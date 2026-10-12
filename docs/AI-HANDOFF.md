@@ -480,6 +480,37 @@ frontend tests, lint/typecheck and Docker build passed. Two focused Chromium tes
 verify all eight routes plus mobile FAQ interaction/no overflow; mobile screenshot
 was inspected. Backend/migration unchanged. Remote CI remains unverified.
 
+## Design fidelity correction (2026-10-12)
+
+The generic static footer and shop implementations in the previous entries were
+contrary to the supplied design and are superseded by this correction. The live
+footer routes now render the actual AboutPage, ContactPage, TermsPage,
+ReturnsPage, TrackingPage, FAQPage, BuyingGuide, and PrivacyPage. Those eight
+component files and all reference CSS remain byte-identical to design-reference.
+StaticInfoPage and its custom stylesheet were removed. Contact uses the
+reference's unavailable state because no approved contact configuration or
+message service exists; tracking uses the reference service-error path and cannot
+issue simulated SMS. Legal pages retain the supplied prototype labels; these are
+not approved business policies.
+
+ShopPage now receives the real catalog through optional data/status/retry props.
+Its original cards, filters, layout and sheets remain intact. API collections and
+categories drive query normalization; products without published SKU contracts
+remain visible with the existing unknown-price/availability state. Stock/price
+filters exclude these products. Unapproved images use the original image-error
+state, and demo favorites and preview controls are disabled for this live route.
+The simplified LiveShopPage was removed. Category routes are connected too.
+
+This correction covers footer pages and shop. LiveArtworksPage (also used for
+bundles) and LiveCommissionsPage still need replacement with their native reference
+components and compatible backend contracts. Do not describe the whole site as
+matching the reference yet. Preserve existing real submission and listing APIs
+while doing that work; never replace native page markup with another generic page.
+Backend contracts, migrations, application data and credentials were unchanged.
+Local frontend tests: 72 passing; lint and typecheck passing. Production Docker
+build and desktop/mobile browser verification are recorded in the progress log.
+Remote CI remains unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

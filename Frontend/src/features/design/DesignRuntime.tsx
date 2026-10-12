@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { isStaticInfoPage } from "./StaticInfoPage";
+import { isStaticInfoPage } from "./information-routes";
 import App from "../../design/App";
 import AdminDashboard from "../../design/AdminDashboard";
 import ArtistDashboard from "../../design/ArtistDashboard";
@@ -36,7 +36,7 @@ export default function DesignRuntime() {
     || /^\/(?:fa|en)\/commissions\/?$/.test(pathname)
     || /^\/(?:fa|en)\/artworks(?:\/[^/]+)?\/?$/.test(pathname)
     || /^\/(?:fa|en)?\/?$/.test(pathname)
-    || /^\/(?:fa|en)\/shop\/?$/.test(pathname)
+    || /^\/(?:fa|en)\/(?:shop|categories\/[^/]+)\/?$/.test(pathname)
     || /^\/(?:fa\/|en\/)?collections(?:\/[^/]+)?\/?$/.test(pathname);
 
   if (!demo && !connected) {

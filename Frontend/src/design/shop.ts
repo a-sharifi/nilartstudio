@@ -78,10 +78,12 @@ export function priceError(min: string, max: string) {
     return "order"
   return ""
 }
-export function shopFeatureChoices(category: string) {
+export type ShopCatalog = { categories: typeof shopCategories; collections: typeof collections; items: CatalogItem[] }
+
+export function shopFeatureChoices(category: string, catalog?: ShopCatalog) {
   const paper = ["sketchbooks", "notebooks"].includes(category)
   const skus = paper
-    ? catalogProducts
+    ? (catalog ? catalog.items.filter((item): item is (typeof catalogProducts)[number] => item.type === "product") : catalogProducts)
         .filter((p) => p.published && p.category === category)
         .flatMap((p) => p.skus)
     : []
@@ -109,17 +111,18 @@ export function shopFeatureChoices(category: string) {
 export function normalizeShopFilters(
   filters: ShopFilters,
   scope = "",
+  catalog?: ShopCatalog,
 ): ShopFilters {
   const category =
     scope ||
-    (shopCategories.some((c) => c.published && c.slug === filters.category)
+    ((catalog?.categories ?? shopCategories).some((c) => c.published && c.slug === filters.category)
       ? filters.category
       : "")
-  const choices = shopFeatureChoices(category)
+  const choices = shopFeatureChoices(category, catalog)
   return {
     ...filters,
     category,
-    collection: collections.some(
+    collection: (catalog?.collections ?? collections).some(
       (c) => c.published && c.slug === filters.collection,
     )
       ? filters.collection
@@ -136,7 +139,7 @@ export function normalizeShopFilters(
     max: priceDigits(filters.max),
   }
 }
-export function parseShopQuery(search: string, scope = ""): ShopQuery {
+export function parseShopQuery(search: string, scope = "", catalog?: ShopCatalog): ShopQuery {
   const params = new URLSearchParams(search)
   const text = (key: string) => params.get(key) || ""
   const page = priceDigits(text("page"))
@@ -172,6 +175,7 @@ export function parseShopQuery(search: string, scope = ""): ShopQuery {
         stock: text("stock") === "1",
       },
       scope,
+      catalog,
     ),
   }
 }
@@ -219,10 +223,11 @@ export function shopResults(
   query: ShopQuery,
   mode: ShopMode = "normal",
   source: CatalogItem[] = [...catalogProducts, ...catalogBundles],
+  catalog?: ShopCatalog,
 ) {
-  if (scope && !shopCategories.some((c) => c.published && c.slug === scope))
+  if (scope && !(catalog?.categories ?? shopCategories).some((c) => c.published && c.slug === scope))
     return []
-  const filters = normalizeShopFilters(query.filters, scope)
+  const filters = normalizeShopFilters(query.filters, scope, catalog)
   if (priceError(filters.min, filters.max) || mode === "empty") return []
   const unique = new Map(
     source.filter((item) => item.published).map((item) => [item.id, item]),
@@ -274,13 +279,13 @@ export function shopResults(
         options,
         buyable,
         price: buyable[0]?.price,
-        unavailableReason: mode === "price-unknown" ? "unknown" : "stock",
+        unavailableReason: mode === "price-unknown" || options.length === 0 ? "unknown" : "stock",
         from: new Set(buyable.map((o) => o.price)).size > 1,
         matchedSkus:
           item.type === "product" ? options.map((o) => o.parts[0].sku) : [],
       }
     })
-    .filter((result) => result.options.length > 0)
+    .filter((result) => result.options.length > 0 || (catalog && !filters.stock && !filters.min && !filters.max && !filters.size && !filters.weight && !filters.sheets && !filters.cover))
     .sort((a, b) => {
       if (query.sort !== "newest") {
         if (a.price === undefined && b.price !== undefined) return 1

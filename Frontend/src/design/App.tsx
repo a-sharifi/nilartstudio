@@ -42,10 +42,10 @@ import CollectionCard, { CollectionSkeleton } from "./CollectionCard"
 import CollectionsPage from "./CollectionsPage"
 import CollectionDetailPage from "./CollectionDetailPage"
 import ShopPage from "./ShopPage"
-import StaticInfoPage, { isStaticInfoPage } from "../features/design/StaticInfoPage"
+import PrivacyPage from "./PrivacyPage"
+import { contactDemoConfig } from "./contact"
 import LiveCommissionsPage from "../features/catalog/LiveCommissionsPage"
 import LiveArtworksPage from "../features/catalog/LiveArtworksPage"
-import LiveShopPage from "../features/catalog/LiveShopPage"
 import { isShopRoute } from "./shop"
 import ProductCard from "./ProductCard"
 import { mergeCart, productSlug, type CartLine } from "./product"
@@ -634,8 +634,9 @@ export default function App() {
   const isBundle = page.startsWith("/bundles/")
   const isCart = page === "/cart"
   const isCheckout = ["/checkout", "/checkout/address", "/checkout/delivery"].includes(page) || isPaymentRoute(page)
-  const isBuyingGuide = page === "/guides/buying"
-  const isFAQ = page === "/faq"
+  const isBuyingGuide = /^\/(?:fa\/|en\/)?guides\/buying\/?$/.test(page)
+  const isFAQ = /^\/(?:fa\/|en\/)?faq\/?$/.test(page)
+  const isPrivacy = /^\/(?:fa\/|en\/)?privacy\/?$/.test(page)
   const isTracking = isTrackingRoute(page)
   const isReturns = isReturnsRoute(page)
   const isAbout = isAboutRoute(page)
@@ -1674,8 +1675,6 @@ export default function App() {
             saved={preferencesDraft} onSave={setPreferencesDraft} onNavigate={navigate}
             hasPriorAssessment={!!assessmentJob}
             onDemoSignIn={setSignedIn} registerGuard={registerReferenceGuard} />
-        ) : !demoMode && isStaticInfoPage(page) ? (
-          <StaticInfoPage path={page} language={lang} />
         ) : isReferences ? (
           <ReferencesPage language={lang} signedIn={signedIn} draft={referenceDraft}
             onSave={setReferenceDraft} onNavigate={navigate} onDemoSignIn={setSignedIn}
@@ -1707,12 +1706,12 @@ export default function App() {
             savedFavorites={favorites}
             onFavorite={id => setFavorites(previous => previous.includes(id) ? previous.filter(value => value !== id) : [...previous, id])}
           />
+        ) : isPrivacy ? (
+          <PrivacyPage language={lang} signedIn={signedIn} mode="normal" onMode={() => {}} onNavigate={navigate} arrow={<Icon name="arrow" size={18} />} />
         ) : isTerms ? (
           <TermsPage language={lang} signedIn={signedIn} mode={termsMode} onMode={setTermsMode} onNavigate={navigate} arrow={<Icon name="arrow" size={18} />} />
         ) : isContact ? (
-          <ContactPage language={lang} signedIn={signedIn} mode={contactMode} onMode={setContactMode} onNavigate={navigate} arrow={<Icon name="arrow" size={18} />} />
-        ) : !demoMode && isStaticInfoPage(page) ? (
-          <StaticInfoPage path={page} language={lang} />
+          <ContactPage config={demoMode ? undefined : { ...contactDemoConfig, demo: false }} language={lang} signedIn={signedIn} mode={contactMode} onMode={setContactMode} onNavigate={navigate} arrow={<Icon name="arrow" size={18} />} />
         ) : isAbout ? (
           <AboutPage
             language={lang}
@@ -1747,7 +1746,7 @@ export default function App() {
         ) : isTracking ? (
           <TrackingPage
             language={lang}
-            mode={trackingMode}
+            mode={demoMode ? trackingMode : "service"}
             onNavigate={navigate}
             arrow={<Icon name="arrow" size={18} />}
           />
@@ -1917,11 +1916,11 @@ export default function App() {
               heart={<Icon name="heart" size={19} />}
             />
           </Suspense>
-        ) : isShop && !demoMode ? (
-          <LiveShopPage data={liveCatalog.data} status={liveCatalog.status} search={urlSearch} language={lang}
-            retry={liveCatalog.retry} navigate={navigate} queryChange={updateShopQuery} />
         ) : isShop ? (
           <ShopPage
+            liveCatalog={demoMode ? undefined : { collections: liveCatalog.data.collections, categories: liveCatalog.data.categories.map(category => ({ ...category, slug: category.id, published: true, description: ["", ""] })), items: liveCatalog.data.products }}
+            liveStatus={demoMode ? undefined : liveCatalog.status}
+            onRetry={liveCatalog.retry}
             key={page.split("/")[2] === "categories" ? page.split("/")[3] : "shop"}
             page={page} search={urlSearch} language={lang}
             onNavigate={navigate} onQueryChange={updateShopQuery}

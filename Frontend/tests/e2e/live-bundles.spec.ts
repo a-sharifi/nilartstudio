@@ -9,19 +9,22 @@ test("bundle list and detail show real components without purchase claims", asyn
   await expect(page.getByText("Purchase details unconfirmed")).toBeVisible();
 });
 
-test("footer information pages render without backend guards", async ({ page }) => {
-  for (const [path, title] of [["/guides/buying", "Buying guide"], ["/faq", "FAQ"], ["/en/about", "About"], ["/en/contact", "Contact"], ["/en/terms", "Terms"], ["/privacy", "Privacy"], ["/en/returns", "Returns"], ["/en/track-order", "Track order"]]) {
-    await page.goto(path + (path.startsWith("/en/") ? "" : "?language=en"));
-    await expect(page.getByRole("heading", { name: title, exact: true })).toBeVisible();
-    await expect(page.getByText("Backend connection required")).toHaveCount(0);
+test("footer routes render their supplied reference layouts", async ({ page }) => {
+  for (const [path, selector] of [["/guides/buying", ".buying-guide"], ["/faq", ".faq-page"], ["/en/about", ".about-page"], ["/en/contact", ".contact-page"], ["/en/terms", ".terms-page"], ["/privacy", ".privacy-page"], ["/en/returns", ".returns-page"], ["/en/track-order", ".tracking-page"]]) {
+    await page.goto(path);
+    await expect(page.locator(selector)).toBeVisible();
+    await expect(page.locator(".static-info-page")).toHaveCount(0);
   }
 });
 
-test("static footer content remains readable on mobile", async ({ page }) => {
+test("reference footer layouts remain readable on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/fa/faq");
-  await expect(page.getByRole("heading", { name: "سؤالات متداول", exact: true })).toBeVisible();
-  await page.getByText("آیا برای مرور فروشگاه باید وارد شوم؟").click();
-  await expect(page.getByText("خیر. صفحات عمومی فروشگاه، کالکشن‌ها، نقاشی‌ها و پکیج‌ها بدون ورود قابل مشاهده‌اند.")).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  for (const path of ["/fa/contact", "/fa/about", "/fa/terms", "/fa/returns", "/fa/track-order", "/fa/faq", "/fa/guides/buying", "/fa/privacy"]) {
+    await page.goto(path);
+    await expect(page.locator("h1").first()).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  }
+  await page.goto("/fa/contact");
+  await expect(page.locator(".contact-page")).toBeVisible();
+  await page.screenshot({ path: "/tmp/nilart-restored-contact-mobile.png", fullPage: true });
 });

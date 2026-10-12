@@ -8,17 +8,18 @@ import {
 import ProductCard from "./ProductCard"
 import BundleResultCard from "./BundleResultCard"
 import FilterPanel from "./FilterPanel"
-import { collectionName, collections } from "./data"
+import { collectionName, collections as referenceCollections } from "./data"
 import { covers } from "./product"
 import {
   emptyShopFilters,
-  normalizeShopFilters,
-  parseShopQuery,
+  normalizeShopFilters as referenceNormalizeShopFilters,
+  parseShopQuery as referenceParseShopQuery,
   priceError,
   serializeShopQuery,
-  shopCategories,
-  shopFeatureChoices,
-  shopResults,
+  shopCategories as referenceCategories,
+  shopFeatureChoices as referenceFeatureChoices,
+  shopResults as referenceResults,
+  type ShopCatalog,
   shopScope,
   type ShopFilters,
   type ShopMode,
@@ -38,6 +39,9 @@ const previews: [ShopMode, string, string][] = [
   ["price-unknown", "قیمت دریافت نشده", "Price unavailable"],
 ]
 type Props = {
+  liveCatalog?: ShopCatalog
+  liveStatus?: string
+  onRetry?: () => void
   page: string
   search: string
   language: 0 | 1
@@ -57,6 +61,9 @@ type Props = {
   heart: ReactNode
 }
 export default function ShopPage({
+  liveCatalog,
+  liveStatus,
+  onRetry,
   page,
   search,
   language,
@@ -70,6 +77,12 @@ export default function ShopPage({
   arrow,
   heart,
 }: Props) {
+  const collections = liveCatalog?.collections ?? referenceCollections
+  const shopCategories = liveCatalog?.categories ?? referenceCategories
+  const normalizeShopFilters = (filters: ShopFilters, scope = "") => referenceNormalizeShopFilters(filters, scope, liveCatalog)
+  const parseShopQuery = (search: string, scope = "") => referenceParseShopQuery(search, scope, liveCatalog)
+  const shopFeatureChoices = (category: string) => referenceFeatureChoices(category, liveCatalog)
+  const shopResults = (scope: string, query: ShopQuery, mode: ShopMode = "normal") => referenceResults(scope, query, mode, liveCatalog?.items, liveCatalog)
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
   const prefix = language === 0 ? "/fa" : "/en",
     shop = `${prefix}/shop`
@@ -78,7 +91,8 @@ export default function ShopPage({
   const valid = !scope || !!category
   const query = parseShopQuery(search, scope),
     serialized = serializeShopQuery(query, scope)
-  const [mode, setMode] = useState<ShopMode>("normal")
+  const [previewMode, setMode] = useState<ShopMode>("normal")
+  const mode: ShopMode = liveStatus === undefined ? previewMode : liveStatus === "loading" ? "loading" : liveStatus === "error" ? "network" : "normal"
   const [sheet, setSheet] = useState(false),
     [draft, setDraft] = useState<ShopFilters>(query.filters)
   const [guest, setGuest] = useState(false),
@@ -453,7 +467,7 @@ export default function ShopPage({
         </section>
       ) : (
         <>
-          <div className="shop-demo">
+          {!liveCatalog && <div className="shop-demo">
             <bdi>Demo</bdi>
             <p>
               {t(
@@ -461,7 +475,7 @@ export default function ShopPage({
                 "Catalog, prices, stock and counts are fixtures; no real sales service is connected. Images are mockups, not actual product photographs.",
               )}
             </p>
-          </div>
+          </div>}
           {!scope ? (
             <nav
               className="shop-category-nav"
@@ -694,9 +708,9 @@ export default function ShopPage({
                   </h3>
                   <button
                     className="button secondary"
-                    onClick={() => setMode("normal")}
+                    onClick={() => onRetry ? onRetry() : setMode("normal")}
                   >
-                    {t("تلاش دوباره · Demo", "Retry · Demo")}
+                    {liveCatalog ? t("تلاش دوباره", "Retry") : t("تلاش دوباره · Demo", "Retry · Demo")}
                   </button>
                 </div>
               ) : !results.length ? (
@@ -797,7 +811,7 @@ export default function ShopPage({
                           ? t("قیمت دریافت نشده", "Price unavailable")
                           : undefined,
                       media:
-                        mode === "image-error" ? (
+                        liveCatalog || mode === "image-error" ? (
                           <div className="shop-image-error">
                             <svg
                               width="32"
@@ -841,7 +855,7 @@ export default function ShopPage({
                           <ProductCard
                             {...common}
                             favorite={saved.includes(item.id)}
-                            onFavorite={() => favorite(item.id)}
+                            onFavorite={liveCatalog ? undefined : () => favorite(item.id)}
                             favoriteLabel={`${
                               saved.includes(item.id)
                                 ? t("حذف از علاقه‌مندی", "Remove from favorites")
@@ -951,7 +965,7 @@ export default function ShopPage({
           </section>
         </>
       )}
-      <details className="shop-preview">
+      {!liveCatalog && <details className="shop-preview">
         <summary>
           {t("حالت‌های پروتوتایپ", "Prototype states")} · PUB-04 · Demo
         </summary>
@@ -976,7 +990,7 @@ export default function ShopPage({
             "Categories and collections are independent; stock is never duplicated. Demo data publishes no real offer or Product schema.",
           )}
         </p>
-      </details>
+      </details>}
       {renderSheet(
         sheet,
         closeSheet,

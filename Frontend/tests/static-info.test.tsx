@@ -1,21 +1,19 @@
 import { cleanup, render, screen } from "@testing-library/react"
 import { afterEach, expect, test } from "vitest"
-import StaticInfoPage, { isStaticInfoPage } from "../src/features/design/StaticInfoPage"
+import ContactPage from "../src/design/ContactPage"
+import { contactDemoConfig } from "../src/design/contact"
+import { isStaticInfoPage } from "../src/features/design/information-routes"
 afterEach(cleanup)
-test("footer pages are static and do not simulate messages or refunds", () => {
-  expect(isStaticInfoPage("/fa/returns")).toBe(true)
+test("all reference information routes and language aliases are connected", () => {
+  for (const route of ["guides/buying", "faq", "track-order", "returns", "about", "contact", "terms", "privacy"]) {
+    for (const prefix of ["/", "/fa/", "/en/"]) expect(isStaticInfoPage(prefix + route)).toBe(true)
+  }
   expect(isStaticInfoPage("/toString")).toBe(false)
-  render(<StaticInfoPage path="/en/returns" language={1} />)
-  expect(screen.getByRole("heading", { name: "Returns" })).toBeTruthy()
-  expect(screen.getByText(/final cancellation and returns policy/)).toBeTruthy()
-  expect(screen.queryByRole("textbox")).toBeNull()
 })
-
-test("FAQ has expandable answers and Persian navigation for all eight pages", () => {
-  render(<StaticInfoPage path="/fa/faq" language={0} />)
-  expect(screen.getByRole("heading", { name: "سؤالات متداول" })).toBeTruthy()
-  const navigation = screen.getByRole("navigation", { name: "صفحات راهنما" })
-  expect(navigation.querySelectorAll("a")).toHaveLength(8)
-  expect(screen.getByText("آیا برای مرور فروشگاه باید وارد شوم؟").closest("details")).toBeTruthy()
-  expect(screen.getByRole("link", { name: "حریم خصوصی" }).getAttribute("href")).toBe("/fa/privacy")
+test("contact uses the reference form without simulating a live submission", () => {
+  const { container } = render(<ContactPage language={1} signedIn={false} mode="normal" onMode={() => {}} onNavigate={() => {}} arrow={null} config={{ ...contactDemoConfig, demo: false }} />)
+  expect(container.querySelector(".contact-page")).toBeTruthy()
+  expect(screen.getByRole("heading", { name: "Contact options are currently unavailable." })).toBeTruthy()
+  expect(screen.queryByRole("textbox")).toBeNull()
+  expect(container.querySelector(".static-info-page")).toBeNull()
 })
