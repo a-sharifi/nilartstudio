@@ -157,6 +157,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/catalog/artworks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Artworks */
+        get: operations["artworks_api_v1_catalog_artworks_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/catalog/artworks/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Artwork */
+        get: operations["artwork_api_v1_catalog_artworks__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/catalog/products/{product_id}/options": {
         parameters: {
             query?: never;
@@ -409,6 +443,35 @@ export interface components {
             roles: components["schemas"]["Role"][];
             /** Permissions */
             permissions: string[];
+        };
+        /** ArtworkOutput */
+        ArtworkOutput: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Title Fa */
+            title_fa: string;
+            /** Title En */
+            title_en: string;
+            /** Description Fa */
+            description_fa: string;
+            /** Description En */
+            description_en: string;
+        };
+        /** ArtworkPage */
+        ArtworkPage: {
+            /** Items */
+            items: components["schemas"]["ArtworkOutput"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
         };
         /** AuditOutput */
         AuditOutput: {
@@ -1077,6 +1140,69 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SKUOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    artworks_api_v1_catalog_artworks_get: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArtworkPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    artwork_api_v1_catalog_artworks__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArtworkOutput"];
                 };
             };
             /** @description Validation Error */

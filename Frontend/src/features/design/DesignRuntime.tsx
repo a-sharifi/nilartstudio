@@ -30,7 +30,8 @@ export default function DesignRuntime() {
       liveApi={liveAuthApi} /></div>;
   }
   // Explicit connected-route allowlist; newly imported routes are not accidentally live.
-  const connected = /^\/(?:fa|en)?\/?$/.test(pathname)
+  const connected = /^\/(?:fa|en)\/artworks(?:\/[^/]+)?\/?$/.test(pathname)
+    || /^\/(?:fa|en)?\/?$/.test(pathname)
     || /^\/(?:fa|en)\/shop\/?$/.test(pathname)
     || /^\/(?:fa\/|en\/)?collections(?:\/[^/]+)?\/?$/.test(pathname);
 

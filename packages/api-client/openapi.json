@@ -489,6 +489,107 @@
         }
       }
     },
+    "/api/v1/catalog/artworks": {
+      "get": {
+        "tags": [
+          "artworks"
+        ],
+        "summary": "Artworks",
+        "operationId": "artworks_api_v1_catalog_artworks_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2147483647,
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 24,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/catalog/artworks/{slug}": {
+      "get": {
+        "tags": [
+          "artworks"
+        ],
+        "summary": "Artwork",
+        "operationId": "artwork_api_v1_catalog_artworks__slug__get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtworkOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/catalog/products/{product_id}/options": {
       "get": {
         "tags": [
@@ -1069,6 +1170,76 @@
           "permissions"
         ],
         "title": "AccessOutput"
+      },
+      "ArtworkOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "title_fa": {
+            "type": "string",
+            "title": "Title Fa"
+          },
+          "title_en": {
+            "type": "string",
+            "title": "Title En"
+          },
+          "description_fa": {
+            "type": "string",
+            "title": "Description Fa"
+          },
+          "description_en": {
+            "type": "string",
+            "title": "Description En"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "title_fa",
+          "title_en",
+          "description_fa",
+          "description_en"
+        ],
+        "title": "ArtworkOutput"
+      },
+      "ArtworkPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ArtworkOutput"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "page_size"
+        ],
+        "title": "ArtworkPage"
       },
       "AuditOutput": {
         "properties": {

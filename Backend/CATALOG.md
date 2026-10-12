@@ -155,3 +155,15 @@ one writer succeeds; the other gets a version conflict. The final document must
 match the winning submission, audit count must increase only once, and the last
 audit's before/after snapshots must match the prior/winning documents. These
 checks extend test coverage without changing runtime behavior.
+
+## Public artwork descriptions (2026-10-12)
+
+Migration 0010 introduces `catalog_artworks` with UUID identity, unique 160-character
+slug, bilingual titles/descriptions and a publication flag defaulting to false.
+It inserts no records. `GET /api/v1/catalog/artworks` returns published descriptions
+ordered by slug/ID with page/page_size (1–100) and total. Detail reads at
+`/artworks/{slug}` return identical public fields; draft/missing records share 404.
+No price, stock, sales status, dimensions, media URL or purchasing eligibility is
+inferred. Authoring, approved media provisioning and artwork sales remain separate.
+The read flow uses application query ports and a SQL repository. Isolated
+PostgreSQL tests cover publication isolation, pagination, details and downgrade.

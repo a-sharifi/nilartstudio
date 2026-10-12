@@ -87,7 +87,7 @@ Profile version 0 means no saved profile; first save becomes 1. Stale writes ret
 
 ### Migrations and background processing
 
-Current head **0009**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Applied locally and verified at head 0009. Do not rewrite applied migrations destructively.
+Current head **0010**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; applied locally at head 0010. Do not rewrite applied migrations destructively.
 
 Outbox insertion shares the domain transaction. Dispatch locks with SKIP LOCKED and confirms broker publishing; consumption records event IDs transactionally. Only `infrastructure.ping` has a handler; stock/payment workflows do not exist yet. Celery uses JSON, persistent delivery, late ack, prefetch 1 and bounded retries. Optional beat must have one active instance.
 
@@ -165,10 +165,10 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 193 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 66 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
+| Backend with PostgreSQL/Redis | 194 passed | Isolated database schemas and disposable Redis containers |
+| Frontend tests | 68 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
-| Final Docker build and service health | Passed | All eight services healthy, migration head 0009 |
+| Final Docker build and service health | Passed | All eight services healthy, migration head 0010 |
 | Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
 | Firefox expiry page | 3 passed on latest source | Reload, retry, permission rejection, external redirects, Persian mobile; prior session/navigation checks remain historical |
 | GitHub CI | Not verified | Local results do not imply a passed remote run |
@@ -422,6 +422,20 @@ Chromium shop test verifies English/Persian with mocked API products. Backend an
 migration unchanged. This is browsing only: product detail remains guarded;
 inventory, cart, checkout, media and option publication are still required for
 purchasing. Remote CI unverified. Full old browser suite was not rerun here.
+
+## Live artworks continuation (2026-10-12)
+
+Migration 0010 adds unseeded catalog_artworks descriptions with published-only
+paginated list/detail APIs. Application queries and SQL repository separate reads
+from presentation. /fa|en/artworks and detail routes now use a cancellable API
+loader, timeout/error retry, empty and not-found states. Existing gallery classes
+and unchanged original CSS are reused; no demo paintings/prices/statuses become
+live. Without approved media/purchase data, show image unavailable and purchase
+unconfirmed. Real gallery starts empty; artwork authoring/import, metadata filters,
+media and purchasing are outstanding. All 194 backend and 68 frontend tests passed,
+plus lint/typechecks, client generation, Docker build, 11 infra checks and focused
+bilingual Chromium gallery/detail navigation. PostgreSQL read test reran after
+repository extraction. Backup defaults advance to 0010. Remote CI unverified.
 
 ## Recommended continuation
 

@@ -42,6 +42,7 @@ import CollectionCard, { CollectionSkeleton } from "./CollectionCard"
 import CollectionsPage from "./CollectionsPage"
 import CollectionDetailPage from "./CollectionDetailPage"
 import ShopPage from "./ShopPage"
+import LiveArtworksPage from "../features/catalog/LiveArtworksPage"
 import LiveShopPage from "../features/catalog/LiveShopPage"
 import { isShopRoute } from "./shop"
 import ProductCard from "./ProductCard"
@@ -1678,6 +1679,8 @@ export default function App() {
           />
         ) : isCommissions ? (
           <CommissionsPage language={lang} signedIn={signedIn} onNavigate={navigate} onDemoSignIn={setSignedIn} />
+        ) : (isArtworkDetail || isArtworks) && !demoMode ? (
+          <LiveArtworksPage language={lang} slug={isArtworkDetail ? page.split("/").pop() : undefined} navigate={navigate} />
         ) : isArtworkDetail ? (
           <ArtworkDetailPage
             slug={page.split("/").pop() || ""}
