@@ -48,3 +48,15 @@ customer/artist/admin panels and not a substitute for backend permission and
 ownership checks. Consumers must re-read on shared lifecycle signals and discard
 local snapshots on verified session changes. Audited role management/bootstrap
 remain unfinished and no actual account roles were modified.
+
+### Shared access consumers
+
+`useAccountAccess()` now subscribes to a shared in-memory `AccessStore`. Mounted
+consumers share one request stream and lifecycle subscription. Revalidation hides
+previous grants before checking the API; unknown results do not restore them.
+Verified logout immediately drops the snapshot and invalidates pending reads.
+Ordering rejects late grants after revocation, and the final unsubscribe releases
+all cached access and the lifecycle listener. A later mount performs a fresh read.
+Server rendering returns a stable checking state without access data or API calls.
+This hook provides presentation state only; no private panel/business workflow is
+connected by this change and backend permission/ownership checks remain mandatory.

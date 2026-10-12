@@ -166,7 +166,7 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL | 121 passed | Separate test database, isolated transactional schemas |
-| Frontend tests | 56 passed | Includes nine live access-adapter validation/revocation regressions |
+| Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
 | Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
@@ -245,6 +245,18 @@ can authorize a backend operation. Future panels must subscribe/revalidate and
 clear their local snapshots on verified boundaries. See `Backend/ACCESS.md`.
 Browser results above belong to the preceding route implementation; this adapter
 adds no visible route or styling change.
+
+## Shared access-consumer continuation (2026-10-12)
+
+`AccessStore` and client `useAccountAccess()` now share one live permission request
+stream between mounted consumers. Session hints revalidate while hiding prior
+grants; unknown/denied reads never retain a ready snapshot. Verified logout clears
+access immediately and generations reject older positive reads. Final unsubscribe
+releases the listener and private snapshot; remounting reads afresh. Server snapshots
+contain no private access. Seven store tests plus a React consumer integration test
+bring frontend tests to 64 passing. This is reusable infrastructure; existing demo
+panels remain guarded and no private workflow or account-role change is introduced.
+Prior browser results belong to earlier visible-route work.
 
 ## Recommended continuation
 
