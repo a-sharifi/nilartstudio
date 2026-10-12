@@ -166,7 +166,7 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL | 121 passed | Separate test database, isolated transactional schemas |
-| Frontend tests | 47 passed | Includes live expiry-state, retry and stale-check regressions |
+| Frontend tests | 56 passed | Includes nine live access-adapter validation/revocation regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
 | Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
@@ -232,6 +232,19 @@ live fixture controls/notes are hidden, and no private content or replayed opera
 is introduced. Three unit regressions cover absence, retry and verified-logout
 ordering; browser regressions cover reload, safe returns, permission rejection and
 Persian mobile layout. Account-restricted routes remain unconnected.
+
+## Live access-adapter continuation (2026-10-12)
+
+A shared frontend adapter now consumes `/api/v1/auth/access` with no-store reads,
+strict owner/role/permission metadata validation and immutable snapshots. Ordered
+reads and session revisions reject stale grants; fresh calls see revocation instead
+of cached permissions. A 401 clears registered memory; a 403 does not establish
+global logout. Nine new unit cases passed (56 frontend tests total). No private
+panel was connected, no account role changed and no frontend permission snapshot
+can authorize a backend operation. Future panels must subscribe/revalidate and
+clear their local snapshots on verified boundaries. See `Backend/ACCESS.md`.
+Browser results above belong to the preceding route implementation; this adapter
+adds no visible route or styling change.
 
 ## Recommended continuation
 

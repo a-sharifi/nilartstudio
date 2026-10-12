@@ -31,3 +31,20 @@ Remaining: audited role assignment/revocation use cases, first-admin bootstrap w
 explicit operator authority, granular override approval, per-order ownership tests,
 and integration of customer/artist/admin panels. Do not mistake imported demo
 panels for permission-protected production workflows.
+
+## Frontend access adapter (2026-10-12)
+
+`Frontend/src/features/identity/access.ts` now reads the live access endpoint with
+credentials and no-store caching. It validates nonempty owner IDs, known distinct
+roles and distinct named permissions; malformed responses never become grants.
+The returned snapshot and its arrays are immutable. Every load queries the server;
+there is no persisted or module-cached permission snapshot.
+
+Shared session revisions and ordered reads reject old-account responses and stale
+permission reads after a newer revocation read. An authenticated 401 clears
+registered private memory; a 403 denies this read without declaring global logout.
+This is an adapter for future connected private pages, not an integration of
+customer/artist/admin panels and not a substitute for backend permission and
+ownership checks. Consumers must re-read on shared lifecycle signals and discard
+local snapshots on verified session changes. Audited role management/bootstrap
+remain unfinished and no actual account roles were modified.
