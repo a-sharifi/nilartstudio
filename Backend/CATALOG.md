@@ -248,3 +248,23 @@ It adds explicit test composition and unpriced test SKUs, independently of any
 production SKU authoring/publication workflow. Reference illustrations are
 frontend assets associated by exact reference slugs; no image, price or inventory
 is inferred by the public API.
+
+### Protected SKU price history
+
+`GET /api/v1/admin/catalog/skus/{sku_id}/price/audits` requires a current session
+with `catalog.manage`. Results contain audit ID, SKU/product/actor IDs, UTC time,
+previous/current versions and exact before/after price snapshots. An explicit
+null price remains unknown; credentials and session tokens are excluded.
+
+Newest versions come first. `limit` defaults to 20 (1–100);
+`before_version` is an exclusive positive version cursor. Continue using
+`next_before_version`; null means the page is exhausted. New writes between
+pages do not shift the older-version cursor. An existing SKU with no price
+changes returns an empty page; a missing SKU returns 404. Unauthorized callers
+receive 401/403 before catalog lookup. Every response is private/no-store.
+
+This reads existing audit records without changing prices, publication, stock,
+or fixture data. No migration is needed: migration 0013 already supplies the
+unique `(sku_id, version)` audit index. Generated OpenAPI/client types include
+the endpoint and typed decimal-string snapshots. Admin UI and production SKU
+creation/publication remain subsequent slices.

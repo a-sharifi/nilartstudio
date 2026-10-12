@@ -714,6 +714,27 @@ focused browser cases passed, including the actual database fixture on desktop
 and Persian mobile. Screenshots were visually inspected.
 Remote CI is not verified.
 
+## Protected SKU price history (2026-10-12)
+
+GET `/api/v1/admin/catalog/skus/{sku_id}/price/audits` exposes existing price
+history to current sessions with `catalog.manage`. It uses the 0013 audit index,
+without schema changes. Responses are private/no-store, scoped to one SKU,
+newest first, with limit 1–100 and an exclusive `before_version` cursor. Typed
+snapshots preserve exact decimal strings and null unknown prices. Audit metadata
+includes actor, SKU/product, versions and UTC timestamp; tokens are excluded.
+
+Seven new PostgreSQL cases cover permission denial/revocation, unauthenticated
+access, exact snapshots, null transitions, SKU isolation, missing/empty history,
+invalid cursors/limits and a newer price write between pages. OpenAPI and client
+types were regenerated. No application price/stock/catalog records were changed.
+Admin UI, versioned SKU creation/publication and inventory contracts remain next.
+Validation: all 221 backend tests passed with isolated PostgreSQL/Redis; backend
+lint and configured mypy passed; OpenAPI/client generation and frontend typecheck
+passed. Production Docker build passed and all eight services are healthy. Live
+unauthenticated history returns 401/no-store. Local DB still has zero price audits
+and zero priced SKUs; Cats bundle composition remains 1/2/1. Browser checks from
+the previous imagery slice remain historical; remote CI remains unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

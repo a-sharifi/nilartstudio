@@ -56,3 +56,16 @@ class SqlSKUPriceRepository:
              "before": json.dumps({"price": before["price"]}),
              "after": json.dumps({"price": after["price"]})})
         return after
+
+    def audits(self, sku_id, before_version, limit):
+        if self.session.scalar(text("SELECT id FROM catalog_skus WHERE id=:id"),
+                               {"id": sku_id}) is None:
+            raise PriceError("sku_not_found")
+        rows = self.session.execute(text('SELECT id,sku_id,product_id,actor_id,previous_version,'
+            'version,created_at,"before","after" FROM catalog_sku_price_audits '
+            'WHERE sku_id=:sku AND (CAST(:cursor AS integer) IS NULL OR version < :cursor) '
+            'ORDER BY version DESC LIMIT :limit'),
+            {"sku": sku_id, "cursor": before_version, "limit": limit + 1}).mappings().all()
+        items = [dict(row) for row in rows[:limit]]
+        return {"items": items,
+                "next_before_version": items[-1]["version"] if len(rows) > limit else None}

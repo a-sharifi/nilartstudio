@@ -1,9 +1,10 @@
 import hmac
+from datetime import datetime
 from decimal import Decimal
 from typing import Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Query, Request
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 
@@ -73,3 +74,36 @@ def update_price(sku_id: UUID, body: PriceUpdate, request: Request,
         return failure(request, str(exc), 409 if str(exc) == "sku_price_version_conflict" else 404)
     db.commit()
     return result
+
+
+class PriceSnapshot(BaseModel):
+    price: ExplicitPrice | None
+
+
+class PriceAuditOutput(BaseModel):
+    id: UUID
+    sku_id: UUID
+    product_id: UUID
+    actor_id: UUID
+    previous_version: int
+    version: int
+    created_at: datetime
+    before: PriceSnapshot
+    after: PriceSnapshot
+
+
+class PriceAuditPage(BaseModel):
+    items: list[PriceAuditOutput]
+    next_before_version: int | None
+
+
+@router.get("/skus/{sku_id}/price/audits", response_model=PriceAuditPage)
+def read_price_audits(sku_id: UUID, request: Request,
+                      before_version: int | None = Query(default=None, ge=1, le=2147483647),
+                      limit: int = Query(default=20, ge=1, le=100),
+                      db: Session = Depends(session_dependency),
+                      principal: Principal = Depends(require_permission("catalog.manage"))):
+    try:
+        return SqlSKUPriceRepository(db).audits(sku_id, before_version, limit)
+    except PriceError as exc:
+        return failure(request, str(exc), 404)

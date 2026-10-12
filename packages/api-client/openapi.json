@@ -993,6 +993,79 @@
         }
       }
     },
+    "/api/v1/admin/catalog/skus/{sku_id}/price/audits": {
+      "get": {
+        "tags": [
+          "catalog-prices"
+        ],
+        "summary": "Read Price Audits",
+        "operationId": "read_price_audits_api_v1_admin_catalog_skus__sku_id__price_audits_get",
+        "parameters": [
+          {
+            "name": "sku_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sku Id"
+            }
+          },
+          {
+            "name": "before_version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 2147483647,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before Version"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriceAuditPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/login/password": {
       "post": {
         "tags": [
@@ -2358,6 +2431,90 @@
         ],
         "title": "PasswordLogin"
       },
+      "PriceAuditOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "sku_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Sku Id"
+          },
+          "product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Product Id"
+          },
+          "actor_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Actor Id"
+          },
+          "previous_version": {
+            "type": "integer",
+            "title": "Previous Version"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "before": {
+            "$ref": "#/components/schemas/PriceSnapshot"
+          },
+          "after": {
+            "$ref": "#/components/schemas/PriceSnapshot"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "sku_id",
+          "product_id",
+          "actor_id",
+          "previous_version",
+          "version",
+          "created_at",
+          "before",
+          "after"
+        ],
+        "title": "PriceAuditOutput"
+      },
+      "PriceAuditPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PriceAuditOutput"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_before_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Before Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_before_version"
+        ],
+        "title": "PriceAuditPage"
+      },
       "PriceOutput": {
         "properties": {
           "sku_id": {
@@ -2398,6 +2555,25 @@
           "price"
         ],
         "title": "PriceOutput"
+      },
+      "PriceSnapshot": {
+        "properties": {
+          "price": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExplicitPrice"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "price"
+        ],
+        "title": "PriceSnapshot"
       },
       "PriceUpdate": {
         "properties": {
