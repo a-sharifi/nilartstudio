@@ -157,6 +157,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/catalog/bundles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bundles */
+        get: operations["bundles_api_v1_catalog_bundles_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/catalog/bundles/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bundle */
+        get: operations["bundle_api_v1_catalog_bundles__slug__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/account/commissions": {
         parameters: {
             query?: never;
@@ -531,6 +565,37 @@ export interface components {
             /** Next Before Version */
             next_before_version: number | null;
         };
+        /** BundleOutput */
+        BundleOutput: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Title Fa */
+            title_fa: string;
+            /** Title En */
+            title_en: string;
+            /** Description Fa */
+            description_fa: string;
+            /** Description En */
+            description_en: string;
+            /** Components */
+            components: components["schemas"]["ComponentOutput"][];
+        };
+        /** BundlePage */
+        BundlePage: {
+            /** Items */
+            items: components["schemas"]["BundleOutput"][];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+        };
         /** CatalogDetail */
         CatalogDetail: {
             /**
@@ -674,6 +739,22 @@ export interface components {
             grant: string;
             /** Password */
             password: string;
+        };
+        /** ComponentOutput */
+        ComponentOutput: {
+            /**
+             * Sku Id
+             * Format: uuid
+             */
+            sku_id: string;
+            /** Quantity */
+            quantity: number;
+            /** Code */
+            code: string;
+            /** Title Fa */
+            title_fa: string;
+            /** Title En */
+            title_en: string;
         };
         /** CsrfOutput */
         CsrfOutput: {
@@ -1196,6 +1277,69 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SKUOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    bundles_api_v1_catalog_bundles_get: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BundlePage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    bundle_api_v1_catalog_bundles__slug__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BundleOutput"];
                 };
             };
             /** @description Validation Error */

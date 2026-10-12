@@ -6,7 +6,7 @@ class ArtworkRepository(Protocol):
     def detail(self, slug): ...
 
 
-class ReadArtworks:
+class ReadPublicDescriptions:
     def __init__(self, repository: ArtworkRepository):
         self.repository = repository
 
@@ -17,3 +17,6 @@ class ReadArtworks:
 
     def detail(self, slug):
         return self.repository.detail(slug)
+
+
+ReadArtworks = ReadPublicDescriptions

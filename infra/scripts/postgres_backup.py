@@ -96,7 +96,7 @@ def inventory(target):
     return {"migration": revision, "tables": counts}
 
 
-def backup_and_verify(source, output, expected_migration="0011"):
+def backup_and_verify(source, output, expected_migration="0012"):
     # A new private directory prevents accidental overwrite and keeps dumps out of logs.
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     archive = output / "postgres.dump"
@@ -175,7 +175,7 @@ def main():
                       help="Recheck a trusted saved backup without modifying it")
     mode.add_argument("--output-dir", type=Path,
                         help="New directory under an existing parent; private artifacts retained")
-    parser.add_argument("--expected-migration", default="0011")
+    parser.add_argument("--expected-migration", default="0012")
     arguments = parser.parse_args()
     try:
         if arguments.verify_existing_dir:

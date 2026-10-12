@@ -10,6 +10,7 @@ from starlette.exceptions import HTTPException
 
 from nilart.bootstrap.settings import settings
 from nilart.contexts.catalog.presentation.artworks import router as artworks_router
+from nilart.contexts.catalog.presentation.bundles import router as bundles_router
 from nilart.contexts.catalog.presentation.options import router as options_router
 from nilart.contexts.catalog.presentation.router import router as catalog_router
 from nilart.contexts.commissions.router import router as commissions_router
@@ -21,6 +22,7 @@ from nilart.contexts.identity.presentation.router import router as identity_rout
 logger = logging.getLogger("nilart")
 app = FastAPI(title="Nilart API", version="0.1.0")
 app.include_router(catalog_router)
+app.include_router(bundles_router)
 app.include_router(commissions_router)
 app.include_router(artworks_router)
 app.include_router(options_router)

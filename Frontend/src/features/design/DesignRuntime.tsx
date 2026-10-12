@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { isStaticInfoPage } from "./StaticInfoPage";
 import App from "../../design/App";
 import AdminDashboard from "../../design/AdminDashboard";
 import ArtistDashboard from "../../design/ArtistDashboard";
@@ -30,7 +31,9 @@ export default function DesignRuntime() {
       liveApi={liveAuthApi} /></div>;
   }
   // Explicit connected-route allowlist; newly imported routes are not accidentally live.
-  const connected = /^\/(?:fa|en)\/commissions\/?$/.test(pathname)
+  const connected = isStaticInfoPage(pathname)
+    || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?\/?$/.test(pathname)
+    || /^\/(?:fa|en)\/commissions\/?$/.test(pathname)
     || /^\/(?:fa|en)\/artworks(?:\/[^/]+)?\/?$/.test(pathname)
     || /^\/(?:fa|en)?\/?$/.test(pathname)
     || /^\/(?:fa|en)\/shop\/?$/.test(pathname)

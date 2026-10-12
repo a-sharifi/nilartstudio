@@ -17,7 +17,7 @@ The output is a new timestamped directory under ignored `backups/`. Override
 python3 infra/scripts/postgres_backup.py \
   --source-container nilart-postgres-1 \
   --output-dir /private/existing-parent/new-backup-directory \
-  --expected-migration 0011
+  --expected-migration 0012
 ```
 
 The parent directory must exist; the output directory must not already exist.

@@ -87,7 +87,7 @@ Profile version 0 means no saved profile; first save becomes 1. Stale writes ret
 
 ### Migrations and background processing
 
-Current head **0011**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; commission request storage follows artworks; applied locally at head 0011. Do not rewrite applied migrations destructively.
+Current head **0012**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; commission request storage follows artworks; bundle composition follows commission requests; applied locally at head 0012. Do not rewrite applied migrations destructively.
 
 Outbox insertion shares the domain transaction. Dispatch locks with SKIP LOCKED and confirms broker publishing; consumption records event IDs transactionally. Only `infrastructure.ping` has a handler; stock/payment workflows do not exist yet. Celery uses JSON, persistent delivery, late ack, prefetch 1 and bounded retries. Optional beat must have one active instance.
 
@@ -165,10 +165,10 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 195 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 70 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
+| Backend with PostgreSQL/Redis | 196 passed | Isolated database schemas and disposable Redis containers |
+| Frontend tests | 71 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
-| Final Docker build and service health | Passed | All eight services healthy, migration head 0011 |
+| Final Docker build and service health | Passed | All eight services healthy, migration head 0012 |
 | Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
 | Firefox expiry page | 3 passed on latest source | Reload, retry, permission rejection, external redirects, Persian mobile; prior session/navigation checks remain historical |
 | GitHub CI | Not verified | Local results do not imply a passed remote run |
@@ -451,6 +451,23 @@ lint/typechecks, client generation and Docker build passed. See Backend/COMMISSI
 Uploads, AI, artist assignment/review, quotes, request history, payments and
 cancellation remain outstanding. No external messages, financial writes or seeds.
 Backup default advances to 0011. Remote CI unverified; existing warning remains.
+
+## Bundles and static footer continuation (2026-10-12)
+
+Migration 0012 adds unseeded bundle descriptions/components using shared SKUs and
+positive quantities. Public list/detail exclude empty bundles and any unpublished
+component SKU/parent product. Bounded pages batch load component titles/codes.
+Live bundle list/detail reuse the cancellable description loader with resource-
+scoped state; no inferred prices, capacity, discounts or media. All eight requested
+footer information routes now render static bilingual content with explicit
+unpublished policies/contact/tracking where appropriate, without simulated writes.
+196 backend tests, 71 frontend tests, lint/typechecks, client generation and 11
+infra tests passed; targeted bundle/artwork PostgreSQL tests rerun after query-port
+refactoring. Final Docker build and three focused Chromium cases (bundle navigation, artwork
+regression and eight footer routes) passed; eight services healthy at head 0012.
+Backup defaults advance to 0012. Bundle authoring/options/discounts,
+inventory capacity/reservation, cart and payment remain outstanding. No seeds.
+Remote CI unverified; existing warning remains.
 
 ## Recommended continuation
 

@@ -167,3 +167,21 @@ No price, stock, sales status, dimensions, media URL or purchasing eligibility i
 inferred. Authoring, approved media provisioning and artwork sales remain separate.
 The read flow uses application query ports and a SQL repository. Isolated
 PostgreSQL tests cover publication isolation, pagination, details and downgrade.
+
+## Public bundle composition (2026-10-12)
+
+Migration 0012 creates unseeded bundle descriptions and explicit component links.
+Each SKU occurs once per bundle with a strictly positive quantity; repeated-unit
+requirements use that quantity. Bundles reference existing shared SKUs and do not
+own inventory. Public list/detail at `/api/v1/catalog/bundles` use bounded paging
+and expose bilingual descriptions plus ordered component SKU codes, product titles
+and quantities. Published bundles require at least one component and all component
+SKUs/parent products published; otherwise they are absent/404. Components are
+batch loaded for selected bundle IDs. No capacity, price, discount, reservation,
+checkout or publication authoring is provided. Inventory must later aggregate
+SKU demand across standalone and bundle lines before computing capacity/reserving.
+
+The live bundle gallery/detail shows saved descriptions/components, unavailable
+media and unconfirmed purchase details. Unknown or empty data is not replaced by
+demo bundles. Commission and footer information routes are also connected; the
+static footer pages explicitly identify unavailable tracking/contact/policies.

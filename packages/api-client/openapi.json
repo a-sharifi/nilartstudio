@@ -489,6 +489,107 @@
         }
       }
     },
+    "/api/v1/catalog/bundles": {
+      "get": {
+        "tags": [
+          "bundles"
+        ],
+        "summary": "Bundles",
+        "operationId": "bundles_api_v1_catalog_bundles_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2147483647,
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 24,
+              "title": "Page Size"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundlePage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/catalog/bundles/{slug}": {
+      "get": {
+        "tags": [
+          "bundles"
+        ],
+        "summary": "Bundle",
+        "operationId": "bundle_api_v1_catalog_bundles__slug__get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundleOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/account/commissions": {
       "post": {
         "tags": [
@@ -1366,6 +1467,84 @@
         ],
         "title": "AuditPage"
       },
+      "BundleOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "title_fa": {
+            "type": "string",
+            "title": "Title Fa"
+          },
+          "title_en": {
+            "type": "string",
+            "title": "Title En"
+          },
+          "description_fa": {
+            "type": "string",
+            "title": "Description Fa"
+          },
+          "description_en": {
+            "type": "string",
+            "title": "Description En"
+          },
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentOutput"
+            },
+            "type": "array",
+            "title": "Components"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "title_fa",
+          "title_en",
+          "description_fa",
+          "description_en",
+          "components"
+        ],
+        "title": "BundleOutput"
+      },
+      "BundlePage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BundleOutput"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "page_size"
+        ],
+        "title": "BundlePage"
+      },
       "CatalogDetail": {
         "properties": {
           "id": {
@@ -1676,6 +1855,40 @@
           "password"
         ],
         "title": "CompletePassword"
+      },
+      "ComponentOutput": {
+        "properties": {
+          "sku_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Sku Id"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "title_fa": {
+            "type": "string",
+            "title": "Title Fa"
+          },
+          "title_en": {
+            "type": "string",
+            "title": "Title En"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sku_id",
+          "quantity",
+          "code",
+          "title_fa",
+          "title_en"
+        ],
+        "title": "ComponentOutput"
       },
       "CsrfOutput": {
         "properties": {

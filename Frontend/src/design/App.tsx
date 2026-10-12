@@ -42,6 +42,7 @@ import CollectionCard, { CollectionSkeleton } from "./CollectionCard"
 import CollectionsPage from "./CollectionsPage"
 import CollectionDetailPage from "./CollectionDetailPage"
 import ShopPage from "./ShopPage"
+import StaticInfoPage, { isStaticInfoPage } from "../features/design/StaticInfoPage"
 import LiveCommissionsPage from "../features/catalog/LiveCommissionsPage"
 import LiveArtworksPage from "../features/catalog/LiveArtworksPage"
 import LiveShopPage from "../features/catalog/LiveShopPage"
@@ -1673,6 +1674,8 @@ export default function App() {
             saved={preferencesDraft} onSave={setPreferencesDraft} onNavigate={navigate}
             hasPriorAssessment={!!assessmentJob}
             onDemoSignIn={setSignedIn} registerGuard={registerReferenceGuard} />
+        ) : !demoMode && isStaticInfoPage(page) ? (
+          <StaticInfoPage path={page} language={lang} />
         ) : isReferences ? (
           <ReferencesPage language={lang} signedIn={signedIn} draft={referenceDraft}
             onSave={setReferenceDraft} onNavigate={navigate} onDemoSignIn={setSignedIn}
@@ -1708,6 +1711,8 @@ export default function App() {
           <TermsPage language={lang} signedIn={signedIn} mode={termsMode} onMode={setTermsMode} onNavigate={navigate} arrow={<Icon name="arrow" size={18} />} />
         ) : isContact ? (
           <ContactPage language={lang} signedIn={signedIn} mode={contactMode} onMode={setContactMode} onNavigate={navigate} arrow={<Icon name="arrow" size={18} />} />
+        ) : !demoMode && isStaticInfoPage(page) ? (
+          <StaticInfoPage path={page} language={lang} />
         ) : isAbout ? (
           <AboutPage
             language={lang}
@@ -1814,6 +1819,8 @@ export default function App() {
               arrow={<Icon name="arrow" size={19} />}
             />
           </Suspense>
+        ) : /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page) && !demoMode ? (
+          <LiveArtworksPage resource="bundles" language={lang} slug={/^\/(?:fa\/|en\/)?bundles\/[^/]+$/.test(page) ? page.split("/").pop() : undefined} navigate={navigate} />
         ) : isBundle ? (
           <Suspense
             fallback={
