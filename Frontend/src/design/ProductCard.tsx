@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 
 export type ProductCardProps = {
+  live?: boolean
   name: string
   route: string
   collection: string
@@ -26,6 +27,7 @@ export type ProductCardProps = {
 }
 export default function ProductCard(props: ProductCardProps) {
   const {
+    live = false,
     name,
     route,
     collection,
@@ -127,9 +129,9 @@ export default function ProductCard(props: ProductCardProps) {
             {t("تومان", "toman")}
           </small>
         ) : null}
-        <small className="demo-price">
+        {!live && <small className="demo-price">
           {t("داده نمایشی؛ قیمت و موجودی نمونه", "Demo price & availability")}
-        </small>
+        </small>}
         <a {...linkProps} className="product-cta">
           {cta ||
             (bundleSummary

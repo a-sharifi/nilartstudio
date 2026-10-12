@@ -108,7 +108,7 @@ export function useLiveCatalog(slug?: string) {
         ? productResult.value.map(value => mapProduct(value, data.collections, categoryResult.status === "fulfilled" ? categoryResult.value : [])) : []
       const status = slug && detailResult.status === "rejected"
         ? (detailResult.reason instanceof Error && detailResult.reason.message === "not-found" ? "not-found" : "error")
-        : productResult.status === "rejected" ? "error" : "normal"
+        : productResult.status === "rejected" || categoryResult.status === "rejected" ? "error" : "normal"
       setState({ key: slug, status, collectionsStatus: "normal", data })
       clearTimeout(timeout)
     })().catch(() => {

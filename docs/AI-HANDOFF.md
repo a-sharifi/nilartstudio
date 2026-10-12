@@ -408,6 +408,21 @@ snapshots must match the winning write and prior document. All 193 backend tests
 and changed-file lint passed; eight services healthy. Tests/docs only: no fresh
 build/frontend/typecheck claim. Remote CI unverified; existing warning remains.
 
+## Live shop browsing continuation (2026-10-12)
+
+/fa/shop and /en/shop now connect to public catalog through LiveShopPage in App,
+with real product cards, category/collection URL filters and six-item paging.
+The existing shop classes/ProductCard are reused; original design CSS unchanged.
+Loading, empty and error/retry states use API status. Category-load failure now
+marks catalog error rather than silently presenting incomplete data. Live cards
+hide demo labels/favorites, use explicit image-unavailable and unconfirmed
+purchase details, and do not infer prices/stock from draft combinations.
+All 66 frontend tests, lint/typecheck and Docker build passed; the focused
+Chromium shop test verifies English/Persian with mocked API products. Backend and
+migration unchanged. This is browsing only: product detail remains guarded;
+inventory, cart, checkout, media and option publication are still required for
+purchasing. Remote CI unverified. Full old browser suite was not rerun here.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

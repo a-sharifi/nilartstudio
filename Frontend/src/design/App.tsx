@@ -42,6 +42,7 @@ import CollectionCard, { CollectionSkeleton } from "./CollectionCard"
 import CollectionsPage from "./CollectionsPage"
 import CollectionDetailPage from "./CollectionDetailPage"
 import ShopPage from "./ShopPage"
+import LiveShopPage from "../features/catalog/LiveShopPage"
 import { isShopRoute } from "./shop"
 import ProductCard from "./ProductCard"
 import { mergeCart, productSlug, type CartLine } from "./product"
@@ -1903,6 +1904,9 @@ export default function App() {
               heart={<Icon name="heart" size={19} />}
             />
           </Suspense>
+        ) : isShop && !demoMode ? (
+          <LiveShopPage data={liveCatalog.data} status={liveCatalog.status} search={urlSearch} language={lang}
+            retry={liveCatalog.retry} navigate={navigate} queryChange={updateShopQuery} />
         ) : isShop ? (
           <ShopPage
             key={page.split("/")[2] === "categories" ? page.split("/")[3] : "shop"}
