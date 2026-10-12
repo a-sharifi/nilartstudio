@@ -1,3 +1,4 @@
+import { ReferenceBundleImage } from "./ReferenceMedia";
 import type { BundleCatalog } from "../features/catalog/bundle-catalog";
 import { PublishedBundleDetail } from "./BundleDetailPage";
 
@@ -18,7 +19,7 @@ export default function PublishedBundlesPage({ catalog, slug, language, onNaviga
     : catalog.status === "not-found" ? <div className="collections-state"><h2>{t("این پکیج پیدا نشد.","Bundle not found.")}</h2><a className="button primary" href={root} onClick={e=>link(e,t("پکیج‌ها","Bundles"),root)}>{t("مشاهده پکیج‌ها","Browse bundles")}</a></div>
     : <div className="bundle-grid" aria-busy={catalog.status === "loading"}>
       {catalog.status === "loading" ? Array.from({length:2},(_,i)=><div key={i} className="skeleton skeleton-bundle" />) : catalog.items.length === 0 ? <div className="empty-state">{t("هنوز پکیج منتشرشده‌ای وجود ندارد.","No published bundles yet.")}</div> : catalog.items.map(bundle=><article className="bundle-card" key={bundle.id}>
-        <div className="bundle-image"><div className="gallery-surface"><div className="gallery-object"><span>{t("تصویر در دسترس نیست","Image unavailable")}</span></div></div></div>
+        <div className="bundle-image"><ReferenceBundleImage slug={bundle.slug} language={language} /></div>
         <div className="bundle-info"><span className="eyebrow">A LITTLE SET OF JOY</span><h3><a href={`${root}/${encodeURIComponent(bundle.slug)}`} onClick={e=>link(e,t(bundle.title_fa,bundle.title_en),`${root}/${encodeURIComponent(bundle.slug)}`)}>{t(bundle.title_fa,bundle.title_en)}</a></h3><p>{t(bundle.description_fa,bundle.description_en)}</p><div className="bundle-prices"><span>{t("قیمت تأیید نشده","Price unconfirmed")}</span></div><a className="text-link" href={`${root}/${encodeURIComponent(bundle.slug)}`} onClick={e=>link(e,t(bundle.title_fa,bundle.title_en),`${root}/${encodeURIComponent(bundle.slug)}`)}>{t("مشاهده پکیج","View bundle")} <span aria-hidden="true">↗</span></a></div>
       </article>)}
     </div>}

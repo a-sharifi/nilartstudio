@@ -1,3 +1,4 @@
+import { ReferenceProductImage, ReferenceBundleImage } from "./ReferenceMedia";
 import {
   useEffect,
   useRef,
@@ -811,7 +812,9 @@ export default function ShopPage({
                           ? t("قیمت دریافت نشده", "Price unavailable")
                           : undefined,
                       media:
-                        liveCatalog || mode === "image-error" ? (
+                        liveCatalog ? (
+                          item.type === "product" ? <ReferenceProductImage slug={item.slug} language={language} /> : <ReferenceBundleImage slug={item.slug} language={language} />
+                        ) : mode === "image-error" ? (
                           <div className="shop-image-error">
                             <svg
                               width="32"

@@ -28,3 +28,23 @@ docker compose --env-file .env -f infra/docker/compose.yaml exec -T api python /
 The user explicitly requested this local test import on 2026-10-12. It was applied
 to the previously empty local catalog: five collections, four categories and four
 products. There is no remote data import or deployment.
+
+### Local Cats bundle
+
+After importing the local design catalog, explicitly import the reference Cats
+bundle (one sketchbook, two Cats stickers, one Cats bookmark):
+
+```sh
+docker compose --env-file .env -f infra/docker/compose.yaml cp Backend/src/nilart/bootstrap/design_bundle.py api:/tmp/nilart-design-bundle.py
+docker compose --env-file .env -f infra/docker/compose.yaml exec -T api python /tmp/nilart-design-bundle.py --local-test-data
+```
+
+Creates two reference products, three explicitly named `TEST-DESIGN-CATS-*` SKUs,
+and one published test bundle. All prices/currencies remain null; no stock or
+purchase eligibility is created. Names and quantities come from
+`design-reference/src/catalog.ts`; prototype prices and option specifications
+are not imported. The existing sketchbook must carry the original test notice.
+Existing product slugs, SKU codes or bundle slugs cause a transactional failure;
+this command never overwrites them. All descriptions carry the bilingual test
+notice. The frontend uses the original SVG mockups and `BundleStillLife` for
+explicitly associated reference slugs; unrelated records keep missing media.

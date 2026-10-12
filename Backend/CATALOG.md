@@ -242,3 +242,9 @@ public response contract; it does not publish a draft SKU or option configuratio
 create SKUs, calculate prices, infer stock, enable purchasing or change proposals.
 No actual application prices were entered. SKU creation/publication, option mapping,
 inventory, admin UI and audit browsing are subsequent slices.
+
+The opt-in local Cats bundle fixture is documented in `fixtures/README.md`.
+It adds explicit test composition and unpriced test SKUs, independently of any
+production SKU authoring/publication workflow. Reference illustrations are
+frontend assets associated by exact reference slugs; no image, price or inventory
+is inferred by the public API.

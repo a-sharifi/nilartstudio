@@ -688,6 +688,32 @@ Next: explicitly versioned SKU creation/publication and option mappings, plus
 inventory contracts before enabling purchasing. Admin UI/role bootstrap require
 their own implementation; do not infer stock or configure real business prices.
 
+## Reference product imagery and local Cats bundle (2026-10-12)
+
+The user's explicit reference imagery request is implemented with the exact
+original SVG `Mockup` extracted into its own module and original `BundleStillLife`.
+Known reference product slugs now show those illustrations in shop cards,
+homepage products and product detail. Only `cats-bundle` receives the reference
+one-book/two-sticker/one-bookmark composition; unknown records retain missing media.
+All 42 reference CSS files remain byte-identical.
+
+The explicit local fixture was imported into the application PostgreSQL database:
+6 products, 5 collections, 4 categories, 3 unpriced test SKUs and 1 Cats bundle.
+The two added products are Cats stickers and bookmark; quantities are 1/2/1.
+Descriptions retain bilingual test notices. Prices and currencies are null,
+stock/purchasing remain unavailable, and no admin permissions were assigned.
+The importer rejects conflicts and rolls back atomically. Reproduction is in
+`Backend/fixtures/README.md`; do not rerun it against existing fixture records.
+Production SKU authoring/publication, inventory and purchase contracts remain
+separate work. Historical zero-SKU statements above describe previous slices.
+
+Validation: 86 frontend unit tests; three focused backend tests in isolated
+PostgreSQL; frontend/backend lint, frontend typecheck and configured backend
+mypy. Production Docker build succeeded, all eight services are healthy, and eleven
+focused browser cases passed, including the actual database fixture on desktop
+and Persian mobile. Screenshots were visually inspected.
+Remote CI is not verified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.
