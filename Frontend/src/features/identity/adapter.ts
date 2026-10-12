@@ -1,4 +1,5 @@
 export type SignInResult = "incorrect" | "service" | "limited" | "success" | "network";
+import { sessionLifecycle } from "./session-lifecycle";
 import type { LiveVerifyFlow } from "../../design/auth";
 
 export type Purpose = "login" | "register" | "recovery";
@@ -30,7 +31,9 @@ async function post(path: string, body: object): Promise<Record<string, unknown>
 export async function requestOtp(phone: string, purpose: Purpose): Promise<LiveVerifyFlow> {
   const normalized = normalizeIranPhone(phone);
   if (!normalized) throw new IdentityApiError("invalid");
+  const revision = sessionLifecycle.capture();
   const result = await post("otp/request", { phone: normalized, purpose });
+  if (!sessionLifecycle.current(revision)) throw new IdentityApiError("unknown");
   const expiry = typeof result.expires_at === "string" ? Date.parse(result.expires_at) : NaN;
   if (typeof result.challenge_id !== "string" || !/^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i.test(result.challenge_id)
     || result.purpose !== purpose || result.delivery_status !== "accepted"
@@ -42,7 +45,7 @@ export async function requestOtp(phone: string, purpose: Purpose): Promise<LiveV
     resendAt: Date.now() + result.resend_after_seconds * 1000 };
 }
 
-async function confirmSession(result: Record<string, unknown>): Promise<void> {
+async function confirmSession(result: Record<string, unknown>, revision: number): Promise<void> {
   if (typeof result.account_id !== "string" || typeof result.csrf_token !== "string")
     throw new IdentityApiError("unknown");
   try {
@@ -52,15 +55,17 @@ async function confirmSession(result: Record<string, unknown>): Promise<void> {
     if (!response.ok) throw new IdentityApiError("unknown");
     const account = await response.json();
     if (account.account_id !== result.account_id) throw new IdentityApiError("unknown");
-    csrfToken = result.csrf_token;
+    if (!sessionLifecycle.authenticated(result.account_id, revision)) throw new IdentityApiError("unknown");
   } catch { throw new IdentityApiError("unknown"); }
 }
 
 export async function verifyOtp(flow: LiveVerifyFlow, code: string): Promise<string | null> {
+  const revision = sessionLifecycle.capture();
   const result = await post("otp/verify", {
     challenge_id: flow.challengeId, purpose: flow.purpose, code,
   });
-  if (flow.purpose === "login") { await confirmSession(result); return null; }
+  if (flow.purpose === "login") { await confirmSession(result, revision); return null; }
+  if (!sessionLifecycle.current(revision)) throw new IdentityApiError("unknown");
   if (typeof result.grant !== "string" || result.grant.length < 40
     || result.purpose !== flow.purpose || result.expires_in_seconds !== 600)
     throw new IdentityApiError("unknown");
@@ -68,11 +73,12 @@ export async function verifyOtp(flow: LiveVerifyFlow, code: string): Promise<str
 }
 
 export async function completePassword(grant: string, purpose: "register" | "recovery", password: string): Promise<void> {
+  const revision = sessionLifecycle.capture();
   const result = await post(`${purpose}/complete`, { grant, password });
-  await confirmSession(result);
+  await confirmSession(result, revision);
 }
 
-let csrfToken: string | null = null;
+let sessionRead = 0;
 
 export function normalizeIranPhone(value: string): string | null {
   const digits = value.trim().replace(/[۰-۹٠-٩]/g, digit => {
@@ -88,7 +94,7 @@ export function normalizeIranPhone(value: string): string | null {
 export async function loginPassword(phone: string, password: string): Promise<SignInResult> {
   const normalized = normalizeIranPhone(phone);
   if (!normalized) return "incorrect";
-  csrfToken = null;
+  const revision = sessionLifecycle.capture();
   try {
     const response = await fetch("/api/v1/auth/login/password", {
       method: "POST", credentials: "same-origin", cache: "no-store",
@@ -110,7 +116,7 @@ export async function loginPassword(phone: string, password: string): Promise<Si
     const account: unknown = await session.json();
     if (!account || typeof account !== "object" || !("account_id" in account)
       || account.account_id !== grant.account_id) return "service";
-    csrfToken = grant.csrf_token;
+    if (!sessionLifecycle.authenticated(grant.account_id, revision)) return "service";
     return "success";
   } catch {
     return "network";
@@ -118,19 +124,23 @@ export async function loginPassword(phone: string, password: string): Promise<Si
 }
 
 export async function checkSession(): Promise<"confirm" | "signedOut" | "service" | "unknown"> {
+  const revision = sessionLifecycle.capture(), read = ++sessionRead;
   try {
     const response = await fetch("/api/v1/auth/session", {
       credentials: "same-origin", cache: "no-store", signal: AbortSignal.timeout(10000),
     });
-    if (response.status === 401) { csrfToken = null; return "signedOut"; }
+    if (!sessionLifecycle.current(revision) || read !== sessionRead) return "unknown";
+    if (response.status === 401) { sessionLifecycle.observe(null, revision); return "signedOut"; }
     if (!response.ok) return "service";
     const account: unknown = await response.json();
-    return account && typeof account === "object" && "account_id" in account
-      && typeof account.account_id === "string" ? "confirm" : "unknown";
+    if (!sessionLifecycle.current(revision) || read !== sessionRead) return "unknown";
+    if (!account || typeof account !== "object" || !("account_id" in account) || typeof account.account_id !== "string") return "unknown";
+    return sessionLifecycle.observe(account.account_id, revision) ? "confirm" : "unknown";
   } catch { return "unknown"; }
 }
 
 export async function logoutSession(): Promise<"success" | "signedOut" | "service" | "unknown"> {
+  const revision = sessionLifecycle.capture();
   try {
     // Bootstrap from the HttpOnly cookie after reload; never persist CSRF in storage.
     const bootstrap = await fetch("/api/v1/auth/session/csrf", {
@@ -141,14 +151,16 @@ export async function logoutSession(): Promise<"success" | "signedOut" | "servic
     if (!bootstrap.ok) return "service";
     const data = await bootstrap.json();
     if (typeof data?.csrf_token !== "string") return "unknown";
-    csrfToken = data.csrf_token;
+    if (!sessionLifecycle.current(revision)) return "unknown";
     const response = await fetch("/api/v1/auth/logout", {
       method: "POST", credentials: "same-origin", cache: "no-store",
-      headers: { "X-CSRF-Token": csrfToken! }, signal: AbortSignal.timeout(15000),
+      headers: { "X-CSRF-Token": data.csrf_token }, signal: AbortSignal.timeout(15000),
     });
     if (response.status !== 204 && response.status !== 401) return "unknown";
-    if (await checkSession() !== "signedOut") return "unknown";
-    csrfToken = null;
+    const confirmation = await fetch("/api/v1/auth/session", { credentials: "same-origin", cache: "no-store", signal: AbortSignal.timeout(10000) });
+    if (confirmation.status !== 401 || !sessionLifecycle.authenticated(null, revision)) return "unknown";
     return "success";
   } catch { return "unknown"; }
 }
+
+export const liveAuthApi = { request: requestOtp, verify: verifyOtp, complete: completePassword, logout: logoutSession, checkSession, subscribe: sessionLifecycle.subscribe };

@@ -6,15 +6,22 @@ PYTHON ?= python3.12
 VENV := $(ROOT)/Backend/.venv
 COMPOSE := docker compose --env-file $(ENV_FILE) -f $(ROOT)/infra/docker/compose.yaml
 ifeq ($(ENV),production)
+ifneq ($(MINIO_DEVELOPMENT_IMAGE),)
+$(error MINIO_DEVELOPMENT_IMAGE is only supported in development)
+endif
 COMPOSE += -f $(ROOT)/infra/docker/compose.production.yaml
 else ifneq ($(ENV),development)
 $(error ENV must be development or production)
+else ifneq ($(MINIO_DEVELOPMENT_IMAGE),)
+export MINIO_DEVELOPMENT_IMAGE
+COMPOSE += -f $(ROOT)/infra/docker/compose.development-storage.yaml
 endif
 .DEFAULT_GOAL := help
 .PHONY: help install up down logs migrate test lint typecheck build api-client check design-reference
 help:
 	@echo 'Targets: install up down logs migrate test lint typecheck build api-client check design-reference'
 	@echo 'Options: PYTHON=python3.12 ENV=development|production ENV_FILE=/path/to/.env SERVICE=api'
+	@echo 'Optional development storage: MINIO_DEVELOPMENT_IMAGE=repository@sha256:digest'
 install:
 	test -x $(VENV)/bin/python || $(PYTHON) -m venv $(VENV)
 	@if $(VENV)/bin/python -m pip --version >/dev/null 2>&1; then \

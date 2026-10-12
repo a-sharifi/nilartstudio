@@ -5,7 +5,7 @@ It explains implemented features, design constraints, test evidence, current
 environment blockers and the recommended next steps. The full platform is not
 yet production-ready.
 
-Repository root is this `code` directory. Applications are `Backend/` and
+Repository root is the checkout directory. Applications are `Backend/` and
 `Frontend/`; requirements and progress are in `docs/`.
 
 ## Local development
@@ -80,3 +80,14 @@ pinned community source at `07c3a429bfed433e49018cb0f78a52145d4bedeb` instead.
 This upstream is archived; the production override refuses to use this development
 build and requires `MINIO_PRODUCTION_IMAGE` with a compatible, security-reviewed image.
 Storage provider/security approval remains a release gate, not an automatic substitution.
+
+If source dependency downloads are blocked, an explicitly chosen development
+MinIO image can be used instead. It must include the `mc` client for its healthcheck:
+
+```sh
+make MINIO_DEVELOPMENT_IMAGE=repository@sha256:digest up
+```
+
+Use that same option for subsequent Compose commands. The image override removes
+the source build and is rejected with `ENV=production`; production continues to
+require `MINIO_PRODUCTION_IMAGE` and the release review described above.

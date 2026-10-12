@@ -18,6 +18,7 @@ import {
   type ProfileRecord,
 } from "./profile"
 import type { ReferenceNavigationGuard } from "./ReferencesPage"
+import type { LiveSessionEvent } from "./auth"
 import "./profile.css"
 
 type SaveState = "idle" | "saving" | "success" | "error" | "unknown" | "conflict"
@@ -50,7 +51,7 @@ export default function ProfilePage({
   page: string
   navigate: (route: string) => void
   registerGuard: (guard: ReferenceNavigationGuard | null) => void
-  liveApi?: { load(): Promise<ProfileRecord>; save(payload: ReturnType<typeof profilePayload>, owner: string): Promise<ProfileRecord> }
+  liveApi?: { load(): Promise<ProfileRecord>; save(payload: ReturnType<typeof profilePayload>, owner: string): Promise<ProfileRecord>; subscribe?(listener: (event: LiveSessionEvent) => void): () => void }
 }) {
   const en = page.startsWith("/en/"),
     t = (fa: string, english: string) => (en ? english : fa)
@@ -80,37 +81,71 @@ export default function ProfilePage({
     conflictInjected = useRef(false),
     timers = useRef(new Set<ReturnType<typeof setTimeout>>())
   const authoritative = useRef(record)
+  const liveMounted = useRef(false),
+    sessionGeneration = useRef(0),
+    readGeneration = useRef(0)
+  const saveStateRef = useRef(state)
+  saveStateRef.current = state
+  const replaceLiveRecord = (value: ProfileRecord) => {
+    sessionGeneration.current += 1
+    authoritative.current = value
+    setRecord(value); setDraft(profileDraft(value)); setLatest(null)
+    setState("idle"); setErrors({}); setMode("normal"); setLive("")
+    setChecking(false); setModal(null)
+    leaveAction.current = null
+    dirtyRef.current = false
+    lock.current = false
+  }
+  const denyLiveProfile = () => {
+    sessionGeneration.current += 1
+    readGeneration.current += 1
+    const empty = { owner: "", fullName: "", phone: "", phoneVerified: false, email: null, emailVerified: false, version: 0 }
+    authoritative.current = empty
+    setRecord(empty); setDraft(profileDraft(empty)); setLatest(null)
+    setState("idle"); setErrors({}); setLive(""); setMode("denied")
+    setChecking(false); setModal(null)
+    leaveAction.current = null
+    dirtyRef.current = false
+    lock.current = false
+  }
   useEffect(() => {
     if (!liveApi) return
-    let active = true
+    liveMounted.current = true
     const revalidate = async () => {
+      const request = ++readGeneration.current
       try {
         const value = await liveApi.load()
-        if (!active) return
-        if (authoritative.current.owner && value.owner !== authoritative.current.owner) {
-          authoritative.current = value; setRecord(value); setDraft(profileDraft(value)); setLatest(null); setState("idle"); setErrors({}); setMode("normal")
+        if (!liveMounted.current || request !== readGeneration.current) return
+        if (value.owner !== authoritative.current.owner) replaceLiveRecord(value)
+        else {
+          setMode("normal"); setChecking(false)
+          if (saveStateRef.current === "conflict" || saveStateRef.current === "unknown") {
+            setLatest(value); setState("conflict")
+          }
         }
       } catch (error) {
-        if (!active) return
-        setMode(error instanceof Error && error.message === "denied" ? "denied" : "network")
-        if (error instanceof Error && error.message === "denied") {
-          setDraft({ fullName: "", email: "" }); setLatest(null); setState("idle")
-        }
+        if (!liveMounted.current || request !== readGeneration.current) return
+        if (error instanceof Error && error.message === "denied") denyLiveProfile()
+        else { setMode("network"); setChecking(false) }
       }
     }
-    const channel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("nilart-auth-status") : null
+    void revalidate()
+    const unsubscribe = liveApi.subscribe?.((event) => {
+      if (event.type === "changed") {
+        denyLiveProfile()
+        if (event.signedOut) return
+      }
+      void revalidate()
+    })
+    const channel = !liveApi.subscribe && typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("nilart-auth-status") : null
     if (channel) channel.onmessage = (event) => { if (event.data?.type === "session-changed") void revalidate() }
-    window.addEventListener("focus", revalidate)
-    return () => { active = false; channel?.close(); window.removeEventListener("focus", revalidate) }
-  }, [liveApi])
-  useEffect(() => {
-    if (!liveApi) return
-    let active = true
-    liveApi.load().then((value) => {
-      if (!active) return
-      authoritative.current = value; setRecord(value); setDraft(profileDraft(value)); setMode("normal")
-    }).catch((error) => { if (active) setMode(error instanceof Error && error.message === "denied" ? "denied" : "network") })
-    return () => { active = false }
+    if (!liveApi.subscribe) window.addEventListener("focus", revalidate)
+    return () => {
+      liveMounted.current = false
+      sessionGeneration.current += 1
+      readGeneration.current += 1
+      unsubscribe?.(); channel?.close(); window.removeEventListener("focus", revalidate)
+    }
   }, [liveApi])
   const policy = liveApi ? { ...profileFixture("normal").policy, phoneChangeEnabled: false } : profileFixture(mode).policy
   const authorized = mode !== "denied"
@@ -118,8 +153,8 @@ export default function ProfilePage({
   const dirty = loaded && profileDirty(record, draft, policy)
   const blocked =
     state === "saving" || state === "unknown" || state === "conflict"
-  dirtyRef.current = dirty || state === "unknown"
-  authorizedRef.current = loaded
+  dirtyRef.current = profileDirty(record, draft, policy) || state === "unknown"
+  authorizedRef.current = authorized && (liveApi ? !!record.owner : loaded)
   savingRef.current = state === "saving"
   const later = (fn: () => void, ms = 750) => {
     const timer = setTimeout(() => {
@@ -137,11 +172,11 @@ export default function ProfilePage({
   )
   useEffect(() => {
     const guard: ReferenceNavigationGuard = (proceed) => {
+      if (savingRef.current) return false
       if (!authorizedRef.current || !dirtyRef.current) {
         proceed()
         return true
       }
-      if (savingRef.current) return false
       leaveAction.current = proceed
       origin.current = (document.activeElement as HTMLElement)
       setModal("leave")
@@ -177,7 +212,7 @@ export default function ProfilePage({
   }
   const requestLeave = (proceed: () => void) => {
     if (state === "saving") return
-    if (dirtyRef.current && loaded) {
+    if (dirtyRef.current && authorizedRef.current) {
       origin.current = (document.activeElement as HTMLElement)
       leaveAction.current = proceed
       setModal("leave")
@@ -264,18 +299,34 @@ export default function ProfilePage({
     setState("saving")
     setLive("")
     if (liveApi) {
+      const generation = sessionGeneration.current
+      const current = () => liveMounted.current && generation === sessionGeneration.current
       try {
         const saved = await liveApi.save(payload, record.owner)
+        if (!current()) return
+        readGeneration.current += 1
+        setChecking(false)
         authoritative.current = saved; setRecord(saved); setDraft(profileDraft(saved)); setState("success")
         setLive(t("اطلاعات پروفایل ذخیره شد.", "Your profile has been saved."))
       } catch (error) {
+        if (!current()) return
         const code = error instanceof Error ? error.message : "unknown"
-        if (code === "denied") setMode("denied")
+        if (code === "denied") denyLiveProfile()
         else if (code === "conflict") {
           setState("conflict")
-          try { setLatest(await liveApi.load()) } catch { setState("unknown") }
+          const request = ++readGeneration.current
+          try {
+            const value = await liveApi.load()
+            if (!current() || request !== readGeneration.current) return
+            if (value.owner !== authoritative.current.owner) replaceLiveRecord(value)
+            else setLatest(value)
+          } catch (error) {
+            if (!current() || request !== readGeneration.current) return
+            if (error instanceof Error && error.message === "denied") denyLiveProfile()
+            else setState("unknown")
+          }
         } else setState(code === "service" ? "error" : "unknown")
-      } finally { lock.current = false }
+      } finally { if (current()) lock.current = false }
       return
     }
     later(() => {
@@ -352,14 +403,24 @@ export default function ProfilePage({
     if (checking) return
     setChecking(true)
     if (liveApi) {
+      const request = ++readGeneration.current
       try {
         const value = await liveApi.load()
+        if (!liveMounted.current || request !== readGeneration.current) return
+        if (value.owner !== authoritative.current.owner) { replaceLiveRecord(value); return }
         authoritative.current = value
         if (mode === "network" || mode === "loading") {
-          setRecord(value); setDraft(profileDraft(value)); setMode("normal"); setState("idle")
+          setMode("normal")
+          if (!profileDirty(record, draft, policy) && state !== "saving" && state !== "unknown" && state !== "conflict") {
+            setRecord(value); setDraft(profileDraft(value)); setState("idle")
+          } else if (value.version !== record.version && state !== "saving") {
+            setLatest(value); setState("conflict")
+          }
         } else { setLatest(value); setState("conflict") }
-      } catch (error) { if (error instanceof Error && error.message === "denied") setMode("denied") }
-      finally { setChecking(false) }
+      } catch (error) {
+        if (liveMounted.current && request === readGeneration.current && error instanceof Error && error.message === "denied") denyLiveProfile()
+      }
+      finally { if (liveMounted.current && request === readGeneration.current) setChecking(false) }
       return
     }
     later(() => {
@@ -778,6 +839,7 @@ export default function ProfilePage({
                       type="button"
                       className="button secondary"
                       onClick={() => {
+                        authoritative.current = latest
                         setRecord(latest)
                         setDraft(profileDraft(latest))
                         setLatest(null)

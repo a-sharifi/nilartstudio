@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react"
+import type { LiveSessionEvent } from "./auth"
 import { AuthIcon } from "./AuthPage"
 
 type State = "confirm" | "saving" | "saveError" | "signingOut" | "success" | "network" | "service" | "unknown" | "signedOut" | "checking" | "otherTab"
@@ -10,9 +11,10 @@ const previews: [State, string, string][] = [
   ["signedOut", "بدون نشست", "No session"], ["otherTab", "خروج تب دیگر Demo", "Demo other-tab sign-out"],
 ]
 
-export default function LogoutPage({ en, navigate, target, clearDemoData, liveLogout, liveCheck }: {
+export default function LogoutPage({ en, navigate, target, clearDemoData, liveLogout, liveCheck, liveSubscribe }: {
   en: boolean; navigate: (route: string) => void; target: string | null; clearDemoData: () => void
   liveLogout?: () => Promise<"success" | "signedOut" | "service" | "unknown">
+  liveSubscribe?: (listener: (event: LiveSessionEvent) => void) => () => void
   liveCheck?: () => Promise<"confirm" | "signedOut" | "service" | "unknown">
 }) {
   const t = (fa: string, english: string) => en ? english : fa
@@ -35,6 +37,7 @@ export default function LogoutPage({ en, navigate, target, clearDemoData, liveLo
   const dialog = useRef<HTMLDialogElement>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lock = useRef(false)
+  const readVersion = useRef(0)
   const channel = useRef<BroadcastChannel | null>(null)
   const clearRef = useRef(clearDemoData)
   clearRef.current = clearDemoData
@@ -56,9 +59,28 @@ export default function LogoutPage({ en, navigate, target, clearDemoData, liveLo
   useEffect(() => {
     if (!liveCheck) return
     let active = true
-    liveCheck().then((next) => { if (active) { setState(next); if (next === "signedOut") clearRef.current() } })
-    return () => { active = false }
-  }, [liveCheck])
+    const refresh = async () => {
+      if (lock.current) return
+      const read = ++readVersion.current
+      const next = await liveCheck()
+      if (active && read === readVersion.current && !lock.current) {
+        setState(next); if (next === "signedOut") clearRef.current()
+      }
+    }
+    const unsubscribe = liveSubscribe?.((event) => {
+      if (event.type === "changed") {
+        readVersion.current += 1
+        if (event.signedOut) {
+          clearRef.current()
+          if (!lock.current) setState("signedOut")
+          return
+        }
+      }
+      void refresh()
+    })
+    void refresh()
+    return () => { active = false; readVersion.current += 1; unsubscribe?.() }
+  }, [liveCheck, liveSubscribe])
   useEffect(() => {
     document.documentElement.lang = en ? "en" : "fa"
     document.documentElement.dir = en ? "ltr" : "rtl"
@@ -71,7 +93,7 @@ export default function LogoutPage({ en, navigate, target, clearDemoData, liveLo
     else if (!open && dialog.current?.open) dialog.current.close()
   }, [open])
   useEffect(() => {
-    if (typeof BroadcastChannel === "undefined") return
+    if (liveSubscribe || typeof BroadcastChannel === "undefined") return
     const node = new BroadcastChannel(liveCheck ? "nilart-auth-status" : "nilart-auth-demo-status")
     channel.current = node
     node.onmessage = async (event) => {
@@ -89,7 +111,7 @@ export default function LogoutPage({ en, navigate, target, clearDemoData, liveLo
       setState("otherTab"); setUnsaved(false); setCancelled(false)
     }
     return () => { node.close(); channel.current = null }
-  }, [liveCheck])
+  }, [liveCheck, liveSubscribe])
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current) }, [])
   const completeDemo = (broadcast: boolean) => {
     if (liveLogout) return
@@ -113,6 +135,7 @@ export default function LogoutPage({ en, navigate, target, clearDemoData, liveLo
   }
   const startLogout = async () => {
     if (lock.current || busy || noSession || uncertain) return
+    readVersion.current += 1
     lock.current = true; setCancelled(false); setState("signingOut")
     if (liveLogout) {
       try {

@@ -40,6 +40,10 @@ function validReturn(search: string) {
   return /^(\/cart|\/checkout(?:\/(?:address|delivery|payment))?|\/account|\/(?:fa|en)\/commissions(?:\/new(?:\/(?:references|preferences|assessment))?)?|\/products\/[\w-]+)$/.test(value) ? value : null
 }
 
+export function clearLiveAuthMemory() {
+  liveMemory.flow = null; liveMemory.registration = null; liveMemory.recovery = null
+}
+
 export default function AuthPage({ page, search, navigate, liveSignIn, liveApi }: { page: string; search: string; navigate: (route: string) => void; liveSignIn?: (phone: string, password: string) => Promise<"incorrect" | "service" | "limited" | "success" | "network">; liveApi?: LiveAuthApi }) {
   const en = page.startsWith("/en/")
   const t = (fa: string, english: string) => en ? english : fa
@@ -67,6 +71,15 @@ export default function AuthPage({ page, search, navigate, liveSignIn, liveApi }
     operation.current += 1
     return () => { operation.current += 1 }
   }, [page])
+  useEffect(() => liveApi?.subscribe?.((event) => {
+    if (event.type === "revalidate") {
+      if (!page.endsWith("/logout")) void liveApi.checkSession()
+      return
+    }
+    if (event.source === "observation") operation.current += 1
+    clearLiveAuthMemory()
+    setFlowState(null); setRegistrationState(null); setRecoveryState(null); setPhone("")
+  }), [liveApi, page])
   const [retrying, setRetrying] = useState(false)
   const heading = useRef<HTMLHeadingElement>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -165,7 +178,7 @@ export default function AuthPage({ page, search, navigate, liveSignIn, liveApi }
   if (isRegistrationPassword || isResetPassword) return <RegistrationPasswordPage key={isResetPassword ? "recovery" : "register"} purpose={isResetPassword ? "recovery" : "register"} en={en} suffix={suffix} grant={isResetPassword ? recoveryGrant : passwordGrant} setGrant={isResetPassword ? setRecoveryGrant : setPasswordGrant} navigate={navigate} target={target} liveComplete={liveComplete} resetFlow={() => { setVerifyFlow(null); if (isResetPassword) setRecoveryGrant(null); else setPasswordGrant(null) }} />
   if (isSessionExpired) return <SessionExpiredPage en={en} navigate={navigate} target={returnTo} />
   if (isRestricted) return <AccountRestrictedPage en={en} navigate={navigate} target={returnTo} />
-  if (isLogout) return <LogoutPage en={en} navigate={navigate} target={returnTo} liveLogout={liveApi?.logout} liveCheck={liveApi?.checkSession} clearDemoData={() => { setPhone(""); setVerifyFlow(null); setPasswordGrant(null); setRecoveryGrant(null) }} />
+  if (isLogout) return <LogoutPage en={en} navigate={navigate} target={returnTo} liveLogout={liveApi?.logout} liveCheck={liveApi?.checkSession} liveSubscribe={liveApi?.subscribe} clearDemoData={() => { setPhone(""); setVerifyFlow(null); setPasswordGrant(null); setRecoveryGrant(null) }} />
   if (isVerify) return <VerifyPage en={en} suffix={suffix} flow={verifyFlow} setFlow={setVerifyFlow} navigate={navigate} target={target} liveVerify={liveVerify} liveResend={liveResend} onRegistrationContinue={(maskedPhone) => { if (liveApi) return; setPasswordGrant({ demo: true, purpose: "register", maskedPhone }); navigate(`${prefix}/auth/register/password${suffix}`) }} onRecoveryContinue={(maskedPhone) => { if (liveApi) return; setRecoveryGrant({ demo: true, purpose: "recovery", maskedPhone }); navigate(`${prefix}/auth/reset-password${suffix}`) }} />
   return <div className="auth-shell" dir={en ? "ltr" : "rtl"}>
     <a className="skip-link" href="#auth-title">{t("رفتن به محتوای اصلی", "Skip to content")}</a>

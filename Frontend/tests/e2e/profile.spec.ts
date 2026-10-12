@@ -46,3 +46,58 @@ test("profile conflicts preserve draft until explicit replacement", async ({ pag
   await page.getByRole("button", { name: "Load latest version", exact: true }).click();
   await expect(page.locator("#profile-fullName")).toHaveValue("Changed elsewhere");
 });
+
+test("an old save cannot restore a profile after an account switch", async ({ page }) => {
+  let switched = false;
+  let release!: () => void;
+  const pending = new Promise<void>(resolve => { release = resolve; });
+  await page.route("**/api/v1/account/profile", async route => {
+    if (route.request().method() === "PUT") {
+      await pending;
+      await route.fulfill({ contentType: "application/json", body: JSON.stringify({
+        account_id: "old-owner", phone: "+989123456789", full_name: "Old account edit", version: 2,
+      }) });
+    } else await route.fulfill({ contentType: "application/json", body: JSON.stringify({
+      account_id: switched ? "new-owner" : "old-owner", phone: "+989123456789",
+      full_name: switched ? "Current customer" : "Previous customer", version: 1,
+    }) });
+  });
+  await page.route("**/api/v1/auth/session/csrf", route => route.fulfill({
+    contentType: "application/json", body: JSON.stringify({ csrf_token: "fresh" }),
+  }));
+  await page.goto("/en/account/profile");
+  await expect(page.locator("#profile-fullName")).toHaveValue("Previous customer");
+  await page.locator("#profile-fullName").fill("Old account edit");
+  const request = page.waitForRequest(request => request.method() === "PUT");
+  await page.locator("button[type=submit]").click();
+  await request;
+  switched = true;
+  await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+  await expect(page.locator("#profile-fullName")).toHaveValue("Current customer");
+  const response = page.waitForResponse(response => response.request().method() === "PUT");
+  release();
+  await response;
+  await expect(page.locator("#profile-fullName")).toHaveValue("Current customer");
+  await expect(page.getByText("Your profile has been saved.", { exact: true })).toHaveCount(0);
+});
+
+test("a session broadcast rechecks the server and removes denied private data", async ({ page }) => {
+  let denied = false;
+  await page.route("**/api/v1/account/profile", route => route.fulfill(denied
+    ? { status: 401, contentType: "application/json", body: "{}" }
+    : { contentType: "application/json", body: JSON.stringify({ account_id: "owner",
+      phone: "+989123456789", full_name: "Private customer", version: 1 }) }));
+  await page.goto("/en/account/profile");
+  await expect(page.locator("#profile-fullName")).toHaveValue("Private customer");
+  await page.locator("#profile-fullName").fill("Private draft");
+  denied = true;
+  await page.evaluate(() => {
+    const channel = new BroadcastChannel("nilart-auth-status");
+    channel.postMessage({ type: "session-changed" });
+    channel.close();
+  });
+  await expect(page.getByText("This account’s profile is not accessible.", { exact: true })).toBeVisible();
+  await expect(page.locator("#profile-fullName")).toHaveCount(0);
+  await expect(page.getByText("Private customer", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Private draft", { exact: true })).toHaveCount(0);
+});

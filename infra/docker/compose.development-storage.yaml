@@ -1,0 +1,8 @@
+# Explicit development-only alternative when the pinned source cannot be built.
+# Invoke through Make with MINIO_DEVELOPMENT_IMAGE set to a chosen pinned image.
+services:
+  minio:
+    image: ${MINIO_DEVELOPMENT_IMAGE:?Set a pinned development MinIO image}
+    build: !reset null
+    healthcheck:
+      test: [CMD, mc, ready, local]

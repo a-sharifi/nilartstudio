@@ -32,12 +32,40 @@ Responses are owner-checked before use. Unknown PUT outcomes pause resubmission;
 a read-only reload offers explicit replacement with the latest version.
 
 Focus and logout broadcasts cause API revalidation, not assumed authorization.
-The existing design's own links and beforeunload warn about unsaved edits. Native
-browser-back interception is not yet integrated with the shared Next shell; do
-not claim all history transitions preserve drafts. Language changes with dirty
-inputs require confirmation before discarding edits; no drafts are persisted in browser storage.
+Profile reads are ordered so an older response cannot overwrite a newer account
+check. Account changes and denied access clear the previous owner's draft, conflict
+data, status and pending navigation. Responses from saves started before that
+change are ignored. Temporary read failures preserve the draft; focus revalidation
+and explicit retry recover it without silently replacing unsaved input. Concurrent
+conflict checks use the latest read and retain explicit replacement semantics.
+The existing design's own links and beforeunload warn about unsaved edits. A
+persistent Next layout provider now connects the live profile's existing guard to
+browser Back/Forward. Rejected traversals restore the current entry without
+unmounting the form; explicit consent replays the original destination, including
+multi-entry jumps. Pending saves block traversal. Temporary read failures keep
+draft protection active. The provider preserves Next's internal history state and
+does not add duplicate entries when the user chooses to stay.
 
-Remaining: shared session/private-cache lifecycle, full navigation guard integration,
+Current browsers' Navigation API indices include native fragment entries. The
+fallback for browsers without that API tracks application-created history entries;
+arbitrary untracked fragment history in those older browsers is outside that
+fallback's guarantees. Reload and cross-document navigation use the browser's
+beforeunload confirmation (subject to normal browser user-activation requirements).
+Language changes with dirty inputs require confirmation before discarding edits;
+no drafts or private profile values are persisted in browser storage/history.
+
+Remaining: shared session/private-cache lifecycle, navigation guards for future private forms,
 audit, verified phone change and optional email policy. Other panel sections remain
 unconnected rather than exposing fixture transactions. No generic replacement page
 is deployed and no real customer profile has been seeded.
+
+The shared session lifecycle now invalidates profile reads/saves across verified
+session boundaries and clears drafts on verified logout or owner changes. A
+payload-free tab hint, focus, visibility restoration or BFCache restoration asks
+for an authenticated profile reload; hints never grant access or establish logout.
+Temporary errors preserve existing draft behavior. A 403 hides this profile but
+does not claim the whole session has expired.
+
+Session expiry (401) during CSRF bootstrap or profile save now advances the shared
+session lifecycle and clears registered auth memory. A late bootstrap denial from
+an older revision cannot invalidate a newer account or issue a profile write.

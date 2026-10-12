@@ -1,6 +1,7 @@
 # Foundation architecture
 
-Git root: `code/`. Artwork: sibling `design-prints/`, outside Git.
+Git root: the checkout directory. The original workspace called it `code/`.
+Artwork was an external `design-prints/` sibling and is not included in this clone.
 
 ## Backend
 

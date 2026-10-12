@@ -99,3 +99,22 @@ Do not enable production auth until the complete flow and security checks pass.
 Role/permission primitives and the authenticated access endpoint are now available;
 see `ACCESS.md`. This does not imply that business endpoints or imported panels
 are integrated. Registration grants only customer privileges.
+
+### Frontend session lifecycle (2026-10-12)
+
+A persistent client provider shares focus, visible-page, BFCache-restoration and
+cross-tab signals. Messages contain only a `session-changed` hint: private views
+query authenticated APIs before treating a session as changed. Verified password,
+OTP and completion flows announce changes only after matching the session owner;
+logout announces only after confirming session absence. No CSRF token is cached
+between requests or persisted in browser storage.
+
+The in-memory lifecycle advances a revision on verified owner changes and fresh
+local authentication, clears registered auth flow/grant memory even when its view
+is unmounted, and notifies private views. Session/profile reads and profile writes
+reject responses from an older revision. Concurrent session/profile reads are
+ordered. Profile permission denial (403) does not establish global sign-out.
+Future private caches must register cleanup and subscribe to authoritative
+revalidation; unconnected commerce features are still unavailable. Cross-tab
+messages alone do not prove same-owner session rotation, and no session identifier
+or credential is broadcast.

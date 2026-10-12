@@ -23,12 +23,19 @@ export interface LiveVerifyFlow {
 }
 export type VerifyFlow = DemoVerifyFlow | LiveVerifyFlow
 
+export type LiveSessionEvent = { type: "revalidate" } | {
+  type: "changed"
+  source: "authentication" | "observation"
+  signedOut: boolean
+}
+
 export interface LiveAuthApi {
   request(phone: string, purpose: Purpose): Promise<LiveVerifyFlow>
   verify(flow: LiveVerifyFlow, code: string): Promise<string | null>
   complete(grant: string, purpose: "register" | "recovery", password: string): Promise<void>
   logout(): Promise<"success" | "signedOut" | "service" | "unknown">
   checkSession(): Promise<"confirm" | "signedOut" | "service" | "unknown">
+  subscribe?(listener: (event: LiveSessionEvent) => void): () => void
 }
 
 export function createDemoVerifyFlow(purpose: Purpose, phone: string): DemoVerifyFlow {
