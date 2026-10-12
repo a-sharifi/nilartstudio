@@ -72,3 +72,12 @@ jobs:
       - uses: actions/checkout@v4
       - run: docker compose -f infra/docker/compose.yaml config --quiet
       - run: docker compose -f infra/docker/compose.yaml -f infra/docker/compose.production.yaml config --quiet
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: docker pull postgres:17-alpine
+      - name: PostgreSQL backup and isolated restoration tests
+        run: python3 -m unittest discover -s infra/tests -v
+        env:
+          NILART_RUN_BACKUP_INTEGRATION: '1'
+          NILART_BACKUP_TEST_IMAGE: postgres:17-alpine

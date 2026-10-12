@@ -91,3 +91,10 @@ make MINIO_DEVELOPMENT_IMAGE=repository@sha256:digest up
 Use that same option for subsequent Compose commands. The image override removes
 the source build and is rejected with `ENV=production`; production continues to
 require `MINIO_PRODUCTION_IMAGE` and the release review described above.
+
+## Database backup verification
+
+Run `make PYTHON=python3 backup-verify` for a read-only PostgreSQL backup and a
+restore drill in a new isolated temporary container. Private artifacts go to
+ignored `backups/`. See [backup and restore scope](docs/backup-restore.md) for
+requirements, tests and remaining production recovery work.

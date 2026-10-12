@@ -47,7 +47,7 @@ A clone does not include print artwork, local environments, credentials or datab
 
 | Area | Implemented | Still pending |
 | --- | --- | --- |
-| Foundation | Compose, proxy, migrations, CI configuration, Make commands, health/logging, typed schema | GitHub CI verification, backup/restore |
+| Foundation | Compose, proxy, migrations, CI configuration, Make commands, health/logging, typed schema | GitHub CI verification; other-service/production recovery |
 | Design | Original components/pages imported; 42 original CSS files byte-identical | Complete Next layouts/SSR and remaining integrations |
 | Catalog | Published localized collections/categories/products/SKUs; homepage and collection list/detail connected | Product purchase, real prices/stock and admin writes |
 | Identity | Password/OTP registration/login/recovery, sessions, CSRF, logout, rate limiting | Real SMS adapter and operational verification |
@@ -176,9 +176,28 @@ private caches must register cleanup/revalidation and forms must register their 
 A Starlette/httpx deprecation warning remains. No public deployment, real SMS or
 payments have been performed. The platform's release gates still apply.
 
+## PostgreSQL backup continuation (2026-10-12)
+
+`infra/scripts/postgres_backup.py` and `make backup-verify` now perform read-only
+custom-format dumps and restore them into an isolated, disposable PostgreSQL 17
+container using the source image ID, no network/ports and a temporary memory
+filesystem. The local database restored at migration 0008; all 15 user tables
+were queryable. A separate fixture integration test preserved Persian rows,
+sequence values and foreign-key enforcement; corrupt archives were rejected.
+Four safety tests plus one Docker integration test passed. Infrastructure CI now
+runs these tests, but remote CI is not yet verified. No app code changed in this
+slice; frontend/backend test results above belong to the preceding slices.
+
+Reports contain archive checksums, migration and table counts; private dumps and
+reports are ignored and owner-readable only. Existing output cannot be overwritten,
+failed drills leave no success report, and only generated restore containers are
+removed. See `docs/backup-restore.md`. This is one-database verification, excluding
+roles/ACLs, WAL/PITR, other service volumes, production recovery and off-host backup
+retention/encryption. It does not satisfy the full release backup gate.
+
 ## Recommended continuation
 
-1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and implement/test isolated backup restoration.
+1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.
 2. Adopt shared session/private-cache cleanup and revalidation in each future private feature; reuse the navigation provider and extend guards as new forms are connected.
 3. Implement audited role management and explicitly approved first-admin bootstrap; enforce ownership/artist assignment on business endpoints.
 4. Finish Next route/layout/SSR migration in small visually verified steps using the pinned components, desktop/mobile and both languages.

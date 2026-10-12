@@ -17,9 +17,9 @@ export MINIO_DEVELOPMENT_IMAGE
 COMPOSE += -f $(ROOT)/infra/docker/compose.development-storage.yaml
 endif
 .DEFAULT_GOAL := help
-.PHONY: help install up down logs migrate test lint typecheck build api-client check design-reference
+.PHONY: help install up down logs migrate test lint typecheck build api-client check design-reference backup-verify test-infra
 help:
-	@echo 'Targets: install up down logs migrate test lint typecheck build api-client check design-reference'
+	@echo 'Targets: install up down logs migrate test lint typecheck build api-client check design-reference backup-verify test-infra'
 	@echo 'Options: PYTHON=python3.12 ENV=development|production ENV_FILE=/path/to/.env SERVICE=api'
 	@echo 'Optional development storage: MINIO_DEVELOPMENT_IMAGE=repository@sha256:digest'
 install:
@@ -58,3 +58,12 @@ api-client:
 check: test lint typecheck
 design-reference:
 	cd $(ROOT)/design-reference && npm ci && npm run dev -- --host 127.0.0.1
+
+# Standard-library tooling; restore targets are always newly created isolated containers.
+BACKUP_DIR ?= $(ROOT)/backups
+BACKUP_SOURCE_CONTAINER ?= nilart-postgres-1
+backup-verify:
+	@mkdir -p "$(BACKUP_DIR)"
+	$(PYTHON) $(ROOT)/infra/scripts/postgres_backup.py --source-container "$(BACKUP_SOURCE_CONTAINER)" --output-dir "$(BACKUP_DIR)/postgres-$$(date -u +%Y%m%dT%H%M%SZ)"
+test-infra:
+	$(PYTHON) -m unittest discover -s $(ROOT)/infra/tests -v

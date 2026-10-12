@@ -17,3 +17,7 @@ coverage/
 test-results/
 playwright-report/
 *.tsbuildinfo
+
+# Private backup artifacts
+backups/
+*.dump
