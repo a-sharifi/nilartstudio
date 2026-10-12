@@ -207,3 +207,11 @@ layout. Descriptions and explicit component quantities/codes come from the exist
 API. Missing commercial/media fields stay unknown; prototype notebook options,
 capacity calculations, discounts and cart callbacks are not invoked. No API/schema
 or data changes accompany this presentation correction.
+
+## Published product detail frontend (2026-10-12)
+
+The original product-detail layout consumes product details and published SKU
+reads. It rejects foreign SKU ownership and malformed exact prices, shows explicit
+SKU codes without inferring notebook specifications, and keeps purchases disabled
+because no stock/purchasing contract exists. Products without SKUs remain visible.
+Prices stay decimal strings; no API/schema or catalog-data changes are included.

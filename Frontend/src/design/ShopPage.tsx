@@ -775,7 +775,7 @@ export default function ShopPage({
                         : ""
                     const common = {
                       name: item.name[language],
-                      route: `/${
+                      route: `${liveCatalog ? (language === 0 ? "/fa" : "/en") : ""}/${
                         item.type === "product" ? "products" : "bundles"
                       }/${item.slug}`,
                       collection: selectedCollection

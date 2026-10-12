@@ -1020,3 +1020,38 @@ function BagIcon() {
     </svg>
   )
 }
+
+// Published descriptions and SKU codes are distinct from notebook demo options.
+export function PublishedProductDetail({ catalog, language, collections, onNavigate }: {
+  catalog: import("../features/catalog/product-detail").ProductDetail;
+  language: 0 | 1; collections: import("./data").Collection[];
+  onNavigate: (name: string, route: string) => void;
+}) {
+  const t = (fa: string, en: string) => language === 0 ? fa : en;
+  const [selected,setSelected] = useState("");
+  const product = catalog.product;
+  const sku = catalog.skus.find(row=>row.id === selected);
+  const root = `/${language === 0 ? "fa" : "en"}/shop`;
+  const go = (event: React.MouseEvent<HTMLAnchorElement>, name: string, route: string) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault(); onNavigate(name,route);
+  };
+  if (catalog.status === "loading") return <div className="container product-detail-page" aria-busy="true"><h1 className="sr-only">{t("بارگذاری محصول", "Loading product")}</h1><div className="product-main-layout"><div className="skeleton product-gallery-skeleton"/><div className="product-loading-info">{Array.from({length:8},(_,i)=><div key={i} className="skeleton skeleton-line"/>)}</div></div></div>;
+  if (catalog.status !== "normal" || !product) return <div className="container product-detail-page"><section className="collections-state" role={catalog.status === "error" ? "alert" : undefined}><h1>{catalog.status === "not-found" ? t("این محصول پیدا نشد.","Product not found.") : t("دریافت محصول ممکن نشد.","Unable to load product.")}</h1>{catalog.status === "error" && <button className="button secondary" onClick={catalog.retry}>{t("دوباره تلاش کنید","Try again")}</button>}<a href={root} className="button primary" onClick={e=>go(e,t("فروشگاه","Shop"),root)}>{t("مشاهده فروشگاه","Browse shop")}</a></section></div>;
+  const name = t(product.title_fa,product.title_en);
+  const memberships = collections.filter(row=>product.collection_ids.includes(row.id));
+  const amount = sku?.price?.amount;
+  const exactPrice = amount ? (language === 0 ? amount.replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[Number(d)]) : amount) : "";
+  return <div className="container product-detail-page">
+    <nav className="breadcrumb detail-breadcrumb" aria-label={t("مسیر صفحه","Breadcrumb")}><a href={root} onClick={e=>go(e,t("فروشگاه","Shop"),root)}>{t("فروشگاه","Shop")}</a><span>/</span><span aria-current="page">{name}</span></nav>
+    <section className="product-main-layout">
+      <div className="product-gallery"><div className="gallery-main"><div className="gallery-surface"><div className="gallery-object"><span>{t("تصویر در دسترس نیست","Image unavailable")}</span></div></div><span className="gallery-editorial">NILART STUDIO / EVERYDAY OBJECTS</span></div></div>
+      <div className="product-purchase-panel"><div className="product-intro-top">{memberships.length ? memberships.map(row=><a key={row.id} className="eyebrow" href={`/collections/${encodeURIComponent(row.slug)}`} onClick={e=>go(e,row.name[language],`/collections/${encodeURIComponent(row.slug)}`)}>{row.name[language]}</a>) : <span className="eyebrow">NILART STUDIO</span>}</div><h1>{name}</h1><p className="product-intro">{t(product.description_fa,product.description_en)}</p>
+        <section className="product-option-groups" aria-labelledby="published-product-options"><h2 id="published-product-options">{t("گزینه‌های منتشرشده","Published options")}</h2>{catalog.skus.length ? <fieldset className="product-option-group"><legend>{t("کد گزینه را انتخاب کنید","Select an option code")}</legend><div className="product-radio-grid">{catalog.skus.map(row=><label className={`product-radio ${selected === row.id ? "selected" : ""}`} key={row.id}><input type="radio" name="published-sku" value={row.id} checked={selected===row.id} onChange={()=>setSelected(row.id)}/><span className="radio-title"><bdi>{row.code}</bdi></span></label>)}</div></fieldset> : <p className="product-stock-state">{t("هنوز گزینه‌ای منتشر نشده است.","No published options yet.")}</p>}</section>
+        <div className="product-price-summary" role="status"><strong>{sku?.price ? `${exactPrice} ${sku.price.currency === "IRT" ? t("تومان","toman") : t("ریال","rial")}` : t("قیمت در دسترس نیست","Price unavailable")}</strong><p className="product-stock-state">{t("موجودی تأیید نشده","Stock unconfirmed")}</p></div>
+        <button className="button primary product-add-button" disabled>{t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}</button><p className="product-reservation-note">{t("نمایش گزینه و قیمت، موجودی یا امکان خرید را تأیید نمی‌کند.","An option and price do not confirm stock or purchase eligibility.")}</p>
+      </div>
+    </section>
+    <section className="product-information" aria-labelledby="published-product-about"><div><span className="eyebrow">MADE FOR EVERYDAY</span><h2 id="published-product-about">{t("درباره محصول","About this product")}</h2><p>{t(product.description_fa,product.description_en)}</p></div><div className="product-specifications"><h3>{t("مشخصات محصول","Product specifications")}</h3><p>{t("ابعاد، مواد و مشخصات تکمیلی تأیید نشده‌اند.","Dimensions, materials and further specifications are unconfirmed.")}</p></div></section>
+  </div>;
+}

@@ -46,6 +46,8 @@ import PrivacyPage from "./PrivacyPage"
 import { contactDemoConfig } from "./contact"
 import CommissionFlow from "../features/catalog/CommissionFlow"
 import { useArtworkCatalog } from "../features/catalog/artwork-catalog"
+import { PublishedProductDetail } from "./ProductDetailPage"
+import { useProductDetail } from "../features/catalog/product-detail"
 import PublishedBundlesPage from "./PublishedBundlesPage"
 import { useBundleCatalog } from "../features/catalog/bundle-catalog"
 import { isShopRoute } from "./shop"
@@ -632,7 +634,8 @@ export default function App() {
   const products = demoMode ? demoProducts : homepageProducts(liveCatalog.data)
   const homeMode = demoMode ? mode : liveCatalog.status
   const homeCollectionsMode = demoMode ? mode : liveCatalog.collectionsStatus
-  const isProduct = page.startsWith("/products/")
+  const isProduct = /^\/(?:fa\/|en\/)?products\/[^/]+$/.test(page)
+  const liveProduct = useProductDetail(!demoMode && isProduct, isProduct ? page.split("/").pop() : undefined)
   const liveBundleSlug = /^\/(?:fa\/|en\/)?bundles\/[^/]+$/.test(page) ? page.split("/").pop() : undefined
   const bundleCatalog = useBundleCatalog(!demoMode && /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page), liveBundleSlug)
   const isBundle = page.startsWith("/bundles/")
@@ -1872,6 +1875,8 @@ export default function App() {
               heart={<Icon name="heart" size={19} />}
             />
           </Suspense>
+        ) : isProduct && !demoMode ? (
+          <PublishedProductDetail key={page} catalog={liveProduct} language={lang} collections={collections} onNavigate={navigate} />
         ) : isProduct ? (
           <Suspense
             fallback={

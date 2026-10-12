@@ -166,7 +166,7 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL/Redis | 196 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 80 passed | Includes native artwork, commission and published bundle coverage |
+| Frontend tests | 84 passed | Includes native artwork, commission, bundle and product-detail coverage |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0012 |
 | Chromium catalog checks | 8 passed | Artwork navigation/search/mobile, shop/category and footer/bundle regressions; prior full-suite results are historical |
@@ -626,6 +626,38 @@ remains unverified.
 Next: connect product detail routes to original ProductDetailPage and existing
 published product/SKU reads, retaining unknown inventory and disabled purchasing;
 then implement explicitly approved inventory/price and authoring contracts.
+
+## Published product detail connection — 2026-10-12
+
+Product detail routes, including /products/{slug} and Persian/English aliases,
+now render PublishedProductDetail inside the original ProductDetailPage source.
+It retains the reference gallery, purchase panel, option radios, price summary
+and description/specification sections. All 42 CSS files remain byte-identical.
+Shop product links preserve the selected language. Prototype notebook options,
+cart, fake price changes, favorites and reservation callbacks are not invoked.
+
+The public adapter loads the product and its published SKU list with cancellation,
+bounded loading and retry; missing/unpublished details stay distinct from errors.
+It validates product membership arrays, SKU ownership, duplicate identities/codes
+and exact decimal/currency representations. SKU codes are shown as published
+options without inferring size, cover, material, stock or production specifications.
+An explicit option selection shows only its published price; null prices remain
+unknown. Decimal strings are never converted to floating point, including large
+six-decimal values. Purchasing stays disabled until inventory/purchasing contracts
+exist. A product with no published SKUs remains visible and explains that state.
+
+Validation: 84 frontend tests, lint/typecheck, production Docker build and 17
+focused Chromium cases pass (three product-detail cases plus fourteen catalog,
+bundle, commission and footer regressions). English/Persian navigation, exact
+prices, invalid/foreign SKU responses, retry, 404 and mobile overflow were checked.
+A separate browser read verified the actual local PostgreSQL sketchbook and its
+test-data notice/no-SKU state. All services remain healthy; local test records persist.
+No API/backend/schema/migrations/data changes; backend checks remain historical.
+Remote CI is unverified. Automated product fixtures are intercepted only, not seeded.
+
+Next backend slice: audited published-SKU/price authoring and inventory contracts,
+with explicit option mappings and stock availability before enabling purchases.
+No automatic draft-option publication, stock inference or price calculation is implied.
 
 ## Recommended continuation
 
