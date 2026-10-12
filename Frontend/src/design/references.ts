@@ -8,7 +8,7 @@ export interface SavedReference {
   receipt?: string
 }
 export interface ReferenceDraft {
-  owner: "demo-session"
+  owner: "demo-session" | "account-session"
   kind: InputKind
   brief: string
   primary: string
@@ -51,13 +51,14 @@ export function referenceFileError(
 }
 export function referenceErrors(
   draft: Pick<ReferenceDraft, "kind" | "brief" | "primary" | "files">,
+  maxText: number = referenceDemoConfig.maxText,
 ) {
   const errors: {
     brief?: "required" | "long"
     files?: "required" | "pending" | "primary"
   } = {}
   if (!draft.brief.trim()) errors.brief = "required"
-  else if (draft.brief.length > referenceDemoConfig.maxText)
+  else if (draft.brief.length > maxText)
     errors.brief = "long"
   if (draft.kind === "image" && !draft.files.length) errors.files = "required"
   else if (

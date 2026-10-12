@@ -207,11 +207,13 @@ export default function CommissionsPage({
   onNavigate,
   onDemoSignIn,
   initialMode = "normal",
+  live = false,
 }: {
   language: 0 | 1
   signedIn: boolean
   onNavigate: (name: string, route: string) => void
   onDemoSignIn?: (value: boolean) => void
+  live?: boolean
   initialMode?: CommissionMode
 }) {
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
@@ -248,6 +250,7 @@ export default function CommissionsPage({
     setMode(next)
   }
   const start = (resume = false, retry = false) => {
+    if (live) { onNavigate(t("شروع درخواست", "Start request"), signedIn ? `${prefix}/commissions/new/references` : `${prefix}/auth/login?returnTo=${encodeURIComponent(`${prefix}/commissions/new/references`)}`); return }
     if (busy.current || (!resume && disabled)) return
     if (resume && !draftVisible) return
     if (mode === "start-error" && !retry) {
@@ -363,7 +366,7 @@ export default function CommissionsPage({
             <div className="skeleton" key={i} />
           ))}
         </div>
-        {previews}
+        {!live && previews}
       </div>
     )
   return (
@@ -429,9 +432,9 @@ export default function CommissionsPage({
         <IntroArtwork language={language} />
       </section>
       <div className="commission-demo-notice">
-        <span>DEMO</span>
+        <span>{live ? t("درخواست بررسی", "Review request") : "DEMO"}</span>
         <p>
-          {t(
+          {live ? t("ایده متنی را برای بررسی ثبت کنید. تصویر، ارزیابی و قیمت‌گذاری هنوز در دسترس نیست. نمونه‌ها و گزینه‌ها نمایشی‌اند و تأیید اجرای سفارش نیستند.", "Submit a text brief for review. Images, assessment and quotes are unavailable. Illustrations and options are examples, not confirmed production offerings.") : t(
             "این صفحه نمونه طراحی مسیر است؛ محتوای سیاست‌ها، انواع اجرا و پیش‌نویس‌ها به سرویس واقعی متصل نیستند. نمونه سفارش دارای مجوز ارائه نشده است.",
             "This is a flow-design prototype. Policies, execution options and drafts are not connected to a live service. No licensed commission examples have been provided.",
           )}
@@ -848,7 +851,7 @@ export default function CommissionsPage({
           )}
         </p>
       )}
-      {previews}
+      {!live && previews}
     </div>
   )
 }

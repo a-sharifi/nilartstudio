@@ -130,6 +130,8 @@ export default function PreferencesPage({
   onDemoSignIn,
   registerGuard,
   hasPriorAssessment = false,
+  live = false,
+  liveSubmission,
 }: {
   language: 0 | 1
   signedIn: boolean
@@ -139,6 +141,8 @@ export default function PreferencesPage({
   onNavigate: (name: string, route: string) => void
   onDemoSignIn: (value: boolean) => void
   registerGuard: (guard: ReferenceNavigationGuard | null) => void
+  live?: boolean
+  liveSubmission?: { status: string; receipt: string; submit: (draft: PreferencesDraft) => Promise<boolean> }
   hasPriorAssessment?: boolean
 }) {
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
@@ -158,15 +162,15 @@ export default function PreferencesPage({
   const busy = useRef(false)
   const epoch = useRef(0)
   const baseline = useRef(JSON.stringify(signedIn && saved ? saved : blank))
-  const dirty = JSON.stringify(draft) !== baseline.current
+  const dirty = !liveSubmission?.receipt && JSON.stringify(draft) !== baseline.current
   const authorized = signedIn && !["denied", "expired"].includes(mode)
   const validReference =
     authorized &&
-    reference?.owner === "demo-session" &&
+    reference?.owner === (live ? "account-session" : "demo-session") &&
     reference.version > 0 &&
-    Object.keys(referenceErrors(reference)).length === 0
+    Object.keys(referenceErrors(reference, live ? 4000 : 2000)).length === 0
   const blocked =
-    !authorized || ["loading", "load-error", "conflict"].includes(mode)
+    !authorized || ["loading", "load-error", "conflict"].includes(mode) || !!(liveSubmission && ["unknown", "saving", "saved"].includes(liveSubmission.status))
   const currentErrors = preferenceErrors(
     draft,
     mode === "empty-styles",
@@ -230,7 +234,7 @@ export default function PreferencesPage({
     }
   }, [authorized])
   useEffect(() => {
-    if (!authorized || !reference || reference.owner !== "demo-session") {
+    if (!authorized || !reference || reference.owner !== (live ? "account-session" : "demo-session")) {
       setPrivateUrl("")
       return
     }
@@ -285,7 +289,14 @@ export default function PreferencesPage({
     [],
   )
   const save = async (continueNext = false, previous = false) => {
-    if (busy.current || blocked) return
+    if (busy.current) return
+    if (liveSubmission?.status === "unknown" && continueNext) {
+      busy.current = true; setStatus("saving"); const generation = epoch.current;
+      const confirmed = await liveSubmission.submit(draft);
+      if (generation !== epoch.current) return;
+      busy.current = false; setStatus(confirmed ? "saved" : "failed"); return
+    }
+    if (blocked) return
     const problems = { ...currentErrors }
     if (!validReference) problems.reference = "required"
     setErrors(problems)
@@ -296,6 +307,16 @@ export default function PreferencesPage({
           `[data-section="${key}"] input:not(:disabled), [data-section="${key}"] button, [data-section="${key}"]`,
         )
         ?.focus()
+      return
+    }
+    if (live) {
+      if (continueNext && liveSubmission) {
+        busy.current = true; setStatus("saving"); const generation = epoch.current;
+        const confirmed = await liveSubmission.submit(draft);
+        if (generation !== epoch.current) return;
+        busy.current = false; setStatus(confirmed ? "saved" : "failed");
+        if (confirmed) baseline.current = JSON.stringify(draft);
+      } else { const next = { ...draft, version: (saved?.version || 0) + 1, referenceVersion: reference!.version }; setDraft(next); baseline.current = JSON.stringify(next); onSave(next); setStatus("saved") }
       return
     }
     busy.current = true
@@ -328,7 +349,7 @@ export default function PreferencesPage({
     }
   }
   const back = () => {
-    if (busy.current) return
+    if (busy.current || liveSubmission?.status === "unknown" || liveSubmission?.status === "saved") return
     // Secure session-memory checkpoint: partial choices survive an intentional step back.
     if (authorized) {
       onSave(draft)
@@ -404,7 +425,7 @@ export default function PreferencesPage({
           <p>
             {t(
               "نوع اجرا، سبک و سایز را مشخص کنید. پیشنهاد قیمت پس از ارزیابی اطلاعات نمایش داده می‌شود.",
-              "Choose the execution type, style and size. A price proposal follows assessment of your request.",
+              live ? "Choose your requested execution, style and size, then submit a text brief for review. No quote is generated." : "Choose the execution type, style and size. A price proposal follows assessment of your request.",
             )}
           </p>
         </div>
@@ -424,10 +445,10 @@ export default function PreferencesPage({
             t("سبک و اجرا", "Style and execution"),
             t("مرحله جاری", "Current step"),
           ],
-          [t("ارزیابی", "Assessment"), t("مرحله بعد", "Next step")],
+          [t("ارزیابی", "Assessment"), live ? t("فعلاً در دسترس نیست", "Currently unavailable") : t("مرحله بعد", "Next step")],
           [
             t("پیشنهاد و تأیید", "Proposal and approval"),
-            t("در انتظار", "Upcoming"),
+            live ? t("فعلاً در دسترس نیست", "Currently unavailable") : t("در انتظار", "Upcoming"),
           ],
         ].map(([name, state], i) => (
           <li
@@ -448,9 +469,9 @@ export default function PreferencesPage({
         ))}
       </ol>
       <div className="ref-demo-banner">
-        <span>DEMO</span>
+        <span>{live ? t("ترجیحات درخواستی", "Requested preferences") : "DEMO"}</span>
         <p>
-          {t(
+          {live ? t("گزینه‌ها و نمونه‌های تصویری صرفاً برای بیان خواسته شما هستند؛ تولید، قیمت یا سفارش خرید را تأیید نمی‌کنند. تا ثبت نهایی، اطلاعات در حافظه این نشست است. ثبت نهایی فقط درخواست بررسی را ذخیره می‌کند.", "Options and visual studies express your preferences; they do not confirm production, pricing or a purchase. Checkpoints stay in session memory. Final submission stores a review request only.") : t(
             "گزینه‌ها، نمونه‌های تصویری و محدوده ابعاد صرفاً نمایشی‌اند. ذخیره فقط در حافظه این نشست است؛ با بارگذاری مجدد از بین می‌رود. سرویس واقعی متصل نیست.",
             "Options, visual studies and dimension limits are illustrative. Saves exist only in this session’s memory and are lost on reload. No live service is connected.",
           )}
@@ -1056,8 +1077,8 @@ export default function PreferencesPage({
                     </div>
                   ))}
                 </dl>
-                <p className={`pref-completeness ${valid ? "complete" : ""}`}>
-                  {valid
+                <p className={`pref-completeness ${(valid || !!liveSubmission?.receipt) ? "complete" : ""}`}>
+                  {(valid || !!liveSubmission?.receipt)
                     ? t(
                         "✓ اطلاعات ضروری کامل است",
                         "✓ Required information is complete",
@@ -1116,19 +1137,19 @@ export default function PreferencesPage({
                       : ""
                 }
               >
-                {status === "saving"
+                {liveSubmission?.receipt ? t("درخواست ثبت شد؛ در انتظار بررسی", "Request saved; awaiting review") : status === "saving"
                   ? t("در حال ذخیره…", "Saving…")
                   : status === "failed"
                     ? t("ذخیره ممکن نشد", "Unable to save")
                     : status === "saved" && !dirty
-                      ? t("✓ ذخیره شد · Demo", "✓ Saved · Demo")
+                      ? t("✓ ذخیره شد · Demo", live ? "✓ Kept in this session" : "✓ Saved · Demo")
                       : t(
                           "تغییرات ذخیره نشده‌اند",
                           "Changes have not been saved",
                         )}
               </span>
               <small>
-                {t(
+                {live ? (liveSubmission?.receipt || t("تا ثبت نهایی فقط در حافظه این نشست", "Session memory until final submission")) : t(
                   "فقط حافظه نشست مجاز · بدون ذخیره روی سرور",
                   "Authorized session memory only · no server storage",
                 )}
@@ -1143,21 +1164,21 @@ export default function PreferencesPage({
               >
                 {status === "failed"
                   ? t("تلاش مجدد ذخیره", "Retry save")
-                  : t("ذخیره ترجیحات · Demo", "Save preferences · Demo")}
+                  : t("ذخیره ترجیحات · Demo", live ? "Keep preferences in this session" : "Save preferences · Demo")}
               </button>
               <button
                 className="button primary"
                 type="submit"
-                disabled={!valid || status === "saving"}
+                disabled={(liveSubmission?.status !== "unknown" && !valid) || status === "saving"}
               >
-                {t("ادامه به ارزیابی", "Continue to assessment")}
+                {live ? liveSubmission?.status === "unknown" ? t("بررسی دوباره همان درخواست", "Retry same request") : t("ثبت درخواست بررسی", "Submit for review") : t("ادامه به ارزیابی", "Continue to assessment")}
                 <span aria-hidden="true">{language === 0 ? "←" : "→"}</span>
               </button>
             </div>
           </div>
           {status === "failed" && (
             <p role="alert" className="pref-warning">
-              {t(
+              {live ? liveSubmission?.status === "unknown" ? t("نتیجه ثبت مشخص نیست. بررسی دوباره از همان شناسه و متن استفاده می‌کند.", "Submission is unconfirmed. Retry uses the identical request ID and brief.") : t("درخواست پذیرفته نشد. نشست و اطلاعات را بررسی کنید.", "Request rejected. Check your session and details.") : t(
                 "ذخیره Demo تأیید نشد؛ انتخاب‌ها حفظ شده‌اند و ادامه انجام نشده است. حالت خطا را در کنترل Demo رفع و دوباره تلاش کنید.",
                 "Demo save was not confirmed. Choices are preserved and navigation was blocked. Clear the error in Demo controls and retry.",
               )}
@@ -1166,7 +1187,7 @@ export default function PreferencesPage({
           <button
             type="button"
             className="text-link pref-back"
-            disabled={status === "saving"}
+            disabled={status === "saving" || liveSubmission?.status === "unknown" || liveSubmission?.status === "saved"}
             onClick={back}
           >
             {t("بازگشت به تصویر و توضیحات", "Back to references and brief")}
@@ -1182,7 +1203,7 @@ export default function PreferencesPage({
       <p className="pref-announcement" role="status" aria-live="polite">
         {notice}
       </p>
-      <details className="references-demo-controls">
+      {!live && <details className="references-demo-controls">
         <summary>
           {t("کنترل حالت‌های نمایشی · Demo", "Prototype state controls · Demo")}
         </summary>
@@ -1220,7 +1241,7 @@ export default function PreferencesPage({
             "Return from assessment simulates review requirements only; no assessment or proposal is produced. No approved brand images were supplied; studies are original abstract Demo illustrations.",
           )}
         </p>
-      </details>
+      </details>}
       <dialog
         ref={dialog}
         className="pref-detail-dialog"

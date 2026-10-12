@@ -166,7 +166,7 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL/Redis | 196 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 75 passed | Includes native artwork catalog, missing-data and error/retry coverage |
+| Frontend tests | 77 passed | Includes native artwork catalog and commission submission/retry/session coverage |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0012 |
 | Chromium catalog checks | 8 passed | Artwork navigation/search/mobile, shop/category and footer/bundle regressions; prior full-suite results are historical |
@@ -541,6 +541,38 @@ responses only and were not inserted into the application database.
 Commissions and bundle presentation still need their reference components restored.
 LiveArtworksPage is now used only by the remaining bundle wrapper. Preserve the
 existing real commission submission and bundle APIs while replacing those UIs.
+
+## Commission design restoration — 2026-10-12
+
+Live commission routes now render the original CommissionsPage, ReferencesPage
+and PreferencesPage instead of the generic form. All 42 reference CSS files
+remain byte-identical. The original layout, cards, illustrations and field groups
+are retained, with live state labels and no prototype controls. A verified session
+is required for private authoring; the introductory CTA uses real authentication.
+
+The text brief and preference checkpoints survive Next route mounts in browser
+memory, scoped to the verified account. They are not server drafts and do not use
+browser storage. Session rotation clears them; focus revalidation detects a
+changed account. Image input is disabled. Illustrative style/dimension cards
+express customer wishes and do not establish approved production offerings.
+Final submission uses the existing CSRF-protected, idempotent review-request API
+and shows its stored receipt in the preferences page. Unknown outcomes lock edits
+and reuse the identical submission ID/body on retry. Obsolete CSRF/receipt replies
+cannot submit or restore a prior account's private data. No assessment, quote,
+payment or external dispatch is simulated.
+
+Validation: 77 frontend tests, lint/typecheck, production Docker build and 12
+focused Chromium cases pass, including Persian mobile layout, original flow,
+guest sign-in, uncertain retries and private-data clearing on account changes.
+All eight services are healthy. Backend/schema/migrations/data are unchanged;
+previous backend results are historical and were not rerun for this UI slice.
+Remote CI remains unverified. Browser fixtures are intercepted responses only.
+
+Next design restoration: bundles still use the generic wrapper. Restore the
+original bundle list/detail components with their existing real API, keeping
+unknown commercial data and purchase controls unavailable. Commission uploads,
+configured production options, assessment, quotes and review workflows remain
+subsequent backend contracts.
 
 ## Recommended continuation
 

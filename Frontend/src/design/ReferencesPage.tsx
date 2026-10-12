@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react"
 import {
-  referenceDemoConfig as config,
+  referenceDemoConfig,
   referenceErrors,
   referenceFileError,
   referenceModes,
@@ -75,6 +75,7 @@ export default function ReferencesPage({
   onDemoSignIn,
   registerGuard,
   initialMode = "normal",
+  live = false,
 }: {
   language: 0 | 1
   signedIn: boolean
@@ -83,8 +84,11 @@ export default function ReferencesPage({
   onNavigate: (name: string, route: string) => void
   onDemoSignIn: (value: boolean) => void
   registerGuard: (guard: ReferenceNavigationGuard | null) => void
+  live?: boolean
   initialMode?: ReferenceMode
 }) {
+  const config = live ? { ...referenceDemoConfig, maxText: 4000 } : referenceDemoConfig
+  const owner = live ? "account-session" : "demo-session"
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
   const num = (n: number) =>
     n.toLocaleString(language === 0 ? "fa-IR" : "en-US")
@@ -93,10 +97,10 @@ export default function ReferencesPage({
     signedIn &&
     initialMode !== "expired" &&
     initialMode !== "denied" &&
-    draft?.owner === "demo-session"
+    draft?.owner === owner
       ? draft
       : null
-  const [kind, setKind] = useState<InputKind>(initial?.kind || "image")
+  const [kind, setKind] = useState<InputKind>(initial?.kind || (live ? "idea" : "image"))
   const [brief, setBrief] = useState(initial?.brief || "")
   const ownedUrls = useRef(new Set<string>())
   const [files, setFiles] = useState<LocalReference[]>(
@@ -136,7 +140,7 @@ export default function ReferencesPage({
   const authorized = signedIn && mode !== "expired" && mode !== "denied"
   authorizedRef.current = authorized
   const snapshot = (): ReferenceDraft => ({
-    owner: "demo-session",
+    owner,
     kind,
     brief,
     primary,
@@ -148,7 +152,7 @@ export default function ReferencesPage({
     initial
       ? referenceSignature(initial)
       : referenceSignature({
-          kind: "image",
+          kind: live ? "idea" : "image",
           brief: "",
           primary: "",
           files: [],
@@ -185,7 +189,7 @@ export default function ReferencesPage({
     setFiles([])
     setBrief("")
     setPrimary("")
-    setKind("image")
+    setKind(live ? "idea" : "image")
     setPreview(null)
     setLeaving(false)
     leaveAction.current = null
@@ -194,7 +198,7 @@ export default function ReferencesPage({
     setSaveError("")
     setSaveStatus("idle")
     savedSignature.current = referenceSignature({
-      kind: "image",
+      kind: live ? "idea" : "image",
       brief: "",
       primary: "",
       files: [],
@@ -421,7 +425,7 @@ export default function ReferencesPage({
     changed()
   }
   const validate = () => {
-    const errors = referenceErrors({ kind, brief, primary, files })
+    const errors = referenceErrors({ kind, brief, primary, files }, config.maxText)
     setBriefError(
       errors.brief === "required"
         ? t("توضیح ایده را وارد کنید.", "Describe your idea.")
@@ -465,6 +469,12 @@ export default function ReferencesPage({
     setSaveError("")
     const data = snapshot()
     const signature = currentSignature
+    if (live) {
+      busySave.current = false; onSave(data); savedSignature.current = signature; dirtyRef.current = false; setSaveStatus("saved");
+      if (continueNext) { registerGuard(null); onNavigate(t("ترجیحات", "Preferences"), `${prefix}/commissions/new/preferences`) }
+      if (exit) { const action = leaveAction.current; leaveAction.current = null; setLeaving(false); action?.() }
+      return
+    }
     later(() => {
       busySave.current = false
       if (!authorizedRef.current) return
@@ -504,7 +514,7 @@ export default function ReferencesPage({
   const leaveWithoutSaving = () => {
     const action = leaveAction.current
     clearPrivate()
-    if (authorizedRef.current && draft?.owner === "demo-session") {
+    if (authorizedRef.current && draft?.owner === owner) {
       setKind(draft.kind)
       setBrief(draft.brief)
       setPrimary(draft.primary)
@@ -605,7 +615,7 @@ export default function ReferencesPage({
           : saveStatus === "saved" || initial
             ? t(
                 "ذخیره شد — فقط حافظه نشست Demo",
-                "Saved — Demo session memory only",
+                live ? "Kept in this session only" : "Saved — Demo session memory only",
               )
             : t(
                 "هنوز اطلاعاتی ذخیره نشده است",
@@ -678,21 +688,21 @@ export default function ReferencesPage({
         ))}
       </ol>
       <div className="ref-demo-banner">
-        <span>DEMO</span>
+        <span>{live ? t("توضیحات متنی", "Text brief") : "DEMO"}</span>
         <p>
-          {t(
+          {live ? t("فعلاً فقط ایده متنی پذیرفته می‌شود؛ آپلود تصویر در دسترس نیست. تا ثبت نهایی، متن فقط در حافظه این نشست است و با خروج یا بازخوانی پاک می‌شود.", "Only text briefs are supported; image upload is unavailable. Until final submission, your brief stays in session memory and clears on sign-out or reload.") : t(
             "آپلود و ذخیره شبیه‌سازی می‌شوند؛ فایل به هیچ سروری ارسال نمی‌شود. داده فقط در حافظه نشست نمونه است و با خروج، انقضای نشست یا بازخوانی صفحه از بین می‌رود.",
             "Upload and save are simulated; no file is sent to a server. Data is only in demo session memory and is lost on sign-out, session expiry or page reload.",
           )}
         </p>
-        <label>
+        {!live && <label>
           <input
             type="checkbox"
             checked={signedIn}
             onChange={(e) => onDemoSignIn(e.target.checked)}
           />
           {t("ورود نمونه", "Demo sign-in")}
-        </label>
+        </label>}
       </div>
       {!authorized && (
         <section className="ref-auth-notice">
@@ -789,6 +799,7 @@ export default function ReferencesPage({
                     <input
                       type="radio"
                       name="ref-kind"
+                      disabled={live && v === "image"}
                       checked={kind === v}
                       onChange={() => {
                         setKind(v)
@@ -1133,6 +1144,7 @@ export default function ReferencesPage({
               </label>
               <textarea
                 id={`${id}-brief`}
+                maxLength={config.maxText}
                 ref={textInput}
                 value={authorized ? brief : ""}
                 disabled={frozen}
@@ -1219,7 +1231,7 @@ export default function ReferencesPage({
                 disabled={frozen || uploading}
                 onClick={() => save()}
               >
-                {t("ذخیره پیش‌نویس — Demo", "Save draft — Demo")}
+                {live ? t("نگه‌داشتن توضیحات در این نشست", "Keep brief in this session") : t("ذخیره پیش‌نویس — Demo", "Save draft — Demo")}
               </button>
             </div>
             {authorized && saveError && (
@@ -1344,7 +1356,7 @@ export default function ReferencesPage({
           </aside>
         </div>
       )}
-      {previews}
+      {!live && previews}
       <dialog
         ref={previewDialog}
         className="ref-preview-dialog"

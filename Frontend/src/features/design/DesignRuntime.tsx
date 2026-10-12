@@ -33,7 +33,8 @@ export default function DesignRuntime() {
   // Explicit connected-route allowlist; newly imported routes are not accidentally live.
   const connected = isStaticInfoPage(pathname)
     || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?\/?$/.test(pathname)
-    || /^\/(?:fa|en)\/commissions\/?$/.test(pathname)
+    || /^\/(?:fa\/|en\/)?commissions(?:\/new)?\/?$/.test(pathname)
+    || /^\/(?:fa|en)\/commissions\/new\/(?:references?|preferences)\/?$/.test(pathname)
     || /^\/(?:fa\/|en\/)?artworks(?:\/[^/]+)?\/?$/.test(pathname)
     || /^\/(?:fa|en)?\/?$/.test(pathname)
     || /^\/(?:fa|en)\/(?:shop|categories\/[^/]+)\/?$/.test(pathname)

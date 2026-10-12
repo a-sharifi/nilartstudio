@@ -44,7 +44,7 @@ import CollectionDetailPage from "./CollectionDetailPage"
 import ShopPage from "./ShopPage"
 import PrivacyPage from "./PrivacyPage"
 import { contactDemoConfig } from "./contact"
-import LiveCommissionsPage from "../features/catalog/LiveCommissionsPage"
+import CommissionFlow from "../features/catalog/CommissionFlow"
 import { useArtworkCatalog } from "../features/catalog/artwork-catalog"
 import LiveArtworksPage from "../features/catalog/LiveArtworksPage"
 import { isShopRoute } from "./shop"
@@ -1542,7 +1542,9 @@ export default function App() {
       )}
 
       <main id="main">
-        {isCheckout ? (
+        {!demoMode && (isCommissions || isReferences || isPreferences) ? (
+          <CommissionFlow path={page} language={lang} onNavigate={navigate} registerGuard={registerReferenceGuard} />
+        ) : isCheckout ? (
           <Suspense
             fallback={
               <div className="container checkout-content" aria-busy="true">
@@ -1682,8 +1684,6 @@ export default function App() {
             onSave={setReferenceDraft} onNavigate={navigate} onDemoSignIn={setSignedIn}
             registerGuard={registerReferenceGuard}
           />
-        ) : isCommissions && !demoMode ? (
-          <LiveCommissionsPage language={lang} />
         ) : isCommissions ? (
           <CommissionsPage language={lang} signedIn={signedIn} onNavigate={navigate} onDemoSignIn={setSignedIn} />
         ) : isArtworkDetail ? (
