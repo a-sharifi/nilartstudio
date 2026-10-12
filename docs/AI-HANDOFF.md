@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 158 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 160 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -324,6 +324,17 @@ build passed. Live nginx API probes confirmed private 422/404 no-store responses
 all eight application services are healthy. No frontend or migration changes.
 Unhandled exceptions are outside this returned-response guarantee. Remote CI is
 unverified, and the existing Starlette/httpx warning remains.
+
+## Unexpected-error continuation (2026-10-12)
+
+Global exception handling now returns generic 500 internal_error JSON with matching
+request-ID header and no-store. The handler logs only exception class/request ID;
+response and application-handler log omit exception messages/traces. Two injected
+session/access failures verify the contract without application data mutations.
+All 160 backend tests, lint/type checks and Docker build passed; eight services
+are healthy. No frontend/migration changes. This covers pre-response failures;
+streaming/background failures and server-level traceback logging remain separate.
+Remote CI remains unverified and the existing Starlette/httpx warning remains.
 
 ## Recommended continuation
 

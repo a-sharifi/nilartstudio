@@ -54,6 +54,17 @@ async def http_error(request: Request, exc: HTTPException):
                  "detail": exc.detail, "request_id": request.state.request_id})
 
 
+@app.exception_handler(Exception)
+async def unexpected_error(request: Request, exc: Exception):
+    request_id = request.state.request_id
+    # Exception messages and traces can contain credentials or submitted data.
+    logger.error("unexpected_error", extra={"request_id": request_id,
+                                          "error_type": type(exc).__name__})
+    return JSONResponse(status_code=500,
+        content={"code": "internal_error", "request_id": request_id},
+        headers={"Cache-Control": "no-store", "X-Request-ID": request_id})
+
+
 @app.get("/api/v1/health/live")
 def live():
     return {"status": "ok", "environment": settings.environment}

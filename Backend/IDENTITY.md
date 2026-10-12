@@ -191,3 +191,14 @@ unauthenticated profile input, routing errors, request IDs, absence of cookies o
 submitted secret values in errors, and public path boundaries. All 158 backend
 tests pass locally. Unhandled server exceptions are outside this middleware's
 returned-response guarantee and are not covered by this slice.
+
+
+### Unexpected server errors (2026-10-12)
+
+A global exception handler now returns generic `500 internal_error` JSON with the
+request ID, matching `X-Request-ID` and `Cache-Control: no-store`. Exception text
+and traces are excluded from the response and the handler's application log;
+that log records only error class and request ID. Two injected session/access
+failures verify this behavior without accessing application data. This covers
+errors before a response starts; streaming/background failures and server-level
+traceback logging require separate review. All 160 backend tests pass locally.
