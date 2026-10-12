@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 167 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 175 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -357,6 +357,16 @@ passed 167 tests; the PostgreSQL case was rerun after extending its assertions.
 Lint/type checks and Docker build passed; eight services remain healthy. No
 frontend, migration, application data or stock changes. Remote CI unverified;
 existing Starlette/httpx warning remains.
+
+## Catalog identifier-validation continuation (2026-10-12)
+
+Catalog detail/product-SKU slugs and SKU codes now accept 1–160 characters;
+optional collection/category filters reject empty/oversized values. Omit filters
+for unfiltered lists. Eight new HTTP cases prove rejection before catalog queries.
+All 175 backend tests passed. OpenAPI updated and client regenerated (TypeScript
+output unchanged); backend lint/type checks, frontend typecheck and Docker build
+passed. Eight local services healthy. No frontend runtime, migration or data
+changes. Remote CI unverified; existing Starlette/httpx warning remains.
 
 ## Recommended continuation
 

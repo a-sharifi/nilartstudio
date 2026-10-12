@@ -53,3 +53,28 @@ def test_public_catalog_excludes_drafts():
     finally:
         app.dependency_overrides.clear()
         engine.dispose()
+
+
+@pytest.mark.parametrize("path", [
+    "/collections/", "/categories/", "/products/", "/skus/",
+])
+def test_catalog_rejects_oversized_detail_identifiers_before_queries(path):
+    app.dependency_overrides[session_dependency] = lambda: object()
+    try:
+        response = TestClient(app).get("/api/v1/catalog" + path + "x" * 161)
+        assert response.status_code == 422
+        assert response.json()["code"] == "validation_error"
+    finally:
+        app.dependency_overrides.pop(session_dependency, None)
+
+
+@pytest.mark.parametrize("field", ["collection", "category"])
+@pytest.mark.parametrize("value", ["", "x" * 161])
+def test_catalog_rejects_invalid_filter_lengths_before_queries(field, value):
+    app.dependency_overrides[session_dependency] = lambda: object()
+    try:
+        response = TestClient(app).get("/api/v1/catalog/products", params={field: value})
+        assert response.status_code == 422
+        assert response.json()["fields"][0]["path"] == ["query", field]
+    finally:
+        app.dependency_overrides.pop(session_dependency, None)

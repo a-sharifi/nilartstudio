@@ -83,3 +83,14 @@ including those with no public SKUs; draft/missing products use one and return
 404. Four HTTP regression cases measure this and preserve ordered public SKU
 results. The isolated PostgreSQL test also verifies SKU identity and exact price
 on this path. No API, schema, data or stock changes are included.
+
+
+## Identifier bounds (2026-10-12)
+
+Public detail slugs, product-SKU slugs and SKU codes accept 1–160 characters,
+matching database identifier capacity. Optional collection/category filters use
+the same bounds; omit a filter for an unfiltered list instead of sending an empty
+value. Invalid lengths return 422 before repository queries. OpenAPI documents
+these constraints. Eight new HTTP cases verify oversized detail identifiers and
+empty/oversized filters with an unusable database dependency. Existing valid
+catalog paths remain covered; no schema or data migration is required.

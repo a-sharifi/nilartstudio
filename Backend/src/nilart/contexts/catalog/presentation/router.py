@@ -2,7 +2,7 @@ from decimal import Decimal
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -20,6 +20,10 @@ from nilart.contexts.catalog.infrastructure.repository import (
 from nilart.shared.database import session_dependency
 
 router = APIRouter(prefix="/api/v1/catalog", tags=["catalog"])
+
+
+CatalogKey = Annotated[str, Path(min_length=1, max_length=160)]
+CatalogFilter = Annotated[str | None, Query(min_length=1, max_length=160)]
 
 
 class CollectionOutput(BaseModel):
@@ -101,7 +105,7 @@ def output(entity, schema):
 
 
 @router.get("/collections/{slug}", response_model=CatalogDetail)
-def collection_detail(slug: str, session: SessionDependency):
+def collection_detail(slug: CatalogKey, session: SessionDependency):
     return output(GetCollection(SqlCollectionRepository(session)).execute(slug), CatalogDetail)
 
 
@@ -113,13 +117,13 @@ def categories(session: SessionDependency, page: Page = 1, page_size: PageSize =
 
 
 @router.get("/categories/{slug}", response_model=CatalogDetail)
-def category_detail(slug: str, session: SessionDependency):
+def category_detail(slug: CatalogKey, session: SessionDependency):
     return output(GetCatalog(SqlCatalogRepository(session)).execute("categories", slug), CatalogDetail)
 
 
 @router.get("/products", response_model=ProductPage)
 def products(session: SessionDependency, page: Page = 1, page_size: PageSize = 24,
-             collection: str | None = None, category: str | None = None):
+             collection: CatalogFilter = None, category: CatalogFilter = None):
     items, total = ListCatalog(SqlCatalogRepository(session)).execute(
         "products", page, page_size, collection, category)
     return ProductPage(items=[output(item, ProductOutput) for item in items],
@@ -127,12 +131,12 @@ def products(session: SessionDependency, page: Page = 1, page_size: PageSize = 2
 
 
 @router.get("/products/{slug}", response_model=ProductOutput)
-def product_detail(slug: str, session: SessionDependency):
+def product_detail(slug: CatalogKey, session: SessionDependency):
     return output(GetCatalog(SqlCatalogRepository(session)).execute("products", slug), ProductOutput)
 
 
 @router.get("/products/{slug}/skus", response_model=list[SKUOutput])
-def product_skus(slug: str, session: SessionDependency):
+def product_skus(slug: CatalogKey, session: SessionDependency):
     items = ListProductSKUs(SqlCatalogRepository(session)).execute(slug)
     if items is None:
         raise HTTPException(status_code=404, detail="Catalog item not found")
@@ -147,5 +151,5 @@ def skus(session: SessionDependency, page: Page = 1, page_size: PageSize = 24):
 
 
 @router.get("/skus/{code}", response_model=SKUOutput)
-def sku_detail(code: str, session: SessionDependency):
+def sku_detail(code: CatalogKey, session: SessionDependency):
     return output(GetCatalog(SqlCatalogRepository(session)).execute("skus", code), SKUOutput)
