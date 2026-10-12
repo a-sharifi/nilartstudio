@@ -309,3 +309,10 @@
 - ۱۶ تست تازه شامل PostgreSQL مستقل برای rollback، رقابت و downgrade اضافه شد؛ هر ۱۹۱ تست backend و ۱۱ تست زیرساخت موفق‌اند. lint/typecheck backend، تولید OpenAPI/client، typecheck frontend و ساخت Docker موفق‌اند.
 - migration محلی تا 0009 اعمال شد؛ هشت سرویس سالم و endpoint زنده بدون نشست پاسخ ۴۰۱/no-store دارد. پیش‌فرض backup verification به 0009 ارتقا یافت؛ گزارش تاریخی حفظ می‌شود.
 - UI مدیر، انتشار، inventory، cart، checkout و اتصال selector زنده هنوز این برش نیستند. CI راه دور تأیید نشده و هشدار Starlette/httpx باقی است.
+
+## خواندن محافظت‌شده تاریخچه گزینه SKU — ۲۰۲۶-۱۰-۱۲
+
+- endpoint خواندن audit محصول با مجوز `catalog.manage` و `no-store` اضافه شد؛ snapshot قبل/بعد، actor، شناسه‌ها، زمان و نسخه‌ها فقط برای محصول درخواست‌شده برمی‌گردند.
+- pagination نزولی نسخه با cursor انحصاری `before_version` و limit پیش‌فرض ۲۰/حداکثر ۱۰۰ است؛ پایان صفحه cursor خالی دارد. محصول موجود بدون تاریخچه آرایه خالی و محصول ناموجود ۴۰۴ می‌گیرد.
+- آزمون PostgreSQL جدید مجوز، ترتیب، cursor، هویت actor/product، جداسازی محصول و bounds را پوشش می‌دهد؛ هر ۱۹۲ تست backend موفق است. lint/typecheck backend، تولید client، typecheck frontend و build Docker موفق‌اند؛ هشت سرویس سالم‌اند.
+- migration، داده واقعی، UI مدیر یا امکان تغییر audit اضافه نشده‌اند. CI راه دور تأیید نشده و هشدار Starlette/httpx باقی است.

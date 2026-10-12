@@ -175,6 +175,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/catalog/products/{product_id}/options/audits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Audits */
+        get: operations["read_audits_api_v1_admin_catalog_products__product_id__options_audits_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/login/password": {
         parameters: {
             query?: never;
@@ -393,6 +410,47 @@ export interface components {
             /** Permissions */
             permissions: string[];
         };
+        /** AuditOutput */
+        AuditOutput: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Configuration Id
+             * Format: uuid
+             */
+            configuration_id: string;
+            /**
+             * Product Id
+             * Format: uuid
+             */
+            product_id: string;
+            /**
+             * Actor Id
+             * Format: uuid
+             */
+            actor_id: string;
+            /** Previous Version */
+            previous_version: number;
+            /** Version */
+            version: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            before: components["schemas"]["OptionDocument"];
+            after: components["schemas"]["OptionDocument"];
+        };
+        /** AuditPage */
+        AuditPage: {
+            /** Items */
+            items: components["schemas"]["AuditOutput"][];
+            /** Next Before Version */
+            next_before_version: number | null;
+        };
         /** CatalogDetail */
         CatalogDetail: {
             /**
@@ -590,6 +648,13 @@ export interface components {
             order: number;
             /** Values */
             values: components["schemas"]["Label"][];
+        };
+        /** OptionDocument */
+        OptionDocument: {
+            /** Options */
+            options: components["schemas"]["Option"][];
+            /** Combinations */
+            combinations: components["schemas"]["Combination"][];
         };
         /**
          * OtpPurpose
@@ -1078,6 +1143,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DraftOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_audits_api_v1_admin_catalog_products__product_id__options_audits_get: {
+        parameters: {
+            query?: {
+                before_version?: number | null;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                product_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditPage"];
                 };
             };
             /** @description Validation Error */

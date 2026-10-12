@@ -583,6 +583,79 @@
         }
       }
     },
+    "/api/v1/admin/catalog/products/{product_id}/options/audits": {
+      "get": {
+        "tags": [
+          "catalog-options"
+        ],
+        "summary": "Read Audits",
+        "operationId": "read_audits_api_v1_admin_catalog_products__product_id__options_audits_get",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Product Id"
+            }
+          },
+          {
+            "name": "before_version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 2147483647,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before Version"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/login/password": {
       "post": {
         "tags": [
@@ -996,6 +1069,90 @@
           "permissions"
         ],
         "title": "AccessOutput"
+      },
+      "AuditOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "configuration_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Configuration Id"
+          },
+          "product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Product Id"
+          },
+          "actor_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Actor Id"
+          },
+          "previous_version": {
+            "type": "integer",
+            "title": "Previous Version"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "before": {
+            "$ref": "#/components/schemas/OptionDocument"
+          },
+          "after": {
+            "$ref": "#/components/schemas/OptionDocument"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "configuration_id",
+          "product_id",
+          "actor_id",
+          "previous_version",
+          "version",
+          "created_at",
+          "before",
+          "after"
+        ],
+        "title": "AuditOutput"
+      },
+      "AuditPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AuditOutput"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_before_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Before Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_before_version"
+        ],
+        "title": "AuditPage"
       },
       "CatalogDetail": {
         "properties": {
@@ -1481,6 +1638,33 @@
           "values"
         ],
         "title": "Option"
+      },
+      "OptionDocument": {
+        "properties": {
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Options"
+          },
+          "combinations": {
+            "items": {
+              "$ref": "#/components/schemas/Combination"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Combinations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "options",
+          "combinations"
+        ],
+        "title": "OptionDocument"
       },
       "OtpPurpose": {
         "type": "string",

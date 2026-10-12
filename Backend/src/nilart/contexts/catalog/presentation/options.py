@@ -1,8 +1,9 @@
 import hmac
+from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Request
-from pydantic import Field
+from fastapi import APIRouter, Depends, Query, Request
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from nilart.bootstrap.settings import settings
@@ -61,3 +62,32 @@ def update_options(product_id: UUID, body: DraftUpdate, request: Request,
         return failure(request, str(exc), 409 if str(exc) == "option_version_conflict" else 404)
     db.commit()
     return result
+
+
+class AuditOutput(BaseModel):
+    id: UUID
+    configuration_id: UUID
+    product_id: UUID
+    actor_id: UUID
+    previous_version: int
+    version: int
+    created_at: datetime
+    before: OptionDocument
+    after: OptionDocument
+
+
+class AuditPage(BaseModel):
+    items: list[AuditOutput]
+    next_before_version: int | None
+
+
+@router.get("/products/{product_id}/options/audits", response_model=AuditPage)
+def read_audits(product_id: UUID, request: Request,
+                before_version: int | None = Query(default=None, ge=1, le=2147483647),
+                limit: int = Query(default=20, ge=1, le=100),
+                db: Session = Depends(session_dependency),
+                principal: Principal = Depends(require_permission("catalog.manage"))):
+    try:
+        return SqlOptionDraftRepository(db).audits(product_id, before_version, limit)
+    except DraftError as exc:
+        return failure(request, str(exc), 404)

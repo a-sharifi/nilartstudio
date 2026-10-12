@@ -133,3 +133,16 @@ is assigned. Product creation, admin UI, publication and the live product select
 remain later slices. Sixteen added tests cover validation, HTTP authorization,
 permission/session/CSRF rechecks, public isolation, audit rollback, concurrent
 first saves and migration downgrade using isolated PostgreSQL schemas.
+
+## Draft option audit reads (2026-10-12)
+
+`GET /api/v1/admin/catalog/products/{product_id}/options/audits` requires
+`catalog.manage` and returns no-store history scoped to that existing product.
+Results include stored before/after option documents, actor/configuration/product
+IDs, versions and timestamps, newest version first. `limit` defaults to 20 and
+accepts 1–100; optional `before_version` is an exclusive positive integer cursor.
+The response contains `items` and `next_before_version` (null at the end).
+Use that cursor on the next read to avoid shifting pages when newer changes arrive.
+An existing product with no history returns an empty page; a missing product is
+404. No audit modification API is provided. The PostgreSQL regression covers
+permissions, cursor ordering, actor/product identity, product isolation and bounds.

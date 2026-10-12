@@ -228,3 +228,33 @@ def test_invalid_option_api_document_has_no_audit(draft_flow):
     assert response.status_code == 422
     assert response.headers["cache-control"] == "no-store"
     assert db.scalar(text("SELECT count(*) FROM catalog_option_audits")) == 0
+
+
+
+def test_audit_history_authorization_cursor_and_product_scope(draft_flow):
+    client, db, actor, product, csrf = draft_flow
+    path = f"/api/v1/admin/catalog/products/{product}/options"
+    assert client.get(path + "/audits").status_code == 403
+    admin(db, actor)
+    assert client.get(path + "/audits").json() == {"items": [], "next_before_version": None}
+    for version in range(3):
+        assert client.put(path, json={"version": version, **document()},
+                          headers={"X-CSRF-Token": csrf}).status_code == 200
+    first = client.get(path + "/audits", params={"limit": 2})
+    assert first.status_code == 200 and first.headers["cache-control"] == "no-store"
+    assert [item["version"] for item in first.json()["items"]] == [3, 2]
+    assert first.json()["next_before_version"] == 2
+    second = client.get(path + "/audits", params={"limit": 2, "before_version": 2}).json()
+    assert [item["version"] for item in second["items"]] == [1]
+    assert second["next_before_version"] is None
+    assert first.json()["items"][0]["actor_id"] == actor
+    assert first.json()["items"][0]["product_id"] == str(product)
+    other = uuid4()
+    db.execute(text("INSERT INTO catalog_products (id,slug,title_fa,title_en,published) VALUES (:id,'other','هنر','Art',true)"), {"id": other})
+    db.commit()
+    assert client.get(f"/api/v1/admin/catalog/products/{other}/options/audits").json()["items"] == []
+    assert client.get(f"/api/v1/admin/catalog/products/{uuid4()}/options/audits").status_code == 404
+    assert client.get(path + "/audits", params={"limit": 101}).status_code == 422
+    assert client.get(path + "/audits", params={"before_version": 0}).status_code == 422
+    client.cookies.clear()
+    assert client.get(path + "/audits").status_code == 401

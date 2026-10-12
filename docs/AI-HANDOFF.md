@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 191 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 192 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0009 |
@@ -386,6 +386,18 @@ advance to 0009; historical saved reports are unchanged. Remote CI unverified.
 Next: publication needs a separate approved contract, followed by documented
 inventory and purchasing before connecting the live product selector. Admin UI
 and product creation are also outstanding. No option data was inferred/seeded.
+
+## Option audit-read continuation (2026-10-12)
+
+Protected GET /api/v1/admin/catalog/products/{product_id}/options/audits now
+returns product-scoped before/after snapshots and actor/version metadata, ordered
+newest first. Limit 1–100 (default 20), exclusive before_version cursor and
+next_before_version provide stable paging when new versions are added. Missing
+products return 404; empty history is an empty page. No audit mutation endpoint.
+The new PostgreSQL regression covers authorization, ordering/paging, product
+isolation, actor identity and bounds. All 192 backend tests, lint/backend typing,
+client generation, frontend typing and Docker build passed; eight services healthy.
+No migration, live data or admin UI changes. Remote CI remains unverified.
 
 ## Recommended continuation
 
