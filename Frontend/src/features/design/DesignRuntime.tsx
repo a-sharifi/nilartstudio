@@ -24,7 +24,7 @@ export default function DesignRuntime() {
     return <div className="live-profile"><ProfilePage page={pathname} liveApi={profileApi}
       navigate={(route) => router.push(route)} registerGuard={registerGuard} /></div>;
   }
-  if (!demo && (/^\/(fa|en)\/auth\/(?:login(?:\/(?:password|otp))?|register(?:\/(?:password|set-password))?|forgot-password|reset-password|verify|logout)\/?$/.test(pathname) || pathname === "/login")) {
+  if (!demo && (/^\/(fa|en)\/auth\/(?:login(?:\/(?:password|otp))?|register(?:\/(?:password|set-password))?|forgot-password|reset-password|verify|logout|session-expired)\/?$/.test(pathname) || pathname === "/login")) {
     return <div className="live-auth"><AuthPage page={pathname} search={search.toString() ? `?${search}` : ""}
       navigate={(route) => router.push(route)} liveSignIn={loginPassword}
       liveApi={liveAuthApi} /></div>;

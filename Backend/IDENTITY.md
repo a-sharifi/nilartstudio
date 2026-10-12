@@ -118,3 +118,17 @@ Future private caches must register cleanup and subscribe to authoritative
 revalidation; unconnected commerce features are still unavailable. Cross-tab
 messages alone do not prove same-owner session rotation, and no session identifier
 or credential is broadcast.
+
+### Live session-expiry route (2026-10-12)
+
+`/fa/auth/session-expired` and `/en/auth/session-expired` now use the original
+expiry-page layout with live session checks. Only a confirmed 401 shows sign-in
+again; unavailable/unknown checks offer explicit retry. An active session offers
+an explicit destination link, whose endpoint still enforces ownership/permissions.
+No private content is rendered on the expiry page, no prior mutation is replayed,
+and no automatic destination authorization is inferred from session presence.
+Cross-tab/focus checks use the shared lifecycle; local read ordering prevents a
+late positive check from replacing a verified logout. Live preview controls and
+fixture notes are absent. Both locale profile URLs are allowed safe auth return
+destinations; arbitrary/external redirects remain rejected. Account-restriction
+pages and the broader destination workflows remain unconnected.

@@ -35,6 +35,7 @@ function validReturn(search: string) {
   const value = new URLSearchParams(search).get("returnTo")
   const shopReturn = value && safeShopReturn(value)
   if (shopReturn) return shopReturn
+  if (/^\/(?:fa|en)\/account\/profile$/.test(value || "")) return value
   // Only known public/internal destinations; no query data, role panels or arbitrary redirects.
   if (!value || /[\\?#%]/.test(value)) return null
   return /^(\/cart|\/checkout(?:\/(?:address|delivery|payment))?|\/account|\/(?:fa|en)\/commissions(?:\/new(?:\/(?:references|preferences|assessment))?)?|\/products\/[\w-]+)$/.test(value) ? value : null
@@ -73,7 +74,7 @@ export default function AuthPage({ page, search, navigate, liveSignIn, liveApi }
   }, [page])
   useEffect(() => liveApi?.subscribe?.((event) => {
     if (event.type === "revalidate") {
-      if (!page.endsWith("/logout")) void liveApi.checkSession()
+      if (!page.endsWith("/logout") && !page.endsWith("/session-expired")) void liveApi.checkSession()
       return
     }
     if (event.source === "observation") operation.current += 1
@@ -176,7 +177,7 @@ export default function AuthPage({ page, search, navigate, liveSignIn, liveApi }
     } catch (error) { return error instanceof Error && error.message === "invalid" ? "invalid" as const : errorState(error) }
   } : undefined
   if (isRegistrationPassword || isResetPassword) return <RegistrationPasswordPage key={isResetPassword ? "recovery" : "register"} purpose={isResetPassword ? "recovery" : "register"} en={en} suffix={suffix} grant={isResetPassword ? recoveryGrant : passwordGrant} setGrant={isResetPassword ? setRecoveryGrant : setPasswordGrant} navigate={navigate} target={target} liveComplete={liveComplete} resetFlow={() => { setVerifyFlow(null); if (isResetPassword) setRecoveryGrant(null); else setPasswordGrant(null) }} />
-  if (isSessionExpired) return <SessionExpiredPage en={en} navigate={navigate} target={returnTo} />
+  if (isSessionExpired) return <SessionExpiredPage en={en} navigate={navigate} target={returnTo} liveApi={liveApi} />
   if (isRestricted) return <AccountRestrictedPage en={en} navigate={navigate} target={returnTo} />
   if (isLogout) return <LogoutPage en={en} navigate={navigate} target={returnTo} liveLogout={liveApi?.logout} liveCheck={liveApi?.checkSession} liveSubscribe={liveApi?.subscribe} clearDemoData={() => { setPhone(""); setVerifyFlow(null); setPasswordGrant(null); setRecoveryGrant(null) }} />
   if (isVerify) return <VerifyPage en={en} suffix={suffix} flow={verifyFlow} setFlow={setVerifyFlow} navigate={navigate} target={target} liveVerify={liveVerify} liveResend={liveResend} onRegistrationContinue={(maskedPhone) => { if (liveApi) return; setPasswordGrant({ demo: true, purpose: "register", maskedPhone }); navigate(`${prefix}/auth/register/password${suffix}`) }} onRecoveryContinue={(maskedPhone) => { if (liveApi) return; setRecoveryGrant({ demo: true, purpose: "recovery", maskedPhone }); navigate(`${prefix}/auth/reset-password${suffix}`) }} />

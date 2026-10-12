@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react"
+import type { LiveAuthApi } from "./auth"
 import { AuthIcon } from "./AuthPage"
 
-type Access = "expired" | "checking" | "network" | "server" | "denied" | "restricted" | "returned" | "differentAccount"
+type Access = "active" | "expired" | "checking" | "network" | "server" | "denied" | "restricted" | "returned" | "differentAccount"
 type Context = "general" | "checkout" | "payment" | "savedDraft" | "unsaved" | "upload" | "analysis"
 const contexts: [Context, string, string][] = [
   ["general", "بدون مقصد", "No destination"], ["checkout", "خرید و سبد Demo", "Demo cart"],
@@ -16,12 +17,13 @@ const accesses: [Access, string, string][] = [
   ["returned", "بازگشت مجاز Demo", "Demo authorized return"], ["differentAccount", "حساب متفاوت", "Different account"],
 ]
 
-export default function SessionExpiredPage({ en, navigate, target }: {
+export default function SessionExpiredPage({ en, navigate, target, liveApi }: {
   en: boolean; navigate: (route: string) => void; target: string | null
+  liveApi?: Pick<LiveAuthApi, "checkSession" | "subscribe">
 }) {
   const t = (fa: string, english: string) => en ? english : fa
   const prefix = en ? "/en" : "/fa"
-  const [access, setAccess] = useState<Access>("expired")
+  const [access, setAccess] = useState<Access>(liveApi ? "checking" : "expired")
   const [context, setContext] = useState<Context>(target?.includes("checkout") || target === "/cart" ? "checkout" : "general")
   const [demoTarget, setDemoTarget] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
@@ -33,17 +35,20 @@ export default function SessionExpiredPage({ en, navigate, target }: {
   const dialog = useRef<HTMLDialogElement>(null)
   const safeControl = useRef<HTMLButtonElement>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const liveRetry = useRef<(() => void) | null>(null)
   const destination = target || demoTarget
   const suffix = destination ? `?returnTo=${encodeURIComponent(destination)}` : ""
   const loginRoute = `${prefix}/auth/login${suffix}`
-  const title = access === "checking" ? t("در حال بررسی دسترسی…", "Checking access…")
+  const title = access === "active" ? t("نشست شما فعال است", "Your session is active")
+    : access === "checking" ? t("در حال بررسی دسترسی…", "Checking access…")
     : access === "network" ? t("ارتباط برقرار نشد", "Unable to connect")
     : access === "server" ? t("دسترسی موقتاً قابل بررسی نیست", "Access cannot be checked right now")
     : access === "denied" || access === "differentAccount" ? t("دسترسی به این مقصد مجاز نیست", "This destination is not permitted")
     : access === "restricted" ? t("حساب نیازمند بررسی است", "Your account needs review")
     : access === "returned" ? t("بازگشت مجاز · Demo", "Authorized return · Demo")
     : t("برای ادامه، دوباره وارد شوید", "Sign in again to continue")
-  const description = access === "checking" ? t("اطلاعات خصوصی تا تأیید دسترسی نمایش داده نمی‌شوند.", "Private information remains hidden until access is confirmed.")
+  const description = access === "active" ? t("برای ادامه، به مقصد برگردید. مجوز و اطلاعات حساب در همان بخش دوباره بررسی می‌شوند.", "Continue to your destination. Its permissions and account data will be checked there again.")
+    : access === "checking" ? t("اطلاعات خصوصی تا تأیید دسترسی نمایش داده نمی‌شوند.", "Private information remains hidden until access is confirmed.")
     : access === "network" ? t("بررسی وضعیت نشست ممکن نشد. خطای شبکه به معنی پایان نشست نیست؛ دوباره ارتباط را بررسی کنید.", "Unable to check session status. A network error does not mean your session expired; check the connection again.")
     : access === "server" ? t("بررسی دسترسی در حال حاضر ممکن نیست. خطای سرور باعث خروج خودکار شما نمی‌شود.", "Access cannot be checked right now. A server error does not automatically sign you out.")
     : access === "differentAccount" ? t("Demo: حساب متفاوت اجازه مشاهده داده حساب قبلی را ندارد. ورود موفق به‌تنهایی مجوز مقصد نیست.", "Demo: a different account cannot access the previous account’s data. Sign-in alone does not authorize this destination.")
@@ -55,6 +60,27 @@ export default function SessionExpiredPage({ en, navigate, target }: {
     : destination?.includes("commissions") ? t("ادامه درخواست نقاشی", "Your commission request")
     : destination?.startsWith("/products/") ? t("صفحه محصول", "Product page")
     : t("حساب کاربری", "Your account")
+  useEffect(() => {
+    if (!liveApi) return
+    let active = true, request = 0
+    const refresh = async () => {
+      const current = ++request
+      setAccess("checking")
+      try {
+        const result = await liveApi.checkSession()
+        if (active && current === request) setAccess(result === "confirm" ? "active"
+          : result === "signedOut" ? "expired" : result === "service" ? "server" : "network")
+      } catch { if (active && current === request) setAccess("network") }
+    }
+    const unsubscribe = liveApi.subscribe?.((event) => {
+      if (event.type === "changed" && event.signedOut) {
+        request += 1; setAccess("expired")
+      } else void refresh()
+    })
+    liveRetry.current = () => { void refresh() }
+    void refresh()
+    return () => { active = false; request += 1; liveRetry.current = null; unsubscribe?.() }
+  }, [liveApi])
   useEffect(() => {
     document.documentElement.lang = en ? "en" : "fa"
     document.documentElement.dir = en ? "ltr" : "rtl"
@@ -77,6 +103,7 @@ export default function SessionExpiredPage({ en, navigate, target }: {
   }
   const retry = () => {
     if (access === "checking") return
+    if (liveApi) { liveRetry.current?.(); return }
     setAccess("checking")
     // No service exists: checking cannot manufacture an expired or valid session.
     timer.current = setTimeout(() => setAccess("network"), 700)
@@ -93,8 +120,9 @@ export default function SessionExpiredPage({ en, navigate, target }: {
     {(context === "upload" || context === "analysis") && <div className="session-note"><AuthIcon kind="notice" /><div><p>{context === "upload" ? t("وضعیت آپلود پس از ورود بررسی می‌شود؛ پایان نشست به معنی شکست قطعی فایل نیست.", "Check upload status after sign-in; session expiry does not confirm file failure.") : t("قطع دسترسی به معنی توقف تحلیل نیست؛ وضعیت کار موجود باید بررسی شود.", "Loss of access does not mean analysis stopped; check the existing job status.")}</p><small>{t("آپلود، تحلیل یا درخواست جدید به‌صورت خودکار آغاز نمی‌شود.", "No upload, analysis or new request will start automatically.")}</small></div></div>}
   </>
   const actions = () => <div className="session-actions">
-    {access === "network" || access === "server" ? <button className="button primary" type="button" onClick={retry}>{t("تلاش دوباره برای بررسی", "Try checking again")}</button>
-      : access === "checking" ? <p className="session-checking" role="status">{t("Demo: بررسی وضعیت دسترسی؛ بدون نمایش داده خصوصی.", "Demo: checking access; private data stays hidden.")}</p>
+    {access === "active" ? <a className="button primary" href={destination || `${prefix}/account/profile`} onClick={follow(destination || `${prefix}/account/profile`)}>{t("ادامه", "Continue")}</a>
+      : access === "network" || access === "server" ? <button className="button primary" type="button" onClick={retry}>{t("تلاش دوباره برای بررسی", "Try checking again")}</button>
+      : access === "checking" ? <p className="session-checking" role="status">{liveApi ? t("در حال بررسی نشست؛ اطلاعات خصوصی نمایش داده نمی‌شوند.", "Checking session; private data stays hidden.") : t("Demo: بررسی وضعیت دسترسی؛ بدون نمایش داده خصوصی.", "Demo: checking access; private data stays hidden.")}</p>
       : access === "denied" || access === "differentAccount" || access === "restricted" ? <a className="button primary" href={`${prefix}/contact`} onClick={follow(`${prefix}/contact`)}>{t("تماس با پشتیبانی", "Contact support")}</a>
       : access === "returned" ? <><button className="button primary" type="button" disabled={!reviewed} onClick={() => { setSafeReturn(true); setInterrupted(false); setOpen(false) }}>{t("پیش‌نمایش بازگشت امن", "Preview safe return")}</button>{!reviewed && <p className="session-next-check">{t("ابتدا مجوز مقصد و نتیجه عملیات را در پروتوتایپ بررسی کنید.", "First check permissions and operation results in the prototype.")}</p>}</>
       : <a className="button primary" href={loginRoute} onClick={follow(loginRoute)}>{t("ورود مجدد", "Sign in again")}<span className="auth-forward"><AuthIcon kind="arrow" /></span></a>}
@@ -105,8 +133,8 @@ export default function SessionExpiredPage({ en, navigate, target }: {
     <div className="auth-eyebrow">NILART · AUTH-09</div>
     {modal ? <h2 id="session-dialog-title" ref={modalHeading} tabIndex={-1}>{title}</h2> : <h1 id="session-title" ref={heading} tabIndex={-1}>{title}</h1>}
     <p className="auth-intro" id={modal ? "session-dialog-description" : "session-description"}>{description}</p>
-    <div className="password-demo session-demo"><span>Demo</span>{t("وضعیت نمونه است؛ سرویس بررسی نشست متصل نیست.", "Design fixture; session validation service is not connected.")}</div>
-    {access === "expired" || access === "returned" ? <><div className="session-destination"><span>{t("پس از ورود و بررسی مجوز", "After sign-in and permission checks")}</span><strong>{destinationName}</strong></div>{notes()}</> : null}
+    {!liveApi && <div className="password-demo session-demo"><span>Demo</span>{t("وضعیت نمونه است؛ سرویس بررسی نشست متصل نیست.", "Design fixture; session validation service is not connected.")}</div>}
+    {access === "expired" || access === "returned" ? <><div className="session-destination"><span>{t("پس از ورود و بررسی مجوز", "After sign-in and permission checks")}</span><strong>{destinationName}</strong></div>{!liveApi && notes()}</> : null}
     {actions()}
     <p className="session-reassurance">{t("عملیات حساس یا پرداخت قبلی خودکار تکرار نمی‌شود.", "Previous sensitive operations or payments will not be retried automatically.")}</p>
   </div>
@@ -118,7 +146,7 @@ export default function SessionExpiredPage({ en, navigate, target }: {
         {interrupted ? <section className="auth-card session-safe-panel"><div className="session-symbol" aria-hidden="true"><AuthIcon kind="lock" /></div><h1 ref={heading} id="session-title" tabIndex={-1}>{t("این بخش تا بررسی دسترسی قفل است", "This section is locked pending access checks")}</h1><p className="auth-intro">{t("Demo: محتوای خصوصی حذف شده است؛ بستن پنجره آن را بازنمی‌گرداند.", "Demo: private content has been removed; closing the dialog does not restore it.")}</p><p className="session-safe-detail">{t("پشت پنجره هیچ داده حساب، تصویر یا سفارش رندر نمی‌شود؛ فقط این نمای امن وجود دارد.", "No account data, images or orders are rendered behind the dialog; only this safe placeholder exists.")}</p><button ref={safeControl} className="button primary session-reopen" type="button" onClick={() => setOpen(true)}>{t("نمایش راه ادامه", "Show how to continue")}</button><a className="text-link" href={loginRoute} onClick={follow(loginRoute)}>{t("ورود مجدد", "Sign in again")}</a></section> : <section className="auth-card session-card" aria-labelledby="session-title">{content(false)}</section>}
       </div></main>
       <footer className="auth-footer"><span>{t("نیل‌آرت؛ هنر در لحظه‌های روزمره", "Nilart. Art in everyday life.")}</span><nav aria-label={t("لینک‌های راهنما", "Helpful links")}><a href={`${prefix}/privacy`} onClick={follow(`${prefix}/privacy`)}>{t("حریم خصوصی", "Privacy policy")}</a><a href={`${prefix}/contact`} onClick={follow(`${prefix}/contact`)}>{t("تماس", "Contact")}</a></nav></footer>
-      <details className="auth-preview"><summary>{t("حالت‌های پیش‌نمایش", "Preview states")} <span>AUTH-09 · Demo</span></summary><p>{t("صفحه مستقل یا پنجره پاسخ نمونه؛ هیچ نشست، پرداخت یا بازیابی داده واقعی انجام نمی‌شود.", "Standalone or simulated response dialog; no real session, payment or data recovery occurs.")}</p><div><button type="button" onClick={() => { setInterrupted(false); setOpen(false) }}>{t("صفحه مستقل", "Standalone page")}</button><button type="button" onClick={() => { setInterrupted(true); setOpen(true) }}>{t("Modal دسکتاپ / Sheet موبایل", "Desktop modal / mobile sheet")}</button>{contexts.map(([value, fa, english]) => <button key={value} type="button" aria-pressed={context === value} onClick={() => chooseContext(value)}>{en ? english : fa}</button>)}</div><div>{accesses.map(([value, fa, english]) => <button key={value} type="button" aria-pressed={access === value} onClick={() => { if (timer.current) clearTimeout(timer.current); setAccess(value); setReviewed(false); setInterrupted(false) }}>{en ? english : fa}</button>)}</div><ol className="session-prototype"><li>{t("پایان نشست تأییدشده · Demo", "Confirmed expiry · Demo")}</li><li><a href={loginRoute} onClick={follow(loginRoute)}>{t("ورود مجدد از AUTH-01", "Sign in again through AUTH-01")}</a></li><li><button type="button" onClick={() => { setAccess("returned"); setReviewed(true); setInterrupted(false) }}>{t("Demo: بررسی مجوز و نتیجه عملیات — بدون اجرای مجدد", "Demo: check permissions and operation results — no replay")}</button></li><li>{t("نمای امن مقصد؛ اطلاعات خصوصی یا نشست واقعی ایجاد نمی‌شود.", "Safe destination preview; no private information or real session is created.")}</li></ol></details>
+      {!liveApi && <details className="auth-preview"><summary>{t("حالت‌های پیش‌نمایش", "Preview states")} <span>AUTH-09 · Demo</span></summary><p>{t("صفحه مستقل یا پنجره پاسخ نمونه؛ هیچ نشست، پرداخت یا بازیابی داده واقعی انجام نمی‌شود.", "Standalone or simulated response dialog; no real session, payment or data recovery occurs.")}</p><div><button type="button" onClick={() => { setInterrupted(false); setOpen(false) }}>{t("صفحه مستقل", "Standalone page")}</button><button type="button" onClick={() => { setInterrupted(true); setOpen(true) }}>{t("Modal دسکتاپ / Sheet موبایل", "Desktop modal / mobile sheet")}</button>{contexts.map(([value, fa, english]) => <button key={value} type="button" aria-pressed={context === value} onClick={() => chooseContext(value)}>{en ? english : fa}</button>)}</div><div>{accesses.map(([value, fa, english]) => <button key={value} type="button" aria-pressed={access === value} onClick={() => { if (timer.current) clearTimeout(timer.current); setAccess(value); setReviewed(false); setInterrupted(false) }}>{en ? english : fa}</button>)}</div><ol className="session-prototype"><li>{t("پایان نشست تأییدشده · Demo", "Confirmed expiry · Demo")}</li><li><a href={loginRoute} onClick={follow(loginRoute)}>{t("ورود مجدد از AUTH-01", "Sign in again through AUTH-01")}</a></li><li><button type="button" onClick={() => { setAccess("returned"); setReviewed(true); setInterrupted(false) }}>{t("Demo: بررسی مجوز و نتیجه عملیات — بدون اجرای مجدد", "Demo: check permissions and operation results — no replay")}</button></li><li>{t("نمای امن مقصد؛ اطلاعات خصوصی یا نشست واقعی ایجاد نمی‌شود.", "Safe destination preview; no private information or real session is created.")}</li></ol></details>}
     </div>
     <dialog ref={dialog} className="session-dialog" aria-labelledby="session-dialog-title" aria-describedby="session-dialog-description" onCancel={(event) => { event.preventDefault(); close() }}>
       <div className="session-sheet-handle" aria-hidden="true" /><button type="button" className="session-close" onClick={close}>{t("بستن پنجره", "Close dialog")}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" /></svg></button>

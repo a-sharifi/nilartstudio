@@ -166,11 +166,11 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL | 121 passed | Separate test database, isolated transactional schemas |
-| Frontend tests | 44 passed | Profile lifecycle and shared-session/read/save-expiry regressions |
+| Frontend tests | 47 passed | Includes live expiry-state, retry and stale-check regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
-| Chromium browser suite | 29 passed | Production development build; sensitive responses mocked |
-| Firefox session/navigation | 12 passed previously; 3 session checks passed on latest source | Latest checks include expiry during save; navigation implementation unchanged |
+| Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
+| Firefox expiry page | 3 passed on latest source | Reload, retry, permission rejection, external redirects, Persian mobile; prior session/navigation checks remain historical |
 | GitHub CI | Not verified | Local results do not imply a passed remote run |
 
 A Starlette/httpx deprecation warning remains. No public deployment, real SMS or
@@ -219,6 +219,19 @@ malformed fingerprints, mismatch rejection and old-report compatibility. A new
 local backup restored at revision 0008 with 15 tables and the older saved backup
 also passed its narrower recheck. Application code was unchanged. Fingerprints do
 not add signatures, approved off-host retention or application recovery approval.
+
+## Live session-expiry continuation (2026-10-12)
+
+The supplied AUTH-09 page is connected at both locale session-expired routes.
+It checks the API on entry and shared lifecycle signals, presents explicit retry
+for unknown/service failures, and distinguishes an active session from confirmed
+absence. Continue is a user action; destination permission/ownership remains the
+endpoint's responsibility. Locale profile return paths are now accepted by the
+safe auth allowlist; external redirects are rejected. Original CSS is unchanged,
+live fixture controls/notes are hidden, and no private content or replayed operation
+is introduced. Three unit regressions cover absence, retry and verified-logout
+ordering; browser regressions cover reload, safe returns, permission rejection and
+Persian mobile layout. Account-restricted routes remain unconnected.
 
 ## Recommended continuation
 
