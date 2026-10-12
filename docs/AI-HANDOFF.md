@@ -166,7 +166,7 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL/Redis | 193 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
+| Frontend tests | 66 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0009 |
 | Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
