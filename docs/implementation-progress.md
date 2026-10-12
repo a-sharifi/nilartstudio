@@ -434,3 +434,11 @@
 - catalog.manage، Origin دقیق، CSRF تازه و بازبینی قفل‌شده نشست/حساب/نقش برای write لازم‌اند. ایجاد/ویرایش، افزایش نسخه و audit در یک تراکنش‌اند؛ شکست audit ایجاد یا ویرایش را rollback می‌کند. فقط داده صریح ایجاد می‌شود و SKU منتشرنشده از پاسخ عمومی پنهان است.
 - هر ۲۳۷ تست backend با PostgreSQL/Redis مستقل موفق است؛ ۱۶ مورد جدید security، ورودی، isolation، duplicate، optimistic version، rollback و concurrency را پوشش می‌دهند. lint/mypy backend، بازتولید OpenAPI/client، typecheck frontend و build تولیدی Docker موفق‌اند. هر یازده تست backup شامل restore واقعی مستقل موفق است و revision پیش‌فرض 0014 شد.
 - migration محلی اعمال شد و هشت سرویس سالم‌اند. سه SKU fixture بدون قیمت، صفر authoring audit و ترکیب پکیج گربه محفوظ است؛ درخواست زنده بدون نشست ۴۰۱/no-store می‌دهد. UI تغییر نکرده؛ نتایج مرورگر قبلی تاریخی و CI راه دور تأییدنشده است. ادامه: mapping صریح option combination، انتشار بازبینی‌شده، سپس موجودی و admin UI.
+
+## mapping صریح گزینه SKU منتشرنشده — ۲۰۲۶-۱۰-۱۲
+
+- migration 0015 و GET/PUT mapping گزینه SKU اضافه شد. configuration متعلق به محصول همان SKU، نسخه دقیق draft و combination صریح با کد برابر SKU لازم است. null برای حذف mapping است؛ version از authoring SKU مشترک استفاده می‌کند و قیمت مستقل می‌ماند.
+- snapshot شامل label دوزبانه مرتب و selection معتبر است. تغییر draft یا کد SKU آن را stale می‌کند، بدون تغییر snapshot. هر combination در یک configuration/version فقط یک mapping دارد؛ برای انتقال باید association قبلی صریحاً حذف شود. انتشار، موجودی و خرید فعال نشد.
+- write نیازمند catalog.manage، Origin دقیق، CSRF تازه و recheck قفل‌شده نشست/حساب/نقش است. قفل محصول پیش از SKU با ویرایش گزینه هماهنگ است؛ mapping، version و audit اتمیک‌اند. پاسخ عمومی SKU و طراحی تغییر نکرد؛ همه ۴۲ CSS مرجع محفوظ است.
+- هر ۲۵۲ تست backend با PostgreSQL/Redis مستقل موفق است؛ ۱۵ تست جدید snapshot، foreign reference، duplicate، stale، rollback، security و concurrency را بررسی می‌کنند. lint/mypy backend، OpenAPI/client، typecheck frontend، build تولیدی Docker و یازده تست backup شامل restore واقعی موفق‌اند.
+- migration محلی 0015 اعمال شد؛ هشت سرویس سالم‌اند. سه SKU بدون قیمت، صفر mapping و صفر authoring audit محفوظ است؛ endpoint بدون نشست ۴۰۱/no-store می‌دهد و پکیج گربه تغییر نکرد. نتایج مرورگر قبلی تاریخی و CI راه دور تأییدنشده است. ادامه: انتشار بازبینی‌شده با snapshot عمومی immutable، سپس موجودی و admin UI.

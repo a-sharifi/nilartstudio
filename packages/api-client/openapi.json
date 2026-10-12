@@ -1213,6 +1213,100 @@
         }
       }
     },
+    "/api/v1/admin/catalog/skus/{sku_id}/options": {
+      "get": {
+        "tags": [
+          "catalog-sku-mappings"
+        ],
+        "summary": "Read Mapping",
+        "operationId": "read_mapping_api_v1_admin_catalog_skus__sku_id__options_get",
+        "parameters": [
+          {
+            "name": "sku_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sku Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SKUMappingOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "catalog-sku-mappings"
+        ],
+        "summary": "Update Mapping",
+        "operationId": "update_mapping_api_v1_admin_catalog_skus__sku_id__options_put",
+        "parameters": [
+          {
+            "name": "sku_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sku Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SKUMappingOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/login/password": {
       "post": {
         "tags": [
@@ -2416,6 +2510,120 @@
         ],
         "title": "Label"
       },
+      "MappingOutput": {
+        "properties": {
+          "configuration_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Configuration Id"
+          },
+          "configuration_version": {
+            "type": "integer",
+            "maximum": 2147483647.0,
+            "minimum": 1.0,
+            "title": "Configuration Version"
+          },
+          "combination_code": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Combination Code"
+          },
+          "snapshot": {
+            "$ref": "#/components/schemas/MappingSnapshot"
+          },
+          "current": {
+            "type": "boolean",
+            "title": "Current"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "configuration_id",
+          "configuration_version",
+          "combination_code",
+          "snapshot",
+          "current"
+        ],
+        "title": "MappingOutput"
+      },
+      "MappingSelection": {
+        "properties": {
+          "configuration_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Configuration Id"
+          },
+          "configuration_version": {
+            "type": "integer",
+            "maximum": 2147483647.0,
+            "minimum": 1.0,
+            "title": "Configuration Version"
+          },
+          "combination_code": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Combination Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "configuration_id",
+          "configuration_version",
+          "combination_code"
+        ],
+        "title": "MappingSelection"
+      },
+      "MappingSnapshot": {
+        "properties": {
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "combination": {
+            "$ref": "#/components/schemas/Combination"
+          }
+        },
+        "type": "object",
+        "required": [
+          "options",
+          "combination"
+        ],
+        "title": "MappingSnapshot"
+      },
+      "MappingUpdate": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "maximum": 2147483646.0,
+            "minimum": 0.0,
+            "title": "Version"
+          },
+          "mapping": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MappingSelection"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version",
+          "mapping"
+        ],
+        "title": "MappingUpdate"
+      },
       "MoneyOutput": {
         "properties": {
           "amount": {
@@ -2947,6 +3155,52 @@
           "code"
         ],
         "title": "SKUCreate"
+      },
+      "SKUMappingOutput": {
+        "properties": {
+          "sku_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Sku Id"
+          },
+          "product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Product Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "published": {
+            "type": "boolean",
+            "title": "Published"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "mapping": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MappingOutput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "sku_id",
+          "product_id",
+          "code",
+          "published",
+          "version",
+          "mapping"
+        ],
+        "title": "SKUMappingOutput"
       },
       "SKUOutput": {
         "properties": {

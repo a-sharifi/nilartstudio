@@ -293,3 +293,34 @@ rolls back creation or editing. Audits record actor, product/SKU, UTC timestamp
 and versions; the creation snapshot has JSON null `before`. Public endpoints
 continue to hide unpublished SKUs, and authoring supplies no inventory or
 purchasing eligibility. No application SKUs are automatically created by migration.
+
+### Explicit unpublished SKU option mappings
+
+Migration `0015` stores one mapping per SKU. GET/PUT
+`/api/v1/admin/catalog/skus/{sku_id}/options` require `catalog.manage`; PUT also
+uses exact Origin, fresh CSRF and locked session/account/role rechecks.
+
+PUT accepts the current SKU authoring `version` and an explicit `mapping`:
+`configuration_id`, `configuration_version`, `combination_code`. The configuration
+must belong to that SKU's product, its draft version must match, the combination
+must exist, and its code must exactly match the SKU code. Only that submitted
+combination is mapped. One combination can belong to at most one SKU within a
+configuration version. Clearing the previous association (`mapping:null`) frees
+it for explicit reassignment. Missing SKU returns 404; foreign/missing combinations
+return 422; stale versions, duplicate associations and published SKU edits return
+409. Body omissions and extra fields are rejected.
+
+The stored snapshot contains ordered bilingual options/values and the validated
+selected combination. GET reads SKU metadata, snapshot and current draft version
+in one database statement. `mapping.current` becomes false when the draft version
+or SKU code changes; the original snapshot is retained. Even unrelated draft edits
+require explicit review/remapping. Existing mapping snapshots are not silently
+rewritten. PUT uses a product lock before a SKU lock to coordinate with option
+authoring. Mapping/unmapping, shared SKU authoring version and actor/time/before/
+after audit commit atomically. Price versions remain separate.
+
+Published SKUs cannot be mapped/unmapped through this API. No public output changes,
+publication, inventory, inferred prices or purchasing are added. Local fixtures
+are preserved and remain unmapped. Subsequent reviewed publication must validate
+mapping freshness while holding these same locks, and define a published snapshot
+contract independently of mutable drafts.

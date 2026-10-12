@@ -767,6 +767,40 @@ Next: explicit option-combination mapping and reviewed publication, followed by
 inventory contracts; admin UI remains separate. Do not enable purchase controls
 using fixture SKUs or infer business specifications/prices from the reference.
 
+## Explicit unpublished SKU option mapping (2026-10-12)
+
+Migration 0015 adds SKU mapping snapshots. GET/PUT admin `/skus/{sku_id}/options`
+select an explicit combination from that product's exact draft configuration
+version. Codes must match the SKU; foreign/incomplete/missing references are not
+inferred. Null explicitly unmaps. A configuration/version/combination maps at most
+once; clear an old association before reassignment. Mapping writes use the shared
+SKU authoring version and audit, independently of price versions.
+
+Snapshots retain bilingual ordered option/value labels and explicit selections.
+A draft version or SKU code change marks the mapping non-current without mutating
+its snapshot. Product-before-SKU locks coordinate option editing and mapping;
+read metadata/mapping/current draft in one statement. Writes require catalog.manage,
+exact Origin, fresh CSRF and locked session/account/roles. Audit failures roll back
+mapping/version changes. Published SKU mapping remains immutable in this API.
+
+No publication, public response changes, inventory, prices, purchasing or new
+application fixture mappings are introduced. Backup default advances to 0015.
+Tests cover explicit snapshots, code and product ownership, stale versions,
+missing/foreign references, security revocation, public isolation, unique mapping
+and reassignment, rollback and concurrent mapping/draft edits. All 252 backend
+tests passed with isolated PostgreSQL/Redis. Backend lint/configured mypy,
+OpenAPI/client regeneration and frontend typecheck passed. Production Docker
+build and all eleven backup tests, including isolated real restore, passed.
+Local migration head is 0015 and all eight services are healthy; live private
+mapping access returns 401/no-store without a session. Local DB retains three
+unpriced fixture SKUs, zero mappings and zero authoring audits. All 42 reference
+CSS files remain unchanged. UI/browser checks from earlier slices are historical;
+remote CI remains unverified.
+
+Next: reviewed publication with immutable public option snapshots and freshness
+checks under the same product/SKU locks, then inventory contracts and admin UI.
+Existing published test fixtures need no automatic mapping or inferred options.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

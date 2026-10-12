@@ -15,6 +15,7 @@ from nilart.contexts.catalog.presentation.options import router as options_route
 from nilart.contexts.catalog.presentation.prices import router as prices_router
 from nilart.contexts.catalog.presentation.router import router as catalog_router
 from nilart.contexts.catalog.presentation.sku_authoring import router as sku_authoring_router
+from nilart.contexts.catalog.presentation.sku_mappings import router as sku_mappings_router
 from nilart.contexts.commissions.router import router as commissions_router
 from nilart.contexts.identity.presentation.access import router as access_router
 from nilart.contexts.identity.presentation.otp_router import router as otp_router
@@ -30,6 +31,7 @@ app.include_router(artworks_router)
 app.include_router(options_router)
 app.include_router(prices_router)
 app.include_router(sku_authoring_router)
+app.include_router(sku_mappings_router)
 app.include_router(identity_router)
 app.include_router(access_router)
 app.include_router(otp_router)

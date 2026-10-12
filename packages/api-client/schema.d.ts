@@ -347,6 +347,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/catalog/skus/{sku_id}/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Mapping */
+        get: operations["read_mapping_api_v1_admin_catalog_skus__sku_id__options_get"];
+        /** Update Mapping */
+        put: operations["update_mapping_api_v1_admin_catalog_skus__sku_id__options_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/login/password": {
         parameters: {
             query?: never;
@@ -906,6 +924,45 @@ export interface components {
             /** Order */
             order: number;
         };
+        /** MappingOutput */
+        MappingOutput: {
+            /**
+             * Configuration Id
+             * Format: uuid
+             */
+            configuration_id: string;
+            /** Configuration Version */
+            configuration_version: number;
+            /** Combination Code */
+            combination_code: string;
+            snapshot: components["schemas"]["MappingSnapshot"];
+            /** Current */
+            current: boolean;
+        };
+        /** MappingSelection */
+        MappingSelection: {
+            /**
+             * Configuration Id
+             * Format: uuid
+             */
+            configuration_id: string;
+            /** Configuration Version */
+            configuration_version: number;
+            /** Combination Code */
+            combination_code: string;
+        };
+        /** MappingSnapshot */
+        MappingSnapshot: {
+            /** Options */
+            options: components["schemas"]["Option"][];
+            combination: components["schemas"]["Combination"];
+        };
+        /** MappingUpdate */
+        MappingUpdate: {
+            /** Version */
+            version: number;
+            mapping: components["schemas"]["MappingSelection"] | null;
+        };
         /** MoneyOutput */
         MoneyOutput: {
             /** Amount */
@@ -1113,6 +1170,26 @@ export interface components {
         SKUCreate: {
             /** Code */
             code: string;
+        };
+        /** SKUMappingOutput */
+        SKUMappingOutput: {
+            /**
+             * Sku Id
+             * Format: uuid
+             */
+            sku_id: string;
+            /**
+             * Product Id
+             * Format: uuid
+             */
+            product_id: string;
+            /** Code */
+            code: string;
+            /** Published */
+            published: boolean;
+            /** Version */
+            version: number;
+            mapping: components["schemas"]["MappingOutput"] | null;
         };
         /** SKUOutput */
         SKUOutput: {
@@ -1917,6 +1994,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SKUAuthoringOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_mapping_api_v1_admin_catalog_skus__sku_id__options_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sku_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SKUMappingOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_mapping_api_v1_admin_catalog_skus__sku_id__options_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sku_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MappingUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SKUMappingOutput"];
                 };
             };
             /** @description Validation Error */
