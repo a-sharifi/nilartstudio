@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 146 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 158 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -313,6 +313,17 @@ All eight application services remain healthy; fixture containers were removed.
 Only tests/documentation changed, so no fresh frontend/build/typecheck result is
 claimed. Remote CI, production proxy address handling and Redis failover remain
 unverified. Existing Starlette/httpx warning remains.
+
+## Private response cache continuation (2026-10-12)
+
+Request middleware now enforces no-store across auth/account path boundaries,
+including framework validation and routing failures that bypass endpoint headers.
+Eight initial regression failures reproduced the gap; all 158 backend tests now
+pass, including twelve new cache/error/boundary cases. Lint/type checks and Docker
+build passed. Live nginx API probes confirmed private 422/404 no-store responses;
+all eight application services are healthy. No frontend or migration changes.
+Unhandled exceptions are outside this returned-response guarantee. Remote CI is
+unverified, and the existing Starlette/httpx warning remains.
 
 ## Recommended continuation
 

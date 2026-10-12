@@ -28,6 +28,10 @@ app.include_router(profile_router)
 async def request_context(request: Request, call_next):
     request.state.request_id = str(uuid4())
     response = await call_next(request)
+    # Validation and routing failures bypass individual private endpoint handlers.
+    if any(request.url.path == prefix or request.url.path.startswith(prefix + "/")
+           for prefix in ("/api/v1/auth", "/api/v1/account")):
+        response.headers["Cache-Control"] = "no-store"
     response.headers["X-Request-ID"] = request.state.request_id
     logger.info("request", extra={"request_id": request.state.request_id,
                                  "path": request.url.path, "status": response.status_code})

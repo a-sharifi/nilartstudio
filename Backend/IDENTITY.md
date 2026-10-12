@@ -178,3 +178,16 @@ An unusable database dependency ensures these outage paths stop before database
 business work. No SMS is sent. The full local backend suite passes 146 tests;
 this update changes tests and documentation only. Production proxy address
 configuration, Redis failover and remote CI execution remain unverified.
+
+
+### Private response cache policy (2026-10-12)
+
+The request middleware enforces `Cache-Control: no-store` for `/api/v1/auth`
+and `/api/v1/account`, including their child paths. This closes the gap where
+framework validation (422), unknown private routes (404), or unsupported methods
+(405) bypassed endpoint-level headers. Exact path boundaries keep unrelated public
+routes outside this rule. Twelve regression cases cover malformed auth input,
+unauthenticated profile input, routing errors, request IDs, absence of cookies or
+submitted secret values in errors, and public path boundaries. All 158 backend
+tests pass locally. Unhandled server exceptions are outside this middleware's
+returned-response guarantee and are not covered by this slice.
