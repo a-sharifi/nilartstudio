@@ -574,6 +574,29 @@ unknown commercial data and purchase controls unavailable. Commission uploads,
 configured production options, assessment, quotes and review workflows remain
 subsequent backend contracts.
 
+## User-requested local reference catalog — 2026-10-12
+
+The user explicitly requested products/collections from design-reference for local
+UI testing. The previously empty local database now has five published collections
+(Cats, Ghosts, Cows, qolche, Love), four categories and four products (127 gsm
+sketchbook, ruled notebook, sticker set, bookmark), with their reference memberships.
+Bilingual descriptions mark them as test data. This supersedes earlier statements
+that the local catalog is unseeded; those statements describe prior checkpoints.
+No accounts/roles, SKUs, prices, stock, artwork or bundle records were created.
+
+`Backend/fixtures/design-catalog.json` contains the reference descriptions and names;
+`nilart.bootstrap.design_catalog` is an explicit local-only importer. It requires
+`--local-test-data`, a fixture path and the local service's database environment.
+It never runs in startup/migrations, does not overwrite matching slugs, and stages
+all records in one transaction. See `Backend/fixtures/README.md` for reproduction.
+
+Validation: seven focused backend tests passed, new-module lint/mypy passed,
+public API counts and all product/collection memberships were checked, and live
+English/Persian shop plus collection detail were verified in Chromium. Persian
+mobile shop has no horizontal overflow. A second real PostgreSQL import was
+rejected without changing existing data. No frontend/API/schema changes or full
+backend suite/build rerun for this data-only request; remote CI is unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

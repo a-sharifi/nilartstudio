@@ -191,3 +191,11 @@ The live bundle gallery/detail shows saved descriptions/components, unavailable
 media and unconfirmed purchase details. Unknown or empty data is not replaced by
 demo bundles. Commission and footer information routes are also connected; the
 static footer pages explicitly identify unavailable tracking/contact/policies.
+
+## Design-reference test data (2026-10-12)
+
+An explicit user-requested local import adds five collections, four categories and
+four products from the pinned design reference. Published descriptions include a
+bilingual test-data notice; sample price/stock/options are not imported. No SKUs
+or commercial records are created. See `fixtures/README.md` for the opt-in importer,
+transaction rollback and existing-slug protection. Startup/migrations remain unseeded.

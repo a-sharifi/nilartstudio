@@ -1,0 +1,92 @@
+{
+  "source": "design-reference/src/data.ts",
+  "collections": [
+    {
+      "slug": "gorbe",
+      "title_fa": "گربه",
+      "title_en": "Cats",
+      "description_fa": "همراه گربه‌ها بنویس، طراحی کن و به روزمره‌ات رنگ بده. همه محصولات و پکیج‌های این کالکشن را اینجا ببین.",
+      "description_en": "Write, draw, and brighten your everyday life with cats. Explore this collection's products and bundles in one place."
+    },
+    {
+      "slug": "roh",
+      "title_fa": "روح",
+      "title_en": "Ghosts",
+      "description_fa": "",
+      "description_en": ""
+    },
+    {
+      "slug": "gav",
+      "title_fa": "گاو",
+      "title_en": "Cows",
+      "description_fa": "",
+      "description_en": ""
+    },
+    {
+      "slug": "qolche",
+      "title_fa": "qolche",
+      "title_en": "qolche",
+      "description_fa": "",
+      "description_en": ""
+    },
+    {
+      "slug": "love",
+      "title_fa": "Love",
+      "title_en": "Love",
+      "description_fa": "",
+      "description_en": ""
+    }
+  ],
+  "categories": [
+    {
+      "slug": "sketchbooks",
+      "title_fa": "دفتر طراحی",
+      "title_en": "Sketchbooks"
+    },
+    {
+      "slug": "notebooks",
+      "title_fa": "دفتر خط‌دار",
+      "title_en": "Notebooks"
+    },
+    {
+      "slug": "stickers",
+      "title_fa": "استیکر",
+      "title_en": "Stickers"
+    },
+    {
+      "slug": "bookmarks",
+      "title_fa": "نشانک",
+      "title_en": "Bookmarks"
+    }
+  ],
+  "products": [
+    {
+      "slug": "cats-sketchbook-127gsm",
+      "title_fa": "دفتر طراحی ۱۲۷ گرم",
+      "title_en": "127 gsm sketchbook",
+      "collection": "gorbe",
+      "category": "sketchbooks"
+    },
+    {
+      "slug": "notebook-ghosts",
+      "title_fa": "دفتر خط‌دار",
+      "title_en": "Ruled notebook",
+      "collection": "roh",
+      "category": "notebooks"
+    },
+    {
+      "slug": "sticker-cows",
+      "title_fa": "ست استیکر",
+      "title_en": "Sticker set",
+      "collection": "gav",
+      "category": "stickers"
+    },
+    {
+      "slug": "bookmark-love",
+      "title_fa": "نشانک",
+      "title_en": "Bookmark",
+      "collection": "love",
+      "category": "bookmarks"
+    }
+  ]
+}
