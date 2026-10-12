@@ -9,6 +9,7 @@ from sqlalchemy import create_engine, text
 from starlette.exceptions import HTTPException
 
 from nilart.bootstrap.settings import settings
+from nilart.contexts.catalog.presentation.options import router as options_router
 from nilart.contexts.catalog.presentation.router import router as catalog_router
 from nilart.contexts.identity.presentation.access import router as access_router
 from nilart.contexts.identity.presentation.otp_router import router as otp_router
@@ -18,6 +19,7 @@ from nilart.contexts.identity.presentation.router import router as identity_rout
 logger = logging.getLogger("nilart")
 app = FastAPI(title="Nilart API", version="0.1.0")
 app.include_router(catalog_router)
+app.include_router(options_router)
 app.include_router(identity_router)
 app.include_router(access_router)
 app.include_router(otp_router)
@@ -30,7 +32,7 @@ async def request_context(request: Request, call_next):
     response = await call_next(request)
     # Validation and routing failures bypass individual private endpoint handlers.
     if any(request.url.path == prefix or request.url.path.startswith(prefix + "/")
-           for prefix in ("/api/v1/auth", "/api/v1/account")):
+           for prefix in ("/api/v1/auth", "/api/v1/account", "/api/v1/admin")):
         response.headers["Cache-Control"] = "no-store"
     response.headers["X-Request-ID"] = request.state.request_id
     logger.info("request", extra={"request_id": request.state.request_id,

@@ -87,7 +87,7 @@ Profile version 0 means no saved profile; first save becomes 1. Stale writes ret
 
 ### Migrations and background processing
 
-Current head **0008**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles. Applied locally before the Docker failure; inspect the actual database after recovery. Do not rewrite applied migrations destructively.
+Current head **0009**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Applied locally and verified at head 0009. Do not rewrite applied migrations destructively.
 
 Outbox insertion shares the domain transaction. Dispatch locks with SKIP LOCKED and confirms broker publishing; consumption records event IDs transactionally. Only `infrastructure.ping` has a handler; stock/payment workflows do not exist yet. Celery uses JSON, persistent delivery, late ack, prefetch 1 and bounded retries. Optional beat must have one active instance.
 
@@ -165,10 +165,10 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 175 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 191 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
-| Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
+| Final Docker build and service health | Passed | All eight services healthy, migration head 0009 |
 | Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
 | Firefox expiry page | 3 passed on latest source | Reload, retry, permission rejection, external redirects, Persian mobile; prior session/navigation checks remain historical |
 | GitHub CI | Not verified | Local results do not imply a passed remote run |
@@ -367,6 +367,25 @@ All 175 backend tests passed. OpenAPI updated and client regenerated (TypeScript
 output unchanged); backend lint/type checks, frontend typecheck and Docker build
 passed. Eight local services healthy. No frontend runtime, migration or data
 changes. Remote CI unverified; existing Starlette/httpx warning remains.
+
+## Draft SKU option authoring continuation (2026-10-12)
+
+Migration 0009 adds separate JSONB draft aggregates and audit snapshots. Protected
+GET/PUT /api/v1/admin/catalog/products/{product_id}/options target existing products.
+PUT replaces a validated complete document with optimistic version checking,
+transactional session/role locks and exact Origin/current CSRF; product locking
+serializes initial saves. Audit and draft commit atomically. No public SKU/data,
+price, stock, administrator assignment or publication change. See Backend/CATALOG.md
+for payload limits, ordering, empty/version-0 semantics and draft-code scope.
+Sixteen new cases verify validation, authorization, permission/session/CSRF changes,
+public isolation, audit rollback, concurrent first saves and migration downgrade.
+191 backend tests, 11 infra tests, lint/backend typechecks, API client generation,
+frontend typecheck and Docker build passed. Local head 0009 and eight healthy
+services verified; live protected endpoint returns 401/no-store. Backup defaults
+advance to 0009; historical saved reports are unchanged. Remote CI unverified.
+Next: publication needs a separate approved contract, followed by documented
+inventory and purchasing before connecting the live product selector. Admin UI
+and product creation are also outstanding. No option data was inferred/seeded.
 
 ## Recommended continuation
 

@@ -157,6 +157,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/catalog/products/{product_id}/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Options */
+        get: operations["read_options_api_v1_admin_catalog_products__product_id__options_get"];
+        /** Update Options */
+        put: operations["update_options_api_v1_admin_catalog_products__product_id__options_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/login/password": {
         parameters: {
             query?: never;
@@ -428,6 +446,19 @@ export interface components {
              */
             delivery_status: "accepted";
         };
+        /** Choice */
+        Choice: {
+            /**
+             * Option Id
+             * Format: uuid
+             */
+            option_id: string;
+            /**
+             * Value Id
+             * Format: uuid
+             */
+            value_id: string;
+        };
         /** CollectionOutput */
         CollectionOutput: {
             /**
@@ -453,6 +484,13 @@ export interface components {
             /** Page Size */
             page_size: number;
         };
+        /** Combination */
+        Combination: {
+            /** Code */
+            code: string;
+            /** Selections */
+            selections: components["schemas"]["Choice"][];
+        };
         /** CompletePassword */
         CompletePassword: {
             /** Grant */
@@ -475,6 +513,31 @@ export interface components {
             /** Phone */
             phone: string;
         };
+        /** DraftOutput */
+        DraftOutput: {
+            /** Options */
+            options: components["schemas"]["Option"][];
+            /** Combinations */
+            combinations: components["schemas"]["Combination"][];
+            /** Configuration Id */
+            configuration_id: string | null;
+            /**
+             * Product Id
+             * Format: uuid
+             */
+            product_id: string;
+            /** Version */
+            version: number;
+        };
+        /** DraftUpdate */
+        DraftUpdate: {
+            /** Options */
+            options: components["schemas"]["Option"][];
+            /** Combinations */
+            combinations: components["schemas"]["Combination"][];
+            /** Version */
+            version: number;
+        };
         /** GrantOutput */
         GrantOutput: {
             /** Grant */
@@ -491,12 +554,42 @@ export interface components {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
         };
+        /** Label */
+        Label: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title Fa */
+            title_fa: string;
+            /** Title En */
+            title_en: string;
+            /** Order */
+            order: number;
+        };
         /** MoneyOutput */
         MoneyOutput: {
             /** Amount */
             amount: string;
             /** Currency */
             currency: string;
+        };
+        /** Option */
+        Option: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title Fa */
+            title_fa: string;
+            /** Title En */
+            title_en: string;
+            /** Order */
+            order: number;
+            /** Values */
+            values: components["schemas"]["Label"][];
         };
         /**
          * OtpPurpose
@@ -919,6 +1012,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SKUOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_options_api_v1_admin_catalog_products__product_id__options_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                product_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_options_api_v1_admin_catalog_products__product_id__options_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                product_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftOutput"];
                 };
             };
             /** @description Validation Error */

@@ -489,6 +489,100 @@
         }
       }
     },
+    "/api/v1/admin/catalog/products/{product_id}/options": {
+      "get": {
+        "tags": [
+          "catalog-options"
+        ],
+        "summary": "Read Options",
+        "operationId": "read_options_api_v1_admin_catalog_products__product_id__options_get",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Product Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "catalog-options"
+        ],
+        "summary": "Update Options",
+        "operationId": "update_options_api_v1_admin_catalog_products__product_id__options_put",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Product Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DraftUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/login/password": {
       "post": {
         "tags": [
@@ -1009,6 +1103,27 @@
         ],
         "title": "ChallengeOutput"
       },
+      "Choice": {
+        "properties": {
+          "option_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Option Id"
+          },
+          "value_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Value Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "option_id",
+          "value_id"
+        ],
+        "title": "Choice"
+      },
       "CollectionOutput": {
         "properties": {
           "id": {
@@ -1069,6 +1184,31 @@
         ],
         "title": "CollectionPage"
       },
+      "Combination": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Code"
+          },
+          "selections": {
+            "items": {
+              "$ref": "#/components/schemas/Choice"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Selections"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "selections"
+        ],
+        "title": "Combination"
+      },
       "CompletePassword": {
         "properties": {
           "grant": {
@@ -1123,6 +1263,91 @@
         ],
         "title": "CurrentSessionOutput"
       },
+      "DraftOutput": {
+        "properties": {
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Options"
+          },
+          "combinations": {
+            "items": {
+              "$ref": "#/components/schemas/Combination"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Combinations"
+          },
+          "configuration_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Configuration Id"
+          },
+          "product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Product Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "options",
+          "combinations",
+          "configuration_id",
+          "product_id",
+          "version"
+        ],
+        "title": "DraftOutput"
+      },
+      "DraftUpdate": {
+        "properties": {
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Options"
+          },
+          "combinations": {
+            "items": {
+              "$ref": "#/components/schemas/Combination"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Combinations"
+          },
+          "version": {
+            "type": "integer",
+            "maximum": 2147483646.0,
+            "minimum": 0.0,
+            "title": "Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "options",
+          "combinations",
+          "version"
+        ],
+        "title": "DraftUpdate"
+      },
       "GrantOutput": {
         "properties": {
           "grant": {
@@ -1159,6 +1384,41 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "Label": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title_fa": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title Fa"
+          },
+          "title_en": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title En"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Order"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "title_fa",
+          "title_en",
+          "order"
+        ],
+        "title": "Label"
+      },
       "MoneyOutput": {
         "properties": {
           "amount": {
@@ -1176,6 +1436,51 @@
           "currency"
         ],
         "title": "MoneyOutput"
+      },
+      "Option": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title_fa": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title Fa"
+          },
+          "title_en": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title En"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Order"
+          },
+          "values": {
+            "items": {
+              "$ref": "#/components/schemas/Label"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Values"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "title_fa",
+          "title_en",
+          "order",
+          "values"
+        ],
+        "title": "Option"
       },
       "OtpPurpose": {
         "type": "string",

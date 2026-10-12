@@ -94,3 +94,42 @@ value. Invalid lengths return 422 before repository queries. OpenAPI documents
 these constraints. Eight new HTTP cases verify oversized detail identifiers and
 empty/oversized filters with an unusable database dependency. Existing valid
 catalog paths remain covered; no schema or data migration is required.
+
+## Draft SKU option authoring (2026-10-12)
+
+`GET` and `PUT /api/v1/admin/catalog/products/{product_id}/options` require
+`catalog.manage`. They target existing products, including published products,
+but operate exclusively on separate draft configurations. No public catalog
+output, SKU, price, inventory, or publication state is changed.
+
+A draft document contains `options` and explicit `combinations`. Options have
+UUID `id`, bilingual `title_fa`/`title_en`, integer `order`, and similarly labeled
+`values`. Combinations have a `code` and `selections` of `option_id`/`value_id`.
+One value per option is required. Unknown values, repeated IDs/orders, blank
+labels, duplicate codes/combinations and extra fields are rejected. Codes are
+case-sensitive, nonblank, trimmed, and at most 160 characters. Draft codes are
+unique within a configuration; they do not reserve published SKU codes. Maximums
+are 20 options, 100 values per option, and 1,000 explicit combinations. An optionless
+product can have one explicit combination with an empty selection.
+
+An existing product without a draft returns version 0, null configuration ID,
+and empty arrays. PUT replaces the whole document and requires its current
+`version`; successful saves increment it, keeping the configuration UUID stable.
+Stale versions return 409; missing products return 404. Reads sort options/values
+by explicit order, preserving submitted combination order. UUID references are
+local to the submitted document, not references to another product's options.
+
+Writes require exact Origin and current CSRF, recheck and lock the session/account
+and current role grants, then lock the product to serialize initial creation and
+updates. The application validates a complete document; PostgreSQL stores it as a
+JSONB aggregate in `catalog_option_drafts`. `catalog_option_audits` receives actor,
+configuration/product IDs, previous/new versions, UTC timestamp and before/after
+option snapshots in the same transaction. An audit failure rolls back the draft.
+There is no API to modify audit history. All admin responses use no-store.
+
+Migration 0009 creates only these two tables/indexes; downgrade removes draft/audit
+history and preserves products. No configuration is seeded and no administrator
+is assigned. Product creation, admin UI, publication and the live product selector
+remain later slices. Sixteen added tests cover validation, HTTP authorization,
+permission/session/CSRF rechecks, public isolation, audit rollback, concurrent
+first saves and migration downgrade using isolated PostgreSQL schemas.

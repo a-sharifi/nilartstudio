@@ -154,7 +154,7 @@ class DockerBackupTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, backup.isolated_postgres(image) as source:
             backup.sql(source, """
                 CREATE TABLE alembic_version (version_num text PRIMARY KEY);
-                INSERT INTO alembic_version VALUES ('0008');
+                INSERT INTO alembic_version VALUES ('0009');
                 CREATE TABLE parent (id serial PRIMARY KEY, name text UNIQUE NOT NULL);
                 CREATE TABLE child (id serial PRIMARY KEY, parent_id int REFERENCES parent(id));
                 INSERT INTO parent(name) VALUES ('هنر'), ('second');
@@ -166,7 +166,7 @@ class DockerBackupTests(unittest.TestCase):
             self.assertEqual(backup.verify_existing(output), result)
             self.assertEqual((output / "verification.json").read_bytes(), saved_report)
             self.assertTrue(result["verified"])
-            self.assertEqual(result["migration"], "0008")
+            self.assertEqual(result["migration"], "0009")
             counts = {entry["table"]: entry["rows"] for entry in result["tables"]}
             self.assertEqual(counts, {"alembic_version": 1, "child": 1, "parent": 2})
             self.assertEqual(json.loads((output / "verification.json").read_text()), result)
