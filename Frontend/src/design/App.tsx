@@ -42,6 +42,7 @@ import CollectionCard, { CollectionSkeleton } from "./CollectionCard"
 import CollectionsPage from "./CollectionsPage"
 import CollectionDetailPage from "./CollectionDetailPage"
 import ShopPage from "./ShopPage"
+import LiveCommissionsPage from "../features/catalog/LiveCommissionsPage"
 import LiveArtworksPage from "../features/catalog/LiveArtworksPage"
 import LiveShopPage from "../features/catalog/LiveShopPage"
 import { isShopRoute } from "./shop"
@@ -1677,6 +1678,8 @@ export default function App() {
             onSave={setReferenceDraft} onNavigate={navigate} onDemoSignIn={setSignedIn}
             registerGuard={registerReferenceGuard}
           />
+        ) : isCommissions && !demoMode ? (
+          <LiveCommissionsPage language={lang} />
         ) : isCommissions ? (
           <CommissionsPage language={lang} signedIn={signedIn} onNavigate={navigate} onDemoSignIn={setSignedIn} />
         ) : (isArtworkDetail || isArtworks) && !demoMode ? (

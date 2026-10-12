@@ -87,7 +87,7 @@ Profile version 0 means no saved profile; first save becomes 1. Stale writes ret
 
 ### Migrations and background processing
 
-Current head **0010**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; applied locally at head 0010. Do not rewrite applied migrations destructively.
+Current head **0011**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; commission request storage follows artworks; applied locally at head 0011. Do not rewrite applied migrations destructively.
 
 Outbox insertion shares the domain transaction. Dispatch locks with SKIP LOCKED and confirms broker publishing; consumption records event IDs transactionally. Only `infrastructure.ping` has a handler; stock/payment workflows do not exist yet. Celery uses JSON, persistent delivery, late ack, prefetch 1 and bounded retries. Optional beat must have one active instance.
 
@@ -165,10 +165,10 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 194 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 68 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
+| Backend with PostgreSQL/Redis | 195 passed | Isolated database schemas and disposable Redis containers |
+| Frontend tests | 70 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
-| Final Docker build and service health | Passed | All eight services healthy, migration head 0010 |
+| Final Docker build and service health | Passed | All eight services healthy, migration head 0011 |
 | Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
 | Firefox expiry page | 3 passed on latest source | Reload, retry, permission rejection, external redirects, Persian mobile; prior session/navigation checks remain historical |
 | GitHub CI | Not verified | Local results do not imply a passed remote run |
@@ -436,6 +436,21 @@ media and purchasing are outstanding. All 194 backend and 68 frontend tests pass
 plus lint/typechecks, client generation, Docker build, 11 infra checks and focused
 bilingual Chromium gallery/detail navigation. PostgreSQL read test reran after
 repository extraction. Backup defaults advance to 0010. Remote CI unverified.
+
+## Commission submission continuation (2026-10-12)
+
+Migration 0011 adds account-owned text briefs with unique owner/submission UUID.
+POST /api/v1/account/commissions requires account.write_self, exact Origin/current
+CSRF and transactionally rechecked session/roles. Replay returns the original
+receipt; altered brief under the same ID conflicts. Receipt status awaiting_review
+means saved, not assigned/dispatched or quoted. Live fa/en commission forms record
+idea, changes, style/size preferences and execution. Unknown outcomes retry the
+same immutable brief/ID; session changes clear private memory. No browser storage.
+195 backend tests, 70 frontend tests, 11 infra tests, focused Chromium submission,
+lint/typechecks, client generation and Docker build passed. See Backend/COMMISSIONS.md.
+Uploads, AI, artist assignment/review, quotes, request history, payments and
+cancellation remain outstanding. No external messages, financial writes or seeds.
+Backup default advances to 0011. Remote CI unverified; existing warning remains.
 
 ## Recommended continuation
 

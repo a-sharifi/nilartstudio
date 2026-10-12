@@ -489,6 +489,47 @@
         }
       }
     },
+    "/api/v1/account/commissions": {
+      "post": {
+        "tags": [
+          "commissions"
+        ],
+        "summary": "Submit",
+        "operationId": "submit_api_v1_account_commissions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommissionBrief"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommissionReceipt"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/catalog/artworks": {
       "get": {
         "tags": [
@@ -1536,6 +1577,83 @@
           "selections"
         ],
         "title": "Combination"
+      },
+      "CommissionBrief": {
+        "properties": {
+          "submission_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Submission Id"
+          },
+          "idea": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Idea"
+          },
+          "changes": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Changes"
+          },
+          "style": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Style"
+          },
+          "size": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Size"
+          },
+          "execution": {
+            "type": "string",
+            "enum": [
+              "digital",
+              "handmade"
+            ],
+            "title": "Execution"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "submission_id",
+          "idea",
+          "changes",
+          "style",
+          "size",
+          "execution"
+        ],
+        "title": "CommissionBrief"
+      },
+      "CommissionReceipt": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "status": {
+            "type": "string",
+            "const": "awaiting_review",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "status"
+        ],
+        "title": "CommissionReceipt"
       },
       "CompletePassword": {
         "properties": {
