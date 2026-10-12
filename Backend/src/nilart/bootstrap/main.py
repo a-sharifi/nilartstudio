@@ -12,6 +12,7 @@ from nilart.bootstrap.settings import settings
 from nilart.contexts.catalog.presentation.artworks import router as artworks_router
 from nilart.contexts.catalog.presentation.bundles import router as bundles_router
 from nilart.contexts.catalog.presentation.options import router as options_router
+from nilart.contexts.catalog.presentation.prices import router as prices_router
 from nilart.contexts.catalog.presentation.router import router as catalog_router
 from nilart.contexts.commissions.router import router as commissions_router
 from nilart.contexts.identity.presentation.access import router as access_router
@@ -26,6 +27,7 @@ app.include_router(bundles_router)
 app.include_router(commissions_router)
 app.include_router(artworks_router)
 app.include_router(options_router)
+app.include_router(prices_router)
 app.include_router(identity_router)
 app.include_router(access_router)
 app.include_router(otp_router)

@@ -87,7 +87,7 @@ Profile version 0 means no saved profile; first save becomes 1. Stale writes ret
 
 ### Migrations and background processing
 
-Current head **0012**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; commission request storage follows artworks; bundle composition follows commission requests; applied locally at head 0012. Do not rewrite applied migrations destructively.
+Current head **0013**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; commission request storage follows artworks; bundle composition follows commission requests; versioned explicit SKU price editing follows bundles; applied locally at head 0013. Do not rewrite applied migrations destructively.
 
 Outbox insertion shares the domain transaction. Dispatch locks with SKIP LOCKED and confirms broker publishing; consumption records event IDs transactionally. Only `infrastructure.ping` has a handler; stock/payment workflows do not exist yet. Celery uses JSON, persistent delivery, late ack, prefetch 1 and bounded retries. Optional beat must have one active instance.
 
@@ -165,11 +165,11 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 196 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 213 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 84 passed | Includes native artwork, commission, bundle and product-detail coverage |
 | Lint/type checks, both applications | Passed | Latest source |
-| Final Docker build and service health | Passed | All eight services healthy, migration head 0012 |
-| Chromium catalog checks | 8 passed | Artwork navigation/search/mobile, shop/category and footer/bundle regressions; prior full-suite results are historical |
+| Final Docker build and service health | Passed | All eight services healthy, migration head 0013 |
+| Chromium catalog checks | 17 passed historically | Latest UI slice; this backend-only slice verifies unauthorized HTTP access and service health |
 | Firefox expiry page | 3 passed historically | Reload, retry, permission rejection, external redirects, Persian mobile; prior session/navigation checks remain historical |
 | GitHub CI | Not verified | Local results do not imply a passed remote run |
 
@@ -658,6 +658,35 @@ Remote CI is unverified. Automated product fixtures are intercepted only, not se
 Next backend slice: audited published-SKU/price authoring and inventory contracts,
 with explicit option mappings and stock availability before enabling purchases.
 No automatic draft-option publication, stock inference or price calculation is implied.
+
+## Explicit SKU price editor — 2026-10-12
+
+Migration 0013 and GET/PUT admin SKU price endpoints provide versioned editing of
+existing SKU prices. Writes require catalog.manage, exact Origin, fresh CSRF and
+locked session/account/role rechecks. Explicit null means unknown; IRT/IRR amounts
+must be decimal strings within NUMERIC(24,6) bounds. Floats/exponents/extra fields
+and excessive precision are rejected. A stale version yields 409. Price/version
+reads share one database snapshot; SKU locks serialize writers. Price, incremented
+version and actor/identity/timestamp/before-after audit commit atomically.
+
+No SKU creation, draft publication, stock, inferred price, admin role assignment,
+admin UI or audit browser is included. Public price changes require an explicit
+successful write to an existing published SKU; no automatic publication occurs.
+No prices or SKUs were entered in the application database; five test collections
+and four products remain unchanged. The additive migration is applied locally.
+
+Validation: all 213 backend tests pass with isolated PostgreSQL/Redis fixtures,
+including 15 new precision/security/rollback/concurrency cases. Backend lint and
+configured mypy pass; OpenAPI/client regenerated; frontend type checking and
+production Docker build pass. All eight services are healthy at 0013; the new
+private endpoint returns 401 without a session. Eleven backup tests, including the
+real PostgreSQL restore test, pass; backup defaults advance to 0013. UI/browser
+results from the prior frontend slice remain historical. Remote CI is unverified.
+Existing Starlette/httpx deprecation warning remains.
+
+Next: explicitly versioned SKU creation/publication and option mappings, plus
+inventory contracts before enabling purchasing. Admin UI/role bootstrap require
+their own implementation; do not infer stock or configure real business prices.
 
 ## Recommended continuation
 

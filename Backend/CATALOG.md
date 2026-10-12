@@ -215,3 +215,30 @@ reads. It rejects foreign SKU ownership and malformed exact prices, shows explic
 SKU codes without inferring notebook specifications, and keeps purchases disabled
 because no stock/purchasing contract exists. Products without SKUs remain visible.
 Prices stay decimal strings; no API/schema or catalog-data changes are included.
+
+## Explicit versioned SKU price authoring (0013)
+
+GET/PUT `/api/v1/admin/catalog/skus/{sku_id}/price` target an existing SKU.
+Both require `catalog.manage`. PUT additionally requires exact Origin, current
+CSRF, and transactionally locked/rechecked session, account and role grants.
+No accounts/roles are created or elevated by this slice.
+
+PUT accepts exactly `{version, price}`. Price is either explicit null (unknown)
+or `{amount: decimal-string, currency: IRT|IRR}`. Amount accepts nonnegative values
+below 10^18 with at most six decimal places; floats, exponent notation, partial
+money, extra fields and excessive precision are rejected before PostgreSQL rounds.
+Zero is an explicitly authored price, never a substitute for unknown.
+
+Initial version is 0; stale writes return 409. Writers lock the SKU, check the
+version, update its existing price, increment the separate version and append an
+audit in one transaction. Reads obtain price/version in one statement. Audit
+records include actor, SKU/product IDs, versions, UTC timestamp and before/after
+prices; no credentials/tokens are stored. Audit failure rolls back price/version.
+Migration 0013 adds only the version and audit tables. Downgrade removes those
+new tables while preserving SKUs and their prices.
+
+Updating an existing published SKU changes its public price through the existing
+public response contract; it does not publish a draft SKU or option configuration,
+create SKUs, calculate prices, infer stock, enable purchasing or change proposals.
+No actual application prices were entered. SKU creation/publication, option mapping,
+inventory, admin UI and audit browsing are subsequent slices.

@@ -899,6 +899,100 @@
         }
       }
     },
+    "/api/v1/admin/catalog/skus/{sku_id}/price": {
+      "get": {
+        "tags": [
+          "catalog-prices"
+        ],
+        "summary": "Read Price",
+        "operationId": "read_price_api_v1_admin_catalog_skus__sku_id__price_get",
+        "parameters": [
+          {
+            "name": "sku_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sku Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriceOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "catalog-prices"
+        ],
+        "summary": "Update Price",
+        "operationId": "update_price_api_v1_admin_catalog_skus__sku_id__price_put",
+        "parameters": [
+          {
+            "name": "sku_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sku Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PriceUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PriceOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/login/password": {
       "post": {
         "tags": [
@@ -2007,6 +2101,30 @@
         ],
         "title": "DraftUpdate"
       },
+      "ExplicitPrice": {
+        "properties": {
+          "amount": {
+            "type": "string",
+            "pattern": "^(?:0|[1-9][0-9]{0,17})(?:\\.[0-9]{1,6})?$",
+            "title": "Amount"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "IRT",
+              "IRR"
+            ],
+            "title": "Currency"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "title": "ExplicitPrice"
+      },
       "GrantOutput": {
         "properties": {
           "grant": {
@@ -2239,6 +2357,74 @@
           "password"
         ],
         "title": "PasswordLogin"
+      },
+      "PriceOutput": {
+        "properties": {
+          "sku_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Sku Id"
+          },
+          "product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Product Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExplicitPrice"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "sku_id",
+          "product_id",
+          "code",
+          "version",
+          "price"
+        ],
+        "title": "PriceOutput"
+      },
+      "PriceUpdate": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "maximum": 2147483646.0,
+            "minimum": 0.0,
+            "title": "Version"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExplicitPrice"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version",
+          "price"
+        ],
+        "title": "PriceUpdate"
       },
       "ProductOutput": {
         "properties": {

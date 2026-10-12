@@ -277,6 +277,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/catalog/skus/{sku_id}/price": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Price */
+        get: operations["read_price_api_v1_admin_catalog_skus__sku_id__price_get"];
+        /** Update Price */
+        put: operations["update_price_api_v1_admin_catalog_skus__sku_id__price_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/login/password": {
         parameters: {
             query?: never;
@@ -796,6 +814,16 @@ export interface components {
             /** Version */
             version: number;
         };
+        /** ExplicitPrice */
+        ExplicitPrice: {
+            /** Amount */
+            amount: string;
+            /**
+             * Currency
+             * @enum {string}
+             */
+            currency: "IRT" | "IRR";
+        };
         /** GrantOutput */
         GrantOutput: {
             /** Grant */
@@ -884,6 +912,30 @@ export interface components {
             phone: string;
             /** Password */
             password: string;
+        };
+        /** PriceOutput */
+        PriceOutput: {
+            /**
+             * Sku Id
+             * Format: uuid
+             */
+            sku_id: string;
+            /**
+             * Product Id
+             * Format: uuid
+             */
+            product_id: string;
+            /** Code */
+            code: string;
+            /** Version */
+            version: number;
+            price: components["schemas"]["ExplicitPrice"] | null;
+        };
+        /** PriceUpdate */
+        PriceUpdate: {
+            /** Version */
+            version: number;
+            price: components["schemas"]["ExplicitPrice"] | null;
         };
         /** ProductOutput */
         ProductOutput: {
@@ -1536,6 +1588,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuditPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_price_api_v1_admin_catalog_skus__sku_id__price_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sku_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PriceOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_price_api_v1_admin_catalog_skus__sku_id__price_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sku_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PriceUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PriceOutput"];
                 };
             };
             /** @description Validation Error */
