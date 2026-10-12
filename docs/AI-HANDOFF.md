@@ -208,6 +208,18 @@ preservation. The local 15-table, revision-0008 saved backup was also rechecked.
 This does not add signatures, row-by-row comparison, off-host storage or production
 recovery approval. No app code changed; prior app test results remain historical.
 
+## Restored row-fingerprint continuation (2026-10-12)
+
+New backup reports include per-table SHA-256 fingerprints of sorted row JSON,
+streamed through COPY and an anonymous private temporary file. Rechecks now detect
+changed values even when counts are equal. Old reports remain supported with
+counts-only verification; raw rows never enter reports/logs. Eleven tests passed,
+including a real same-count value change, restoration to the original fingerprint,
+malformed fingerprints, mismatch rejection and old-report compatibility. A new
+local backup restored at revision 0008 with 15 tables and the older saved backup
+also passed its narrower recheck. Application code was unchanged. Fingerprints do
+not add signatures, approved off-host retention or application recovery approval.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

@@ -102,3 +102,6 @@ requirements, tests and remaining production recovery work.
 Recheck an existing trusted backup without modifying it with
 `make PYTHON=python3 BACKUP_PATH=/private/saved-directory backup-check`.
 The archive checksum and restored migration/table inventory must match its saved report.
+
+New backup reports also include row-content fingerprints, so rechecks detect changed
+values even when row counts match. Older reports retain counts-only verification.

@@ -6,6 +6,7 @@ import json
 import os
 import re
 import subprocess
+import tempfile
 import time
 import uuid
 from contextlib import contextmanager
@@ -78,8 +79,19 @@ def inventory(target):
     counts = []
     for schema, table in tables:
         identifier = '.'.join('"' + part.replace('"', '""') + '"' for part in (schema, table))
+        # Sort canonical row JSON so physical row order does not affect the fingerprint.
+        # COPY streams to an anonymous private file, avoiding row data in logs/memory.
+        statement = (f'COPY (SELECT row_to_json(t)::text FROM {identifier} AS t '
+                     'ORDER BY row_to_json(t)::text COLLATE "C") TO STDOUT;')
+        with tempfile.TemporaryFile() as stream:
+            run(["docker", "exec", "-i", target, "psql", "-X", "-q", "-At",
+                 "-v", "ON_ERROR_STOP=1", "-U", "nilart", "-d", "nilart"],
+                input=statement.encode(), stdout=stream)
+            stream.seek(0)
+            fingerprint = hashlib.file_digest(stream, "sha256").hexdigest()
         counts.append({"schema": schema, "table": table,
-                       "rows": int(sql(target, f"SELECT count(*) FROM {identifier};"))})
+                       "rows": int(sql(target, f"SELECT count(*) FROM {identifier};")),
+                       "rows_sha256": fingerprint})
     revision = sql(target, "SELECT version_num FROM public.alembic_version ORDER BY version_num;")
     return {"migration": revision, "tables": counts}
 
@@ -130,11 +142,15 @@ def verify_existing(directory):
             or not isinstance(result.get("tables"), list)):
         raise RuntimeError("Saved verification report is invalid")
     for table in result["tables"]:
-        if (not isinstance(table, dict) or set(table) != {"schema", "table", "rows"}
+        if (not isinstance(table, dict) or set(table) not in ({"schema", "table", "rows"},
+                    {"schema", "table", "rows", "rows_sha256"})
                 or not isinstance(table["schema"], str) or not table["schema"]
                 or not isinstance(table["table"], str) or not table["table"]
                 or type(table["rows"]) is not int or table["rows"] < 0):
             raise RuntimeError("Saved table inventory is invalid")
+        if "rows_sha256" in table and (not isinstance(table["rows_sha256"], str)
+                or not re.fullmatch(r"[0-9a-f]{64}", table["rows_sha256"])):
+            raise RuntimeError("Saved row fingerprint is invalid")
     with archive.open("rb") as stream:
         digest = hashlib.file_digest(stream, "sha256").hexdigest()
     if digest != result["sha256"]:
@@ -142,6 +158,10 @@ def verify_existing(directory):
     with isolated_postgres(result["postgres_image"]) as target:
         restore_archive(archive, target)
         restored = inventory(target)
+        # Older reports contain counts only; preserve that narrower verification scope.
+        for actual, expected in zip(restored["tables"], result["tables"]):
+            if "rows_sha256" not in expected:
+                actual.pop("rows_sha256", None)
         if restored != {"migration": result["migration"], "tables": result["tables"]}:
             raise RuntimeError("Restored inventory does not match the saved verification report")
     return result

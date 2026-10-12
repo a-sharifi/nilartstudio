@@ -38,7 +38,7 @@ Large backups need a reviewed extension to these resource/time limits.
 
 `verification.json` is written only after successful restoration and querying
 all restored user tables, and after matching the expected Alembic revision.
-It records table row counts, migration head, archive SHA-256 and source image ID;
+It records table row counts, row-content SHA-256 fingerprints, migration head, archive SHA-256 and source image ID;
 it never records row contents or passwords. Existing output is never overwritten.
 A failed drill removes its new dump/report rather than leaving a partial backup
 labelled successful. Server error details are withheld from logs because database
@@ -57,7 +57,7 @@ Run lightweight safety tests:
 make PYTHON=python3 test-infra
 ```
 
-Run all nine tests with real disposable PostgreSQL fixtures:
+Run all eleven tests with real disposable PostgreSQL fixtures:
 
 ```sh
 docker pull postgres:17-alpine
@@ -88,13 +88,21 @@ python3 infra/scripts/postgres_backup.py --verify-existing-dir /private/saved-ba
 The directory must contain the original `postgres.dump` and `verification.json`.
 The saved image ID must still be installed locally. The command validates the
 report, checks the archive's SHA-256 before starting Docker, restores into a new
-isolated container, then compares migration and table row counts against the saved
+isolated container, then compares migration, table row counts and available row fingerprints against the saved
 report. It preserves both files on success and failure, including a corrupt archive
 that needs investigation. It does not write a new report or silently update the
 expected inventory. The stored migration is used so older trusted backups can be
 checked after the application advances to a newer revision.
 
 This detects accidental corruption and report/restore inconsistencies; the report
-is not a signed manifest and must come from trusted storage. Matching counts do
-not prove row-by-row equivalence or application compatibility. Production recovery
+is not a signed manifest and must come from trusted storage. Older reports contain counts only and retain that narrower comparison. New reports
+also fingerprint sorted row JSON: equal counts with changed values are rejected.
+These fingerprints do not prove application compatibility. Production recovery
 and authenticated off-host storage remain separate release requirements.
+
+Row fingerprints use a deterministic C-collation sort of each table's row JSON,
+streamed through PostgreSQL COPY into an anonymous private temporary file before
+SHA-256 hashing. Raw row values never enter reports or logs, and the file closes
+immediately after hashing. Physical row order does not affect the result. Sorting
+large tables costs time and temporary disk/memory; the existing drill resource and
+time limits still apply. Reports remain private metadata and are not signed.

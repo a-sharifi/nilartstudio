@@ -117,6 +117,34 @@ class BackupTests(unittest.TestCase):
                     backup.verify_existing(Path(directory))
                 restore.assert_not_called()
 
+    def test_invalid_row_fingerprint_is_rejected_before_docker(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self.saved_fixture(directory)
+            result["tables"] = [{"schema": "public", "table": "private", "rows": 1,
+                                 "rows_sha256": "invalid"}]
+            (Path(directory) / "verification.json").write_text(json.dumps(result))
+            with patch.object(backup, "isolated_postgres") as restore:
+                with self.assertRaisesRegex(RuntimeError, "fingerprint is invalid"):
+                    backup.verify_existing(Path(directory))
+                restore.assert_not_called()
+
+    def test_same_count_different_fingerprint_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self.saved_fixture(directory)
+            result["tables"] = [{"schema": "public", "table": "private", "rows": 1,
+                                 "rows_sha256": "a" * 64}]
+            report = Path(directory) / "verification.json"
+            report.write_text(json.dumps(result))
+            original = report.read_bytes()
+            changed = {"migration": "0008", "tables": [{"schema": "public", "table": "private",
+                        "rows": 1, "rows_sha256": "b" * 64}]}
+            with patch.object(backup, "isolated_postgres", return_value=nullcontext("target")), \
+                 patch.object(backup, "restore_archive"), \
+                 patch.object(backup, "inventory", return_value=changed), \
+                 self.assertRaisesRegex(RuntimeError, "inventory does not match"):
+                backup.verify_existing(Path(directory))
+            self.assertEqual(report.read_bytes(), original)
+
 
 @unittest.skipUnless(os.environ.get("NILART_RUN_BACKUP_INTEGRATION") == "1",
                      "Explicit Docker integration opt-in required")
@@ -147,6 +175,17 @@ class DockerBackupTests(unittest.TestCase):
             with backup.isolated_postgres(image) as restored:
                 backup.restore_archive(output / "postgres.dump", restored)
                 self.assertEqual(backup.sql(restored, "SELECT name FROM parent WHERE id=1;"), "هنر")
+                original = backup.inventory(restored)
+                self.assertEqual(original["tables"], result["tables"])
+                backup.sql(restored, "UPDATE parent SET name='changed' WHERE id=1;")
+                changed = backup.inventory(restored)
+                old_parent = next(row for row in original["tables"] if row["table"] == "parent")
+                new_parent = next(row for row in changed["tables"] if row["table"] == "parent")
+                self.assertEqual(old_parent["rows"], new_parent["rows"])
+                self.assertNotEqual(old_parent["rows_sha256"], new_parent["rows_sha256"])
+                backup.sql(restored, "UPDATE parent SET name='هنر' WHERE id=1;")
+                self.assertEqual(backup.inventory(restored), original)
+
                 self.assertEqual(backup.sql(restored,
                     "INSERT INTO parent(name) VALUES ('next') RETURNING id;"), "3\nINSERT 0 1")
                 with self.assertRaises(RuntimeError):
