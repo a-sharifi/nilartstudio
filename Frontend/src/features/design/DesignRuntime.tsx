@@ -34,7 +34,7 @@ export default function DesignRuntime() {
   const connected = isStaticInfoPage(pathname)
     || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?\/?$/.test(pathname)
     || /^\/(?:fa|en)\/commissions\/?$/.test(pathname)
-    || /^\/(?:fa|en)\/artworks(?:\/[^/]+)?\/?$/.test(pathname)
+    || /^\/(?:fa\/|en\/)?artworks(?:\/[^/]+)?\/?$/.test(pathname)
     || /^\/(?:fa|en)?\/?$/.test(pathname)
     || /^\/(?:fa|en)\/(?:shop|categories\/[^/]+)\/?$/.test(pathname)
     || /^\/(?:fa\/|en\/)?collections(?:\/[^/]+)?\/?$/.test(pathname);

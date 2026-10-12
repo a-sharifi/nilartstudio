@@ -45,6 +45,7 @@ import ShopPage from "./ShopPage"
 import PrivacyPage from "./PrivacyPage"
 import { contactDemoConfig } from "./contact"
 import LiveCommissionsPage from "../features/catalog/LiveCommissionsPage"
+import { useArtworkCatalog } from "../features/catalog/artwork-catalog"
 import LiveArtworksPage from "../features/catalog/LiveArtworksPage"
 import { isShopRoute } from "./shop"
 import ProductCard from "./ProductCard"
@@ -643,7 +644,8 @@ export default function App() {
   const isContact = isContactRoute(page)
   const isTerms = isTermsRoute(page)
   const isArtworks = /^(\/fa|\/en)?\/artworks$/.test(page)
-  const isArtworkDetail = /^\/(fa|en)\/artworks\/[^/]+$/.test(page)
+  const isArtworkDetail = /^\/(?:fa\/|en\/)?artworks\/[^/]+$/.test(page)
+  const artworkCatalog = useArtworkCatalog(!demoMode && (isArtworks || isArtworkDetail), isArtworkDetail ? page.split("/").pop() : undefined)
   const isCommissions = isCommissionRoute(page)
   const isReferences = isReferencesRoute(page)
   const isPreferences = isPreferencesRoute(page)
@@ -1684,10 +1686,9 @@ export default function App() {
           <LiveCommissionsPage language={lang} />
         ) : isCommissions ? (
           <CommissionsPage language={lang} signedIn={signedIn} onNavigate={navigate} onDemoSignIn={setSignedIn} />
-        ) : (isArtworkDetail || isArtworks) && !demoMode ? (
-          <LiveArtworksPage language={lang} slug={isArtworkDetail ? page.split("/").pop() : undefined} navigate={navigate} />
         ) : isArtworkDetail ? (
           <ArtworkDetailPage
+            catalog={demoMode ? undefined : artworkCatalog}
             slug={page.split("/").pop() || ""}
             language={lang}
             signedIn={signedIn}
@@ -1702,7 +1703,7 @@ export default function App() {
             }}
           />
         ) : isArtworks ? (
-          <ArtworksPage language={lang} signedIn={signedIn} onNavigate={navigate}
+          <ArtworksPage catalog={demoMode ? undefined : artworkCatalog} language={lang} signedIn={signedIn} onNavigate={navigate}
             savedFavorites={favorites}
             onFavorite={id => setFavorites(previous => previous.includes(id) ? previous.filter(value => value !== id) : [...previous, id])}
           />

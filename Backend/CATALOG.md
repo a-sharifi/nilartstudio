@@ -168,6 +168,12 @@ inferred. Authoring, approved media provisioning and artwork sales remain separa
 The read flow uses application query ports and a SQL repository. Isolated
 PostgreSQL tests cover publication isolation, pagination, details and downgrade.
 
+The frontend renders these reads through the original ArtworksPage and
+ArtworkDetailPage. Missing image/specification/commercial fields use the supplied
+unavailable presentation; no demonstration artist, painting, frame, price or stock
+is substituted. Default ordering follows the API, and purchasing/favorites remain
+disabled until their contracts exist. This does not change the public response schema.
+
 ## Public bundle composition (2026-10-12)
 
 Migration 0012 creates unseeded bundle descriptions and explicit component links.

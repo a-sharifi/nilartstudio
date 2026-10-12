@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react"
-import { ArtGalleryCard, DemoPainting, Symbol, works } from "./ArtworksPage"
+import { ArtGalleryCard, DemoPainting, Symbol, works, type GalleryWork } from "./ArtworksPage"
 import type { ArtCartLine } from "./cart"
 import "./artwork-detail.css"
 
-type Work = typeof works[number]
+import type { ArtworkCatalog } from "../features/catalog/artwork-catalog"
+
+type Work = GalleryWork
 type View = "full" | "detail" | "frame"
 type Mode = "normal" | "loading" | "error" | "not-found" | "image-error" | "sold" | "unavailable" | "checking" | "cart-error" | "stock-error" | "price-change" | "favorite-error"
 const modes: [Mode, string, string][] = [
@@ -52,7 +54,9 @@ export default function ArtworkDetailPage({
   onAdd,
   onNavigate,
   onBack,
+  catalog,
 }: {
+  catalog?: ArtworkCatalog
   slug: string
   language: 0 | 1
   signedIn: boolean
@@ -64,11 +68,15 @@ export default function ArtworkDetailPage({
   onBack: () => void
 }) {
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
-  const num = (n: number) =>
-    n.toLocaleString(language === 0 ? "fa-IR" : "en-US")
+  const num = (n: number | null) =>
+    n === null ? "—" : n.toLocaleString(language === 0 ? "fa-IR" : "en-US")
   const prefix = language === 0 ? "/fa" : "/en"
-  const work = works.find((w) => w.id === slug)
-  const [mode, setMode] = useState<Mode>("normal")
+  const source: GalleryWork[] = catalog?.items ?? works
+  const work = source.find((w) => w.id === slug)
+  const [previewMode, setMode] = useState<Mode>("normal")
+  const mode: Mode = catalog ? catalog.status === "normal" ? "image-error" : catalog.status : previewMode
+  const live = !!catalog
+  const unknown = t("اعلام نشده", "Not provided")
   const [view, setView] = useState<View>("full")
   const [frame, setFrame] = useState(false)
   const [lightbox, setLightbox] = useState(false)
@@ -86,8 +94,8 @@ export default function ArtworkDetailPage({
   const drag = useRef<{ x: number; y: number; panX: number; panY: number } | null>(
     null,
   )
-  const hasFrameOptions = work?.id === "quiet-morning"
-  const views: View[] = hasFrameOptions
+  const hasFrameOptions = !live && work?.id === "quiet-morning"
+  const views: View[] = live ? ["full"] : hasFrameOptions
     ? ["full", "detail", "frame"]
     : ["full", "detail"]
   const resetZoom = () => {
@@ -125,7 +133,7 @@ export default function ArtworkDetailPage({
     resetZoom()
   }, [view])
   const medium =
-    work?.medium === "oil"
+    live ? unknown : work?.medium === "oil"
       ? t("رنگ روغن", "Oil painting")
       : t("اکریلیک", "Acrylic")
   const price =
@@ -140,11 +148,11 @@ export default function ArtworkDetailPage({
         ? "unavailable"
         : work?.status
   const purchasable =
-    status === "available" &&
+    !live && status === "available" &&
     price !== null &&
     mode !== "checking" &&
     mode !== "image-error"
-  const inCart = work ? cartIds.includes(work.id) : false
+  const inCart = !live && work ? cartIds.includes(work.id) : false
   const viewName = (v: View) =>
     v === "full"
       ? t("نمای کامل", "Full artwork")
@@ -178,6 +186,7 @@ export default function ArtworkDetailPage({
     </a>
   )
   const favorite = (w: Work) => {
+    if (live) return
     if (!signedIn) {
       onNavigate(
         t("ورود برای ذخیره اثر", "Sign in to save artwork"),
@@ -252,12 +261,12 @@ export default function ArtworkDetailPage({
       className={`ad-art-surface ${selected === "frame" ? "ad-framed" : ""} ${
         selected === "detail" ? "ad-crop" : ""
       } ${extra}`}
-      style={{ "--art-ratio": `${w.width} / ${w.height}` } as CSSProperties}
+      style={w.width !== null && w.height !== null ? { "--art-ratio": `${w.width} / ${w.height}` } as CSSProperties : undefined}
     >
-      <DemoPainting work={w} />
+      {w.catalogRecord ? <Symbol name="image" /> : <DemoPainting work={w} />}
     </div>
   )
-  const prototype = (
+  const prototype = live ? null : (
     <details className="art-demo-controls">
       <summary>
         {t("حالت‌های پروتوتایپ", "Prototype states")} · PAINT-02 / Demo
@@ -283,6 +292,24 @@ export default function ArtworkDetailPage({
       </p>
     </details>
   )
+  if (mode === "loading")
+    return (
+      <div className="container ad-page">
+        <div
+          className="ad-layout"
+          role="status"
+          aria-label={t("در حال دریافت اثر", "Loading artwork")}
+        >
+          <div className="ad-image-skeleton skeleton" />
+          <div className="ad-info-skeleton">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div className="skeleton" key={i} />
+            ))}
+          </div>
+        </div>
+        {prototype}
+      </div>
+    )
   if (!work || mode === "not-found" || mode === "error")
     return (
       <div className="container ad-page">
@@ -302,7 +329,7 @@ export default function ArtworkDetailPage({
           {mode === "error" && (
             <button
               className="button secondary"
-              onClick={() => changeMode("normal")}
+              onClick={() => catalog ? catalog.retry() : changeMode("normal")}
             >
               {t("تلاش دوباره", "Try again")}
             </button>
@@ -315,25 +342,7 @@ export default function ArtworkDetailPage({
         {prototype}
       </div>
     )
-  if (mode === "loading")
-    return (
-      <div className="container ad-page">
-        <div
-          className="ad-layout"
-          role="status"
-          aria-label={t("در حال دریافت اثر", "Loading artwork")}
-        >
-          <div className="ad-image-skeleton skeleton" />
-          <div className="ad-info-skeleton">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div className="skeleton" key={i} />
-            ))}
-          </div>
-        </div>
-        {prototype}
-      </div>
-    )
-  const related = works
+  const related = (live ? [] : works)
     .filter((w) => w.id !== work.id && w.style === work.style)
     .slice(0, 3)
   const saved = favorites.includes(work.id)
@@ -369,7 +378,7 @@ export default function ArtworkDetailPage({
         >
           <div className="ad-main-image">
             <span className="ad-image-label">
-              NILART GALLERY <span>DEMO / {work.id.toUpperCase()}</span>
+              NILART GALLERY <span>{!live && "DEMO / "}{work.id.toUpperCase()}</span>
             </span>
             {mode === "image-error" ? (
               <div className="ad-image-error">
@@ -388,7 +397,7 @@ export default function ArtworkDetailPage({
                 </small>
                 <button
                   className="button secondary"
-                  onClick={() => changeMode("normal")}
+                  onClick={() => catalog ? catalog.retry() : changeMode("normal")}
                 >
                   {t("تلاش دوباره", "Try again")}
                 </button>
@@ -399,14 +408,14 @@ export default function ArtworkDetailPage({
             <div className="ad-image-bottom">
               <span>
                 {viewName(view)}
-                {view !== "detail" && (
+                {!live && view !== "detail" && (
                   <>
                     {" "}
                     ·{" "}
                     <bdi>
-                      {num(work.width)} × {num(work.height)}
+                      {work.width === null || work.height === null ? unknown : <>{num(work.width)} × {num(work.height)}</>}
                     </bdi>{" "}
-                    {t("سانتی‌متر", "cm")}
+                    {work.width !== null && work.height !== null && t("سانتی‌متر", "cm")}
                   </>
                 )}
               </span>
@@ -435,7 +444,7 @@ export default function ArtworkDetailPage({
             ))}
           </div>
           <p className="ad-gallery-note">
-            {view === "frame"
+            {live ? t("تصویر تأییدشده اثر ارائه نشده است.", "No approved artwork image has been provided.") : view === "frame"
               ? t(
                   "نمای قاب شبیه‌سازی‌شده است؛ مقیاس و رنگ تقریبی‌اند.",
                   "Simulated frame view; scale and color are approximate.",
@@ -449,7 +458,7 @@ export default function ArtworkDetailPage({
         <section className="ad-purchase" aria-labelledby="ad-title">
           <div className="ad-topline">
             <span className="eyebrow">
-              {t("نقاشی اصل", "Original painting")} · DEMO
+              {live ? t("نقاشی", "Artwork") : <>{t("نقاشی اصل", "Original painting")} · DEMO</>}
             </span>
             {work.unique && (
               <span className="ad-edition">
@@ -458,9 +467,9 @@ export default function ArtworkDetailPage({
             )}
           </div>
           <h1 id="ad-title">{work.title[language]}</h1>
-          <p className="ad-byline">{t("اثر هنرمند نمونه", "By Demo artist")}</p>
+          <p className="ad-byline">{live ? t("هنرمند اعلام نشده", "Artist not provided") : t("اثر هنرمند نمونه", "By Demo artist")}</p>
           <p className="ad-summary">
-            {work.style === "landscape"
+            {work.catalogRecord ? work.catalogRecord[language === 0 ? "description_fa" : "description_en"] : work.style === "landscape"
               ? t(
                   "نمونه‌ای از یک منظره‌ی آرام، با لایه‌های رنگ و نور ملایم؛ برای تصور جایگاه یک اثر در فضای شما.",
                   "A demo of a quiet landscape, with layered color and soft light; an invitation to imagine a piece in your space.",
@@ -477,15 +486,15 @@ export default function ArtworkDetailPage({
             </div>
             <div>
               <dt>{t("سطح اجرا", "Surface")}</dt>
-              <dd>{t("بوم — نمونه", "Canvas — demo")}</dd>
+              <dd>{live ? unknown : t("بوم — نمونه", "Canvas — demo")}</dd>
             </div>
             <div>
               <dt>{t("ابعاد اثر", "Artwork dimensions")}</dt>
               <dd>
                 <bdi>
-                  {num(work.width)} × {num(work.height)}
+                  {work.width === null || work.height === null ? unknown : <>{num(work.width)} × {num(work.height)}</>}
                 </bdi>{" "}
-                {t("سانتی‌متر", "cm")}
+                {work.width !== null && work.height !== null && t("سانتی‌متر", "cm")}
                 <small>
                   {t("عرض × ارتفاع؛ بدون قاب", "Width × height; unframed")}
                 </small>
@@ -494,7 +503,7 @@ export default function ArtworkDetailPage({
             <div>
               <dt>{t("قاب", "Frame")}</dt>
               <dd>
-                {frame
+                {live ? unknown : frame
                   ? t("با قاب چوبی — نمونه", "Wood frame — demo")
                   : t("بدون قاب — نمونه", "Unframed — demo")}
               </dd>
@@ -503,7 +512,7 @@ export default function ArtworkDetailPage({
           <div className="ad-price-block" aria-live="polite">
             <div>
               <span>
-                {t("قیمت", "Price")} <small>Demo</small>
+                {t("قیمت", "Price")} {!live && <small>Demo</small>}
               </span>
               <strong>
                 {price === null ? (
@@ -580,7 +589,7 @@ export default function ArtworkDetailPage({
           <div className="ad-quantity">
             {t("تعداد: ۱", "Quantity: 1")}
             <span>
-              {t(
+              {live ? unknown : t(
                 "هر اثر نمونه یک ردیف در سبد دارد",
                 "One cart line per demo artwork",
               )}
@@ -635,11 +644,12 @@ export default function ArtworkDetailPage({
                       "Checking demo price and stock…",
                     )
                   : t("افزودن به سبد", "Add to cart")}
-                <span>Demo</span>
+                {!live && <span>Demo</span>}
               </button>
             )}
             <button
               className={`button secondary ad-save ${saved ? "saved" : ""}`}
+              disabled={live}
               aria-pressed={saved}
               aria-label={`${
                 saved
@@ -681,7 +691,7 @@ export default function ArtworkDetailPage({
                 {t("ارسال و شرایط خرید", "Shipping & purchase conditions")}
               </strong>
               <p>
-                {t(
+                {live ? t("اطلاعات ارسال و خرید تأیید نشده است.", "Shipping and purchase details are unconfirmed.") : t(
                   "هزینه ارسال در مرحله انتخاب آدرس و روش ارسال مشخص می‌شود.",
                   "Shipping cost is calculated when you choose your address and delivery method.",
                 )}
@@ -696,7 +706,7 @@ export default function ArtworkDetailPage({
           </div>
         </section>
       </div>
-      <div className="ad-demo-disclaimer">
+      {!live && <div className="ad-demo-disclaimer">
         <span>DEMO</span>
         <p>
           {t(
@@ -704,7 +714,7 @@ export default function ArtworkDetailPage({
             "This is a design prototype. Artwork, artist, specifications, frame, price and availability are demo data. No signature, authenticity certificate or delivery promise is claimed.",
           )}
         </p>
-      </div>
+      </div>}
       <nav
         className="ad-section-nav"
         aria-label={t("بخش‌های اطلاعات", "Artwork information sections")}
@@ -718,7 +728,7 @@ export default function ArtworkDetailPage({
           <div className="eyebrow">01 / THE ARTWORK</div>
           <h2>{t("درباره اثر", "About the artwork")}</h2>
           <p>
-            {t(
+            {work.catalogRecord ? work.catalogRecord[language === 0 ? "description_fa" : "description_en"] : t(
               "این تصویرسازی برای نمایش تجربه بررسی یک نقاشی آماده ساخته شده است. فرم‌ها و لایه‌های رنگ صرفاً نمونه‌اند؛ توضیح تأییدشده‌ی اثر واقعی در زمان اتصال کاتالوگ جایگزین خواهد شد.",
               "This illustration was created to demonstrate the experience of exploring a ready-made painting. Shapes and color layers are illustrative only; an approved artwork description will replace this text when a catalog is connected.",
             )}
@@ -726,7 +736,7 @@ export default function ArtworkDetailPage({
           <div className="ad-artist-note">
             <span className="ad-monogram">N.</span>
             <div>
-              <strong>{t("هنرمند نمونه", "Demo artist")}</strong>
+              <strong>{live ? unknown : t("هنرمند نمونه", "Demo artist")}</strong>
               <p>
                 {t(
                   "پروفایل واقعی و زندگی‌نامه تأییدشده ارائه نشده است.",
@@ -743,7 +753,7 @@ export default function ArtworkDetailPage({
             <div>
               <dt>{t("نوع اثر", "Artwork type")}</dt>
               <dd>
-                {t(
+                {live ? unknown : t(
                   "نقاشی اصل — نمونه، نه چاپ",
                   "Original painting — demo, not a print",
                 )}
@@ -752,22 +762,22 @@ export default function ArtworkDetailPage({
             <div>
               <dt>{t("تکنیک و سطح", "Medium & surface")}</dt>
               <dd>
-                {medium} · {t("بوم — نمونه", "Canvas — demo")}
+                {medium} · {live ? unknown : t("بوم — نمونه", "Canvas — demo")}
               </dd>
             </div>
             <div>
               <dt>{t("عرض × ارتفاع اثر", "Artwork width × height")}</dt>
               <dd>
                 <bdi>
-                  {num(work.width)} × {num(work.height)}
+                  {work.width === null || work.height === null ? unknown : <>{num(work.width)} × {num(work.height)}</>}
                 </bdi>{" "}
-                {t("سانتی‌متر", "cm")}
+                {work.width !== null && work.height !== null && t("سانتی‌متر", "cm")}
               </dd>
             </div>
             <div>
               <dt>{t("اقلام همراه", "Included items")}</dt>
               <dd>
-                {frame
+                {live ? unknown : frame
                   ? t("اثر و قاب چوبی — نمونه", "Artwork and wood frame — demo")
                   : t("اثر بدون قاب — نمونه", "Unframed artwork — demo")}
               </dd>
@@ -794,7 +804,7 @@ export default function ArtworkDetailPage({
             )}
           </p>
           <p>
-            {t(
+            {live ? t("اطلاعات ارسال و خرید تأیید نشده است.", "Shipping and purchase details are unconfirmed.") : t(
               "روش ارسال، بسته‌بندی، زمان آماده‌سازی و زمان حمل تأییدشده برای این نمونه ارائه نشده‌اند. هزینه ارسال پس از انتخاب آدرس و روش ارسال مشخص می‌شود.",
               "Approved delivery methods, packaging, preparation time and transit time have not been provided for this demo. Shipping cost is calculated after choosing an address and delivery method.",
             )}

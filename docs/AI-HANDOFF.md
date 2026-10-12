@@ -166,11 +166,11 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL/Redis | 196 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 72 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
+| Frontend tests | 75 passed | Includes native artwork catalog, missing-data and error/retry coverage |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0012 |
-| Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
-| Firefox expiry page | 3 passed on latest source | Reload, retry, permission rejection, external redirects, Persian mobile; prior session/navigation checks remain historical |
+| Chromium catalog checks | 8 passed | Artwork navigation/search/mobile, shop/category and footer/bundle regressions; prior full-suite results are historical |
+| Firefox expiry page | 3 passed historically | Reload, retry, permission rejection, external redirects, Persian mobile; prior session/navigation checks remain historical |
 | GitHub CI | Not verified | Local results do not imply a passed remote run |
 
 A Starlette/httpx deprecation warning remains. No public deployment, real SMS or
@@ -510,6 +510,37 @@ Backend contracts, migrations, application data and credentials were unchanged.
 Local frontend tests: 72 passing; lint and typecheck passing. Production Docker
 build and desktop/mobile browser verification are recorded in the progress log.
 Remote CI remains unverified.
+
+## Artwork reference restoration (2026-10-12)
+
+The artwork correction is now complete for public description browsing. App uses
+ArtworksPage and ArtworkDetailPage directly with optional catalog props, replacing
+the simplified artwork rendering. The supplied layout, gallery cards, filters,
+image fallback, detail specifications, information sections, skeletons and error
+states remain in their original components. All 42 supplied stylesheets remain
+byte-identical. Demo mode retains the original illustrative gallery; live mode
+never substitutes fixture paintings or commercial data.
+
+The cancellable artwork-catalog adapter validates published list/detail responses,
+paginates, bounds loading time, distinguishes missing detail from request errors,
+and retries. Published title/description fields populate the native components.
+Artist, medium, style, dimensions, images, price, uniqueness, frame and inventory
+are not in the existing API contract and remain unknown; filters requiring those
+fields exclude these records. Default order follows the catalog API, not inferred
+publication dates. Purchase and favorite callbacks cannot execute in live mode.
+Localized gallery/detail routes, including unprefixed aliases, are connected;
+search survives detail navigation, back and reload.
+
+Validation: 75 frontend tests, lint/typecheck, production Docker build and eight
+focused Chromium cases (including mobile screenshots) pass; all eight services
+healthy. Backend/migration/data and API schema unchanged; backend checks from the
+previous slice remain historical and were not rerun for this frontend correction.
+Remote CI remains unverified. Fixtures used by browser tests are intercepted API
+responses only and were not inserted into the application database.
+
+Commissions and bundle presentation still need their reference components restored.
+LiveArtworksPage is now used only by the remaining bundle wrapper. Preserve the
+existing real commission submission and bundle APIs while replacing those UIs.
 
 ## Recommended continuation
 

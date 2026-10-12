@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import "./artworks.css"
+import type { ArtworkCatalog, ArtworkRecord } from "../features/catalog/artwork-catalog"
 
 type Filters = {
   available: boolean
@@ -176,6 +177,8 @@ function readState() {
     page: Math.max(1, Number(p.get("page")) || 1),
   }
 }
+export type GalleryWork = Omit<(typeof works)[number], "width" | "height"> & { width: number | null; height: number | null; catalogRecord?: ArtworkRecord }
+
 export function Symbol({
   name,
 }: {
@@ -222,7 +225,7 @@ export function Symbol({
 }
 
 // Original illustrative SVGs for the explicitly labelled demo, not catalog assets.
-export function DemoPainting({ work }: { work: typeof works[number] }) {
+export function DemoPainting({ work }: { work: GalleryWork }) {
   const colors = [
     ["#d9d6b8", "#89947e", "#3e5b4f", "#ded7b3"],
     ["#e4c9b1", "#af654c", "#703e33", "#e9b97b"],
@@ -231,8 +234,8 @@ export function DemoPainting({ work }: { work: typeof works[number] }) {
     ["#e5d4bd", "#9b9380", "#566653", "#b9a689"],
     ["#ead8b6", "#c28b52", "#8e523b", "#f2cf82"],
   ][work.palette]
-  const w = work.width * 6,
-    h = work.height * 6
+  const w = (work.width ?? 1) * 6,
+    h = (work.height ?? 1) * 6
   return (
     <svg
       className="demo-painting"
@@ -330,7 +333,9 @@ export default function ArtworksPage({
   onNavigate,
   savedFavorites,
   onFavorite,
+  catalog,
 }: {
+  catalog?: ArtworkCatalog
   language: 0 | 1
   signedIn: boolean
   onNavigate: (name: string, route: string) => void
@@ -346,7 +351,9 @@ export default function ArtworksPage({
   const [draft, setDraft] = useState(state.filters)
   const [sheet, setSheet] = useState(false)
   const dialog = useRef<HTMLDialogElement>(null)
-  const [mode, setMode] = useState("normal")
+  const [previewMode, setMode] = useState("normal")
+  const mode = catalog ? catalog.status === "normal" && catalog.items.length === 0 ? "empty" : catalog.status : previewMode
+  const source: GalleryWork[] = catalog?.items ?? works
   const [localFavorites, setFavorites] = useState<string[]>([])
   const favorites = savedFavorites ?? localFavorites
   const [message, setMessage] = useState("")
@@ -390,18 +397,18 @@ export default function ArtworksPage({
       : v === "landscape"
         ? t("افقی", "Landscape")
         : t("مربع", "Square")
-  const orientation = (w: typeof works[number]) =>
-    w.width === w.height
+  const orientation = (w: GalleryWork) =>
+    w.width === null || w.height === null ? "" : w.width === w.height
       ? "square"
       : w.width < w.height
         ? "portrait"
         : "landscape"
   const f = state.filters
-  const results = works.filter(
+  const results = source.filter(
     (w) =>
       (!state.query ||
         normalize(
-          `${w.title[language]} ${t("هنرمند نمونه", "Demo artist")}`,
+          `${w.title[language]} ${w.catalogRecord ? w.catalogRecord.description_fa + " " + w.catalogRecord.description_en : t("هنرمند نمونه", "Demo artist")}`,
         ).includes(normalize(state.query))) &&
       (!f.available || w.status === "available") &&
       (!f.medium || w.medium === f.medium) &&
@@ -412,7 +419,7 @@ export default function ArtworksPage({
   )
   if (state.sort !== "newest")
     results.sort((a, b) =>
-      a.price === null
+      a.price === null && b.price === null ? 0 : a.price === null
         ? 1
         : b.price === null
           ? -1
@@ -574,13 +581,13 @@ export default function ArtworksPage({
           )}
         </div>
       </section>
-      <div className="art-demo-note">
+      {!catalog && <div className="art-demo-note">
         <span>DEMO</span>
         {t(
           "آثار تصویرسازی‌شده و اطلاعات این گالری نمونه‌اند؛ قیمت و موجودی واقعی نیستند.",
           "Illustrated artworks and catalog data are samples; prices and availability are not live.",
         )}
-      </div>
+      </div>}
       <form
         className="art-search"
         onSubmit={(e) => {
@@ -633,7 +640,7 @@ export default function ArtworksPage({
             <span aria-live="polite">
               {num(mode === "empty" ? 0 : results.length)}{" "}
               {t("اثر", "artworks")}
-              <small> / DEMO</small>
+              {!catalog && <small> / DEMO</small>}
             </span>
             <div>
               <button
@@ -653,7 +660,7 @@ export default function ArtworksPage({
                   value={state.sort}
                   onChange={(e) => update({ sort: e.target.value })}
                 >
-                  <option value="newest">{t("جدیدترین", "Newest")}</option>
+                  <option value="newest">{catalog ? t("ترتیب کاتالوگ", "Catalog order") : t("جدیدترین", "Newest")}</option>
                   <option value="low">
                     {t("قیمت: کم به زیاد", "Price: low to high")}
                   </option>
@@ -725,7 +732,7 @@ export default function ArtworksPage({
               <h2>{t("دریافت آثار ممکن نشد.", "Unable to load artworks.")}</h2>
               <button
                 className="button secondary"
-                onClick={() => setMode("normal")}
+                onClick={() => catalog ? catalog.retry() : setMode("normal")}
               >
                 {t("تلاش دوباره", "Try again")}
               </button>
@@ -776,6 +783,8 @@ export default function ArtworksPage({
                 <ArtGalleryCard
                   key={work.id}
                   work={work}
+                  showFavorite={!catalog}
+                  imageError={!!catalog}
                   language={language}
                   saved={favorites.includes(work.id)}
                   onNavigate={onNavigate}
@@ -870,7 +879,7 @@ export default function ArtworksPage({
           "button secondary",
         )}
       </section>
-      <details className="art-demo-controls">
+      {!catalog && <details className="art-demo-controls">
         <summary>{t("حالت‌های پروتوتایپ", "Prototype states")} · Demo</summary>
         <label>
           {t("وضعیت گالری", "Gallery state")}
@@ -888,7 +897,7 @@ export default function ArtworksPage({
             "Demo sign-in is available in the site's demo panel. No live service is connected.",
           )}
         </p>
-      </details>
+      </details>}
       {message && (
         <div className="art-message" role="status">
           {message}
@@ -942,20 +951,20 @@ export function ArtGalleryCard({
   showFavorite = true,
   imageError = false,
 }: {
-  work: typeof works[number]
+  work: GalleryWork
   language: 0 | 1
   saved: boolean
-  onFavorite: (work: typeof works[number]) => void
+  onFavorite: (work: GalleryWork) => void
   onNavigate: (name: string, route: string) => void
   showFavorite?: boolean
   imageError?: boolean
 }) {
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
-  const num = (n: number) =>
-    n.toLocaleString(language === 0 ? "fa-IR" : "en-US")
+  const num = (n: number | null) =>
+    n === null ? "—" : n.toLocaleString(language === 0 ? "fa-IR" : "en-US")
   const prefix = language === 0 ? "/fa" : "/en"
   const mediumName = (v: string) =>
-    v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
+    !v ? t("تکنیک اعلام نشده", "Medium not provided") : v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
   const routeLink = (label: string, route: string) => (
     <a
       className="text-link"
@@ -985,7 +994,7 @@ export function ArtGalleryCard({
         >
           {imageError ? <div className="art-image-fallback"><Symbol name="image" />{t("تصویر در دسترس نیست", "Image unavailable")}</div> : <DemoPainting work={work} />}
         </a>
-        <span className="art-original">{t("اثر اصل", "Original")} · Demo</span>
+        <span className="art-original">{work.catalogRecord ? t("نقاشی", "Artwork") : <>{t("اثر اصل", "Original")} · Demo</>}</span>
         {showFavorite && <button
           className={`art-favorite icon-button ${saved ? "saved" : ""}`}
           aria-pressed={saved}
@@ -1011,13 +1020,13 @@ export function ArtGalleryCard({
           {work.unique && <small>{t("تک‌نسخه", "One-of-a-kind")}</small>}
         </div>
         <h2>{work.title[language]}</h2>
-        <p className="art-artist">{t("هنرمند نمونه", "Demo artist")}</p>
+        <p className="art-artist">{work.catalogRecord ? t("هنرمند اعلام نشده", "Artist not provided") : t("هنرمند نمونه", "Demo artist")}</p>
         <p className="art-specs">
           {mediumName(work.medium)} ·{" "}
           <span dir="ltr">
-            {num(work.width)} × {num(work.height)}
+            {work.width === null || work.height === null ? t("ابعاد اعلام نشده", "Dimensions not provided") : <>{num(work.width)} × {num(work.height)}</>}
           </span>{" "}
-          {t("سانتی‌متر", "cm")}
+          {work.width !== null && work.height !== null && t("سانتی‌متر", "cm")}
         </p>
         <div className="art-card-footer">
           <strong>
