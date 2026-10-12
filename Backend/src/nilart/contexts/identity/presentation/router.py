@@ -114,6 +114,8 @@ def current_session(request: Request, response: Response,
 def logout(request: Request, response: Response, db: Session = Depends(session_dependency)):
     import hmac
 
+    if request.headers.get("origin") != settings.public_origin:
+        return failure(request, "origin_invalid", 403)
     account = session_account(request, db)
     if not account:
         return failure(request, "unauthenticated", 401)

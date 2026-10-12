@@ -132,3 +132,17 @@ late positive check from replacing a verified logout. Live preview controls and
 fixture notes are absent. Both locale profile URLs are allowed safe auth return
 destinations; arbitrary/external redirects remain rejected. Account-restriction
 pages and the broader destination workflows remain unconnected.
+
+### Exact-origin logout gate (2026-10-12)
+
+`POST /api/v1/auth/logout` now requires `Origin` to match `NILART_PUBLIC_ORIGIN`
+exactly, in addition to the cookie session and fresh CSRF token. Missing, null,
+foreign, wrong-port and lookalike origins return `403 origin_invalid` before
+session lookup/revocation, with no-store caching and no cookie mutation. An API
+client must supply the configured Origin; same-origin browser POSTs supply it
+normally. A valid CSRF token does not override this gate. Existing atomic nonce
+rechecks and server-confirmed logout behavior remain unchanged.
+
+Five origin probes and the PostgreSQL password/session/logout flow cover rejection,
+including a genuine valid-token request that leaves its session active when rejected.
+No application accounts or sessions were modified during this continuation.

@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from nilart.bootstrap.main import app
@@ -52,6 +53,24 @@ def test_csrf_bootstrap_origin_rate_limit_and_cache_outage(monkeypatch):
                                 unavailable)
             response = client.post("/api/v1/auth/session/csrf", headers=headers)
             assert response.status_code == 503
+            assert "set-cookie" not in response.headers
+    finally:
+        app.dependency_overrides.pop(session_dependency, None)
+
+
+@pytest.mark.parametrize("origin", [None, "null", "https://attacker.invalid",
+                                   "http://localhost:8081", "http://localhost:8080.evil.invalid"])
+def test_logout_rejects_non_exact_origin_before_session_access(origin):
+    app.dependency_overrides[session_dependency] = lambda: object()
+    try:
+        with TestClient(app) as client:
+            headers = {"X-CSRF-Token": "x" * 43}
+            if origin is not None:
+                headers["Origin"] = origin
+            response = client.post("/api/v1/auth/logout", headers=headers)
+            assert response.status_code == 403
+            assert response.json()["code"] == "origin_invalid"
+            assert response.headers["cache-control"] == "no-store"
             assert "set-cookie" not in response.headers
     finally:
         app.dependency_overrides.pop(session_dependency, None)

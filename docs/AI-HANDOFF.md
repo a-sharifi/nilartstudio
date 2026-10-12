@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL | 125 passed | Separate test database, isolated transactional schemas |
+| Backend with PostgreSQL | 130 passed | Separate test database, isolated transactional schemas |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -279,6 +279,16 @@ All 125 backend tests passed; lint/type checks passed. No migration, role-manage
 endpoint, administrator bootstrap or frontend change was introduced. Only this
 profile write has the additional transactional recheck; other business workflows
 must enforce their own permission/ownership/state concurrency rules.
+
+## Logout-origin continuation (2026-10-12)
+
+Logout now uses the same exact configured-Origin gate as the other cookie-auth
+mutations, before session lookup and revocation. Even a genuine CSRF token cannot
+bypass missing/foreign-origin rejection; rejected requests leave session and cookie
+unchanged. Five new origin cases plus the real PostgreSQL logout flow passed;
+130 backend tests total. Lint/type checks passed. Non-browser API clients must send
+the configured Origin explicitly. No migration or frontend change was introduced;
+existing browser POSTs supply Origin. Remote CI remains unverified.
 
 ## Recommended continuation
 

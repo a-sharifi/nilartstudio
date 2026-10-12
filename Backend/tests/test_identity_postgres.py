@@ -67,9 +67,18 @@ def test_identity_password_session_logout(monkeypatch):
                 assert not SqlIdentityRepository(db).delete_session(
                     token_digest(client.cookies.get("nilart_session")), token_digest(csrf))
                 assert db.execute(text("SELECT count(*) FROM identity_sessions")).scalar() == 1
-                assert client.post("/api/v1/auth/logout", headers={"X-CSRF-Token": csrf}).status_code == 403
+                assert client.post("/api/v1/auth/logout", headers={**headers, "X-CSRF-Token": csrf}).status_code == 403
                 csrf = refresh.json()["csrf_token"]
-                assert client.post("/api/v1/auth/logout", headers={"X-CSRF-Token": csrf}).status_code == 204
+                for origin in [None, "https://attacker.invalid"]:
+                    blocked_headers = {"X-CSRF-Token": csrf}
+                    if origin:
+                        blocked_headers["Origin"] = origin
+                    rejected = client.post("/api/v1/auth/logout", headers=blocked_headers)
+                    assert rejected.status_code == 403
+                    assert rejected.json()["code"] == "origin_invalid"
+                    assert "set-cookie" not in rejected.headers
+                    assert client.get("/api/v1/auth/session").status_code == 200
+                assert client.post("/api/v1/auth/logout", headers={**headers, "X-CSRF-Token": csrf}).status_code == 204
                 assert client.get("/api/v1/auth/session").status_code == 401
                 assert db.execute(text("SELECT count(*) FROM identity_sessions")).scalar() == 0
             db.close()
