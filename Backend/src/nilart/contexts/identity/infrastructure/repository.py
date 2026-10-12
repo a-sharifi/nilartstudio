@@ -30,11 +30,12 @@ class SqlIdentityRepository:
                              {"token": token_hash, "account": account_id, "csrf": csrf_hash,
                               "expires": expires, "now": now})
 
-    def session_account(self, token_hash: str, now: datetime) -> SessionAccount | None:
+    def session_account(self, token_hash: str, now: datetime, *, lock: bool = False) -> SessionAccount | None:
         row = self.session.execute(text("SELECT a.id,a.phone,s.csrf_hash FROM identity_sessions s "
                                         "JOIN identity_accounts a ON a.id=s.account_id "
                                         "WHERE s.token_hash=:token AND s.expires_at>:now "
-                                        "AND a.phone_verified=true AND a.blocked=false"),
+                                        "AND a.phone_verified=true AND a.blocked=false"
+                                        + (" FOR UPDATE OF s, a" if lock else "")),
                                    {"token": token_hash, "now": now}).mappings().first()
         return SessionAccount(str(row["id"]), row["phone"], row["csrf_hash"]) if row else None
 

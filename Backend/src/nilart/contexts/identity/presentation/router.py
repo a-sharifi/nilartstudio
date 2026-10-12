@@ -93,11 +93,11 @@ def login(body: PasswordLogin, request: Request, response: Response,
     return set_session_cookie(response, grant)
 
 
-def session_account(request: Request, db: Session):
+def session_account(request: Request, db: Session, *, lock: bool = False):
     token = request.cookies.get(_cookie, "")
     if not 40 <= len(token) <= 128:
         return None
-    return SqlIdentityRepository(db).session_account(token_digest(token), datetime.now(UTC))
+    return SqlIdentityRepository(db).session_account(token_digest(token), datetime.now(UTC), lock=lock)
 
 
 @router.get("/session", response_model=CurrentSessionOutput)

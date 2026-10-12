@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL | 121 passed | Separate test database, isolated transactional schemas |
+| Backend with PostgreSQL | 124 passed | Separate test database, isolated transactional schemas |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -257,6 +257,17 @@ contain no private access. Seven store tests plus a React consumer integration t
 bring frontend tests to 64 passing. This is reusable infrastructure; existing demo
 panels remain guarded and no private workflow or account-role change is introduced.
 Prior browser results belong to earlier visible-route work.
+
+## Profile session-lock continuation (2026-10-12)
+
+Profile saving revalidates and locks the session/account rows through its database
+transaction, closing the CSRF read/write gap. Rotation/revocation after the initial
+permission read is detected before writing: stale CSRF yields 403, missing active
+session yields 401. Ordinary session GETs remain unlocked. Three new PostgreSQL
+cases cover those interleavings and a real two-connection lock/rotation probe;
+124 backend tests passed. Test data lives only in isolated test schemas. No schema
+migration or frontend behavior changed, and this is not blanket serialization of
+role revocation or future commerce workflows. See `Backend/PROFILE.md`.
 
 ## Recommended continuation
 

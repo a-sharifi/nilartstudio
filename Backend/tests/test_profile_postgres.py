@@ -1,6 +1,7 @@
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
+import pytest
 from sqlalchemy import text
 from test_identity_otp_postgres import flow as flow
 from test_identity_otp_postgres import register
@@ -61,3 +62,32 @@ def test_profile_owner_csrf_conflicts_and_mass_assignment(flow):
     assert denied.status_code == 403 and denied.headers["cache-control"] == "no-store"
     client.cookies.clear()
     assert client.get("/api/v1/account/profile").status_code == 401
+
+
+@pytest.mark.parametrize("change", ["rotate", "revoke"])
+def test_profile_rechecks_session_before_writing(flow, monkeypatch, change):
+    client, db, sms = flow
+    _, login = register(client, sms)
+    old_csrf = login.json()["csrf_token"]
+    token = token_digest(client.cookies.get("nilart_session"))
+    original = SqlIdentityRepository.session_account
+    rotated = False
+
+    def account(self, digest, now, *, lock=False):
+        nonlocal rotated
+        result = original(self, digest, now, lock=lock)
+        if not lock and not rotated:
+            # Rotation occurs after the permission guard's ordinary session read.
+            rotated = True
+            if change == "rotate":
+                self.rotate_csrf(token, token_digest(new_session_token()), now)
+            else:
+                self.session.execute(text("DELETE FROM identity_sessions WHERE token_hash=:token"),
+                                     {"token": token})
+        return result
+
+    monkeypatch.setattr(SqlIdentityRepository, "session_account", account)
+    result = client.put("/api/v1/account/profile", json={"full_name": "Must not save", "version": 0},
+                        headers={"X-CSRF-Token": old_csrf})
+    assert result.status_code == (403 if change == "rotate" else 401)
+    assert db.execute(text("SELECT count(*) FROM identity_profiles")).scalar_one() == 0

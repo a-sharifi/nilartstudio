@@ -69,3 +69,18 @@ does not claim the whole session has expired.
 Session expiry (401) during CSRF bootstrap or profile save now advances the shared
 session lifecycle and clears registered auth memory. A late bootstrap denial from
 an older revision cannot invalidate a newer account or issue a profile write.
+
+### Save/session serialization (2026-10-12)
+
+Profile PUT now re-reads and locks the current session and account rows inside
+its write transaction (`FOR UPDATE OF s, a`) before comparing CSRF. The locks
+remain until commit/rollback, so a competing token rotation cannot invalidate the
+checked nonce between validation and the profile write. Ordinary session reads
+remain unlocked. A session revoked between the permission guard and this locked
+read returns 401; an already-rotated CSRF token returns 403. Neither writes a profile.
+
+Tests cover rotation/revocation after the initial guard and before validation,
+plus two real PostgreSQL connections proving rotation waits for the mutation
+transaction and proceeds after it finishes. Fixtures use separate test-database
+schemas; no application account or database was seeded/modified. This does not
+implement role-management or all business-operation concurrency guarantees.

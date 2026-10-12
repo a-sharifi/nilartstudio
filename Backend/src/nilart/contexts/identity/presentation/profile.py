@@ -46,9 +46,11 @@ def update_profile(body: ProfileUpdate, request: Request, response: Response,
     expected_owner = request.headers.get("X-Profile-Owner")
     if expected_owner is not None and expected_owner != principal.account_id:
         return failure(request, "permission_denied", 403)
-    account = session_account(request, db)
+    account = session_account(request, db, lock=True)
+    if not account:
+        return failure(request, "unauthenticated", 401)
     csrf = request.headers.get("X-CSRF-Token", "")
-    if not account or not csrf or len(csrf) > 128 or not hmac.compare_digest(token_digest(csrf), account.csrf_hash):
+    if not csrf or len(csrf) > 128 or not hmac.compare_digest(token_digest(csrf), account.csrf_hash):
         return failure(request, "csrf_invalid", 403)
     try:
         result = UpdateProfile(SqlProfileRepository(db)).execute(principal.account_id, body.full_name, body.version)
