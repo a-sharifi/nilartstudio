@@ -1,0 +1,11 @@
+/* Keep imported design CSS intact. Prevent the auth grid's implicit min-content
+   track from exceeding the viewport when the column has a fixed desktop width. */
+.auth-shell .auth-main {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Simulation controls stay exclusive to the design preview. */
+.live-auth .auth-preview,
+.live-auth .password-demo {
+  display: none;
+}

@@ -1,0 +1,4959 @@
+{
+  "files": [
+    {
+      "path": "bookmarks/concepts/gav-3-color-poses-v2-cutline.png",
+      "type": "file",
+      "bytes": 2317368,
+      "sha256": "ace81b8f6ce261be71b31f702150fdef506d0d9b61e799ec6406b84f34745c6a"
+    },
+    {
+      "path": "bookmarks/concepts/gav-3-color-poses-v3-branded.png",
+      "type": "file",
+      "bytes": 1855308,
+      "sha256": "3f2c7974db71dc93fb5901d2f32f4e448f72b744f2c7e69354f3dc12e356575f"
+    },
+    {
+      "path": "bookmarks/concepts/gav-3-color-poses.png",
+      "type": "file",
+      "bytes": 2449022,
+      "sha256": "2388355a1c833f01d54c6de35131d66af1ae38548fa1982ddd59b2cd8ba9ccd7"
+    },
+    {
+      "path": "bookmarks/concepts/gorbe-3-color-poses-v2-cutline.png",
+      "type": "file",
+      "bytes": 2047387,
+      "sha256": "95bc8040b66ef6c09850c5a3195015355b2f5bff508fb32039922103cbedfb44"
+    },
+    {
+      "path": "bookmarks/concepts/gorbe-3-color-poses-v3-branded.png",
+      "type": "file",
+      "bytes": 1769303,
+      "sha256": "b4347660fbc6cb23e9b0d3f53aecd547e9fea7cb484f213255f8234ff8054e63"
+    },
+    {
+      "path": "bookmarks/concepts/gorbe-3-color-poses.png",
+      "type": "file",
+      "bytes": 2253779,
+      "sha256": "7905c88ab7db9606d171b5c93a07c294856cd006f853af49c7aba6babd89d062"
+    },
+    {
+      "path": "bookmarks/concepts/prompts-v2.txt",
+      "type": "file",
+      "bytes": 812,
+      "sha256": "2808f375432b5b85478335ab8bf2e382e405e2d56cab6dcdbd8225c215dde5d3"
+    },
+    {
+      "path": "bookmarks/concepts/prompts-v3.txt",
+      "type": "file",
+      "bytes": 505,
+      "sha256": "0cbc6b37d6c4b695e9d5ccbb799a98cb46d45f6865d03a5593c2d4b8312cb1c3"
+    },
+    {
+      "path": "bookmarks/concepts/prompts.txt",
+      "type": "file",
+      "bytes": 6940,
+      "sha256": "5c746d5e9b0692b207580d00e1be168334645aa32e5dace80e1718c6a404bef0"
+    },
+    {
+      "path": "bookmarks/concepts/qolche-3-color-poses-v2-cutline.png",
+      "type": "file",
+      "bytes": 2430883,
+      "sha256": "5d2f3e7864a52265932257fb4b1c2be5c1631bda28ab315a8430f1aa643dc627"
+    },
+    {
+      "path": "bookmarks/concepts/qolche-3-color-poses-v3-branded.png",
+      "type": "file",
+      "bytes": 1981946,
+      "sha256": "cd04685889a97c47fb2d538781bcee21bc11ea2c7fb9df21e9c3cf735db84ba4"
+    },
+    {
+      "path": "bookmarks/concepts/qolche-3-color-poses-v4-branded.png",
+      "type": "file",
+      "bytes": 1934934,
+      "sha256": "b951e35ff5f6e38594ac04f6cf45a572bd5da2015cc46404547772931be2f178"
+    },
+    {
+      "path": "bookmarks/concepts/qolche-3-color-poses.png",
+      "type": "file",
+      "bytes": 2696112,
+      "sha256": "aa020ebbdf62675c74eefe993f50a5676784eaaea5685434d5a6ee755781d1c4"
+    },
+    {
+      "path": "bookmarks/concepts/roh-3-color-poses-v2-cutline.png",
+      "type": "file",
+      "bytes": 2459086,
+      "sha256": "2e81d4935a1116eb75254c39b419b630afb01a0a5a332fad08ea771fb442d513"
+    },
+    {
+      "path": "bookmarks/concepts/roh-3-color-poses-v3-branded.png",
+      "type": "file",
+      "bytes": 2066397,
+      "sha256": "ecad4918970090a0cf72da6cd269344097fdcbfc589c23f84ecc8573657dbbb0"
+    },
+    {
+      "path": "bookmarks/concepts/roh-3-color-poses.png",
+      "type": "file",
+      "bytes": 2427070,
+      "sha256": "3c89f8a875a23e555255d44d52cc366a4cad3122efe715d99e91ac7e2450398e"
+    },
+    {
+      "path": "branding/nil-logo/nil-artistic-main.png",
+      "type": "file",
+      "bytes": 1001548,
+      "sha256": "caeea21c7269c0d28272fee633a6bc9724521a6ccd3d1d395fc05661a3f7b27c"
+    },
+    {
+      "path": "branding/nil-logo/nil-artistic-white-main.png",
+      "type": "file",
+      "bytes": 1093817,
+      "sha256": "286fba93f6b4d77a926fa5a3d06da1be02072666900201c1caa5043305423a82"
+    },
+    {
+      "path": "branding/nil-logo/nil-main-with-website-transparent.png",
+      "type": "file",
+      "bytes": 1112944,
+      "sha256": "723651df19df0e4be7716ff17f96b9f40e8ca69281afc46c4ca599211b2d3a62"
+    },
+    {
+      "path": "branding/nil-logo/nil-main-with-website-white.png",
+      "type": "file",
+      "bytes": 1149481,
+      "sha256": "a17ab0389da70bb4456e9e7c299b14d90286873ee639797690cc1b1733ad6ba3"
+    },
+    {
+      "path": "notebooks/README.md",
+      "type": "file",
+      "bytes": 9078,
+      "sha256": "342a61f229a7f3c81e7d3ff6c352d2ccd38724794e028d3ba2eb24a5c89d669e"
+    },
+    {
+      "path": "notebooks/costing/__pycache__/research.cpython-312.pyc",
+      "type": "file",
+      "bytes": 5506,
+      "sha256": "a702eb4deef34acfd622a06c5fcb1290d96c824e68c0d514e2a64cbfbc4b22a1"
+    },
+    {
+      "path": "notebooks/costing/audit-preview.png",
+      "type": "file",
+      "bytes": 136984,
+      "sha256": "8e015b45fcb316e19be2f906c6d1aea10596fa68e096ca84e2fdd8edfd8bc55e"
+    },
+    {
+      "path": "notebooks/costing/binding-source.json",
+      "type": "file",
+      "bytes": 544,
+      "sha256": "6544d68dc0ed24092ce0e8ffeeec6f28b64c8567fa254d5cc431f3b97c60b42e"
+    },
+    {
+      "path": "notebooks/costing/build_costs.mjs",
+      "type": "file",
+      "bytes": 17864,
+      "sha256": "17a317693e0c93eb2be725fc5ea91fdf9d550e2b4448783aa938d9d2ce12ae97"
+    },
+    {
+      "path": "notebooks/costing/calculated-comparisons.json",
+      "type": "file",
+      "bytes": 157795,
+      "sha256": "e28b5e0a807d120d3550aa1ce0f93eb997ddefdec7a1ad3830a22a4c222ec5b9"
+    },
+    {
+      "path": "notebooks/costing/calculator-preview.png",
+      "type": "file",
+      "bytes": 147839,
+      "sha256": "f6b5adca81c9781d15871197cdf239deae27a4e77ba692a7c46fc3d326486830"
+    },
+    {
+      "path": "notebooks/costing/catalogue-raw.json",
+      "type": "file",
+      "bytes": 616315,
+      "sha256": "e55045286c51d070e4443f4d0fb9b7be6cd4fe6dbe175cc640c02b9b05c8ff59"
+    },
+    {
+      "path": "notebooks/costing/comparison-preview.png",
+      "type": "file",
+      "bytes": 159779,
+      "sha256": "0f136606534d6111d0517825f68ce49f6ae9775b5f25fc50b0b6dd802c64606e"
+    },
+    {
+      "path": "notebooks/costing/materials-preview.png",
+      "type": "file",
+      "bytes": 187860,
+      "sha256": "6f1abb5ef6fdb444f3c25697326ae1090f3cea888c3d606069c783af4face44d"
+    },
+    {
+      "path": "notebooks/costing/materials.json",
+      "type": "file",
+      "bytes": 131179,
+      "sha256": "34606ff4768721b92ae78ea3c7c83c1e6dcb371ca30f5dbd817e669535cf6f33"
+    },
+    {
+      "path": "notebooks/costing/nilartstudio-notebook-costs.xlsm",
+      "type": "file",
+      "bytes": 117827,
+      "sha256": "e2366eef9af0c748dba70bfe67a45fc14c2a040e33572ef1b98bf1f34268d05a"
+    },
+    {
+      "path": "notebooks/costing/nilartstudio-notebook-costs.xlsx.inspect.ndjson",
+      "type": "file",
+      "bytes": 5535200,
+      "sha256": "50be1da148a5c55f21b61b7551c9b4d04a9d4fd6273a6811466dcdb50d48733d"
+    },
+    {
+      "path": "notebooks/costing/node_modules",
+      "type": "symlink",
+      "target": "/Users/amir/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules"
+    },
+    {
+      "path": "notebooks/costing/prepare_data.py",
+      "type": "file",
+      "bytes": 7785,
+      "sha256": "b36ac8abc7fef7fa512d4e59c494eb554d262d06851801eeac1d3364f088c559"
+    },
+    {
+      "path": "notebooks/costing/research-cache/000.txt",
+      "type": "file",
+      "bytes": 1575,
+      "sha256": "16bae9017745df2dc1692019b8cff9785baa4cbb20c0af31210b96e1486cc039"
+    },
+    {
+      "path": "notebooks/costing/research-cache/001.txt",
+      "type": "file",
+      "bytes": 2751,
+      "sha256": "d9a45a46022ea5334d30dad7b6f88c097445d6a32924a2f04bcb5d08b3d3bc7a"
+    },
+    {
+      "path": "notebooks/costing/research-cache/002.txt",
+      "type": "file",
+      "bytes": 2737,
+      "sha256": "3ec5c708eb292d7dd414a04bfaf6372fb4feb361182d9ff3802c3730eb3ef252"
+    },
+    {
+      "path": "notebooks/costing/research-cache/003.txt",
+      "type": "file",
+      "bytes": 228,
+      "sha256": "f1aaf2beb31cd0c2b9e3b00e7ef9bdd41ea62d3621e333668b0825958053c2f9"
+    },
+    {
+      "path": "notebooks/costing/research-cache/004.txt",
+      "type": "file",
+      "bytes": 232,
+      "sha256": "db00d0e562476ecad36e6165bf19fc76a7d24cf23a07a70ac7612ccffe8ddfa7"
+    },
+    {
+      "path": "notebooks/costing/research-cache/005.txt",
+      "type": "file",
+      "bytes": 1148,
+      "sha256": "956646f3213a884f9d4890dc01548893ac48b87e8189415e747fb594abdaad9c"
+    },
+    {
+      "path": "notebooks/costing/research-cache/006.txt",
+      "type": "file",
+      "bytes": 1220,
+      "sha256": "5f3b7a1b4d0eb147b43c15946fda561ed9cc3dd4aa9ab06ae925065f0f22eb38"
+    },
+    {
+      "path": "notebooks/costing/research-cache/007.txt",
+      "type": "file",
+      "bytes": 1219,
+      "sha256": "b2298b9772b73d3e025d617ad11522ecdc20812175848e342478dddbe1f80be4"
+    },
+    {
+      "path": "notebooks/costing/research-cache/008.txt",
+      "type": "file",
+      "bytes": 1149,
+      "sha256": "675d06da1ad31c0c4760b65955dbd176718aaf732ff3e2193edf8ac54b89bf78"
+    },
+    {
+      "path": "notebooks/costing/research-cache/009.txt",
+      "type": "file",
+      "bytes": 3056,
+      "sha256": "aef677a5ef795520e35a0ab9fe2ff6cd89f5ea8e730a98de6ea4610c3d9f9a15"
+    },
+    {
+      "path": "notebooks/costing/research-cache/010.txt",
+      "type": "file",
+      "bytes": 2317,
+      "sha256": "7a112e5aad04287fa31f86244a29fd2406e803e138a5496bde9e253071554c6e"
+    },
+    {
+      "path": "notebooks/costing/research-cache/011.txt",
+      "type": "file",
+      "bytes": 296,
+      "sha256": "b001328370e3d689e0887c3bbce0089ed81bf884d8fe93b4cc9976686c9a5138"
+    },
+    {
+      "path": "notebooks/costing/research-cache/012.txt",
+      "type": "file",
+      "bytes": 1449,
+      "sha256": "19270895304827710d64f4116533d7c96458270a9fc5d32d1b215dff88f872d8"
+    },
+    {
+      "path": "notebooks/costing/research-cache/013.txt",
+      "type": "file",
+      "bytes": 1374,
+      "sha256": "f2f957271a543f542437ce642cf10ce1fab6cfbd63e4c88fa81d21043f41d469"
+    },
+    {
+      "path": "notebooks/costing/research-cache/014.txt",
+      "type": "file",
+      "bytes": 1449,
+      "sha256": "562185ef36edb6e39c0ca0e9f5631393f8e2960b857f488e53af181dd1f703d9"
+    },
+    {
+      "path": "notebooks/costing/research-cache/015.txt",
+      "type": "file",
+      "bytes": 1420,
+      "sha256": "ca5d5807100a284796cf96299e8c0c050b1a70dbfa8eccb485cd1d8678e51e3c"
+    },
+    {
+      "path": "notebooks/costing/research-cache/016.txt",
+      "type": "file",
+      "bytes": 1449,
+      "sha256": "3fa0e66b92217c00c958f151be64d223fd126f465d185d48f97b28ca3cb126bc"
+    },
+    {
+      "path": "notebooks/costing/research-cache/017.txt",
+      "type": "file",
+      "bytes": 1360,
+      "sha256": "b7a4a3e503a438928f6e2ee0da7813838f1ed4e44b19f711c1952ae58a0bb97b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/018.txt",
+      "type": "file",
+      "bytes": 1341,
+      "sha256": "6f632371248719a8ca269011c5a9cdc3eefcf639023289794864409f929e2e9f"
+    },
+    {
+      "path": "notebooks/costing/research-cache/019.txt",
+      "type": "file",
+      "bytes": 3247,
+      "sha256": "9e6184feaf781be7e365a402f5965ab018459ffab182dabda4a190029cf48e40"
+    },
+    {
+      "path": "notebooks/costing/research-cache/020.txt",
+      "type": "file",
+      "bytes": 2062,
+      "sha256": "783880d29161729c96fbac8f035c3c403f9806d7ccc7cc2356aee08cb2445476"
+    },
+    {
+      "path": "notebooks/costing/research-cache/021.txt",
+      "type": "file",
+      "bytes": 424,
+      "sha256": "051701e9b5f428cd296deb8b9d65c13352f8feddd25e8c95ccb5b5dc7ca2589d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/022.txt",
+      "type": "file",
+      "bytes": 1190,
+      "sha256": "eac77a42af7dd64f960c3bd75dd387856193cbb66c869a07f73fd06dd4ee7119"
+    },
+    {
+      "path": "notebooks/costing/research-cache/023.txt",
+      "type": "file",
+      "bytes": 1999,
+      "sha256": "75166a70e64018410a7273856cc1754c4f7958f1a63ea9fa5c210096e48ecc1f"
+    },
+    {
+      "path": "notebooks/costing/research-cache/024.txt",
+      "type": "file",
+      "bytes": 1120,
+      "sha256": "aa6834e998f874fdb6a14ec79dd48fa503f3527e9673d4eeb153b7b3d20f52f3"
+    },
+    {
+      "path": "notebooks/costing/research-cache/025.txt",
+      "type": "file",
+      "bytes": 107,
+      "sha256": "b2bf68e1266cab4ba98792f77f0420b551628b0597e3a59ce4565109ead49d7f"
+    },
+    {
+      "path": "notebooks/costing/research-cache/026.txt",
+      "type": "file",
+      "bytes": 2159,
+      "sha256": "be566be455d7bfa95c861b1f687516d39f33f4d276e000596e44691983d5ecaa"
+    },
+    {
+      "path": "notebooks/costing/research-cache/027.txt",
+      "type": "file",
+      "bytes": 1128,
+      "sha256": "411dc94030314dbd61cf3f0529b86db0675bd5155f82f6142180185d09c23706"
+    },
+    {
+      "path": "notebooks/costing/research-cache/028.txt",
+      "type": "file",
+      "bytes": 918,
+      "sha256": "d8026a2ca7c0fb363d5ede444bee627c040c82b298ab68b8a519eacdeb341f54"
+    },
+    {
+      "path": "notebooks/costing/research-cache/029.txt",
+      "type": "file",
+      "bytes": 503,
+      "sha256": "c8884117a730a5edaf65ca05bac0c9e5aed920456d4c04ba71bd7c7d77f14c58"
+    },
+    {
+      "path": "notebooks/costing/research-cache/030.txt",
+      "type": "file",
+      "bytes": 735,
+      "sha256": "9aa46d0550b529714d1ab7bdc46168564451e3da985a296f6f31cf4a134c3548"
+    },
+    {
+      "path": "notebooks/costing/research-cache/031.txt",
+      "type": "file",
+      "bytes": 210,
+      "sha256": "821e2e949e1d1a505479cb314651a9749a5fc61704eb17d44af96b0059bfb3dc"
+    },
+    {
+      "path": "notebooks/costing/research-cache/032.txt",
+      "type": "file",
+      "bytes": 1325,
+      "sha256": "8800a6812779fad830660be210febd0cbe5e0665592c74f8e20a2313886705b6"
+    },
+    {
+      "path": "notebooks/costing/research-cache/033.txt",
+      "type": "file",
+      "bytes": 276,
+      "sha256": "5a01bfb6c79f80f66d2d5159beaddc94abb97e99ce2064e0f5d37426335cc0e1"
+    },
+    {
+      "path": "notebooks/costing/research-cache/034.txt",
+      "type": "file",
+      "bytes": 219,
+      "sha256": "6ec94f5cf7fd12af237e8122c8cfbe9abf84851f028cc9fbe39f6fdd866bbaad"
+    },
+    {
+      "path": "notebooks/costing/research-cache/035.txt",
+      "type": "file",
+      "bytes": 2114,
+      "sha256": "5d71dfcd838a6e51570c89198a73606628087ad1faeeb6c8e37776620f22b911"
+    },
+    {
+      "path": "notebooks/costing/research-cache/036.txt",
+      "type": "file",
+      "bytes": 1249,
+      "sha256": "2355e60294abc64069fa489b42983ae7eae829ef30c6309cad9104554699c140"
+    },
+    {
+      "path": "notebooks/costing/research-cache/037.txt",
+      "type": "file",
+      "bytes": 95,
+      "sha256": "a9037ff6dcadbc3e7ba40c8e4fb1f1b1ed8cf40a81821696fad9aa789fa165e6"
+    },
+    {
+      "path": "notebooks/costing/research-cache/038.txt",
+      "type": "file",
+      "bytes": 87,
+      "sha256": "fa19e0d10139c89e79a84db9addbf216489e27221beffbab979ffc20c5966db8"
+    },
+    {
+      "path": "notebooks/costing/research-cache/039.txt",
+      "type": "file",
+      "bytes": 1091,
+      "sha256": "b8b496989d10d66220a60c0f5578199d370ae29a4c91449325c06dafb1240bb5"
+    },
+    {
+      "path": "notebooks/costing/research-cache/040.txt",
+      "type": "file",
+      "bytes": 3523,
+      "sha256": "6198d5f73a3b5e34f34e425490f1d927a20f5d27f9a27db441ec9429d6f51d56"
+    },
+    {
+      "path": "notebooks/costing/research-cache/041.txt",
+      "type": "file",
+      "bytes": 1251,
+      "sha256": "c9fa1f8f0a4adab3e544736951a41cbc9c86e7ab58854cf2cf7e3bfc276cea1c"
+    },
+    {
+      "path": "notebooks/costing/research-cache/042.txt",
+      "type": "file",
+      "bytes": 1521,
+      "sha256": "294495657e73c0b4b271e4ecb44b9cad64931002a5cb628f317c6764264b1dce"
+    },
+    {
+      "path": "notebooks/costing/research-cache/043.txt",
+      "type": "file",
+      "bytes": 123,
+      "sha256": "6ed8e0aed1fc3564bdd4920db9cf71cc8185ed6da4b704b1bda10c6b491fafd2"
+    },
+    {
+      "path": "notebooks/costing/research-cache/044.txt",
+      "type": "file",
+      "bytes": 1253,
+      "sha256": "72a11abc95081ea304d6720d607cef4370e9ea215fa85c0f7f8c85c292fc2942"
+    },
+    {
+      "path": "notebooks/costing/research-cache/045.txt",
+      "type": "file",
+      "bytes": 1343,
+      "sha256": "71113c241b3bc27d12e9288d7da42e7f396660ab66e72913c774a41b3b7cf3fc"
+    },
+    {
+      "path": "notebooks/costing/research-cache/046.txt",
+      "type": "file",
+      "bytes": 71,
+      "sha256": "565ec891a7d38d1c7355bfecbb80ea771695054d6423a5b4a16f867312be5c7c"
+    },
+    {
+      "path": "notebooks/costing/research-cache/047.txt",
+      "type": "file",
+      "bytes": 1463,
+      "sha256": "51eacfcefd871cd1be429c74140f669a4c6ce110012ea711b274d79b5872ac82"
+    },
+    {
+      "path": "notebooks/costing/research-cache/048.txt",
+      "type": "file",
+      "bytes": 42,
+      "sha256": "e8ca4eeddaffb746dd788ea9b676dc088c15117e55bd27270b042e0fb0dcb6ac"
+    },
+    {
+      "path": "notebooks/costing/research-cache/049.txt",
+      "type": "file",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/050.txt",
+      "type": "file",
+      "bytes": 1251,
+      "sha256": "0822b2a65a4210cee47b07db75bd0947dd239647a794ef5e6d9cff2cb93e34ff"
+    },
+    {
+      "path": "notebooks/costing/research-cache/051.txt",
+      "type": "file",
+      "bytes": 2627,
+      "sha256": "46419d01301696eee7da43bbbdb748ed88379bf799f5b79a479e3a5a82993321"
+    },
+    {
+      "path": "notebooks/costing/research-cache/052.txt",
+      "type": "file",
+      "bytes": 106,
+      "sha256": "8901e2a59ceb43bc3835359cc70d7808a670121f6fca0c3433a93e465edf4df0"
+    },
+    {
+      "path": "notebooks/costing/research-cache/053.txt",
+      "type": "file",
+      "bytes": 42,
+      "sha256": "62d2880ab03e3587d5cc1e203f77d48dc35a314dcadb065d352283e15eabf40d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/054.txt",
+      "type": "file",
+      "bytes": 2627,
+      "sha256": "c1ca0355d5f1afa25eaaa94d9ca5006c64d6f811b4a626053cecae510ea5c4c2"
+    },
+    {
+      "path": "notebooks/costing/research-cache/055.txt",
+      "type": "file",
+      "bytes": 2209,
+      "sha256": "5bbc3b77d5d26615ff563c15af0f87547076c6ecfe681f566d56786807ce107e"
+    },
+    {
+      "path": "notebooks/costing/research-cache/056.txt",
+      "type": "file",
+      "bytes": 3482,
+      "sha256": "f1c3995de9fe917d95d34ee0ddd077259695d2c2d72f5486beff26174ebdc004"
+    },
+    {
+      "path": "notebooks/costing/research-cache/057.txt",
+      "type": "file",
+      "bytes": 2623,
+      "sha256": "8571c8ed6f4a009d5c7ca6512c13fa99372d09193bcfe42a0941a80f5b529503"
+    },
+    {
+      "path": "notebooks/costing/research-cache/058.txt",
+      "type": "file",
+      "bytes": 127,
+      "sha256": "2839c7928ce7706855637afa285bd7c1145440365ad6065cbd9e079e0e4f6a7a"
+    },
+    {
+      "path": "notebooks/costing/research-cache/059.txt",
+      "type": "file",
+      "bytes": 116,
+      "sha256": "dde8ee67e1a3af89da6678c725555fc8b66edd1eb82d41fa2ca525c2f852e853"
+    },
+    {
+      "path": "notebooks/costing/research-cache/060.txt",
+      "type": "file",
+      "bytes": 117,
+      "sha256": "711e2aca28cef59730b50ad5568a6d2bd602df5b3022c46aea44ae37fcb24601"
+    },
+    {
+      "path": "notebooks/costing/research-cache/061.txt",
+      "type": "file",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/062.txt",
+      "type": "file",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/063.txt",
+      "type": "file",
+      "bytes": 2379,
+      "sha256": "d52181bdd3d02468197a18dd82153bf2ad7c993ed6958fe1db9f43e7f1a3e01b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/064.txt",
+      "type": "file",
+      "bytes": 2379,
+      "sha256": "d52181bdd3d02468197a18dd82153bf2ad7c993ed6958fe1db9f43e7f1a3e01b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/065.txt",
+      "type": "file",
+      "bytes": 2379,
+      "sha256": "d52181bdd3d02468197a18dd82153bf2ad7c993ed6958fe1db9f43e7f1a3e01b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/066.txt",
+      "type": "file",
+      "bytes": 2379,
+      "sha256": "d52181bdd3d02468197a18dd82153bf2ad7c993ed6958fe1db9f43e7f1a3e01b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/067.txt",
+      "type": "file",
+      "bytes": 2209,
+      "sha256": "5bbc3b77d5d26615ff563c15af0f87547076c6ecfe681f566d56786807ce107e"
+    },
+    {
+      "path": "notebooks/costing/research-cache/068.txt",
+      "type": "file",
+      "bytes": 1148,
+      "sha256": "5b44e6a83b1a1fb0ce956ecacb15273a5e11eceaee98d4904b506b01af7409a4"
+    },
+    {
+      "path": "notebooks/costing/research-cache/069.txt",
+      "type": "file",
+      "bytes": 1149,
+      "sha256": "c4c142e2c3674ed9e2fb5364c1ecff0910fafdac4fa271284ef4e3e60da14019"
+    },
+    {
+      "path": "notebooks/costing/research-cache/070.txt",
+      "type": "file",
+      "bytes": 1148,
+      "sha256": "b0118fc4508ae84c455d1ac09d2595e104aae993cd7223eacabcd5d0e0f6d1c0"
+    },
+    {
+      "path": "notebooks/costing/research-cache/071.txt",
+      "type": "file",
+      "bytes": 1150,
+      "sha256": "ed4f77bd22fec458d12c352647e1f323ac7ab892b0cd318ecd6d45f7eb5cc52d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/072.txt",
+      "type": "file",
+      "bytes": 1519,
+      "sha256": "9c6f2adab23066df83165184a8c45e7609fdcac64a9bbd104f746f765bc26259"
+    },
+    {
+      "path": "notebooks/costing/research-cache/073.txt",
+      "type": "file",
+      "bytes": 1501,
+      "sha256": "d197c15412fbcf19e27af32a1659cc52554c2cbc92db98684290a1f487ccc510"
+    },
+    {
+      "path": "notebooks/costing/research-cache/074.txt",
+      "type": "file",
+      "bytes": 1072,
+      "sha256": "132c96951484784daf596d4eb8ef19029454e72aec2b79e7eff80f2f5abd3b71"
+    },
+    {
+      "path": "notebooks/costing/research-cache/075.txt",
+      "type": "file",
+      "bytes": 1152,
+      "sha256": "3d4cf17afee708e6a31e0bd7643061f32a6981f86b4bf4cc240967273f11f33e"
+    },
+    {
+      "path": "notebooks/costing/research-cache/076.txt",
+      "type": "file",
+      "bytes": 1226,
+      "sha256": "206b06d6e7ca984c5300d50693eeefb08c03bd41de86a07c3c119cf04aea9134"
+    },
+    {
+      "path": "notebooks/costing/research-cache/077.txt",
+      "type": "file",
+      "bytes": 1230,
+      "sha256": "5bfa047527ecdfc51ceba943cda47a5e0c458ea5103920a5d988819153d4f1fd"
+    },
+    {
+      "path": "notebooks/costing/research-cache/078.txt",
+      "type": "file",
+      "bytes": 1349,
+      "sha256": "eb8ea6cb9b53777eb24a389e85fb77f94659087b6279cfddcd9cb6bb0615b065"
+    },
+    {
+      "path": "notebooks/costing/research-cache/079.txt",
+      "type": "file",
+      "bytes": 2333,
+      "sha256": "9cb42152a6a47ec85bd17efc20c6b8ad9c256a929a67690eeced0f6ae7bc09b6"
+    },
+    {
+      "path": "notebooks/costing/research-cache/080.txt",
+      "type": "file",
+      "bytes": 1252,
+      "sha256": "9e6e1d086f636619b453c47c1d9cb91af1f777ac64f13012442441bfd95341de"
+    },
+    {
+      "path": "notebooks/costing/research-cache/081.txt",
+      "type": "file",
+      "bytes": 2090,
+      "sha256": "6334911b8076aeb97e0b6a0f72e723309dbed52e6b4e211e08da4b1e4272a9ea"
+    },
+    {
+      "path": "notebooks/costing/research-cache/082.txt",
+      "type": "file",
+      "bytes": 1183,
+      "sha256": "538ecb145e13e9d442351fc7739bed4af9b2039fe61f5ca1ceabe8209195cf6e"
+    },
+    {
+      "path": "notebooks/costing/research-cache/083.txt",
+      "type": "file",
+      "bytes": 237,
+      "sha256": "4b7b49838dd45cb9d73140a3dc9a9ad1a96f1088f2bb42ad7954e1115668e894"
+    },
+    {
+      "path": "notebooks/costing/research-cache/084.txt",
+      "type": "file",
+      "bytes": 184,
+      "sha256": "fbe7b27a5bf912944f328318260c7f46fe66bcc8c472e40e8e0fea274b90c138"
+    },
+    {
+      "path": "notebooks/costing/research-cache/085.txt",
+      "type": "file",
+      "bytes": 1298,
+      "sha256": "2dba7636f8d45b08d8f87460c120462a682fa5fff2481e789dfca1eee7172f52"
+    },
+    {
+      "path": "notebooks/costing/research-cache/086.txt",
+      "type": "file",
+      "bytes": 192,
+      "sha256": "4f6930113a050bc10f44363478621fe1b231c823eb05d53c9c85306e1759b8a8"
+    },
+    {
+      "path": "notebooks/costing/research-cache/087.txt",
+      "type": "file",
+      "bytes": 177,
+      "sha256": "8d976805bb1c6771ec3b1755c0540abfc8abade96333b82537010128cb64b3ba"
+    },
+    {
+      "path": "notebooks/costing/research-cache/088.txt",
+      "type": "file",
+      "bytes": 1248,
+      "sha256": "cc67426a55bfe4f5584c45d6261d89b3b6f5823f57afdf3a646e7e400ca16069"
+    },
+    {
+      "path": "notebooks/costing/research-cache/089.txt",
+      "type": "file",
+      "bytes": 247,
+      "sha256": "7331ab659f0636d87f3bc055591270dcb3fbe22d7932956df338dc76e4a8755b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/090.txt",
+      "type": "file",
+      "bytes": 1195,
+      "sha256": "a5d95da156c8d0633b191f5de3e2a1b9dd9cf2e11c77c12a806992970afc8a2d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/091.txt",
+      "type": "file",
+      "bytes": 175,
+      "sha256": "86dc6c718d44b4ed6749ed537b449261cc29c5c05f79159b4df1af1a84e6703c"
+    },
+    {
+      "path": "notebooks/costing/research-cache/092.txt",
+      "type": "file",
+      "bytes": 194,
+      "sha256": "ed6b56b5b3e2581f78bf798afa127cb8fd5caa95a6a38beb4b4add1929dfae0d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/093.txt",
+      "type": "file",
+      "bytes": 190,
+      "sha256": "8bdea0c5010f1376d15093e9a8c37b4356a5ca517c674e51daf73deb187c7287"
+    },
+    {
+      "path": "notebooks/costing/research-cache/094.txt",
+      "type": "file",
+      "bytes": 164,
+      "sha256": "d431fd0be90f7534a8763a10835fc613d2af136740f6e3f9472b62596aacde6e"
+    },
+    {
+      "path": "notebooks/costing/research-cache/095.txt",
+      "type": "file",
+      "bytes": 147,
+      "sha256": "50252b7812803f6fd8dfd0deeece0cee0947a61baad4c0086985c3b59af0bce8"
+    },
+    {
+      "path": "notebooks/costing/research-cache/096.txt",
+      "type": "file",
+      "bytes": 266,
+      "sha256": "cc037d4518a96043c296baedc4b61766dd95e938ccd934244f1687cc1692fbf7"
+    },
+    {
+      "path": "notebooks/costing/research-cache/097.txt",
+      "type": "file",
+      "bytes": 980,
+      "sha256": "3f18b6cd5ae8d33c4868481ede1b7fd347078c9c098a0501cf1433f0ef4beb01"
+    },
+    {
+      "path": "notebooks/costing/research-cache/098.txt",
+      "type": "file",
+      "bytes": 177,
+      "sha256": "38f4bb312bbba7ca5916da30e53f3c371a8b32606c14866ad924df8b8715811e"
+    },
+    {
+      "path": "notebooks/costing/research-cache/099.txt",
+      "type": "file",
+      "bytes": 212,
+      "sha256": "f51542093333d3e1a9ad696704a1c7fa90b965d10960c31005fa025fbddf2b73"
+    },
+    {
+      "path": "notebooks/costing/research-cache/100.txt",
+      "type": "file",
+      "bytes": 193,
+      "sha256": "a7ef2393bf42f66de5bce089cb59253b62d67845c33476d0015dbadf86e6dae2"
+    },
+    {
+      "path": "notebooks/costing/research-cache/101.txt",
+      "type": "file",
+      "bytes": 210,
+      "sha256": "5963889176131613b529bc49e6cab9d7b594601271b52d150a6cc4a3818e7a83"
+    },
+    {
+      "path": "notebooks/costing/research-cache/102.txt",
+      "type": "file",
+      "bytes": 2460,
+      "sha256": "c34f73cb29dd9faea0e668121cb8c4278d0f7616b3baa0c6cb61e4e19bc60418"
+    },
+    {
+      "path": "notebooks/costing/research-cache/103.txt",
+      "type": "file",
+      "bytes": 181,
+      "sha256": "f6918fa0718cc68b39620829d6a306a29460e9e95dc314d9fe06ceb348288e82"
+    },
+    {
+      "path": "notebooks/costing/research-cache/104.txt",
+      "type": "file",
+      "bytes": 158,
+      "sha256": "2eac4acdd213a75511bd44398ea515ce00c7cc2e5aa89591ab9ea8224d662528"
+    },
+    {
+      "path": "notebooks/costing/research-cache/105.txt",
+      "type": "file",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/106.txt",
+      "type": "file",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/107.txt",
+      "type": "file",
+      "bytes": 2462,
+      "sha256": "c2835cf847af9187004f0afc421f77c5535940c6931797608d60fbb123a5f2ee"
+    },
+    {
+      "path": "notebooks/costing/research-cache/108.txt",
+      "type": "file",
+      "bytes": 2395,
+      "sha256": "fab9ce763431277a13a741880fb5b311c2f0126202b72a33fd1f5e143fb84c87"
+    },
+    {
+      "path": "notebooks/costing/research-cache/109.txt",
+      "type": "file",
+      "bytes": 185,
+      "sha256": "0d26f5cc856ca2215965870bd701adc49a735225c13eeb9db7f55f96bb2868b9"
+    },
+    {
+      "path": "notebooks/costing/research-cache/110.txt",
+      "type": "file",
+      "bytes": 2266,
+      "sha256": "488208dd5707dfff6fceb176e76596ca8980ccd991b58ffb727e59077a6544ec"
+    },
+    {
+      "path": "notebooks/costing/research-cache/111.txt",
+      "type": "file",
+      "bytes": 240,
+      "sha256": "6deedb37fff9e1a74929882aa3393d94320d2d7b707679ba8575df636aeb5b8d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/112.txt",
+      "type": "file",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/113.txt",
+      "type": "file",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "notebooks/costing/research-cache/114.txt",
+      "type": "file",
+      "bytes": 1246,
+      "sha256": "773f60e2141d0320f596ab5ba0adbc60b66092ad0fa6489e9decea8529285f2d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/115.txt",
+      "type": "file",
+      "bytes": 1246,
+      "sha256": "773f60e2141d0320f596ab5ba0adbc60b66092ad0fa6489e9decea8529285f2d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/116.txt",
+      "type": "file",
+      "bytes": 1246,
+      "sha256": "773f60e2141d0320f596ab5ba0adbc60b66092ad0fa6489e9decea8529285f2d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/117.txt",
+      "type": "file",
+      "bytes": 1127,
+      "sha256": "b3da674011223c996e12eea2e6c0beb7207251dbb1d74ca279b59fe08b393134"
+    },
+    {
+      "path": "notebooks/costing/research-cache/118.txt",
+      "type": "file",
+      "bytes": 1127,
+      "sha256": "b3da674011223c996e12eea2e6c0beb7207251dbb1d74ca279b59fe08b393134"
+    },
+    {
+      "path": "notebooks/costing/research-cache/119.txt",
+      "type": "file",
+      "bytes": 634,
+      "sha256": "a9e13d9d08910e48897ae6404bde0fef6234e4b1c0fab8d8f33618c58918f9a6"
+    },
+    {
+      "path": "notebooks/costing/research-cache/120.txt",
+      "type": "file",
+      "bytes": 634,
+      "sha256": "a9e13d9d08910e48897ae6404bde0fef6234e4b1c0fab8d8f33618c58918f9a6"
+    },
+    {
+      "path": "notebooks/costing/research-cache/121.txt",
+      "type": "file",
+      "bytes": 2413,
+      "sha256": "7adbe749882bc2b39ca50da33c1a52a0dcb7aeb24b71a39036486f062982bf7d"
+    },
+    {
+      "path": "notebooks/costing/research-cache/122.txt",
+      "type": "file",
+      "bytes": 7963,
+      "sha256": "ef3c33190d746c7947eeed3a9bae8cf48711d9c715a43d9cbfff8638d321690f"
+    },
+    {
+      "path": "notebooks/costing/research-cache/123.txt",
+      "type": "file",
+      "bytes": 3180,
+      "sha256": "676cde87db5ff3fa32765da00c82d66f391aeffdc5c275881fea6883a1e40723"
+    },
+    {
+      "path": "notebooks/costing/research-cache/124.txt",
+      "type": "file",
+      "bytes": 2296,
+      "sha256": "8b1a023ebc5466403c771691de7a0d6cf2a771d7e259923141be8c0114cc9ae8"
+    },
+    {
+      "path": "notebooks/costing/research-cache/125.txt",
+      "type": "file",
+      "bytes": 2458,
+      "sha256": "abf0ae181ab0c9d0a37e37c67b0adcd7fca7ae1233808dd7e70a6e029f87ec67"
+    },
+    {
+      "path": "notebooks/costing/research-cache/126.txt",
+      "type": "file",
+      "bytes": 3302,
+      "sha256": "ee9902893a4d88cdf6f7e8511e4d215b66903bec357495f6542fbd278c520718"
+    },
+    {
+      "path": "notebooks/costing/research-cache/127.txt",
+      "type": "file",
+      "bytes": 2521,
+      "sha256": "a837ead6172c884bcdb7d4db5ac8e84c54ac44c58cfc9804e36f0ad96c0723fe"
+    },
+    {
+      "path": "notebooks/costing/research-cache/128.txt",
+      "type": "file",
+      "bytes": 2543,
+      "sha256": "1898b6b363e76f2b87e2152d438444a3775715de98215b009478bca95fa6a277"
+    },
+    {
+      "path": "notebooks/costing/research.py",
+      "type": "file",
+      "bytes": 3213,
+      "sha256": "0c212c5189b585274896291297cac33d2a8ffa862e255072081b9bc29baa733a"
+    },
+    {
+      "path": "notebooks/costing/verification.json",
+      "type": "file",
+      "bytes": 166,
+      "sha256": "5bcfa47e61b53bc4c59d035d0b7cc1e49737d18acd9fd2b3ff2ff30ffab83181"
+    },
+    {
+      "path": "notebooks/costing/راهنمای محاسبه هزینه.md",
+      "type": "file",
+      "bytes": 6600,
+      "sha256": "aa763d6434c706cf4791128a2d142aed1252984b32899e63bcd415e5f728b4bf"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/README.md",
+      "type": "file",
+      "bytes": 466,
+      "sha256": "6dfd92109e1e199e0d84f1d7916a9de09e1abef78f5e1e678091ea571c49c6d8"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/covers/gav-14x14-on-A5-back.pdf",
+      "type": "file",
+      "bytes": 1502880,
+      "sha256": "472c14648697c470b8fdad5bfad5e23e5d1020da7d010b43e2e24738499f0140"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/covers/gav-14x14-on-A5-back.png",
+      "type": "file",
+      "bytes": 1012640,
+      "sha256": "93ff394fee779a4a6de335a37040eb8f9b1249734cc62b5a22ba81ff9b30f5c3"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/covers/gav-14x14-on-A5-front.pdf",
+      "type": "file",
+      "bytes": 14207427,
+      "sha256": "c7b62b937d883462ded5dbe5a66d4a5d3d0f5e1860ef71336b02c64dc930eb3d"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/covers/gav-14x14-on-A5-front.png",
+      "type": "file",
+      "bytes": 3857946,
+      "sha256": "cf2b8c0e81a663b01939e7931ed5198c44b475ef7304ed86f498b86513711321"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/notebooks/gav-14x14-on-A5-notebooks.pdf",
+      "type": "file",
+      "bytes": 2718734,
+      "sha256": "7e110950f15a050703da1c678328b4568363f84321779a27d9a013bac6f88a30"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/notebooks/gav-14x14-on-A5-notebooks.png",
+      "type": "file",
+      "bytes": 30017,
+      "sha256": "503ed19bba778e33935ae6795d1ce656b7342dfc9926331bd853d09a27b4ccaa"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/sketchbooks/gav-14x14-on-A5-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 2716980,
+      "sha256": "af71a1549340d8a9bf1c01b391d75647bfef4af1fce68ce51536dcf454bdee53"
+    },
+    {
+      "path": "notebooks/gav/14x14-on-A5/sketchbooks/gav-14x14-on-A5-sketchbooks.png",
+      "type": "file",
+      "bytes": 29669,
+      "sha256": "deacfc7b72ced94f95424025647cc21a3aefba81df916e33754e7706f453fb77"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/README.md",
+      "type": "file",
+      "bytes": 474,
+      "sha256": "98ffb0d5e382471f4dcbf16cf9ea2ebd31188b4edb1699ff96d00e9085d82b80"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/covers/gav-16.5x23.5-on-A4-back.pdf",
+      "type": "file",
+      "bytes": 1502950,
+      "sha256": "0aa4d7538bd9d3ac5a6901b8302d4caa29dbea90d59beec069867b30ad79806b"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/covers/gav-16.5x23.5-on-A4-back.png",
+      "type": "file",
+      "bytes": 2093258,
+      "sha256": "bc6d1454cf63bf09292cdd397a9c3f6a9471f662fbada503e5241fc1cfb54891"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/covers/gav-16.5x23.5-on-A4-front.pdf",
+      "type": "file",
+      "bytes": 14207439,
+      "sha256": "4129f70a7b419ec35ec03751b1ab6a2cfa1504cd9ffd91c5bbc7bc5067d74a5d"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/covers/gav-16.5x23.5-on-A4-front.png",
+      "type": "file",
+      "bytes": 9992572,
+      "sha256": "c733c8f29011e8810731da9c9ce25b312bbb8c0e04dc8a040ace81db36ce5906"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/notebooks/gav-16.5x23.5-on-A4-notebooks.pdf",
+      "type": "file",
+      "bytes": 2720065,
+      "sha256": "4279855189745d87db00c25351b3378853d287765c674e355e989bfbb9bca3a5"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/notebooks/gav-16.5x23.5-on-A4-notebooks.png",
+      "type": "file",
+      "bytes": 52414,
+      "sha256": "3e1d11254629410ee178567a515b274993388519a825e6145f6a3620d4582aab"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/sketchbooks/gav-16.5x23.5-on-A4-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 2717029,
+      "sha256": "dd23fedb16beff14b71313d8f889d7d5ebdd1762683aa99d369ce55d4203babc"
+    },
+    {
+      "path": "notebooks/gav/16.5x23.5-on-A4/sketchbooks/gav-16.5x23.5-on-A4-sketchbooks.png",
+      "type": "file",
+      "bytes": 51708,
+      "sha256": "0f04504989adb5df5da20a23d0e2e5b19dcf7c12b6f8f3f29dc55f136d2aba79"
+    },
+    {
+      "path": "notebooks/gav/A3/covers/gav-A3-back.pdf",
+      "type": "file",
+      "bytes": 1503264,
+      "sha256": "3e7c75198474967e5f3484fa8ad903df34b60ff452b27f9f2bcf3cf0a85a1fda"
+    },
+    {
+      "path": "notebooks/gav/A3/covers/gav-A3-back.png",
+      "type": "file",
+      "bytes": 3027944,
+      "sha256": "ae5091cc164e99e159840a96943bdce6250a6aa11c0eb8f7cbaaf5d983c62763"
+    },
+    {
+      "path": "notebooks/gav/A3/covers/gav-A3-front.pdf",
+      "type": "file",
+      "bytes": 4083179,
+      "sha256": "3fcce7858be4e2dd7d4ddb73ad5926fdfe9688523b7d26c472fd40d5c07bd0ef"
+    },
+    {
+      "path": "notebooks/gav/A3/covers/gav-A3-front.png",
+      "type": "file",
+      "bytes": 4753004,
+      "sha256": "04fce9663e0e1e48bcc97e9eb42527d36051fbc46e645e0180e058b5dffcdd27"
+    },
+    {
+      "path": "notebooks/gav/A3/covers/previews/gav-A3-back-preview.png",
+      "type": "file",
+      "bytes": 1698537,
+      "sha256": "81ddb2a60c03669b17e604b85e89fe1fde9ca46f75f6871d18610746dba003ff"
+    },
+    {
+      "path": "notebooks/gav/A3/covers/previews/gav-A3-front-preview.png",
+      "type": "file",
+      "bytes": 5373424,
+      "sha256": "c0847cd153a351dc71695885e12a1411f07092ddc1f72e027d768f7e7539eefb"
+    },
+    {
+      "path": "notebooks/gav/A3/notebooks/gav-A3-200-pages.pdf",
+      "type": "file",
+      "bytes": 2730400,
+      "sha256": "e51f7d7e68783d383e58ff7f9520ad39f568461ab0d763d43c01b53ad296ae39"
+    },
+    {
+      "path": "notebooks/gav/A3/notebooks/gav-A3-opening.pdf",
+      "type": "file",
+      "bytes": 346870,
+      "sha256": "fd400fb6cf293cf75d49dda84e4c4d608059b4c5e057d64d0c7b5cdd13d2b245"
+    },
+    {
+      "path": "notebooks/gav/A3/notebooks/previews/A3-all-designs-preview.png",
+      "type": "file",
+      "bytes": 36715,
+      "sha256": "10a63b797036d8bf2c32cea2273798b49729f6862fe62dd01ec2f41d8c08b466"
+    },
+    {
+      "path": "notebooks/gav/A3/notebooks/previews/A3-ruled-preview.png",
+      "type": "file",
+      "bytes": 120097,
+      "sha256": "100a940eeefc0c470d0e6e2e23fbb79d8ade0c9c00f040788efa3a87d5db73c8"
+    },
+    {
+      "path": "notebooks/gav/A3/notebooks/previews/gav-A3-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 104219,
+      "sha256": "d4e6474da9c1a3c2115222be0458289418c43f4755cdfa159e20c0afaceaa851"
+    },
+    {
+      "path": "notebooks/gav/A3/notebooks/previews/gav-A3-opening.png",
+      "type": "file",
+      "bytes": 163919,
+      "sha256": "0a8c734e1794e57cdb50e0d78e19de98e2210aec850d2087f5007876456e90e4"
+    },
+    {
+      "path": "notebooks/gav/A3/opening/gav-A3-opening-preview.png",
+      "type": "file",
+      "bytes": 163919,
+      "sha256": "0a8c734e1794e57cdb50e0d78e19de98e2210aec850d2087f5007876456e90e4"
+    },
+    {
+      "path": "notebooks/gav/A3/opening/gav-A3-opening.pdf",
+      "type": "file",
+      "bytes": 346870,
+      "sha256": "a2acb6bda572bb328abb451a4d60891dacd1e2d87b7f83a85958b5a07daa5a25"
+    },
+    {
+      "path": "notebooks/gav/A3/sketchbooks/cows-A3-100-pages.pdf",
+      "type": "file",
+      "bytes": 2685495,
+      "sha256": "e835b01536f3efcf6f51a4a68b1cf91028d892e6cab583eef0ab95df7bfc3bc8"
+    },
+    {
+      "path": "notebooks/gav/A3/sketchbooks/cows-A3.pdf",
+      "type": "file",
+      "bytes": 2659355,
+      "sha256": "f7ced66c7c2118a276359fa780b97412f8ae2f074d9361f18411d60e4a22201b"
+    },
+    {
+      "path": "notebooks/gav/A3/sketchbooks/previews/cows-A3-100-pages-first-page.png",
+      "type": "file",
+      "bytes": 115465,
+      "sha256": "ca0d816e7a88aa273be6992f52d54a7076df6f395e584ad649628b125e12187c"
+    },
+    {
+      "path": "notebooks/gav/A3/sketchbooks/previews/cows-A3-first-page.png",
+      "type": "file",
+      "bytes": 115465,
+      "sha256": "ca0d816e7a88aa273be6992f52d54a7076df6f395e584ad649628b125e12187c"
+    },
+    {
+      "path": "notebooks/gav/A4/covers/gav-A4-back.pdf",
+      "type": "file",
+      "bytes": 1503291,
+      "sha256": "470e029712ddaf71d31124c0128b3ffc09d10b61d3d6f63bea2ed102d10417d2"
+    },
+    {
+      "path": "notebooks/gav/A4/covers/gav-A4-back.png",
+      "type": "file",
+      "bytes": 2176185,
+      "sha256": "f52524a9b27a6ce133ca5316e4ae37d184dc0064eb6f90d970ef70e08646aa62"
+    },
+    {
+      "path": "notebooks/gav/A4/covers/previews/gav-A4-back-preview.png",
+      "type": "file",
+      "bytes": 1072021,
+      "sha256": "2aff10674689144440713507b8ba6606110a3e3c5513a1bb11ddf6549f0238b5"
+    },
+    {
+      "path": "notebooks/gav/A4/notebooks/gav-A4-200-pages.pdf",
+      "type": "file",
+      "bytes": 2728842,
+      "sha256": "6b3103ef72dd074f59a8b3d3644c302621be99c38e81480eaea48354b0ec25b2"
+    },
+    {
+      "path": "notebooks/gav/A4/notebooks/gav-A4-opening.pdf",
+      "type": "file",
+      "bytes": 346870,
+      "sha256": "8653cb1898d64e534c238651e969ed5321230d4457d71b1135c78f964939d026"
+    },
+    {
+      "path": "notebooks/gav/A4/notebooks/previews/A4-all-designs-preview.png",
+      "type": "file",
+      "bytes": 42729,
+      "sha256": "f63fe7857f2cf5c75dd2fb28bed99fbf42599a2a990a75c3d6697f672e537db3"
+    },
+    {
+      "path": "notebooks/gav/A4/notebooks/previews/A4-ruled-preview.png",
+      "type": "file",
+      "bytes": 78000,
+      "sha256": "4ab3ee1c684f17db76c5ac01a425172d2fd082996d4f66e518cc9a4267b056fc"
+    },
+    {
+      "path": "notebooks/gav/A4/notebooks/previews/gav-A4-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 68102,
+      "sha256": "394527a849aa1f82139103c258fe6c7192a95603312bbb422b7002d23eba70bc"
+    },
+    {
+      "path": "notebooks/gav/A4/notebooks/previews/gav-A4-opening.png",
+      "type": "file",
+      "bytes": 107588,
+      "sha256": "75ba44d7c0508045374121cf6e8816e934312dbfc61c05ffb4af9b6ca7c82ebe"
+    },
+    {
+      "path": "notebooks/gav/A4/opening/gav-A4-opening-preview.png",
+      "type": "file",
+      "bytes": 107588,
+      "sha256": "75ba44d7c0508045374121cf6e8816e934312dbfc61c05ffb4af9b6ca7c82ebe"
+    },
+    {
+      "path": "notebooks/gav/A4/opening/gav-A4-opening.pdf",
+      "type": "file",
+      "bytes": 346870,
+      "sha256": "48146268c76f2970cdf3dbc6ce4246b32ac1c1646783245dbbcc222b8e21c116"
+    },
+    {
+      "path": "notebooks/gav/A5/covers/gav-A5-back.pdf",
+      "type": "file",
+      "bytes": 1503315,
+      "sha256": "dee5f0556af6f6914e05a18d2df7a869534fc3425e8de6ca5a54e243b2c77734"
+    },
+    {
+      "path": "notebooks/gav/A5/covers/gav-A5-back.png",
+      "type": "file",
+      "bytes": 2417007,
+      "sha256": "525c87c39711623d1b6ee4b572766e896c842d330788d33ae29218852cf39482"
+    },
+    {
+      "path": "notebooks/gav/A5/covers/previews/gav-A5-back-preview.png",
+      "type": "file",
+      "bytes": 562775,
+      "sha256": "126e8885452bde79b7e072001411bf7d1e8aa5ad395b85742484ca5fd94b2645"
+    },
+    {
+      "path": "notebooks/gav/A5/notebooks/gav-A5-200-pages.pdf",
+      "type": "file",
+      "bytes": 2727707,
+      "sha256": "98a54dab64b5914729c9feb87c804f4ade5a064dde4891960d7102e0e16c6801"
+    },
+    {
+      "path": "notebooks/gav/A5/notebooks/gav-A5-opening.pdf",
+      "type": "file",
+      "bytes": 346866,
+      "sha256": "97a0e87d4ec9631ad4a42836cddfd3458b23c31b3687b1909cc1fcf9d9ecaf32"
+    },
+    {
+      "path": "notebooks/gav/A5/notebooks/previews/A5-all-designs-preview.png",
+      "type": "file",
+      "bytes": 48367,
+      "sha256": "85873d36b43bf5c211184ae0d5e0faeced25ef5bbf47be4e8a035497c3b0d392"
+    },
+    {
+      "path": "notebooks/gav/A5/notebooks/previews/A5-ruled-preview.png",
+      "type": "file",
+      "bytes": 47794,
+      "sha256": "da10b7f629fa9bd87c4e898b83529d4f389a7f1181742f7749e96156424710a7"
+    },
+    {
+      "path": "notebooks/gav/A5/notebooks/previews/gav-A5-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 41924,
+      "sha256": "6c64af6e23756857f19365e6617ee4a9f81acb187d8a427b64e679288ae91748"
+    },
+    {
+      "path": "notebooks/gav/A5/notebooks/previews/gav-A5-opening.png",
+      "type": "file",
+      "bytes": 66095,
+      "sha256": "48e06ee8a5dfccf562c1561d3db8e312ee8c542294bbf2abca4af2e1dc616ee1"
+    },
+    {
+      "path": "notebooks/gav/A5/opening/gav-A5-opening-preview.png",
+      "type": "file",
+      "bytes": 66095,
+      "sha256": "48e06ee8a5dfccf562c1561d3db8e312ee8c542294bbf2abca4af2e1dc616ee1"
+    },
+    {
+      "path": "notebooks/gav/A5/opening/gav-A5-opening.pdf",
+      "type": "file",
+      "bytes": 346866,
+      "sha256": "c7ac0083e96220ec18d6541692aee6845b8c4662f105a3b10240011fd7fd1b76"
+    },
+    {
+      "path": "notebooks/gav/A6/covers/gav-A6-back.pdf",
+      "type": "file",
+      "bytes": 1503306,
+      "sha256": "15a5c3e6c317fd63e7f7456d089c2db7e7bbe29cb2b5f1e8375f1cd4ce7386ec"
+    },
+    {
+      "path": "notebooks/gav/A6/covers/gav-A6-back.png",
+      "type": "file",
+      "bytes": 1403874,
+      "sha256": "5d0a14e080a774a8d759886476246db15945967a4fa526205eb455b9ad676283"
+    },
+    {
+      "path": "notebooks/gav/A6/covers/previews/gav-A6-back-preview.png",
+      "type": "file",
+      "bytes": 281792,
+      "sha256": "304baf66f43185f7ca16dfdf781821b8330fb265d702567d1263a8218e2a36a5"
+    },
+    {
+      "path": "notebooks/gav/A6/notebooks/gav-A6-200-pages.pdf",
+      "type": "file",
+      "bytes": 2726942,
+      "sha256": "4f1c0554121e9b63126119d19ec09f20f145ffc26269c01f52caadd8096b3696"
+    },
+    {
+      "path": "notebooks/gav/A6/notebooks/gav-A6-opening.pdf",
+      "type": "file",
+      "bytes": 346878,
+      "sha256": "914eaff7c09f31ea311fab7f507b909847d00510740a71ac4840000e6fa5ee39"
+    },
+    {
+      "path": "notebooks/gav/A6/notebooks/previews/A6-all-designs-preview.png",
+      "type": "file",
+      "bytes": 49908,
+      "sha256": "f11904f2084d951d49b23ecce8dc141836496b1c36992cee2f964cc534f66506"
+    },
+    {
+      "path": "notebooks/gav/A6/notebooks/previews/A6-ruled-preview.png",
+      "type": "file",
+      "bytes": 27191,
+      "sha256": "31459767e2c40a9ae4a3a3cf4dd0ae64c102545ae7a041fbb24b77df9303012a"
+    },
+    {
+      "path": "notebooks/gav/A6/notebooks/previews/gav-A6-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 23410,
+      "sha256": "bc296f1d8fdc16d513e80dd8dd01f68348a523e811ee4cf2b9c2146f7de59566"
+    },
+    {
+      "path": "notebooks/gav/A6/notebooks/previews/gav-A6-opening.png",
+      "type": "file",
+      "bytes": 37441,
+      "sha256": "851e38201c4661fcab7e1fa4a3dea5a0760bda367307e7e65b42e7a01afd8c2d"
+    },
+    {
+      "path": "notebooks/gav/A6/opening/gav-A6-opening-preview.png",
+      "type": "file",
+      "bytes": 37441,
+      "sha256": "851e38201c4661fcab7e1fa4a3dea5a0760bda367307e7e65b42e7a01afd8c2d"
+    },
+    {
+      "path": "notebooks/gav/A6/opening/gav-A6-opening.pdf",
+      "type": "file",
+      "bytes": 346878,
+      "sha256": "58b46fe79632c6058a3f56193a83d2134b7943be945f31c9c1c92485451efc93"
+    },
+    {
+      "path": "notebooks/gav/README.md",
+      "type": "file",
+      "bytes": 736,
+      "sha256": "9b483a348bede678380b22d22c47c5783a481e94ef7d920bc97427c51e62b1b4"
+    },
+    {
+      "path": "notebooks/gav/assets/character-sheets/cows-transparent.png",
+      "type": "file",
+      "bytes": 2502044,
+      "sha256": "7e2fc1f8e5aa2a76a629cd83e7c23e5efe6a5e3c4531aeccfdac79347f776090"
+    },
+    {
+      "path": "notebooks/gav/assets/covers/back-art.png",
+      "type": "file",
+      "bytes": 1504974,
+      "sha256": "876cac7bb374154e1571bb51f7a9ff53d79af2feb8e244b88be28fc6b721267e"
+    },
+    {
+      "path": "notebooks/gav/assets/covers/front-art.png",
+      "type": "file",
+      "bytes": 2955705,
+      "sha256": "86f2b4f027ce172ac050898c5b2176a86819796de9e167239602c954777ab24f"
+    },
+    {
+      "path": "notebooks/gav/assets/originals/2026-10-09 15.00.55.jpg",
+      "type": "file",
+      "bytes": 814170,
+      "sha256": "df3d635fbd357a1dbb506960dc7a5f80566d2e29fab142426427cfcb3622e3e1"
+    },
+    {
+      "path": "notebooks/gav/assets/originals/IMG_8835.JPG",
+      "type": "file",
+      "bytes": 2030303,
+      "sha256": "a474642ff70876e9827d79b5e733492c5df3ee8fb966c0f3ced3f17450137288"
+    },
+    {
+      "path": "notebooks/gav/assets/originals/front.png",
+      "type": "file",
+      "bytes": 2699399,
+      "sha256": "e8e3b17944210c7f7a9f3e7b7b2698182ed3f5c22396bc5cd9d7910463291df2"
+    },
+    {
+      "path": "notebooks/gav/assets/previews/preview.png",
+      "type": "file",
+      "bytes": 73368,
+      "sha256": "7ba486818ab438698e06d3a5c3a86ac1462eec311615c2ac2ce18b91046bb407"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-01.png",
+      "type": "file",
+      "bytes": 268090,
+      "sha256": "30b947eba327bfe948460c32e35b953b5efd1e2424175215c7a80d75d504b51b"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-02.png",
+      "type": "file",
+      "bytes": 229289,
+      "sha256": "a817ea87a7a13d7dfa889229b3f7c6170fc6d80efc793e66b86892a441d91f71"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-03.png",
+      "type": "file",
+      "bytes": 196931,
+      "sha256": "528280dd3b22f134293876218ae815ddd8c93c83e50aa82e0268ca3c8a8fd451"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-04.png",
+      "type": "file",
+      "bytes": 165280,
+      "sha256": "573b31a4ef7cfcd1cf78305bab493fbcef6f887120a5eb2ea799e3ac08fcc5ad"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-05.png",
+      "type": "file",
+      "bytes": 257334,
+      "sha256": "373f0371496ab2182858a77981ebf1a257695678a20e6428042c5dc930d9ede7"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-06.png",
+      "type": "file",
+      "bytes": 234674,
+      "sha256": "2c61e5c361ab310f42002aa8d137408f02dcebbf1063e283e593ee7151e98063"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-07.png",
+      "type": "file",
+      "bytes": 271863,
+      "sha256": "8532b7a8b3724e65523d9e737d995d3bd7928edc0bdc9f6a73bd50fa5f69956b"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-08.png",
+      "type": "file",
+      "bytes": 250657,
+      "sha256": "7c279034a028706061cc797fecea82c1432a91fdf21cc97682ae3ca179548540"
+    },
+    {
+      "path": "notebooks/gav/characters/cow-09.png",
+      "type": "file",
+      "bytes": 258296,
+      "sha256": "115ba2657df66efb3c793bf7bdbb5adaa8d0f64898dbb087ecd09a1d2c34904a"
+    },
+    {
+      "path": "notebooks/gav/metadata/notebooks-manifest.json",
+      "type": "file",
+      "bytes": 2286,
+      "sha256": "d58fc82e755358151630bbde2559531d76b2450757a75469a2e4c94f1a9fc821"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/README.md",
+      "type": "file",
+      "bytes": 466,
+      "sha256": "6dfd92109e1e199e0d84f1d7916a9de09e1abef78f5e1e678091ea571c49c6d8"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/covers/gorbe-14x14-on-A5-back.pdf",
+      "type": "file",
+      "bytes": 1473966,
+      "sha256": "aacb5a9cf4edb52ac602d3287dfb7ae019cdb98b86489a00d3256f6dcbde1253"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/covers/gorbe-14x14-on-A5-back.png",
+      "type": "file",
+      "bytes": 994002,
+      "sha256": "83f6e85fa9c5086b75122e17c66c5b9366be7587aaafcf0b3eab60c43d740838"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/covers/gorbe-14x14-on-A5-front.pdf",
+      "type": "file",
+      "bytes": 12933967,
+      "sha256": "0c93b6a1beb84bbcc9c5cfeafbbd9b4102d02218a6cacfcaf92db0dd220a2328"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/covers/gorbe-14x14-on-A5-front.png",
+      "type": "file",
+      "bytes": 3605261,
+      "sha256": "57ce6b37d04d0abd9a6fad99fe4810a68a540b5eb2865b368abd9338483e5646"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/notebooks/gorbe-14x14-on-A5-notebooks.pdf",
+      "type": "file",
+      "bytes": 2097196,
+      "sha256": "d3a1c3da1e7d0bf0865f81a577906a649c8aaa4027dcecc8e08636a82a4e7fa0"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/notebooks/gorbe-14x14-on-A5-notebooks.png",
+      "type": "file",
+      "bytes": 28321,
+      "sha256": "7f90de0efc8f8d0e7f03d29b4ca68fb9f8f93adbca56f5d81a48f281465a8a71"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/sketchbooks/gorbe-14x14-on-A5-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 2095452,
+      "sha256": "0232308dc0b96581ef491c83623d67223b6c12449cb1c4b5bb24c4a55a504edf"
+    },
+    {
+      "path": "notebooks/gorbe/14x14-on-A5/sketchbooks/gorbe-14x14-on-A5-sketchbooks.png",
+      "type": "file",
+      "bytes": 27969,
+      "sha256": "f008945f43a1aad014dfad4aa9656fb02d6265e7b61bc1edfc7130af6142e99a"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/README.md",
+      "type": "file",
+      "bytes": 474,
+      "sha256": "98ffb0d5e382471f4dcbf16cf9ea2ebd31188b4edb1699ff96d00e9085d82b80"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/covers/gorbe-16.5x23.5-on-A4-back.pdf",
+      "type": "file",
+      "bytes": 1474039,
+      "sha256": "d8d3c45ba1c39f7602c39b9b7dc653d31e44709474a7255cb8ab162c9c8aa040"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/covers/gorbe-16.5x23.5-on-A4-back.png",
+      "type": "file",
+      "bytes": 2108766,
+      "sha256": "ee8b20e122f60fdfd25c079c6b54d0c8c356d30c59bf11aeac0242080b49231a"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/covers/gorbe-16.5x23.5-on-A4-front.pdf",
+      "type": "file",
+      "bytes": 12933979,
+      "sha256": "7087f0893c5cf854feea3e5d80589b93913af694e0dc54928afaa7ff24e52fc3"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/covers/gorbe-16.5x23.5-on-A4-front.png",
+      "type": "file",
+      "bytes": 9185941,
+      "sha256": "cffe76f7c61d7599972e916674dc2b26475410f84ee31879e3f3ac46c08bf183"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/notebooks/gorbe-16.5x23.5-on-A4-notebooks.pdf",
+      "type": "file",
+      "bytes": 2098525,
+      "sha256": "fae91d1a60edeff602ae8968aaf26720f3af835292ed4c8482f2e3d524af6e9f"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/notebooks/gorbe-16.5x23.5-on-A4-notebooks.png",
+      "type": "file",
+      "bytes": 49500,
+      "sha256": "9b5ff4ece34a5c8c047d51dd46d95c50dc2229856582609c89a9da6170c29895"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/sketchbooks/gorbe-16.5x23.5-on-A4-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 2095482,
+      "sha256": "8ff7a44639cec310172098961dcc544630586c1af541f7c4d2ba88239e6b4f34"
+    },
+    {
+      "path": "notebooks/gorbe/16.5x23.5-on-A4/sketchbooks/gorbe-16.5x23.5-on-A4-sketchbooks.png",
+      "type": "file",
+      "bytes": 48829,
+      "sha256": "dc9ae3c53f14162830e02782df23cfc8f115b40903f8c885bf5d42ab444656f1"
+    },
+    {
+      "path": "notebooks/gorbe/A3/covers/gorbe-A3-back.pdf",
+      "type": "file",
+      "bytes": 1474357,
+      "sha256": "c1baffdd71e9765ba13ccf1151587685116c3f71dc5dbc841fbab01511d25155"
+    },
+    {
+      "path": "notebooks/gorbe/A3/covers/gorbe-A3-back.png",
+      "type": "file",
+      "bytes": 2830120,
+      "sha256": "8c3b55f28c77e33a296b4d2953bd9c4a6d172a8c311083abda2ec3663f039af2"
+    },
+    {
+      "path": "notebooks/gorbe/A3/covers/gorbe-A3-front.pdf",
+      "type": "file",
+      "bytes": 3848744,
+      "sha256": "66ef6df36127bff1a42c4a785e76812b5c5e3bd9703e4ec77689ffb3981aac67"
+    },
+    {
+      "path": "notebooks/gorbe/A3/covers/gorbe-A3-front.png",
+      "type": "file",
+      "bytes": 4646061,
+      "sha256": "226ea8f9e81e677f155492e7343e3563ed86911702019c66d014e2f5bc302c4b"
+    },
+    {
+      "path": "notebooks/gorbe/A3/covers/previews/gorbe-A3-back-preview.png",
+      "type": "file",
+      "bytes": 1707709,
+      "sha256": "7aae7b8669f1ec94204de940c6b750ed56756c96ce139630b5faad3ea1f46d8d"
+    },
+    {
+      "path": "notebooks/gorbe/A3/covers/previews/gorbe-A3-front-preview.png",
+      "type": "file",
+      "bytes": 4983127,
+      "sha256": "c62da48e180c10a90e3fe5090a9adf8924890cd4427234773e242a6dabfbf0d1"
+    },
+    {
+      "path": "notebooks/gorbe/A3/notebooks/gorbe-A3-200-pages.pdf",
+      "type": "file",
+      "bytes": 2108856,
+      "sha256": "438ab7e40cd1da0ae0756bacf090593a2477c7ecd974f4a62b685a31a7ca702c"
+    },
+    {
+      "path": "notebooks/gorbe/A3/notebooks/gorbe-A3-opening.pdf",
+      "type": "file",
+      "bytes": 283966,
+      "sha256": "3c17f265c39130079e387ad94a09aa33a158573b3f2c9d0f154fdc120abf3a8b"
+    },
+    {
+      "path": "notebooks/gorbe/A3/notebooks/previews/A3-all-designs-preview.png",
+      "type": "file",
+      "bytes": 37833,
+      "sha256": "16ba740ee69304edeb063688f2b13bb322f14850f26d34cd46e2ede2abf104ee"
+    },
+    {
+      "path": "notebooks/gorbe/A3/notebooks/previews/A3-ruled-preview.png",
+      "type": "file",
+      "bytes": 111485,
+      "sha256": "9402a5f7e4b4659eca68f06f4c1d582a465fdfe758922e34350ea649cdee1fcd"
+    },
+    {
+      "path": "notebooks/gorbe/A3/notebooks/previews/gorbe-A3-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 97295,
+      "sha256": "7b54659b9ebd03a01ea61c1b988e9c3549892dcc5f0409062dfe7f0073c10f8f"
+    },
+    {
+      "path": "notebooks/gorbe/A3/notebooks/previews/gorbe-A3-opening.png",
+      "type": "file",
+      "bytes": 152200,
+      "sha256": "d27c87151fa036e57bd085a3d860a50cef759b584eacbec6623eb17eb111aec4"
+    },
+    {
+      "path": "notebooks/gorbe/A3/opening/gorbe-A3-opening-preview.png",
+      "type": "file",
+      "bytes": 152200,
+      "sha256": "d27c87151fa036e57bd085a3d860a50cef759b584eacbec6623eb17eb111aec4"
+    },
+    {
+      "path": "notebooks/gorbe/A3/opening/gorbe-A3-opening.pdf",
+      "type": "file",
+      "bytes": 283966,
+      "sha256": "dc931a74e7cc10c4474c94fa75e10ff9687f7058ac5914fbe6bb9602639feabd"
+    },
+    {
+      "path": "notebooks/gorbe/A3/sketchbooks/cats-A3-100-pages.pdf",
+      "type": "file",
+      "bytes": 2063958,
+      "sha256": "0374fd6da65b5ade944a83deb830974cf9fb6b7710059db324743f54a3d6fe3e"
+    },
+    {
+      "path": "notebooks/gorbe/A3/sketchbooks/cats-A3.pdf",
+      "type": "file",
+      "bytes": 2037818,
+      "sha256": "1683a269872015ec55d5d1608652ddfb740131e6a0e30edac6ac2b1176d72633"
+    },
+    {
+      "path": "notebooks/gorbe/A3/sketchbooks/previews/cats-A3-100-pages-first-page.png",
+      "type": "file",
+      "bytes": 107395,
+      "sha256": "e479a9d39433970f833acf77291050aabcb391e6627cbb22479072817bc9a06e"
+    },
+    {
+      "path": "notebooks/gorbe/A3/sketchbooks/previews/cats-A3-first-page.png",
+      "type": "file",
+      "bytes": 107395,
+      "sha256": "e479a9d39433970f833acf77291050aabcb391e6627cbb22479072817bc9a06e"
+    },
+    {
+      "path": "notebooks/gorbe/A4/covers/gorbe-A4-back.pdf",
+      "type": "file",
+      "bytes": 1474382,
+      "sha256": "c39fee5c714fc1bf33bbb0e0cdc9644801c827f08ec8306838843fed0810f7d7"
+    },
+    {
+      "path": "notebooks/gorbe/A4/covers/gorbe-A4-back.png",
+      "type": "file",
+      "bytes": 2033937,
+      "sha256": "6da58616cb1379cbe23554028a260bedaf08d83ada8efe72533f31c3d6ecf174"
+    },
+    {
+      "path": "notebooks/gorbe/A4/covers/previews/gorbe-A4-back-preview.png",
+      "type": "file",
+      "bytes": 1052227,
+      "sha256": "01094a636f3e04a3d8f60dcf05642646f4ed7a7391d74e3667182b15d0c87514"
+    },
+    {
+      "path": "notebooks/gorbe/A4/notebooks/gorbe-A4-200-pages.pdf",
+      "type": "file",
+      "bytes": 2107293,
+      "sha256": "9795d1f4de0fce1264d7fb35583e6565e98507fa4010a9145bcdd3099ee3b25b"
+    },
+    {
+      "path": "notebooks/gorbe/A4/notebooks/gorbe-A4-opening.pdf",
+      "type": "file",
+      "bytes": 283965,
+      "sha256": "307230ffdeaa7fc0aac392e839e53f71da5d073eb9497685036adbc9b1459410"
+    },
+    {
+      "path": "notebooks/gorbe/A4/notebooks/previews/A4-all-designs-preview.png",
+      "type": "file",
+      "bytes": 43935,
+      "sha256": "2e1d1906d4bb999071022a3472cb7fae283706df3ab45b10e1ee026daa03fc72"
+    },
+    {
+      "path": "notebooks/gorbe/A4/notebooks/previews/A4-ruled-preview.png",
+      "type": "file",
+      "bytes": 72264,
+      "sha256": "17d945a6b1a57075ca5958c10ba29d1f412fff53ac31a3a811179aaa8a04bb60"
+    },
+    {
+      "path": "notebooks/gorbe/A4/notebooks/previews/gorbe-A4-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 63494,
+      "sha256": "d1f0d3c81871bd9fc3d08e187f0da384975f41dc936ced7269a38f589481bf1f"
+    },
+    {
+      "path": "notebooks/gorbe/A4/notebooks/previews/gorbe-A4-opening.png",
+      "type": "file",
+      "bytes": 100516,
+      "sha256": "5a05fc40ed1237b44e217b7846f6d6db38dcdad6ba9d8a3d53e19aafbe9311a8"
+    },
+    {
+      "path": "notebooks/gorbe/A4/opening/gorbe-A4-opening-preview.png",
+      "type": "file",
+      "bytes": 100516,
+      "sha256": "5a05fc40ed1237b44e217b7846f6d6db38dcdad6ba9d8a3d53e19aafbe9311a8"
+    },
+    {
+      "path": "notebooks/gorbe/A4/opening/gorbe-A4-opening.pdf",
+      "type": "file",
+      "bytes": 283965,
+      "sha256": "6ff9a49f4c9aebc69968d6cae21842cf2dd44217a47c6ecf70b5cb23d2df7c7c"
+    },
+    {
+      "path": "notebooks/gorbe/A5/covers/gorbe-A5-back.pdf",
+      "type": "file",
+      "bytes": 1474401,
+      "sha256": "c816d89dbce2b94a44bbf36b25fcc7905cdedd86c247d9ffff80fa3df90d73fa"
+    },
+    {
+      "path": "notebooks/gorbe/A5/covers/gorbe-A5-back.png",
+      "type": "file",
+      "bytes": 2447098,
+      "sha256": "2f985e1aec3085b361b783fe9a235938ed79c0536f57ec51067156041cf54693"
+    },
+    {
+      "path": "notebooks/gorbe/A5/covers/previews/gorbe-A5-back-preview.png",
+      "type": "file",
+      "bytes": 553663,
+      "sha256": "bedd1a68951c24249960a962a52ef59d2be830194f7df980bcb053651b801cbd"
+    },
+    {
+      "path": "notebooks/gorbe/A5/notebooks/gorbe-A5-200-pages.pdf",
+      "type": "file",
+      "bytes": 2106160,
+      "sha256": "0c41bffda2ffb1e9f2392720e9acf19ea6940a42e3dd7e0beca3e9aba3283532"
+    },
+    {
+      "path": "notebooks/gorbe/A5/notebooks/gorbe-A5-opening.pdf",
+      "type": "file",
+      "bytes": 283961,
+      "sha256": "de627f151b11c0b68e99938f8b531393d354ce5bb2438c2d5d613e2f5c5be04b"
+    },
+    {
+      "path": "notebooks/gorbe/A5/notebooks/previews/A5-all-designs-preview.png",
+      "type": "file",
+      "bytes": 50291,
+      "sha256": "7b5c89306d9f9f0641ee8667b847dab9dd2a0df3cb8299efcd927a683018e922"
+    },
+    {
+      "path": "notebooks/gorbe/A5/notebooks/previews/A5-ruled-preview.png",
+      "type": "file",
+      "bytes": 44835,
+      "sha256": "682c29265f73cefd6e349ab5b0a3e8b9dc2a15af76dc968289749e159ae5062d"
+    },
+    {
+      "path": "notebooks/gorbe/A5/notebooks/previews/gorbe-A5-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 39544,
+      "sha256": "30cba0aa176a15abab8565a4cb5f30a30ca8ee5e9dc96c03d32f87b17bbdc5c2"
+    },
+    {
+      "path": "notebooks/gorbe/A5/notebooks/previews/gorbe-A5-opening.png",
+      "type": "file",
+      "bytes": 62551,
+      "sha256": "e4c5685f4c016edf9421ae9f16db54c3030ef7ec7d30bc321e3b93827db25370"
+    },
+    {
+      "path": "notebooks/gorbe/A5/opening/gorbe-A5-opening-preview.png",
+      "type": "file",
+      "bytes": 62551,
+      "sha256": "e4c5685f4c016edf9421ae9f16db54c3030ef7ec7d30bc321e3b93827db25370"
+    },
+    {
+      "path": "notebooks/gorbe/A5/opening/gorbe-A5-opening.pdf",
+      "type": "file",
+      "bytes": 283961,
+      "sha256": "53086a582c664a5cce8d70eb3a218f22be3868b58b1093bf999e91373ff27618"
+    },
+    {
+      "path": "notebooks/gorbe/A6/covers/gorbe-A6-back.pdf",
+      "type": "file",
+      "bytes": 1474395,
+      "sha256": "e9ec7c578313683b12e61eb0c7243345e6de3a6033b264aac3177f6dbe19842d"
+    },
+    {
+      "path": "notebooks/gorbe/A6/covers/gorbe-A6-back.png",
+      "type": "file",
+      "bytes": 1400101,
+      "sha256": "eb31a183b06c4b094a259278e539beeedf5b52ce98e026b5ed50e9cd50b75f44"
+    },
+    {
+      "path": "notebooks/gorbe/A6/covers/previews/gorbe-A6-back-preview.png",
+      "type": "file",
+      "bytes": 277916,
+      "sha256": "3a81184ba7ec8c201e33b3cae6a027c80cc90f0bc453b7b2a2bc5a91e6ff6128"
+    },
+    {
+      "path": "notebooks/gorbe/A6/notebooks/gorbe-A6-200-pages.pdf",
+      "type": "file",
+      "bytes": 2105392,
+      "sha256": "966373b913f6eaecd5653d09d3926eabf602e58768154c1eadf116057dab0561"
+    },
+    {
+      "path": "notebooks/gorbe/A6/notebooks/gorbe-A6-opening.pdf",
+      "type": "file",
+      "bytes": 283975,
+      "sha256": "dfd6dbd1f1791c254a4d782e16d945662330dd621703723c55618074da58d588"
+    },
+    {
+      "path": "notebooks/gorbe/A6/notebooks/previews/A6-all-designs-preview.png",
+      "type": "file",
+      "bytes": 51897,
+      "sha256": "3d642c8d4570ae5c493612ed94ddbda8a20ad3bdd230d474a1116168e68e3825"
+    },
+    {
+      "path": "notebooks/gorbe/A6/notebooks/previews/A6-ruled-preview.png",
+      "type": "file",
+      "bytes": 25597,
+      "sha256": "0b7fd747ef0d40cf6d4970bc781564d28f4bfdc48f7185fe284ff28bb4b30e6f"
+    },
+    {
+      "path": "notebooks/gorbe/A6/notebooks/previews/gorbe-A6-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 22427,
+      "sha256": "fa3379dcc570b60b2c5415ed3d7c2b7a30fc85ecb841d5692a3d428e08d10f0d"
+    },
+    {
+      "path": "notebooks/gorbe/A6/notebooks/previews/gorbe-A6-opening.png",
+      "type": "file",
+      "bytes": 35388,
+      "sha256": "737d9e6c0c788e1c434a4eaa8939089de4793d691840798591d9ed3fd267724a"
+    },
+    {
+      "path": "notebooks/gorbe/A6/opening/gorbe-A6-opening-preview.png",
+      "type": "file",
+      "bytes": 35388,
+      "sha256": "737d9e6c0c788e1c434a4eaa8939089de4793d691840798591d9ed3fd267724a"
+    },
+    {
+      "path": "notebooks/gorbe/A6/opening/gorbe-A6-opening.pdf",
+      "type": "file",
+      "bytes": 283975,
+      "sha256": "6b41ff6f542c21b7976f2d90909f710b59ea5c15ceaa9b04f6e55745fd0aa47e"
+    },
+    {
+      "path": "notebooks/gorbe/README.md",
+      "type": "file",
+      "bytes": 738,
+      "sha256": "97e9ddc81ac798873621726dafa9968eb12555852e7ce5801a65eb2b09ef0120"
+    },
+    {
+      "path": "notebooks/gorbe/assets/character-sheets/cats-transparent.png",
+      "type": "file",
+      "bytes": 2014535,
+      "sha256": "90ccee1df2c893d7f415c7ca0e11061cb840d6b063cab1f001356de39af340a9"
+    },
+    {
+      "path": "notebooks/gorbe/assets/covers/back-art.png",
+      "type": "file",
+      "bytes": 1479330,
+      "sha256": "f9f7a0622c33d94ddb4e7dd992e92a2c188baac50da91fbf2b0caa02b5b95e6d"
+    },
+    {
+      "path": "notebooks/gorbe/assets/covers/front-art.png",
+      "type": "file",
+      "bytes": 2840257,
+      "sha256": "d3dbd0a3fb62aaeb1797eb26392257997384f9c57f347369d5a7952457bdb47d"
+    },
+    {
+      "path": "notebooks/gorbe/assets/originals/IMG_8831.JPG",
+      "type": "file",
+      "bytes": 627209,
+      "sha256": "b1c9b09b79e434e25640705317606bd61ca2fb34ff64e7fb2c89cce416793298"
+    },
+    {
+      "path": "notebooks/gorbe/assets/originals/front.JPG",
+      "type": "file",
+      "bytes": 840395,
+      "sha256": "7b31ffea7cd60790890943cdb9070dd01c48ed6b11bd57d785c2e17f96967699"
+    },
+    {
+      "path": "notebooks/gorbe/assets/previews/preview.png",
+      "type": "file",
+      "bytes": 77377,
+      "sha256": "8644bc7d0c420c4a473b83c576e1880c7d0c07dfba544b7736c4f4ce3401d041"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-01.png",
+      "type": "file",
+      "bytes": 224745,
+      "sha256": "35c1cb531b748c69a993e99bedd05e4463bb62647c6bdbf6fa9c05f2007e56cb"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-02.png",
+      "type": "file",
+      "bytes": 200952,
+      "sha256": "27b114078a9182cf10ab04eeef166d516bbb6c9b2b30ed23421baab726679976"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-03.png",
+      "type": "file",
+      "bytes": 161024,
+      "sha256": "0255b1b15e7207b2d138d11d788d5ab1a75e0d8953109471fe446446735bd2d1"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-04.png",
+      "type": "file",
+      "bytes": 126611,
+      "sha256": "233f0ece750537bb676f29c9e8838e7abebee97fc03992a94af677c9e248c01c"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-05.png",
+      "type": "file",
+      "bytes": 212677,
+      "sha256": "9d81de47ae877f6d8189bea1f54fd7312ed21d4ae658dd9999ed9341391175c5"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-06.png",
+      "type": "file",
+      "bytes": 192012,
+      "sha256": "8dd59e5f22f483726a7b24d892a38d70b8ebfe1e3f71f4b2f05a795a46c19ee6"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-07.png",
+      "type": "file",
+      "bytes": 191872,
+      "sha256": "0c9e4f984ff495f6fc1e110315b915d21c6e6c942fd4de29a466c075b662c0ce"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-08.png",
+      "type": "file",
+      "bytes": 185925,
+      "sha256": "09807c5473d66372d12b00d6094ecc71ff55aad253c985202b98e79f7c0d259c"
+    },
+    {
+      "path": "notebooks/gorbe/characters/cat-09.png",
+      "type": "file",
+      "bytes": 187562,
+      "sha256": "4c33a92b32019ec4155d667b7a542eae007fc2676f094d2c4e3f2451370a1ba8"
+    },
+    {
+      "path": "notebooks/gorbe/metadata/notebooks-manifest.json",
+      "type": "file",
+      "bytes": 2294,
+      "sha256": "123e7f6e4d922ba8a4a1350a39f8f6765ba9a03a18fed58a19df4cefe1dd0eae"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/README.md",
+      "type": "file",
+      "bytes": 466,
+      "sha256": "6dfd92109e1e199e0d84f1d7916a9de09e1abef78f5e1e678091ea571c49c6d8"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/covers/love-14x14-on-A5-back.pdf",
+      "type": "file",
+      "bytes": 2049952,
+      "sha256": "bd5df1cb4c98e2ebc9f4faa4284a572008a38f756cbcf06a6bed0f166884bf55"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/covers/love-14x14-on-A5-back.png",
+      "type": "file",
+      "bytes": 1315018,
+      "sha256": "f67ec70039bffd55fb152706d0516ce43467142a45b33bee003461e49ae5f35b"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/covers/love-14x14-on-A5-front.pdf",
+      "type": "file",
+      "bytes": 11551106,
+      "sha256": "b7272cf32d06f312432966c01a4dc3fd2a1886304837ba1241ce26caf717c340"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/covers/love-14x14-on-A5-front.png",
+      "type": "file",
+      "bytes": 2951393,
+      "sha256": "853b4091f60e9b6df2392be45e34f6aca43ec71416ad70d86ad95d361e83fa8e"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/notebooks/love-14x14-on-A5-notebooks.pdf",
+      "type": "file",
+      "bytes": 28704571,
+      "sha256": "ff15961e3abd0eda271116faac3f80479770b47c87ea553dc16fd2ac363040ac"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/notebooks/love-14x14-on-A5-notebooks.png",
+      "type": "file",
+      "bytes": 22549,
+      "sha256": "fb88196d2987572ad86d685173c73a24ba7637be9e51f0c783aa7f5c93168ea7"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/sketchbooks/love-14x14-on-A5-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 28702628,
+      "sha256": "eefdcc9cf83e783cbe68add629b9d5ad6c312752d20e9ac25d3870635e3a911b"
+    },
+    {
+      "path": "notebooks/love/14x14-on-A5/sketchbooks/love-14x14-on-A5-sketchbooks.png",
+      "type": "file",
+      "bytes": 22173,
+      "sha256": "8f1bc4d09e899cc3a7c2676818b9cb1bdbb2906230a1f2e2697e803791f4221e"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/README.md",
+      "type": "file",
+      "bytes": 474,
+      "sha256": "98ffb0d5e382471f4dcbf16cf9ea2ebd31188b4edb1699ff96d00e9085d82b80"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/covers/love-16.5x23.5-on-A4-back.pdf",
+      "type": "file",
+      "bytes": 2050025,
+      "sha256": "c0c3f4361082532fdacb5534df5702b0cc4043f9e56bce0d435720f60c37667b"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/covers/love-16.5x23.5-on-A4-back.png",
+      "type": "file",
+      "bytes": 3045104,
+      "sha256": "78dd25593157e4da9a5bda4891fa1e6c255de8186fa1ae205fe351de13895efc"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/covers/love-16.5x23.5-on-A4-front.pdf",
+      "type": "file",
+      "bytes": 11551116,
+      "sha256": "b72b11fd32ba8d69abff2feaa605ad5fee2aeb8a6381facde40329eeaf9de6bf"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/covers/love-16.5x23.5-on-A4-front.png",
+      "type": "file",
+      "bytes": 7938346,
+      "sha256": "75db7186a90a974b5af48528f2787bbe07676524713ea1771b9425ec2824d731"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/notebooks/love-16.5x23.5-on-A4-notebooks.pdf",
+      "type": "file",
+      "bytes": 28706040,
+      "sha256": "170ba9d9f765f8cf826326c438dd54fe3be94a407710b312623304b9870f0375"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/notebooks/love-16.5x23.5-on-A4-notebooks.png",
+      "type": "file",
+      "bytes": 40313,
+      "sha256": "434b9fbd0f57fd55e1e11b613d2ecd17d7b088d85044a8d6a66f44b242416d21"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/sketchbooks/love-16.5x23.5-on-A4-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 28702669,
+      "sha256": "bcce8a694731e9d7bcda0b3ffe69acc0b348090e7d3cde703eebff1491746a0e"
+    },
+    {
+      "path": "notebooks/love/16.5x23.5-on-A4/sketchbooks/love-16.5x23.5-on-A4-sketchbooks.png",
+      "type": "file",
+      "bytes": 39575,
+      "sha256": "33783c92d18462f593da3370c5f6e53fdc7c04775f3c98370fd9e4c599ece0d7"
+    },
+    {
+      "path": "notebooks/love/A3/covers/love-A3-back.pdf",
+      "type": "file",
+      "bytes": 2050342,
+      "sha256": "5f88499080b9d5fde412f8dbb6868cd41d7118483d071ec0140a12d884c15692"
+    },
+    {
+      "path": "notebooks/love/A3/covers/love-A3-back.png",
+      "type": "file",
+      "bytes": 3274764,
+      "sha256": "d1eb923675e8927890ac01b01a93e7a8a2da8d71c74016f58c9528add10dac52"
+    },
+    {
+      "path": "notebooks/love/A3/covers/love-A3-front.pdf",
+      "type": "file",
+      "bytes": 3122138,
+      "sha256": "2d0ad35b703ff9063e1a422f0944437079c5e439595e0eb527588e024887932f"
+    },
+    {
+      "path": "notebooks/love/A3/covers/love-A3-front.png",
+      "type": "file",
+      "bytes": 3239229,
+      "sha256": "d5322d2289e49d7f1b39f6aebb14bea05dfcd29054f26e09a35ec48d1ecf24cf"
+    },
+    {
+      "path": "notebooks/love/A3/covers/previews/A3-back.png",
+      "type": "file",
+      "bytes": 2582389,
+      "sha256": "4370ee6c20707e1a9f51c21e0035edb4a5a0ba7d8f655416f7a865a058714d7b"
+    },
+    {
+      "path": "notebooks/love/A3/covers/previews/A3-front.png",
+      "type": "file",
+      "bytes": 4199713,
+      "sha256": "3e75812716585164a3a6f203f716b698f3c8592714b35557a307482512828e8e"
+    },
+    {
+      "path": "notebooks/love/A3/notebooks/love-A3-notebooks-200-pages.pdf",
+      "type": "file",
+      "bytes": 28716491,
+      "sha256": "b5ae40108ba4cae686f1dd90688f807af6e40dea45316fa348565d3557de624e"
+    },
+    {
+      "path": "notebooks/love/A3/notebooks/love-A3-opening.pdf",
+      "type": "file",
+      "bytes": 2827421,
+      "sha256": "2a748d420a3325f401e4e44d6b321fa2a181e12bcce4597887c0cf1ec72ec3d7"
+    },
+    {
+      "path": "notebooks/love/A3/notebooks/previews/A3-all-designs.png",
+      "type": "file",
+      "bytes": 33605,
+      "sha256": "3ae60a65399f089febe9278d51ce364d89e99ba2e7a21ad216cf0a1ff51ccf6c"
+    },
+    {
+      "path": "notebooks/love/A3/notebooks/previews/A3-page.png",
+      "type": "file",
+      "bytes": 81294,
+      "sha256": "169ba598c10a76f535a528072c18937678ec657f19bb20afecb6b3d1440888af"
+    },
+    {
+      "path": "notebooks/love/A3/notebooks/previews/love-A3-notebooks-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 81294,
+      "sha256": "169ba598c10a76f535a528072c18937678ec657f19bb20afecb6b3d1440888af"
+    },
+    {
+      "path": "notebooks/love/A3/notebooks/previews/love-A3-opening.png",
+      "type": "file",
+      "bytes": 130304,
+      "sha256": "c79954ee5a6ae5af6e8fc9d6a543c3bcaa003aaae59aaa1390e199a10daa7e18"
+    },
+    {
+      "path": "notebooks/love/A3/opening/love-A3-opening-preview.png",
+      "type": "file",
+      "bytes": 130304,
+      "sha256": "c79954ee5a6ae5af6e8fc9d6a543c3bcaa003aaae59aaa1390e199a10daa7e18"
+    },
+    {
+      "path": "notebooks/love/A3/opening/love-A3-opening.pdf",
+      "type": "file",
+      "bytes": 2827421,
+      "sha256": "5cf2e4fd4adbc48244ec1ad735049d2dba3e77f1321b6b7479371e75e2354e7f"
+    },
+    {
+      "path": "notebooks/love/A3/sketchbooks/love-A3-opening.pdf",
+      "type": "file",
+      "bytes": 2827421,
+      "sha256": "f26088f33a72d647efd4a39366c0ee97da9fce085cda37504da7614250b5969d"
+    },
+    {
+      "path": "notebooks/love/A3/sketchbooks/love-A3-sketchbooks-200-pages.pdf",
+      "type": "file",
+      "bytes": 28710361,
+      "sha256": "e83ec74498f111f418dd1604168c22f613049953de457597b41b9195760f6258"
+    },
+    {
+      "path": "notebooks/love/A3/sketchbooks/previews/A3-all-designs.png",
+      "type": "file",
+      "bytes": 30191,
+      "sha256": "bd5c24d2458f90bc6bd70f7538f72e562974b9caa708c4de353e123cf6adc4ac"
+    },
+    {
+      "path": "notebooks/love/A3/sketchbooks/previews/A3-page.png",
+      "type": "file",
+      "bytes": 79957,
+      "sha256": "51279dec8a1469a67130de2b91bdc5c398fc946464767e071a82dadc692aee5b"
+    },
+    {
+      "path": "notebooks/love/A3/sketchbooks/previews/love-A3-opening.png",
+      "type": "file",
+      "bytes": 130304,
+      "sha256": "c79954ee5a6ae5af6e8fc9d6a543c3bcaa003aaae59aaa1390e199a10daa7e18"
+    },
+    {
+      "path": "notebooks/love/A3/sketchbooks/previews/love-A3-sketchbooks-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 79957,
+      "sha256": "51279dec8a1469a67130de2b91bdc5c398fc946464767e071a82dadc692aee5b"
+    },
+    {
+      "path": "notebooks/love/A4/covers/love-A4-back.pdf",
+      "type": "file",
+      "bytes": 2050369,
+      "sha256": "7bef6af58b8015c555b745fbec35c87006bd1fd5c74c850534412beb00e35253"
+    },
+    {
+      "path": "notebooks/love/A4/covers/love-A4-back.png",
+      "type": "file",
+      "bytes": 2515895,
+      "sha256": "7b499eb9f1d26e079f3a8bf6b131b4582c35c4d4fcfaa122ab85fa1d8e1568f4"
+    },
+    {
+      "path": "notebooks/love/A4/covers/previews/A4-back.png",
+      "type": "file",
+      "bytes": 1484374,
+      "sha256": "0662b7e1f7a57db97e89bf64ec9c7d9623536f391c3c6c0c93da8e71701c1871"
+    },
+    {
+      "path": "notebooks/love/A4/notebooks/love-A4-notebooks-200-pages.pdf",
+      "type": "file",
+      "bytes": 28714756,
+      "sha256": "e5057796e0ba92926cc1925af745acf18ab9054fd6afee90b39772bdc9f9b619"
+    },
+    {
+      "path": "notebooks/love/A4/notebooks/love-A4-opening.pdf",
+      "type": "file",
+      "bytes": 2827422,
+      "sha256": "959d481f92b45e50698aaac7f468bc5576a04ae640a2d4e596d4e1b6b14340bb"
+    },
+    {
+      "path": "notebooks/love/A4/notebooks/previews/A4-all-designs.png",
+      "type": "file",
+      "bytes": 37899,
+      "sha256": "b83438fa0bc524e481b15fa7334e89ae53e0d875b6fa5756ded6a04eba86286a"
+    },
+    {
+      "path": "notebooks/love/A4/notebooks/previews/A4-page.png",
+      "type": "file",
+      "bytes": 52207,
+      "sha256": "8010f17dc2a4863a06993358823568aa891c11c4936b23633202a4d90264d5a3"
+    },
+    {
+      "path": "notebooks/love/A4/notebooks/previews/love-A4-notebooks-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 52207,
+      "sha256": "8010f17dc2a4863a06993358823568aa891c11c4936b23633202a4d90264d5a3"
+    },
+    {
+      "path": "notebooks/love/A4/notebooks/previews/love-A4-opening.png",
+      "type": "file",
+      "bytes": 84932,
+      "sha256": "36d772f0289b285ccdf2c0854b2fda32e92a628ad92ad68949d7bd2c50f732c2"
+    },
+    {
+      "path": "notebooks/love/A4/opening/love-A4-opening-preview.png",
+      "type": "file",
+      "bytes": 84932,
+      "sha256": "36d772f0289b285ccdf2c0854b2fda32e92a628ad92ad68949d7bd2c50f732c2"
+    },
+    {
+      "path": "notebooks/love/A4/opening/love-A4-opening.pdf",
+      "type": "file",
+      "bytes": 2827422,
+      "sha256": "14af5d20820361375dabfab74caaa0a87c066b252150c3f2e81f3550817338be"
+    },
+    {
+      "path": "notebooks/love/A4/sketchbooks/love-A4-opening.pdf",
+      "type": "file",
+      "bytes": 2827422,
+      "sha256": "d81823f2ae66d850ce140a1ff01194f4168a4c18ba67129b606bdbfdf031f08b"
+    },
+    {
+      "path": "notebooks/love/A4/sketchbooks/love-A4-sketchbooks-200-pages.pdf",
+      "type": "file",
+      "bytes": 28710366,
+      "sha256": "f884228ee5ee84d868dd2baccdc32efea8b3e9fd064b0cbf0eefb10d62d23853"
+    },
+    {
+      "path": "notebooks/love/A4/sketchbooks/previews/A4-all-designs.png",
+      "type": "file",
+      "bytes": 35929,
+      "sha256": "2015221ba270ab990a5ce2847f0e0c0a9290f6b490833aad05948742b31e4582"
+    },
+    {
+      "path": "notebooks/love/A4/sketchbooks/previews/A4-page.png",
+      "type": "file",
+      "bytes": 51338,
+      "sha256": "0f3d1cd745fda39f0dc66679bf917d5d8309ecc6b4e6a652c27f29c829ad7bbb"
+    },
+    {
+      "path": "notebooks/love/A4/sketchbooks/previews/love-A4-opening.png",
+      "type": "file",
+      "bytes": 84932,
+      "sha256": "36d772f0289b285ccdf2c0854b2fda32e92a628ad92ad68949d7bd2c50f732c2"
+    },
+    {
+      "path": "notebooks/love/A4/sketchbooks/previews/love-A4-sketchbooks-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 51338,
+      "sha256": "0f3d1cd745fda39f0dc66679bf917d5d8309ecc6b4e6a652c27f29c829ad7bbb"
+    },
+    {
+      "path": "notebooks/love/A5/covers/love-A5-back.pdf",
+      "type": "file",
+      "bytes": 2050382,
+      "sha256": "c3e60e623b3ca69b57c81a85e32e096c90e528b058a9e641af8fd4fd56d62ec8"
+    },
+    {
+      "path": "notebooks/love/A5/covers/love-A5-back.png",
+      "type": "file",
+      "bytes": 3810206,
+      "sha256": "694edd6aea371f21cc8146ca1c3729d6b368a8159abb192d881ddee17c281184"
+    },
+    {
+      "path": "notebooks/love/A5/covers/previews/A5-back.png",
+      "type": "file",
+      "bytes": 769356,
+      "sha256": "15cf893fa74c1802eda681b3f5af3c1994115d31f1c50c21b09ca8c94bc5029e"
+    },
+    {
+      "path": "notebooks/love/A5/notebooks/love-A5-notebooks-200-pages.pdf",
+      "type": "file",
+      "bytes": 28713500,
+      "sha256": "1dbabe64185d2492054efa665e986a9771bd0e1b0c0a51d90f043cee1b07e5b8"
+    },
+    {
+      "path": "notebooks/love/A5/notebooks/love-A5-opening.pdf",
+      "type": "file",
+      "bytes": 2827420,
+      "sha256": "2f91f969e91795e572178b4b47c48e35404acd90d73d2b0d8387f17e6e136da5"
+    },
+    {
+      "path": "notebooks/love/A5/notebooks/previews/A5-all-designs.png",
+      "type": "file",
+      "bytes": 43074,
+      "sha256": "32de443ef3f94dccc44fb7a1daa147702403253db437caac6b6310e1298b6981"
+    },
+    {
+      "path": "notebooks/love/A5/notebooks/previews/A5-page.png",
+      "type": "file",
+      "bytes": 31283,
+      "sha256": "d2a74c98b28cba8fdc2f32ec59afc227775beb45815617ea972f952509343e80"
+    },
+    {
+      "path": "notebooks/love/A5/notebooks/previews/love-A5-notebooks-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 31283,
+      "sha256": "d2a74c98b28cba8fdc2f32ec59afc227775beb45815617ea972f952509343e80"
+    },
+    {
+      "path": "notebooks/love/A5/notebooks/previews/love-A5-opening.png",
+      "type": "file",
+      "bytes": 50637,
+      "sha256": "73ef011ec7412b8c0d1b55e040020c08d30098b65902633164f77a0c2ba1a790"
+    },
+    {
+      "path": "notebooks/love/A5/opening/love-A5-opening-preview.png",
+      "type": "file",
+      "bytes": 50637,
+      "sha256": "73ef011ec7412b8c0d1b55e040020c08d30098b65902633164f77a0c2ba1a790"
+    },
+    {
+      "path": "notebooks/love/A5/opening/love-A5-opening.pdf",
+      "type": "file",
+      "bytes": 2827420,
+      "sha256": "e5dc64384fed1e5a4b968e0557345c53cc6876d1e7a922815e320165fe93938b"
+    },
+    {
+      "path": "notebooks/love/A5/sketchbooks/love-A5-opening.pdf",
+      "type": "file",
+      "bytes": 2827420,
+      "sha256": "b498f0bafd56e1b4fd61cde61fb8c4a3dd553e3cbe97496f318cbffbe74ff1e6"
+    },
+    {
+      "path": "notebooks/love/A5/sketchbooks/love-A5-sketchbooks-200-pages.pdf",
+      "type": "file",
+      "bytes": 28710353,
+      "sha256": "0d9386443bb7eb7ae9edb60430ac7debc33e15bba41e10a9c59bf8d43aa821fd"
+    },
+    {
+      "path": "notebooks/love/A5/sketchbooks/previews/A5-all-designs.png",
+      "type": "file",
+      "bytes": 40659,
+      "sha256": "26a451bc90e2bb26e23d8a1dec8d591f82c3bc69f31c007473ca68b9141892b4"
+    },
+    {
+      "path": "notebooks/love/A5/sketchbooks/previews/A5-page.png",
+      "type": "file",
+      "bytes": 30568,
+      "sha256": "c67d2fa9ab74377efb6eb7316674eeac0ac56832b21742408632fbbcbe56a55f"
+    },
+    {
+      "path": "notebooks/love/A5/sketchbooks/previews/love-A5-opening.png",
+      "type": "file",
+      "bytes": 50637,
+      "sha256": "73ef011ec7412b8c0d1b55e040020c08d30098b65902633164f77a0c2ba1a790"
+    },
+    {
+      "path": "notebooks/love/A5/sketchbooks/previews/love-A5-sketchbooks-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 30568,
+      "sha256": "c67d2fa9ab74377efb6eb7316674eeac0ac56832b21742408632fbbcbe56a55f"
+    },
+    {
+      "path": "notebooks/love/A6/covers/love-A6-back.pdf",
+      "type": "file",
+      "bytes": 2050380,
+      "sha256": "48fb9fc95f309a7450a363b8d1a28207e4bf2e5c99bc80dbf1bd7659a5182d6d"
+    },
+    {
+      "path": "notebooks/love/A6/covers/love-A6-back.png",
+      "type": "file",
+      "bytes": 2073670,
+      "sha256": "29f9c4ae94e48ab22bcdae6c06909df7391810997066626ce7372f72395ad74a"
+    },
+    {
+      "path": "notebooks/love/A6/covers/previews/A6-back.png",
+      "type": "file",
+      "bytes": 381559,
+      "sha256": "91be075599099bfc35cf953bcaa5882164071843d1da423de574d9c2b78c0356"
+    },
+    {
+      "path": "notebooks/love/A6/notebooks/love-A6-notebooks-200-pages.pdf",
+      "type": "file",
+      "bytes": 28712628,
+      "sha256": "5f57cecd8d14833fcc5989843de3e5a3962afa786631d88cbef9a20f331169b0"
+    },
+    {
+      "path": "notebooks/love/A6/notebooks/love-A6-opening.pdf",
+      "type": "file",
+      "bytes": 2827431,
+      "sha256": "ecfce49740e8bade71100bea0fe21f66de2d4c7b7578c2724f0fe095dcd9c4b1"
+    },
+    {
+      "path": "notebooks/love/A6/notebooks/previews/A6-all-designs.png",
+      "type": "file",
+      "bytes": 43933,
+      "sha256": "0a96ee6564c2f7c1938c51bb3c09933c78bf0f1b846034aedb5f77317dc3c9c6"
+    },
+    {
+      "path": "notebooks/love/A6/notebooks/previews/A6-page.png",
+      "type": "file",
+      "bytes": 17694,
+      "sha256": "253c866fe2fc1599853733ca67af7e5a81a9c9c46e690a3346a1bda718a2c7a6"
+    },
+    {
+      "path": "notebooks/love/A6/notebooks/previews/love-A6-notebooks-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 17694,
+      "sha256": "253c866fe2fc1599853733ca67af7e5a81a9c9c46e690a3346a1bda718a2c7a6"
+    },
+    {
+      "path": "notebooks/love/A6/notebooks/previews/love-A6-opening.png",
+      "type": "file",
+      "bytes": 28018,
+      "sha256": "9eda6c4e643b638ebe23362bde5f8435df480f0e21d956c94794e4edd1bdc260"
+    },
+    {
+      "path": "notebooks/love/A6/opening/love-A6-opening-preview.png",
+      "type": "file",
+      "bytes": 28018,
+      "sha256": "9eda6c4e643b638ebe23362bde5f8435df480f0e21d956c94794e4edd1bdc260"
+    },
+    {
+      "path": "notebooks/love/A6/opening/love-A6-opening.pdf",
+      "type": "file",
+      "bytes": 2827431,
+      "sha256": "8f64289ee6626d8b2207c61858cc0a621aef53b43387935988cbc93ae0d14a83"
+    },
+    {
+      "path": "notebooks/love/A6/sketchbooks/love-A6-opening.pdf",
+      "type": "file",
+      "bytes": 2827431,
+      "sha256": "2c1b2219bee1dfb7d86b73697cf37da75975b9d7c37f0549facc2153e2d3367a"
+    },
+    {
+      "path": "notebooks/love/A6/sketchbooks/love-A6-sketchbooks-200-pages.pdf",
+      "type": "file",
+      "bytes": 28710390,
+      "sha256": "36eb30732f1d1cac83824dea71341a908b294612faaa69a82e3807a036cad591"
+    },
+    {
+      "path": "notebooks/love/A6/sketchbooks/previews/A6-all-designs.png",
+      "type": "file",
+      "bytes": 42239,
+      "sha256": "61b7a9d4c16a2e389aa28ad88d1492729d3afa01d643fe756b5fffc551332383"
+    },
+    {
+      "path": "notebooks/love/A6/sketchbooks/previews/A6-page.png",
+      "type": "file",
+      "bytes": 17207,
+      "sha256": "b30b718868b9b29e50e64e8a993217db96d1c54dcf953d93495d66520ede2d20"
+    },
+    {
+      "path": "notebooks/love/A6/sketchbooks/previews/love-A6-opening.png",
+      "type": "file",
+      "bytes": 28018,
+      "sha256": "9eda6c4e643b638ebe23362bde5f8435df480f0e21d956c94794e4edd1bdc260"
+    },
+    {
+      "path": "notebooks/love/A6/sketchbooks/previews/love-A6-sketchbooks-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 17207,
+      "sha256": "b30b718868b9b29e50e64e8a993217db96d1c54dcf953d93495d66520ede2d20"
+    },
+    {
+      "path": "notebooks/love/README.md",
+      "type": "file",
+      "bytes": 2847,
+      "sha256": "3ca25423da940968a5e8536fa9bb4d16fc43e308d88ea5598ac3d46733219b7f"
+    },
+    {
+      "path": "notebooks/love/assets/character-08-check.png",
+      "type": "file",
+      "bytes": 59563,
+      "sha256": "4a101be0c737f85f9a3fde1021c0d50251cc8f0bc4112fc84aebb538e7391c55"
+    },
+    {
+      "path": "notebooks/love/assets/characters-preview.png",
+      "type": "file",
+      "bytes": 859655,
+      "sha256": "4f350e14458d5677856c4d3b9986135b57e4e8ed9569f811805e19d89b3934e1"
+    },
+    {
+      "path": "notebooks/love/assets/corrections-check.png",
+      "type": "file",
+      "bytes": 60934,
+      "sha256": "9e2813aa19a39a3117763135fc1b9a724bebc48d60a97d20b2128dc1dce00f9d"
+    },
+    {
+      "path": "notebooks/love/assets/covers/back-art.png",
+      "type": "file",
+      "bytes": 2087059,
+      "sha256": "0911c46025b672040ff7a8a6e2b518e84e8137daecc42153c901cf53eef62883"
+    },
+    {
+      "path": "notebooks/love/assets/covers/front-art.png",
+      "type": "file",
+      "bytes": 2474306,
+      "sha256": "0ad6290030d6fa0617b78c49931ef7f180bb4a3c021d30165afdd35e12ead284"
+    },
+    {
+      "path": "notebooks/love/assets/layout-check.png",
+      "type": "file",
+      "bytes": 95063,
+      "sha256": "5cf4d3a8d3f63c526f89b645717f87c89fb60d07381099be70703669aa405dfe"
+    },
+    {
+      "path": "notebooks/love/assets/originals/love-collection.jpg",
+      "type": "file",
+      "bytes": 231595,
+      "sha256": "8e19df85df13282f4aba65bfb2758e5ac4a31f8d26531f956180b3f93cd037a5"
+    },
+    {
+      "path": "notebooks/love/characters/character-01.png",
+      "type": "file",
+      "bytes": 2738554,
+      "sha256": "bd8512e91724dbd52852a37b95fae3ab52f9fbf29e127b507a6dd2568f898a00"
+    },
+    {
+      "path": "notebooks/love/characters/character-02.png",
+      "type": "file",
+      "bytes": 2546770,
+      "sha256": "b2eb2339c120ada69f3cad96b7a1a171ea70ffdfa1d77d9422513efad096f306"
+    },
+    {
+      "path": "notebooks/love/characters/character-03.png",
+      "type": "file",
+      "bytes": 2503875,
+      "sha256": "9175c8e06399c9db65c83f58cac1ca96fdca20937ce5255cae8afae6a0c14e81"
+    },
+    {
+      "path": "notebooks/love/characters/character-04.png",
+      "type": "file",
+      "bytes": 2695020,
+      "sha256": "3102d93871a61d599e03dbf64f3e3db3e77ace9bbf5caaa10747119b62401122"
+    },
+    {
+      "path": "notebooks/love/characters/character-05.png",
+      "type": "file",
+      "bytes": 2594916,
+      "sha256": "f715e0579bbc6c0fc418cf3b420017080e7e36f65ad7484d6d1ca62e348e67bc"
+    },
+    {
+      "path": "notebooks/love/characters/character-06.png",
+      "type": "file",
+      "bytes": 2790917,
+      "sha256": "c4e98bafd8d62e66e0864b48f77c5cf4a9152a367a77df33491641759ad3f6a6"
+    },
+    {
+      "path": "notebooks/love/characters/character-07.png",
+      "type": "file",
+      "bytes": 2811855,
+      "sha256": "64a554ef5a04eb187292cb24ca975cf33ef02a25642aabdd4e0756b26f48beb1"
+    },
+    {
+      "path": "notebooks/love/characters/character-08.png",
+      "type": "file",
+      "bytes": 2111991,
+      "sha256": "645ccc13224a4d37e76e5956f578e9846efef76fdcba50b865bc47ca93486342"
+    },
+    {
+      "path": "notebooks/love/characters/character-09.png",
+      "type": "file",
+      "bytes": 2815747,
+      "sha256": "6bd71f1a4fd65eda95baeb6b6f2d64a94af5793c4784f4a8785eb66d73648364"
+    },
+    {
+      "path": "notebooks/love/characters/character-10.png",
+      "type": "file",
+      "bytes": 2482486,
+      "sha256": "6d220cdb6a271ad93ea5a8d4ea4810df3747934365ed8940764963a936aad78b"
+    },
+    {
+      "path": "notebooks/love/love-collection.jpg",
+      "type": "file",
+      "bytes": 231595,
+      "sha256": "8e19df85df13282f4aba65bfb2758e5ac4a31f8d26531f956180b3f93cd037a5"
+    },
+    {
+      "path": "notebooks/love/metadata/image-prompts.json",
+      "type": "file",
+      "bytes": 10502,
+      "sha256": "bad66f43b8f4d8a483cd3da6918b6004e001d910cb50b36800a24e08dbef2778"
+    },
+    {
+      "path": "notebooks/love/metadata/manifest.json",
+      "type": "file",
+      "bytes": 4334,
+      "sha256": "7f652a3398899dd8a2c0461c75b4f7e722c4f4202e6944a27447391305bf7d73"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-A3-covers.zip",
+      "type": "file",
+      "bytes": 152723208,
+      "sha256": "d91d08bb8ba11fbc8bacad6f38352eeda364441d163495175f98060f14f55570"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-back-covers-all-sizes.zip",
+      "type": "file",
+      "bytes": 26619966,
+      "sha256": "c947c215259daec156349978f0b89ae91f73c268b301bf461672fede158c0f94"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-custom-sizes.zip",
+      "type": "file",
+      "bytes": 429713484,
+      "sha256": "2b9a4a0c4191d6bdb55becf0556070f5a62b63f6e25cb448f81f879af575f34b"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-love-collection.zip",
+      "type": "file",
+      "bytes": 250750824,
+      "sha256": "f4ab208eac6d969b09a977f3dc2193cfdb2ea43cac5045002301ea8be482a61c"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-notebooks-200-pages.zip",
+      "type": "file",
+      "bytes": 235728362,
+      "sha256": "026077d5957c717ae7efe7a68e95ddaf28870846cc9fe0dbbc65706aeb1c277c"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-opening-pages.zip",
+      "type": "file",
+      "bytes": 23440125,
+      "sha256": "5c8d0483fad1a4e112befbe8c9a3115c0c6ee97fa29d94ba7bc11615d2245fdf"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-openings-separate.zip",
+      "type": "file",
+      "bytes": 43896914,
+      "sha256": "b2c05e867312ff74f89808c781d0e292507856abdf018f123688b4bd53d06c74"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-print-ready-all-collections.zip",
+      "type": "file",
+      "bytes": 562746808,
+      "sha256": "ac3e64f2a94b7afee6f4209b08df6a02d778dc7d8ce698f0ea635860fa2fb599"
+    },
+    {
+      "path": "notebooks/packages/nilartstudio-qolche-collection.zip",
+      "type": "file",
+      "bytes": 340334418,
+      "sha256": "4de204cdd6f0fa67764d6c925f0885ebbe839d38ae7dcb7f41346994eada7d48"
+    },
+    {
+      "path": "notebooks/previews/100-pages-preview.png",
+      "type": "file",
+      "bytes": 30049,
+      "sha256": "2a0dcdcf11c0b2604cb5626649d80496c8faa87e4db71a5993bb461f7aab0d64"
+    },
+    {
+      "path": "notebooks/previews/all-notebooks-preview.png",
+      "type": "file",
+      "bytes": 241630,
+      "sha256": "fa43cc985bdc8a47200a3c2677bb2808048c180b61c04afcff8207f2f821f67c"
+    },
+    {
+      "path": "notebooks/previews/back-size-check.png",
+      "type": "file",
+      "bytes": 1674511,
+      "sha256": "dffcaa57e7089c96dbb589b4abe286aada1888f24eeedcf27e8ebf1e42cf0596"
+    },
+    {
+      "path": "notebooks/previews/cover-master-check.png",
+      "type": "file",
+      "bytes": 1298540,
+      "sha256": "46b47f3404a7393c32e7e636a65ef2f9b8f43b3bbb9806dbc163e13e22ea1e9b"
+    },
+    {
+      "path": "notebooks/previews/custom-size-waste.png",
+      "type": "file",
+      "bytes": 12553,
+      "sha256": "cd076e4a6ddd8da641b6de1b937cb081a94c4fda1dfee49fdec52e4576090ba3"
+    },
+    {
+      "path": "notebooks/previews/custom-sizes-check.png",
+      "type": "file",
+      "bytes": 994305,
+      "sha256": "5885b92858ccb272d74ac4bac18901bfc0825dddc0ac775ae53331ea9b25f4ea"
+    },
+    {
+      "path": "notebooks/previews/no-opening-check.png",
+      "type": "file",
+      "bytes": 113376,
+      "sha256": "1f2261c7afbe7a1354e005df745c057ac82a584dc653738aad0c013c36942bbd"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/cats-A4-sample.png",
+      "type": "file",
+      "bytes": 72264,
+      "sha256": "17d945a6b1a57075ca5958c10ba29d1f412fff53ac31a3a811179aaa8a04bb60"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/cats-A5-sample.png",
+      "type": "file",
+      "bytes": 44835,
+      "sha256": "682c29265f73cefd6e349ab5b0a3e8b9dc2a15af76dc968289749e159ae5062d"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/cats-A6-sample.png",
+      "type": "file",
+      "bytes": 25597,
+      "sha256": "0b7fd747ef0d40cf6d4970bc781564d28f4bfdc48f7185fe284ff28bb4b30e6f"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/collections-preview.png",
+      "type": "file",
+      "bytes": 128508,
+      "sha256": "c471575a90524924aa17a48231cf5e067b1fc17af89611a7874173bca338e754"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/cows-A4-sample.png",
+      "type": "file",
+      "bytes": 78000,
+      "sha256": "4ab3ee1c684f17db76c5ac01a425172d2fd082996d4f66e518cc9a4267b056fc"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/cows-A5-sample.png",
+      "type": "file",
+      "bytes": 47794,
+      "sha256": "da10b7f629fa9bd87c4e898b83529d4f389a7f1181742f7749e96156424710a7"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/cows-A6-sample.png",
+      "type": "file",
+      "bytes": 27191,
+      "sha256": "31459767e2c40a9ae4a3a3cf4dd0ae64c102545ae7a041fbb24b77df9303012a"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/ghosts-A4-sample.png",
+      "type": "file",
+      "bytes": 58057,
+      "sha256": "12e838b0b89c042e90f831df8ccdede4ba4bfa548630e4a1ccb86025b295666b"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/ghosts-A5-sample.png",
+      "type": "file",
+      "bytes": 36475,
+      "sha256": "d2c48efc1cf0cdc1136af399567bb524a2484d97562e7d75aa369155c64ae2b1"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/ghosts-A6-sample.png",
+      "type": "file",
+      "bytes": 21029,
+      "sha256": "0a38f487f3e7bec62377af8dcc09e17ff18c23c0846494d88a0a8209159977ae"
+    },
+    {
+      "path": "notebooks/previews/notebook-design/notebook-collections-proof.pdf",
+      "type": "file",
+      "bytes": 889276,
+      "sha256": "14a0d10ffae582ffc593187d8574a48204656764270f5440128fc0b8fa5fcd7c"
+    },
+    {
+      "path": "notebooks/previews/opening-pages-preview.png",
+      "type": "file",
+      "bytes": 82074,
+      "sha256": "ee361ba6cf3b77a06fdcf48b315b816cbe5b0fe7073d45cd62a5288e7f24983c"
+    },
+    {
+      "path": "notebooks/previews/opening-separate-check.png",
+      "type": "file",
+      "bytes": 204448,
+      "sha256": "dc698124dcce4665d6741d4bbe65c51ee40768ba38ce1c046a361dd475f40efe"
+    },
+    {
+      "path": "notebooks/previews/separate-opening-check.png",
+      "type": "file",
+      "bytes": 187724,
+      "sha256": "5f21160ed5c88b15f3fe63dd1b4440afd3373050b3d19f5b52525112cc35dc65"
+    },
+    {
+      "path": "notebooks/previews/sketchbooks-no-opening-check.png",
+      "type": "file",
+      "bytes": 64946,
+      "sha256": "2aa066d6856dca98f3254bb290119f99bb13fd0eff48a482bdb5ed9155043860"
+    },
+    {
+      "path": "notebooks/production/__pycache__/build_cover_masters.cpython-312.pyc",
+      "type": "file",
+      "bytes": 5528,
+      "sha256": "a2d0fbe870706484c646182a678aa1a424e454a573f2d65aacd05776a97c82ff"
+    },
+    {
+      "path": "notebooks/production/__pycache__/build_covers.cpython-312.pyc",
+      "type": "file",
+      "bytes": 246,
+      "sha256": "8017492c5473a43538f16533026dd58c877fd9e9b9d8906ca81fd0e81f9984d6"
+    },
+    {
+      "path": "notebooks/production/__pycache__/build_notebooks.cpython-312.pyc",
+      "type": "file",
+      "bytes": 13564,
+      "sha256": "312f2b9f3826cc1f2c60d7d56a3a2c23bb2091c3ef3540d498b0dc3b7eab2c7b"
+    },
+    {
+      "path": "notebooks/production/__pycache__/build_qolche.cpython-312.pyc",
+      "type": "file",
+      "bytes": 7896,
+      "sha256": "30b2a8fb7067bf5c4e92e97891a1d0af50596d224b9034b1dbd75775a60f25c2"
+    },
+    {
+      "path": "notebooks/production/__pycache__/package_collections.cpython-312.pyc",
+      "type": "file",
+      "bytes": 2615,
+      "sha256": "c968ab697c38340e900e506390bc6477f11137e17f7764879e3b54a646efd6a4"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gav/IMG_8835-original.JPG",
+      "type": "file",
+      "bytes": 899521,
+      "sha256": "4e08bda0f3ea134119abad75179ca91473ac2a633a6f624eaca14d491e2d36e1"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gav/back-A4.png",
+      "type": "file",
+      "bytes": 1713786,
+      "sha256": "e0503d0ad04e786e7ff66ea0a47d3fe567c58000b0d6c3df53c0d55be92c5429"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gav/front-A4.png",
+      "type": "file",
+      "bytes": 6052122,
+      "sha256": "03e0c115aaa4236215a9cbe02953f600284c587818a673c224a538c5758f700a"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gav/front-art.png",
+      "type": "file",
+      "bytes": 2769501,
+      "sha256": "85ae3abd86ddd4c17b5ae1f0e2042c9cbaf041a9e0e35041003f77cd9ac5e65d"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gav/gav-A4-front-back.pdf",
+      "type": "file",
+      "bytes": 5917320,
+      "sha256": "d8e2946ce2f9c9701fb7f0fb011ceb9e878a48f7ad825fd869e39ed33b03cc40"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gav/gav-back-preview.png",
+      "type": "file",
+      "bytes": 1448890,
+      "sha256": "987eef19221435b7811202d62517ab7ff5df8adaf388ce9b7faa1df683202bd7"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gav/gav-front-preview.png",
+      "type": "file",
+      "bytes": 6052122,
+      "sha256": "03e0c115aaa4236215a9cbe02953f600284c587818a673c224a538c5758f700a"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gorbe/back-A4.png",
+      "type": "file",
+      "bytes": 1750435,
+      "sha256": "b615b51bb200bbe63a762e4cac891a560af031f4d8d140719bdcb039c458b27c"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gorbe/front-A4.png",
+      "type": "file",
+      "bytes": 4914278,
+      "sha256": "f12a4f6955c81c097642d2a46dfbab94d1f05339a9c3071fe0fcab2953930e87"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gorbe/front-art.png",
+      "type": "file",
+      "bytes": 2488428,
+      "sha256": "2e652e85d60845b0a25eee24aa5a715bd181c1b3e81c1785597ecf173be48de3"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gorbe/gorbe-A4-front-back.pdf",
+      "type": "file",
+      "bytes": 5231065,
+      "sha256": "da4ce4279fc9565a846d44fee15ae2d64689c32cb082bef82f7fdb4b3be65669"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gorbe/gorbe-back-preview.png",
+      "type": "file",
+      "bytes": 1456219,
+      "sha256": "aaae913268092a4b799123ab98b048a388b7dce0cdc96cea962576c26b1e65f9"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/gorbe/gorbe-front-preview.png",
+      "type": "file",
+      "bytes": 4914278,
+      "sha256": "f12a4f6955c81c097642d2a46dfbab94d1f05339a9c3071fe0fcab2953930e87"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/nilartstudio-A4-covers.zip",
+      "type": "file",
+      "bytes": 33094115,
+      "sha256": "6752fc5c32982beb244d86ab99a5c32386ecae343fd7ee93a20e4113e01adbcb"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/A3-back-preview.png",
+      "type": "file",
+      "bytes": 2274810,
+      "sha256": "d6f075eba830112f851dc9888e2538c9940eb7840cca4ca2f47db0dae61b2463"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/A3-front-preview.png",
+      "type": "file",
+      "bytes": 5623207,
+      "sha256": "ee2c40ed2dac7de0315bca3d1136f464dd3ef8b0dd7bc6e2816282146c142c86"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/A4-back-preview.png",
+      "type": "file",
+      "bytes": 1291159,
+      "sha256": "8a5e704df9b98ea586401ffaaefefdfc705ec8bd49a473e50546f885c4779d58"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/A4-front-preview.png",
+      "type": "file",
+      "bytes": 2967739,
+      "sha256": "5e37ae6ba277a2c9b3148012069e395795da8d5613ad8a0842c5cff425bad9f9"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/A5-back-preview.png",
+      "type": "file",
+      "bytes": 665579,
+      "sha256": "e6ade9c0e4da616db10e627278708cca57feca45c818b1cb5a2d4a5fcc4f3973"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/A5-front-preview.png",
+      "type": "file",
+      "bytes": 1469184,
+      "sha256": "98c8b1901b7531c65b4054563fcc3561f1f6aed73a95c33299518c5bb2782468"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/A6-back-preview.png",
+      "type": "file",
+      "bytes": 333608,
+      "sha256": "22fa393e05abcc8261d0808c13a3a357829924f83ad0e8683de78ba48879f523"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/A6-front-preview.png",
+      "type": "file",
+      "bytes": 726700,
+      "sha256": "e1e36f9333ca54947f276e434f83ee6175a2a86958bb61a88f3455d58317de5a"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/front-art.png",
+      "type": "file",
+      "bytes": 3274963,
+      "sha256": "4952b9f79a28fafc8386edea4fe13e49a507ab0a6157ec637cb5a10a544c2cfb"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/qolche-A3-front-back.pdf",
+      "type": "file",
+      "bytes": 6225055,
+      "sha256": "197470cc3a653160403f237402045a29d74b931c0fb7a8f8a2b18c1437fcb93e"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/qolche-A4-front-back.pdf",
+      "type": "file",
+      "bytes": 6225043,
+      "sha256": "25b807326f33c1b1ca87a9f908018c9d847cbf70c13e5efd710afa73521dcaf6"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/qolche-A5-front-back.pdf",
+      "type": "file",
+      "bytes": 6225056,
+      "sha256": "af5bb73844b157a2addb6b7596b3e1749cb09335de478baa77790476ed718e5a"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/qolche/qolche-A6-front-back.pdf",
+      "type": "file",
+      "bytes": 6225060,
+      "sha256": "e92e8aa38789fb48d678a478a948b42ded2745d5d9b8fc7f99076f6553405216"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/roh/back-A4.png",
+      "type": "file",
+      "bytes": 1184891,
+      "sha256": "a5b68bebf6152f2830c7e3f27980be1fbe7fe30d86b888425f2c5ecc107ef68d"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/roh/front-A4.png",
+      "type": "file",
+      "bytes": 4639321,
+      "sha256": "9773b3ebe52d49efc39fc5f0653b587784ed1116ef23813d111e4f9001d6c6f0"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/roh/front-art.png",
+      "type": "file",
+      "bytes": 2596207,
+      "sha256": "aa459e365945f0b058b3959253011cf8b7038ecfec0af1abedaf192a7fb8426a"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/roh/roh-A4-front-back.pdf",
+      "type": "file",
+      "bytes": 4668163,
+      "sha256": "0e4c52658eef95245d7b3ad3d92de0de3a704c9413030166753dd5d2fe994e7e"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/roh/roh-back-preview.png",
+      "type": "file",
+      "bytes": 1022107,
+      "sha256": "a90c69ada583bb327a5e4952f09ac8bb729e686dac10107d06492ce3157770e9"
+    },
+    {
+      "path": "notebooks/production/archive/covers-before-a3/roh/roh-front-preview.png",
+      "type": "file",
+      "bytes": 4639321,
+      "sha256": "9773b3ebe52d49efc39fc5f0653b587784ed1116ef23813d111e4f9001d6c6f0"
+    },
+    {
+      "path": "notebooks/production/build_cover_masters.py",
+      "type": "file",
+      "bytes": 2622,
+      "sha256": "09a65005f682080539e6db252a61faf01f14a18275cc8a8c2cd2c38f96a91f21"
+    },
+    {
+      "path": "notebooks/production/build_covers.py",
+      "type": "file",
+      "bytes": 78,
+      "sha256": "9a3d2dcf15194b7534d0c5517be78d776da4b22eb9a782e29f0d2e45d1793c85"
+    },
+    {
+      "path": "notebooks/production/build_custom_sizes.py",
+      "type": "file",
+      "bytes": 4599,
+      "sha256": "e4ce31228a2d8855c57d50c0bdf8e0adbf1b3dc362a57e08f86af8f1cfe2c115"
+    },
+    {
+      "path": "notebooks/production/build_love.py",
+      "type": "file",
+      "bytes": 4109,
+      "sha256": "30edb8d9e041aaa9e2bbbadfcd7765f693a244ddce622b4fcfd1ffe594350112"
+    },
+    {
+      "path": "notebooks/production/build_notebooks.py",
+      "type": "file",
+      "bytes": 7330,
+      "sha256": "fbac560eed5e07741b70c5196ddb7cf7d229533d63e03e828f541b76d8bfaa50"
+    },
+    {
+      "path": "notebooks/production/build_qolche.py",
+      "type": "file",
+      "bytes": 3585,
+      "sha256": "40f566a6bcd9d61f0f52ea0732f229598100a69e625aef33f59c6c533127e0c2"
+    },
+    {
+      "path": "notebooks/production/cover-design-notes.md",
+      "type": "file",
+      "bytes": 1679,
+      "sha256": "0d7a8d0a121615f2126ac1054307e2d19662c27f4f2f3a69eaf84378b52c3741"
+    },
+    {
+      "path": "notebooks/production/cover-edit-notes.md",
+      "type": "file",
+      "bytes": 655,
+      "sha256": "5cb3ac16f5c179605c624bd1dbdec6e8d48abcf50c8f611b60c873e235e41e34"
+    },
+    {
+      "path": "notebooks/production/file-moves.json",
+      "type": "file",
+      "bytes": 16360,
+      "sha256": "98b771587d65bc6e70dd32c9646f30c1d8d6b26ab882d62dfc619ae5c672b68c"
+    },
+    {
+      "path": "notebooks/production/finalize_print_files.py",
+      "type": "file",
+      "bytes": 3387,
+      "sha256": "a0432f3fdbe2310713e3f44beda1bcd747a72350e8241a84a85593b28259710f"
+    },
+    {
+      "path": "notebooks/production/no-opening-report.json",
+      "type": "file",
+      "bytes": 1666,
+      "sha256": "03bc52ed78f8793542e5fd6375b5e7698e26f4ea16fae708dfc264e711769ebb"
+    },
+    {
+      "path": "notebooks/production/package_collections.py",
+      "type": "file",
+      "bytes": 966,
+      "sha256": "c019dde7a1d7a916665c6e1d35508a549d78af95db77fd3fb837e7243e5f47e6"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/README.md",
+      "type": "file",
+      "bytes": 466,
+      "sha256": "6dfd92109e1e199e0d84f1d7916a9de09e1abef78f5e1e678091ea571c49c6d8"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/covers/qolche-14x14-on-A5-back.pdf",
+      "type": "file",
+      "bytes": 1984591,
+      "sha256": "c3a6094ce9f49205d5a55b279d9a7eacc066d3113d0e05a3dfc1c9de44d47af3"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/covers/qolche-14x14-on-A5-back.png",
+      "type": "file",
+      "bytes": 1324719,
+      "sha256": "f44742a79a5a3e66cea6bc15450f1aa7b6253f16499a87e61947b340d5cc31e7"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/covers/qolche-14x14-on-A5-front.pdf",
+      "type": "file",
+      "bytes": 14398680,
+      "sha256": "2fccec360efba00a8261ad684cdf82ca8d9027f0e55aaab52c8884b05d155747"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/covers/qolche-14x14-on-A5-front.png",
+      "type": "file",
+      "bytes": 3834555,
+      "sha256": "ee8093bc6fcaadee18e9248b7e8ef574007a72b7b99a21cae27e5195e356ae0f"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/notebooks/qolche-14x14-on-A5-notebooks.pdf",
+      "type": "file",
+      "bytes": 36086520,
+      "sha256": "79bd6a946badc4d13dcc305c66f58774b00a8fca452c6adb9181fe323432551b"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/notebooks/qolche-14x14-on-A5-notebooks.png",
+      "type": "file",
+      "bytes": 33592,
+      "sha256": "0ab48dc7f2e32de4d2127481058cdf812cc534a848a4a6b74ffdb1d805b85e60"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/sketchbooks/qolche-14x14-on-A5-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 36084579,
+      "sha256": "6d6f7c29cc30dc905e9095965b4cc525a5746b29ebc53ef4de09a21cecdf5922"
+    },
+    {
+      "path": "notebooks/qolche/14x14-on-A5/sketchbooks/qolche-14x14-on-A5-sketchbooks.png",
+      "type": "file",
+      "bytes": 33231,
+      "sha256": "c7ee2629452bc7607595db032dc8846a769079148de50499b37650da48a432f2"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/README.md",
+      "type": "file",
+      "bytes": 474,
+      "sha256": "98ffb0d5e382471f4dcbf16cf9ea2ebd31188b4edb1699ff96d00e9085d82b80"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/covers/qolche-16.5x23.5-on-A4-back.pdf",
+      "type": "file",
+      "bytes": 1984662,
+      "sha256": "978b40c5f61c8794cd3f7fd809bc45b01065d014abf8f735605a6b5f42319fef"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/covers/qolche-16.5x23.5-on-A4-back.png",
+      "type": "file",
+      "bytes": 2991030,
+      "sha256": "7c090fc5fa94a7a40ebefa36652a1e674602051c4194f3bd1cd906dd7da27737"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/covers/qolche-16.5x23.5-on-A4-front.pdf",
+      "type": "file",
+      "bytes": 14398692,
+      "sha256": "83bc68d17a00dffa494f7069981c39091e1c21e0ae387e4bdf8698fc5e86293b"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/covers/qolche-16.5x23.5-on-A4-front.png",
+      "type": "file",
+      "bytes": 10097991,
+      "sha256": "ca99396d53c349e1d199de92a9c9acec3db3946e9c79f57100fcac2a5f8a5c69"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/notebooks/qolche-16.5x23.5-on-A4-notebooks.pdf",
+      "type": "file",
+      "bytes": 36087986,
+      "sha256": "6ff3c2f113fdb225e473abcda932b5ac51a79fd385a7191dec8f00ffbcb93bcc"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/notebooks/qolche-16.5x23.5-on-A4-notebooks.png",
+      "type": "file",
+      "bytes": 60393,
+      "sha256": "aa74f8a7a81e70ead48033bbe043644cad499b50fac56fa3a0b2faf28bd72070"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/sketchbooks/qolche-16.5x23.5-on-A4-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 36084616,
+      "sha256": "10c1a4cfb0029592eee1ae518f995d3e95193db5fac4b99e47eb96253134b94b"
+    },
+    {
+      "path": "notebooks/qolche/16.5x23.5-on-A4/sketchbooks/qolche-16.5x23.5-on-A4-sketchbooks.png",
+      "type": "file",
+      "bytes": 59691,
+      "sha256": "dec81bed42f758c74cf470187e27d4f96ab316ebec3de7c356a4cfde87a87fa4"
+    },
+    {
+      "path": "notebooks/qolche/A3/covers/previews/qolche-A3-back-preview.png",
+      "type": "file",
+      "bytes": 2418042,
+      "sha256": "e9c048cac22bbe3730f99d9e412820b3857dd1df2be27b53a98089c4173bbb40"
+    },
+    {
+      "path": "notebooks/qolche/A3/covers/previews/qolche-A3-front-preview.png",
+      "type": "file",
+      "bytes": 5400752,
+      "sha256": "90f4c4e40213a17ce765bc881052772863989439c7583f118768da1cd28893fa"
+    },
+    {
+      "path": "notebooks/qolche/A3/covers/qolche-A3-back.pdf",
+      "type": "file",
+      "bytes": 1984977,
+      "sha256": "bf355d043ff1d9d54f1a9a3d7d6aa981177ef5cea8b0a98f8df40f18c4624c3e"
+    },
+    {
+      "path": "notebooks/qolche/A3/covers/qolche-A3-back.png",
+      "type": "file",
+      "bytes": 3254975,
+      "sha256": "001307fb5b1addabd2dbb7f60851c821bd679e150ca129b833fa476000be77ae"
+    },
+    {
+      "path": "notebooks/qolche/A3/covers/qolche-A3-front.pdf",
+      "type": "file",
+      "bytes": 4089691,
+      "sha256": "81018fb896e188d8781bca7d1e6145db2ee76ffda96c46fbf888ca9513f58f82"
+    },
+    {
+      "path": "notebooks/qolche/A3/covers/qolche-A3-front.png",
+      "type": "file",
+      "bytes": 4806649,
+      "sha256": "4a009694f3815e9f5bbb90416bb707bef2940824e5e524f0592b0a6f58efad39"
+    },
+    {
+      "path": "notebooks/qolche/A3/notebooks/previews/A3-all-designs-preview.png",
+      "type": "file",
+      "bytes": 43034,
+      "sha256": "b7f9ad471e1f9af32b8ab17eac9ff72e8d700c46a8e939e14363d0762b01c8a9"
+    },
+    {
+      "path": "notebooks/qolche/A3/notebooks/previews/A3-page-preview.png",
+      "type": "file",
+      "bytes": 121878,
+      "sha256": "f3708b4b23d1ecc73ca8dcde1bdcfd2de99bbc78613aef837e661576560d6e9f"
+    },
+    {
+      "path": "notebooks/qolche/A3/notebooks/previews/qolche-A3-notebook-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 121878,
+      "sha256": "f3708b4b23d1ecc73ca8dcde1bdcfd2de99bbc78613aef837e661576560d6e9f"
+    },
+    {
+      "path": "notebooks/qolche/A3/notebooks/previews/qolche-A3-opening.png",
+      "type": "file",
+      "bytes": 164562,
+      "sha256": "e45bc1bc23d9b09936e116208215c184e176f10ca1ac6d42d4753b8a8338698f"
+    },
+    {
+      "path": "notebooks/qolche/A3/notebooks/qolche-A3-notebook-200-pages.pdf",
+      "type": "file",
+      "bytes": 36098453,
+      "sha256": "72584a0597fb140769dec5ce36e4c6d7e0e917007d2d9294d4ad2b10d5f747a2"
+    },
+    {
+      "path": "notebooks/qolche/A3/notebooks/qolche-A3-opening.pdf",
+      "type": "file",
+      "bytes": 3465640,
+      "sha256": "75ef347b4df47bab2debffc96fc211caf67d980f8c87dc6cba988690eadeb5d8"
+    },
+    {
+      "path": "notebooks/qolche/A3/opening/qolche-A3-opening-preview.png",
+      "type": "file",
+      "bytes": 164562,
+      "sha256": "e45bc1bc23d9b09936e116208215c184e176f10ca1ac6d42d4753b8a8338698f"
+    },
+    {
+      "path": "notebooks/qolche/A3/opening/qolche-A3-opening.pdf",
+      "type": "file",
+      "bytes": 3465640,
+      "sha256": "3d6ec5b33ad092a108753962d4d2551d7684a2eb0c5b94372bde53851d254a75"
+    },
+    {
+      "path": "notebooks/qolche/A3/sketchbooks/previews/A3-all-designs-preview.png",
+      "type": "file",
+      "bytes": 39539,
+      "sha256": "06cc7e8c20e9cfa3959682ce4bcd8bb514de4267603e555f47c6db8d0954b716"
+    },
+    {
+      "path": "notebooks/qolche/A3/sketchbooks/previews/A3-page-preview.png",
+      "type": "file",
+      "bytes": 120390,
+      "sha256": "4d1348f07ff1e48c5c3848e1e07358fb624ac868673cf077db63f260acc452ff"
+    },
+    {
+      "path": "notebooks/qolche/A3/sketchbooks/previews/qolche-A3-opening.png",
+      "type": "file",
+      "bytes": 164562,
+      "sha256": "e45bc1bc23d9b09936e116208215c184e176f10ca1ac6d42d4753b8a8338698f"
+    },
+    {
+      "path": "notebooks/qolche/A3/sketchbooks/previews/qolche-A3-sketchbook-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 120390,
+      "sha256": "4d1348f07ff1e48c5c3848e1e07358fb624ac868673cf077db63f260acc452ff"
+    },
+    {
+      "path": "notebooks/qolche/A3/sketchbooks/qolche-A3-opening.pdf",
+      "type": "file",
+      "bytes": 3465640,
+      "sha256": "20fd64d6df7c18d58f42c1284ec949bc4c7994d582e4586a9cda16c04c81a361"
+    },
+    {
+      "path": "notebooks/qolche/A3/sketchbooks/qolche-A3-sketchbook-200-pages.pdf",
+      "type": "file",
+      "bytes": 36092305,
+      "sha256": "61e8c7eef8358c92882cabaf37d21922685c281349c2f3419a7b2101adc749dc"
+    },
+    {
+      "path": "notebooks/qolche/A4/covers/previews/qolche-A4-back-preview.png",
+      "type": "file",
+      "bytes": 1418245,
+      "sha256": "e24ad032bda732dc3d2ded13566515decc14b0a8ae7a466be8634bf882ddd129"
+    },
+    {
+      "path": "notebooks/qolche/A4/covers/qolche-A4-back.pdf",
+      "type": "file",
+      "bytes": 1985005,
+      "sha256": "1fe5dffbe69ed068115a47b69ec6cdfe6905d120895a63c56f72f60401e383ae"
+    },
+    {
+      "path": "notebooks/qolche/A4/covers/qolche-A4-back.png",
+      "type": "file",
+      "bytes": 2489033,
+      "sha256": "711b9832cace12eb47f3bbb1396f10c96b94b7eedb438314c36953c6b2093131"
+    },
+    {
+      "path": "notebooks/qolche/A4/notebooks/previews/A4-all-designs-preview.png",
+      "type": "file",
+      "bytes": 49624,
+      "sha256": "caa1d8e5978c20e99be71bab9d39e325e6085aa6b88b41baa9d8b09e68dac90b"
+    },
+    {
+      "path": "notebooks/qolche/A4/notebooks/previews/A4-page-preview.png",
+      "type": "file",
+      "bytes": 79110,
+      "sha256": "c1840cbbbc98f5e8004216e2ba083f7688c7129fd83f3d5ce3544ec0c0431105"
+    },
+    {
+      "path": "notebooks/qolche/A4/notebooks/previews/qolche-A4-notebook-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 79110,
+      "sha256": "c1840cbbbc98f5e8004216e2ba083f7688c7129fd83f3d5ce3544ec0c0431105"
+    },
+    {
+      "path": "notebooks/qolche/A4/notebooks/previews/qolche-A4-opening.png",
+      "type": "file",
+      "bytes": 107308,
+      "sha256": "47167f7a12f91a5d2cbfd94f4d2b0bece0ab3ccac66ae275d250936bff63a8ca"
+    },
+    {
+      "path": "notebooks/qolche/A4/notebooks/qolche-A4-notebook-200-pages.pdf",
+      "type": "file",
+      "bytes": 36096714,
+      "sha256": "1c60680c162bdee53377960243bd91f86640c503c180bcdaa9b59f8fb14d85c7"
+    },
+    {
+      "path": "notebooks/qolche/A4/notebooks/qolche-A4-opening.pdf",
+      "type": "file",
+      "bytes": 3465638,
+      "sha256": "f9bbec2adc384dd356e0bf45496fd01b7d163db2681677f289505ab52b1ec30f"
+    },
+    {
+      "path": "notebooks/qolche/A4/opening/qolche-A4-opening-preview.png",
+      "type": "file",
+      "bytes": 107308,
+      "sha256": "47167f7a12f91a5d2cbfd94f4d2b0bece0ab3ccac66ae275d250936bff63a8ca"
+    },
+    {
+      "path": "notebooks/qolche/A4/opening/qolche-A4-opening.pdf",
+      "type": "file",
+      "bytes": 3465638,
+      "sha256": "bc69f4e6b260ee4fb29488bd4bc65167ecd61ba19dbe3f78dcbd9e644174c026"
+    },
+    {
+      "path": "notebooks/qolche/A4/sketchbooks/previews/A4-all-designs-preview.png",
+      "type": "file",
+      "bytes": 47709,
+      "sha256": "6fbce7a1729dacb1b45283e35a15b2d2735cb164a16aa63edfbc2b8773aad9d2"
+    },
+    {
+      "path": "notebooks/qolche/A4/sketchbooks/previews/A4-page-preview.png",
+      "type": "file",
+      "bytes": 78293,
+      "sha256": "f6c395cc4d0f087739cdb1bae174f676273aab68c9cfa97f7b83a833ddae4b50"
+    },
+    {
+      "path": "notebooks/qolche/A4/sketchbooks/previews/qolche-A4-opening.png",
+      "type": "file",
+      "bytes": 107308,
+      "sha256": "47167f7a12f91a5d2cbfd94f4d2b0bece0ab3ccac66ae275d250936bff63a8ca"
+    },
+    {
+      "path": "notebooks/qolche/A4/sketchbooks/previews/qolche-A4-sketchbook-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 78293,
+      "sha256": "f6c395cc4d0f087739cdb1bae174f676273aab68c9cfa97f7b83a833ddae4b50"
+    },
+    {
+      "path": "notebooks/qolche/A4/sketchbooks/qolche-A4-opening.pdf",
+      "type": "file",
+      "bytes": 3465638,
+      "sha256": "d9fb685d2ff409ecb1cd7e00bda519d4452abcc93fd9ad2068c20227110e9af7"
+    },
+    {
+      "path": "notebooks/qolche/A4/sketchbooks/qolche-A4-sketchbook-200-pages.pdf",
+      "type": "file",
+      "bytes": 36092314,
+      "sha256": "0963db8e58f4492c7f224ecbcff6806fcd7712cd1aa37649e14d818768e92d3e"
+    },
+    {
+      "path": "notebooks/qolche/A5/covers/previews/qolche-A5-back-preview.png",
+      "type": "file",
+      "bytes": 734896,
+      "sha256": "06a454599766be86033ee4285d8765753e1ab1f70d3f4eeff2b88472fb449688"
+    },
+    {
+      "path": "notebooks/qolche/A5/covers/qolche-A5-back.pdf",
+      "type": "file",
+      "bytes": 1985021,
+      "sha256": "d9f21dccf91f3aabf05fdebd8acc09c17833240f5ac71634f594be4002c24cd3"
+    },
+    {
+      "path": "notebooks/qolche/A5/covers/qolche-A5-back.png",
+      "type": "file",
+      "bytes": 3525664,
+      "sha256": "a44d359209e2ea1b323d261d40a503be5a58d1c2dcecb89b7c67b8c0268ad405"
+    },
+    {
+      "path": "notebooks/qolche/A5/notebooks/previews/A5-all-designs-preview.png",
+      "type": "file",
+      "bytes": 56608,
+      "sha256": "9a12b270df3929ab3fe31b7e5f4cf8c7bbdf5c69251fc1be0b040b1496264d86"
+    },
+    {
+      "path": "notebooks/qolche/A5/notebooks/previews/A5-page-preview.png",
+      "type": "file",
+      "bytes": 47623,
+      "sha256": "31e746a9b314473cb59735ff1cad04c1777a9c48cc8247d894372d5f135efa2b"
+    },
+    {
+      "path": "notebooks/qolche/A5/notebooks/previews/qolche-A5-notebook-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 47623,
+      "sha256": "31e746a9b314473cb59735ff1cad04c1777a9c48cc8247d894372d5f135efa2b"
+    },
+    {
+      "path": "notebooks/qolche/A5/notebooks/previews/qolche-A5-opening.png",
+      "type": "file",
+      "bytes": 65268,
+      "sha256": "20d7538ea28ed15daebc4b02c2af64eeec7b1f1c755619f1b3c453c24357300d"
+    },
+    {
+      "path": "notebooks/qolche/A5/notebooks/qolche-A5-notebook-200-pages.pdf",
+      "type": "file",
+      "bytes": 36095445,
+      "sha256": "5d272e5f7f29b5390162dde4c47a234e91a365a058d8f49cc48c120ecba21ef3"
+    },
+    {
+      "path": "notebooks/qolche/A5/notebooks/qolche-A5-opening.pdf",
+      "type": "file",
+      "bytes": 3465636,
+      "sha256": "0d3d4bfdd6034129be9be0908736276d465710a3d800a15141cae231d342e5bc"
+    },
+    {
+      "path": "notebooks/qolche/A5/opening/qolche-A5-opening-preview.png",
+      "type": "file",
+      "bytes": 65268,
+      "sha256": "20d7538ea28ed15daebc4b02c2af64eeec7b1f1c755619f1b3c453c24357300d"
+    },
+    {
+      "path": "notebooks/qolche/A5/opening/qolche-A5-opening.pdf",
+      "type": "file",
+      "bytes": 3465636,
+      "sha256": "2a81b2eb22feb4d45e7bd10c67759b833c62a10a7a0b750097cf2a9982a26d89"
+    },
+    {
+      "path": "notebooks/qolche/A5/sketchbooks/previews/A5-all-designs-preview.png",
+      "type": "file",
+      "bytes": 54272,
+      "sha256": "03b8559291ed0f5ed876fb964a7fbb0a3e3540302053f6dff067cc2c8d6abc8e"
+    },
+    {
+      "path": "notebooks/qolche/A5/sketchbooks/previews/A5-page-preview.png",
+      "type": "file",
+      "bytes": 46922,
+      "sha256": "b8c016d778abeccd252b9ebd561414884680e3d33d8657b7b18e05d4fe2c2e1e"
+    },
+    {
+      "path": "notebooks/qolche/A5/sketchbooks/previews/qolche-A5-opening.png",
+      "type": "file",
+      "bytes": 65268,
+      "sha256": "20d7538ea28ed15daebc4b02c2af64eeec7b1f1c755619f1b3c453c24357300d"
+    },
+    {
+      "path": "notebooks/qolche/A5/sketchbooks/previews/qolche-A5-sketchbook-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 46922,
+      "sha256": "b8c016d778abeccd252b9ebd561414884680e3d33d8657b7b18e05d4fe2c2e1e"
+    },
+    {
+      "path": "notebooks/qolche/A5/sketchbooks/qolche-A5-opening.pdf",
+      "type": "file",
+      "bytes": 3465636,
+      "sha256": "b0356655300d448c05558b6d14fad95bb56af0cee670a6d3619fb63abe7bb0d2"
+    },
+    {
+      "path": "notebooks/qolche/A5/sketchbooks/qolche-A5-sketchbook-200-pages.pdf",
+      "type": "file",
+      "bytes": 36092300,
+      "sha256": "df0632d9bac56b364862ca1f545d45532044bffa72e0779a11c5883952c2e8b9"
+    },
+    {
+      "path": "notebooks/qolche/A6/covers/previews/qolche-A6-back-preview.png",
+      "type": "file",
+      "bytes": 367006,
+      "sha256": "6ed395cabe9db64088230ad74ca6dd5443a36cb966bbab8ad8b4653451ba6cb1"
+    },
+    {
+      "path": "notebooks/qolche/A6/covers/qolche-A6-back.pdf",
+      "type": "file",
+      "bytes": 1985017,
+      "sha256": "bda7f38e1c1e6184058784e31af1285644a392fc517dadde98a82a653c579876"
+    },
+    {
+      "path": "notebooks/qolche/A6/covers/qolche-A6-back.png",
+      "type": "file",
+      "bytes": 1956529,
+      "sha256": "af8b86c72656b951c87d9caba975803a0cbcc9035d954141f9457687b9d7bef9"
+    },
+    {
+      "path": "notebooks/qolche/A6/notebooks/previews/A6-all-designs-preview.png",
+      "type": "file",
+      "bytes": 58206,
+      "sha256": "d7fab1bfbb0efa0325da5a7c643b18902853a6efee1639ae402c3d113da281d8"
+    },
+    {
+      "path": "notebooks/qolche/A6/notebooks/previews/A6-page-preview.png",
+      "type": "file",
+      "bytes": 26336,
+      "sha256": "cc4ace4dc0ab3d4affdf9c4e7d34edb29878a74d810a43330c81a0c0f970ae5c"
+    },
+    {
+      "path": "notebooks/qolche/A6/notebooks/previews/qolche-A6-notebook-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 26336,
+      "sha256": "cc4ace4dc0ab3d4affdf9c4e7d34edb29878a74d810a43330c81a0c0f970ae5c"
+    },
+    {
+      "path": "notebooks/qolche/A6/notebooks/previews/qolche-A6-opening.png",
+      "type": "file",
+      "bytes": 36429,
+      "sha256": "675317e341562c746b70cddc1988d068f808c449e13c63e947c8e75c12ce9380"
+    },
+    {
+      "path": "notebooks/qolche/A6/notebooks/qolche-A6-notebook-200-pages.pdf",
+      "type": "file",
+      "bytes": 36094573,
+      "sha256": "d62b69706be410b4bc46173ce2cafcc8404e16de2a8a04cfb0004ed77b26eb0c"
+    },
+    {
+      "path": "notebooks/qolche/A6/notebooks/qolche-A6-opening.pdf",
+      "type": "file",
+      "bytes": 3465650,
+      "sha256": "e64cd49d6f5b7510b18a8e63e4cc1976dfb1e4356255db35782cd3e02122c066"
+    },
+    {
+      "path": "notebooks/qolche/A6/opening/qolche-A6-opening-preview.png",
+      "type": "file",
+      "bytes": 36429,
+      "sha256": "675317e341562c746b70cddc1988d068f808c449e13c63e947c8e75c12ce9380"
+    },
+    {
+      "path": "notebooks/qolche/A6/opening/qolche-A6-opening.pdf",
+      "type": "file",
+      "bytes": 3465650,
+      "sha256": "7a57d0b4541f70f3623043a8020b7cfc377d1198fc8c526b34d70ca1f86fa477"
+    },
+    {
+      "path": "notebooks/qolche/A6/sketchbooks/previews/A6-all-designs-preview.png",
+      "type": "file",
+      "bytes": 56418,
+      "sha256": "b080a66d4edf6e4e135f3841826334818bd086ea03ef25f420abccf7d6f1addd"
+    },
+    {
+      "path": "notebooks/qolche/A6/sketchbooks/previews/A6-page-preview.png",
+      "type": "file",
+      "bytes": 25874,
+      "sha256": "e48e09e8bb96c4bf2d260dccab3e2d4f02cdf906a64fdf95f8933b9842192b48"
+    },
+    {
+      "path": "notebooks/qolche/A6/sketchbooks/previews/qolche-A6-opening.png",
+      "type": "file",
+      "bytes": 36429,
+      "sha256": "675317e341562c746b70cddc1988d068f808c449e13c63e947c8e75c12ce9380"
+    },
+    {
+      "path": "notebooks/qolche/A6/sketchbooks/previews/qolche-A6-sketchbook-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 25874,
+      "sha256": "e48e09e8bb96c4bf2d260dccab3e2d4f02cdf906a64fdf95f8933b9842192b48"
+    },
+    {
+      "path": "notebooks/qolche/A6/sketchbooks/qolche-A6-opening.pdf",
+      "type": "file",
+      "bytes": 3465650,
+      "sha256": "426c2513abce50dc3c7100f49fc0a5f7e0da0e936a52f71492ee7a0c60299083"
+    },
+    {
+      "path": "notebooks/qolche/A6/sketchbooks/qolche-A6-sketchbook-200-pages.pdf",
+      "type": "file",
+      "bytes": 36092346,
+      "sha256": "7e5dd53a149f05caf389a73cf11c0fe7fbd704797b4bbad2aaf7eb98798e52cc"
+    },
+    {
+      "path": "notebooks/qolche/README.md",
+      "type": "file",
+      "bytes": 739,
+      "sha256": "54157e84ca90405c126f5a8238d1dc1079925f7a6cb2eb8e2fdee30ddb0c7076"
+    },
+    {
+      "path": "notebooks/qolche/assets/covers/back-art.png",
+      "type": "file",
+      "bytes": 1919715,
+      "sha256": "cb527f2c31d488c27a5575270134bb149defaddc163b73a76ae5a88cb375149d"
+    },
+    {
+      "path": "notebooks/qolche/assets/covers/front-art.png",
+      "type": "file",
+      "bytes": 3079618,
+      "sha256": "8d15b32544e23db3ee3bd1025583fc384c3a1533a58acee1186d3796bbcd9dd6"
+    },
+    {
+      "path": "notebooks/qolche/assets/originals/characters-preview.png",
+      "type": "file",
+      "bytes": 1252312,
+      "sha256": "4983d0b48b6a7a72cab97858b88e290da28567c80b86ca6e667e779c171d5319"
+    },
+    {
+      "path": "notebooks/qolche/assets/originals/qolche.jpg",
+      "type": "file",
+      "bytes": 3628001,
+      "sha256": "681293bf46aefb81cf9e86a29a58988b10060bb4a445e78df3bff165275b3f6d"
+    },
+    {
+      "path": "notebooks/qolche/assets/previews/reference-preview.png",
+      "type": "file",
+      "bytes": 29076607,
+      "sha256": "69a7fbf630094ae1088f3347074c6441d0df63a52561ac56659673f7974dbe85"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-01.png",
+      "type": "file",
+      "bytes": 3331865,
+      "sha256": "8d43bfefc0ba6043fa24f218379c225e0418fa53c05987915ccb4ae33208299e"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-02.png",
+      "type": "file",
+      "bytes": 3146655,
+      "sha256": "2db84c685346bda1022fbf00b55766ee6120d31aeaa42be0d220269e58feb341"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-03.png",
+      "type": "file",
+      "bytes": 3136798,
+      "sha256": "b7f09bf97968fddd9b588dea04b4ddb16fb92bf5fd9d4bfcd695df36c82036a2"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-04.png",
+      "type": "file",
+      "bytes": 3080489,
+      "sha256": "8556aa5e11daba52f7180fe9678b6161e76d3acaf057430d034cfdfdf3513b95"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-05.png",
+      "type": "file",
+      "bytes": 2997168,
+      "sha256": "630c18d561e260c333b62bc545996ba1e770ad31e9fd5330541f2ea00fefd86d"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-06.png",
+      "type": "file",
+      "bytes": 3504532,
+      "sha256": "95098cd10a5d2f4c4f5e668cb5810d7d24341a33dc8ba8795d5c45007665749b"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-07.png",
+      "type": "file",
+      "bytes": 3243234,
+      "sha256": "d924366fdfa6f2920cc5249dfea88467a422d834e6f2f92fa2fedfab237b2f74"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-08.png",
+      "type": "file",
+      "bytes": 3042198,
+      "sha256": "ae19f27cc30871c9c5b9c50df763be8265fd66973257d024703547366eb09c66"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-09.png",
+      "type": "file",
+      "bytes": 3334097,
+      "sha256": "49f10480c75f9c3258a6059fd1c6729b22fbe07252fff1d08394b866ee235ec6"
+    },
+    {
+      "path": "notebooks/qolche/characters/character-10.png",
+      "type": "file",
+      "bytes": 2967287,
+      "sha256": "23cc5238dda7400de38c430674493a265b2f00a349872b1dd8db36d3bb17a073"
+    },
+    {
+      "path": "notebooks/qolche/metadata/manifest.json",
+      "type": "file",
+      "bytes": 4704,
+      "sha256": "eba675161ff4f8a193294530af5c2977c98374736fdb105b2860a9dc9ad76593"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/README.md",
+      "type": "file",
+      "bytes": 466,
+      "sha256": "6dfd92109e1e199e0d84f1d7916a9de09e1abef78f5e1e678091ea571c49c6d8"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/covers/roh-14x14-on-A5-back.pdf",
+      "type": "file",
+      "bytes": 1169331,
+      "sha256": "76a8b9d56e36d82ebd87519e297de679208f5303677db290dfb9b276b3026b6e"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/covers/roh-14x14-on-A5-back.png",
+      "type": "file",
+      "bytes": 803820,
+      "sha256": "6cce2d9ab02b2cf8157f856a457caac36811ac2727209e9a3f272370ad094e06"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/covers/roh-14x14-on-A5-front.pdf",
+      "type": "file",
+      "bytes": 10843536,
+      "sha256": "9c543d11b1665d7340731998a067103a86d8a21a3f9c43a79962d9f1149e8b30"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/covers/roh-14x14-on-A5-front.png",
+      "type": "file",
+      "bytes": 3106148,
+      "sha256": "316ea3536932c15017392bebe927a86de34fcfb3c2516ed35f31ac4e15216e1a"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/notebooks/roh-14x14-on-A5-notebooks.pdf",
+      "type": "file",
+      "bytes": 2289580,
+      "sha256": "808c9077606f823d7c27641c113e76e94df5069008d4976e2681d86fc811dc69"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/notebooks/roh-14x14-on-A5-notebooks.png",
+      "type": "file",
+      "bytes": 23381,
+      "sha256": "c5eb71276f10fb979aeb6b0b077a558837b2f49aed30aff0a0b7549f561e1685"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/sketchbooks/roh-14x14-on-A5-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 2287837,
+      "sha256": "498cc4d2a0cd1a3a4e30a9103513102f8d872f6f00f143819fb4d6782d6ac381"
+    },
+    {
+      "path": "notebooks/roh/14x14-on-A5/sketchbooks/roh-14x14-on-A5-sketchbooks.png",
+      "type": "file",
+      "bytes": 23030,
+      "sha256": "1bbaaf521310a59771693a78e09f7d0f107a40f34eef29991721ad303dd912ab"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/README.md",
+      "type": "file",
+      "bytes": 474,
+      "sha256": "98ffb0d5e382471f4dcbf16cf9ea2ebd31188b4edb1699ff96d00e9085d82b80"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/covers/roh-16.5x23.5-on-A4-back.pdf",
+      "type": "file",
+      "bytes": 1169401,
+      "sha256": "bcb06d63cf71f1f21b54184e57ea53ab401298bec635f331450dff2c568bbe69"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/covers/roh-16.5x23.5-on-A4-back.png",
+      "type": "file",
+      "bytes": 1493963,
+      "sha256": "f2b831f1c1cb9f279eb366b0c00f2397ea8f8a353c02c67697f6cec397fb705b"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/covers/roh-16.5x23.5-on-A4-front.pdf",
+      "type": "file",
+      "bytes": 10843548,
+      "sha256": "79bb8624127cd3d83c1d3c6e26419661e5e1f2aee8984ad8939e2b87b39f841b"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/covers/roh-16.5x23.5-on-A4-front.png",
+      "type": "file",
+      "bytes": 7741493,
+      "sha256": "293ddbcf9714fab976aeb659427266fe56d10bacfc8a3bcd9fd7d921e74b4dfa"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/notebooks/roh-16.5x23.5-on-A4-notebooks.pdf",
+      "type": "file",
+      "bytes": 2290909,
+      "sha256": "ee0756d86abaeaf24ec3333b2e3cd5b40db5c5906a8c9bfb525a54c88fc53656"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/notebooks/roh-16.5x23.5-on-A4-notebooks.png",
+      "type": "file",
+      "bytes": 40570,
+      "sha256": "c10aa6d8d2bede1acd8b07b04f7d7ceec3fc4c6582da2db62d4fc7a037343d29"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/sketchbooks/roh-16.5x23.5-on-A4-sketchbooks.pdf",
+      "type": "file",
+      "bytes": 2287877,
+      "sha256": "24955d369724079ebdf7181c7439d9cca264eadc5037faeb8dd842ec6f74082e"
+    },
+    {
+      "path": "notebooks/roh/16.5x23.5-on-A4/sketchbooks/roh-16.5x23.5-on-A4-sketchbooks.png",
+      "type": "file",
+      "bytes": 39867,
+      "sha256": "6fbecc38a09f3141fa421afcb5ce5d0bdd7d627891820e58bfe1d6957b3311bc"
+    },
+    {
+      "path": "notebooks/roh/A3/covers/previews/roh-A3-back-preview.png",
+      "type": "file",
+      "bytes": 1223909,
+      "sha256": "3ca9964689ebf89b264aaf0b25a3cbd2069987151279f6c298ffc792a681f18e"
+    },
+    {
+      "path": "notebooks/roh/A3/covers/previews/roh-A3-front-preview.png",
+      "type": "file",
+      "bytes": 4245586,
+      "sha256": "5712f954df37151f3d5386bacfa277a29aa1204aa9a5277c0823e3500d9d9f2d"
+    },
+    {
+      "path": "notebooks/roh/A3/covers/roh-A3-back.pdf",
+      "type": "file",
+      "bytes": 1169714,
+      "sha256": "2465c8bdc112e01818562b22456da3c2190555cd21ad237cee8f43edcf01566c"
+    },
+    {
+      "path": "notebooks/roh/A3/covers/roh-A3-back.png",
+      "type": "file",
+      "bytes": 2773994,
+      "sha256": "8592cd211c48461c5fdff3fb2b9ff8ba2235996778d8ad75c5673c730b0237d0"
+    },
+    {
+      "path": "notebooks/roh/A3/covers/roh-A3-front.pdf",
+      "type": "file",
+      "bytes": 3333797,
+      "sha256": "03f770bf5543b0be92ce5fdbe09984bab2fad900f566cfc211748429145c6987"
+    },
+    {
+      "path": "notebooks/roh/A3/covers/roh-A3-front.png",
+      "type": "file",
+      "bytes": 4218611,
+      "sha256": "eb24173759435e9d29fb1c3205c1cfa6726b2b24479bcbf6ccaaccdc862f36ed"
+    },
+    {
+      "path": "notebooks/roh/A3/notebooks/previews/A3-all-designs-preview.png",
+      "type": "file",
+      "bytes": 36817,
+      "sha256": "92431b531a087eca18f8377f610116ee8aa7a6edf26bb1b16f1cb023fe41285a"
+    },
+    {
+      "path": "notebooks/roh/A3/notebooks/previews/A3-ruled-preview.png",
+      "type": "file",
+      "bytes": 87578,
+      "sha256": "fe0eb47781fe9371058c09f7bcd9a74f08f4f1bd8283c21f2c2bb271dddc61ce"
+    },
+    {
+      "path": "notebooks/roh/A3/notebooks/previews/roh-A3-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 76682,
+      "sha256": "5236aefda0b5dcc854d112dd21475a8b033f78b7aaa6ddfb00d3c82d36815dcb"
+    },
+    {
+      "path": "notebooks/roh/A3/notebooks/previews/roh-A3-opening.png",
+      "type": "file",
+      "bytes": 119445,
+      "sha256": "a9924386fa2681d755ac7cc4f8fd39924d746640e96e309ce9bfaf996e651d99"
+    },
+    {
+      "path": "notebooks/roh/A3/notebooks/roh-A3-200-pages.pdf",
+      "type": "file",
+      "bytes": 2301255,
+      "sha256": "e7d90acaab73d319c9a35efd77815693f3d6541ad386f36993fae2b5337da5b7"
+    },
+    {
+      "path": "notebooks/roh/A3/notebooks/roh-A3-opening.pdf",
+      "type": "file",
+      "bytes": 282589,
+      "sha256": "0a3abfdf37d28d11c75479e87bf704512b8ac17cb00804ef9ef85243116041d8"
+    },
+    {
+      "path": "notebooks/roh/A3/opening/roh-A3-opening-preview.png",
+      "type": "file",
+      "bytes": 119445,
+      "sha256": "a9924386fa2681d755ac7cc4f8fd39924d746640e96e309ce9bfaf996e651d99"
+    },
+    {
+      "path": "notebooks/roh/A3/opening/roh-A3-opening.pdf",
+      "type": "file",
+      "bytes": 282589,
+      "sha256": "b704e401e0835efa9ca7fa88ca7a53a3c9823a50bb17259aba86a87e11814958"
+    },
+    {
+      "path": "notebooks/roh/A3/sketchbooks/ghosts-A3-100-pages.pdf",
+      "type": "file",
+      "bytes": 2256347,
+      "sha256": "4efc8c05fc87e43c5c46a4aa3ca1d7b7f602bca6ead4a7784e30547bcd220062"
+    },
+    {
+      "path": "notebooks/roh/A3/sketchbooks/ghosts-A3.pdf",
+      "type": "file",
+      "bytes": 2230207,
+      "sha256": "94920d07423bfa79ac0ea681c976af89fe88bbff776cc2cd589158e1006f44bf"
+    },
+    {
+      "path": "notebooks/roh/A3/sketchbooks/previews/ghosts-A3-100-pages-first-page.png",
+      "type": "file",
+      "bytes": 83386,
+      "sha256": "f3f06f0a98c5437a85e1ea78f2caf3735c464806194883ed28e344ed840ddf63"
+    },
+    {
+      "path": "notebooks/roh/A3/sketchbooks/previews/ghosts-A3-first-page.png",
+      "type": "file",
+      "bytes": 83386,
+      "sha256": "f3f06f0a98c5437a85e1ea78f2caf3735c464806194883ed28e344ed840ddf63"
+    },
+    {
+      "path": "notebooks/roh/A4/covers/previews/roh-A4-back-preview.png",
+      "type": "file",
+      "bytes": 839826,
+      "sha256": "7f6963de0c30e835c8468eff31f7471043403dea3a03b31fedcd6ffec2b482fd"
+    },
+    {
+      "path": "notebooks/roh/A4/covers/roh-A4-back.pdf",
+      "type": "file",
+      "bytes": 1169743,
+      "sha256": "95295921c491365e459ab8b05935489a81b814ff804f44c7b37331b067cc8568"
+    },
+    {
+      "path": "notebooks/roh/A4/covers/roh-A4-back.png",
+      "type": "file",
+      "bytes": 1900189,
+      "sha256": "ba829e2e4e32586c6dd714a3c524467287dd354d856a384ae787d1b08c7d9241"
+    },
+    {
+      "path": "notebooks/roh/A4/notebooks/previews/A4-all-designs-preview.png",
+      "type": "file",
+      "bytes": 42174,
+      "sha256": "c659f1dcbe146c6cc71f5d72ab7fbdbe64a3fb9822b2295926193658b192d766"
+    },
+    {
+      "path": "notebooks/roh/A4/notebooks/previews/A4-ruled-preview.png",
+      "type": "file",
+      "bytes": 58057,
+      "sha256": "12e838b0b89c042e90f831df8ccdede4ba4bfa548630e4a1ccb86025b295666b"
+    },
+    {
+      "path": "notebooks/roh/A4/notebooks/previews/roh-A4-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 51309,
+      "sha256": "7c852305b915f3210b282ae992749c36a247603250be12ddfa709410749405b7"
+    },
+    {
+      "path": "notebooks/roh/A4/notebooks/previews/roh-A4-opening.png",
+      "type": "file",
+      "bytes": 80361,
+      "sha256": "fd58c431020680a85d8dfa90fbf791ec330400284cdad799e0ef065cd110624f"
+    },
+    {
+      "path": "notebooks/roh/A4/notebooks/roh-A4-200-pages.pdf",
+      "type": "file",
+      "bytes": 2299678,
+      "sha256": "8ab73978269db4e8949adac1adc249b86f3cef53be477a9c83a71586a2036297"
+    },
+    {
+      "path": "notebooks/roh/A4/notebooks/roh-A4-opening.pdf",
+      "type": "file",
+      "bytes": 282589,
+      "sha256": "b208c3d3bea5e6c2e199ee60515c8afbd51b165654953aa7f1b91c4d7dbe505c"
+    },
+    {
+      "path": "notebooks/roh/A4/opening/roh-A4-opening-preview.png",
+      "type": "file",
+      "bytes": 80361,
+      "sha256": "fd58c431020680a85d8dfa90fbf791ec330400284cdad799e0ef065cd110624f"
+    },
+    {
+      "path": "notebooks/roh/A4/opening/roh-A4-opening.pdf",
+      "type": "file",
+      "bytes": 282589,
+      "sha256": "e8f7e58ce7e719c9f88382cdf24ab8f35ea7fda2d820200a60c914a12b6244c7"
+    },
+    {
+      "path": "notebooks/roh/A5/covers/previews/roh-A5-back-preview.png",
+      "type": "file",
+      "bytes": 451748,
+      "sha256": "8131001665529c0754eb5876dfe047e4fe320422b9e14162ee28572688224580"
+    },
+    {
+      "path": "notebooks/roh/A5/covers/roh-A5-back.pdf",
+      "type": "file",
+      "bytes": 1169765,
+      "sha256": "eccd085883330fdb39018b2cf1378b7efd932b53e271a7f22f3b14b4ebecfe90"
+    },
+    {
+      "path": "notebooks/roh/A5/covers/roh-A5-back.png",
+      "type": "file",
+      "bytes": 1672603,
+      "sha256": "ac2b74d22649cd01f83945a82cf7bf984205a2077e5f75d2001773029fb23293"
+    },
+    {
+      "path": "notebooks/roh/A5/notebooks/previews/A5-all-designs-preview.png",
+      "type": "file",
+      "bytes": 48120,
+      "sha256": "f3f116a721e09b6426e621f824e0b13dae6ac353d5b5b58a9ff261adda798ef8"
+    },
+    {
+      "path": "notebooks/roh/A5/notebooks/previews/A5-ruled-preview.png",
+      "type": "file",
+      "bytes": 36475,
+      "sha256": "d2c48efc1cf0cdc1136af399567bb524a2484d97562e7d75aa369155c64ae2b1"
+    },
+    {
+      "path": "notebooks/roh/A5/notebooks/previews/roh-A5-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 32279,
+      "sha256": "2b468fdaab6042d1647a11d18cce65bbdac4341a3acdbf754b80dec97e97236d"
+    },
+    {
+      "path": "notebooks/roh/A5/notebooks/previews/roh-A5-opening.png",
+      "type": "file",
+      "bytes": 50729,
+      "sha256": "1b3989e1a45df5485951325e1900d3ca7969496d81f7ab82e9d76c05ef88147c"
+    },
+    {
+      "path": "notebooks/roh/A5/notebooks/roh-A5-200-pages.pdf",
+      "type": "file",
+      "bytes": 2298548,
+      "sha256": "e75a1f100f3ba96bcd81357b1cd040cc5286d2ccbe56f5cedfa9a44d90cb796f"
+    },
+    {
+      "path": "notebooks/roh/A5/notebooks/roh-A5-opening.pdf",
+      "type": "file",
+      "bytes": 282588,
+      "sha256": "7931f40e63c97be2ffd45a35e872a4e08d99f49b807019bea47641cdf1549aec"
+    },
+    {
+      "path": "notebooks/roh/A5/opening/roh-A5-opening-preview.png",
+      "type": "file",
+      "bytes": 50729,
+      "sha256": "1b3989e1a45df5485951325e1900d3ca7969496d81f7ab82e9d76c05ef88147c"
+    },
+    {
+      "path": "notebooks/roh/A5/opening/roh-A5-opening.pdf",
+      "type": "file",
+      "bytes": 282588,
+      "sha256": "97c2fdd5ba76bb9be5a5ab08b5d9069ae70bc0ae2f0f5d01741e73a3c32e4afa"
+    },
+    {
+      "path": "notebooks/roh/A6/covers/previews/roh-A6-back-preview.png",
+      "type": "file",
+      "bytes": 229227,
+      "sha256": "d926f4fce136f66d0464515de0cb82365a8497c1ca9672fb5b2674e28593de2d"
+    },
+    {
+      "path": "notebooks/roh/A6/covers/roh-A6-back.pdf",
+      "type": "file",
+      "bytes": 1169756,
+      "sha256": "ab86514a543940ed9e262e8137cc8bce7274da863724b60b34755f7f51da0840"
+    },
+    {
+      "path": "notebooks/roh/A6/covers/roh-A6-back.png",
+      "type": "file",
+      "bytes": 1037544,
+      "sha256": "2ee40bb43992b01bdb9dba2c9dd2b4c19bc5b5d416448e0d8f04c0b1b7c02b40"
+    },
+    {
+      "path": "notebooks/roh/A6/notebooks/previews/A6-all-designs-preview.png",
+      "type": "file",
+      "bytes": 50017,
+      "sha256": "1c24ffdeea271f5bd10908c65ab5067f57cf7434e01284956cf79605cd5b3cf5"
+    },
+    {
+      "path": "notebooks/roh/A6/notebooks/previews/A6-ruled-preview.png",
+      "type": "file",
+      "bytes": 21029,
+      "sha256": "0a38f487f3e7bec62377af8dcc09e17ff18c23c0846494d88a0a8209159977ae"
+    },
+    {
+      "path": "notebooks/roh/A6/notebooks/previews/roh-A6-200-pages-first-page.png",
+      "type": "file",
+      "bytes": 18322,
+      "sha256": "7088d10260010629f62bc6344c9f69abbacb58b4519b3f9203aa8c7df3e2cf6a"
+    },
+    {
+      "path": "notebooks/roh/A6/notebooks/previews/roh-A6-opening.png",
+      "type": "file",
+      "bytes": 28758,
+      "sha256": "83bc2abb5c1b5bb1315f58a0b80c8ce49a506b95c8bcc1930e04bb35d4a6bca2"
+    },
+    {
+      "path": "notebooks/roh/A6/notebooks/roh-A6-200-pages.pdf",
+      "type": "file",
+      "bytes": 2297776,
+      "sha256": "2ba3d165ad3ba7bbc9f282294c613215a78e1bd19d508253cf12d09ae92b95d3"
+    },
+    {
+      "path": "notebooks/roh/A6/notebooks/roh-A6-opening.pdf",
+      "type": "file",
+      "bytes": 282599,
+      "sha256": "3b25f5b746595eaf52b2cb4a9817a38cf346534a18efdeb47c295a9600a21491"
+    },
+    {
+      "path": "notebooks/roh/A6/opening/roh-A6-opening-preview.png",
+      "type": "file",
+      "bytes": 28758,
+      "sha256": "83bc2abb5c1b5bb1315f58a0b80c8ce49a506b95c8bcc1930e04bb35d4a6bca2"
+    },
+    {
+      "path": "notebooks/roh/A6/opening/roh-A6-opening.pdf",
+      "type": "file",
+      "bytes": 282599,
+      "sha256": "bfe3633f49ff5d4de7c24e6c51246f8fef1bbe0479c903edbe3640dc38f36ae8"
+    },
+    {
+      "path": "notebooks/roh/README.md",
+      "type": "file",
+      "bytes": 736,
+      "sha256": "e7fbfd1ab77b280c117c4009fcecd713f37cde6440a72abc45644ac632f7909b"
+    },
+    {
+      "path": "notebooks/roh/assets/character-sheets/ghosts-transparent.png",
+      "type": "file",
+      "bytes": 2237616,
+      "sha256": "544b81db871fba98861424367270f1b0131175e51b9876a1d11dba248ae274d1"
+    },
+    {
+      "path": "notebooks/roh/assets/covers/back-art.png",
+      "type": "file",
+      "bytes": 1239288,
+      "sha256": "6bcfcd77ff99c1c6d54c3cd9d7a2dd8e04c2cabaef610c73a89200efa5323c33"
+    },
+    {
+      "path": "notebooks/roh/assets/covers/front-art.png",
+      "type": "file",
+      "bytes": 2693117,
+      "sha256": "3f65fd25ab497f7116fdd7ee7d3bd43a0faf3c5f513d2cf34b1970dc87b9272e"
+    },
+    {
+      "path": "notebooks/roh/assets/originals/IMG_8830.JPG",
+      "type": "file",
+      "bytes": 653907,
+      "sha256": "d5db519ec524e77bce209f6426e7829fec96d74f6f4e5e2a9b86e3ce11d2cf78"
+    },
+    {
+      "path": "notebooks/roh/assets/originals/front.JPG",
+      "type": "file",
+      "bytes": 743410,
+      "sha256": "7bb9d90c2f47e7494bf1d3e00fdf94564a020459547d400ed50ad7384a72477c"
+    },
+    {
+      "path": "notebooks/roh/assets/previews/preview.png",
+      "type": "file",
+      "bytes": 75428,
+      "sha256": "bed7a6fb8d6bb73d122085b4f886985a8bdbcaac3908273acd90234950d51a66"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-01.png",
+      "type": "file",
+      "bytes": 240462,
+      "sha256": "aabad651f041a04a7e11039b16c0e91aef46ab4a05a7b42d8519f5d727c4eed1"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-02.png",
+      "type": "file",
+      "bytes": 241593,
+      "sha256": "7734193a22a873754146056ce7bc9c78c9ceaea4bdeab640ec8b4119c0e072ad"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-03.png",
+      "type": "file",
+      "bytes": 218417,
+      "sha256": "feec51c3e47c9b18949867ae62b47cc446df0c519f262e8e44593434441d920d"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-04.png",
+      "type": "file",
+      "bytes": 210729,
+      "sha256": "3fec07f0a008338f48e7462b146a397c33de216f59261fb48465d49abda876a8"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-05.png",
+      "type": "file",
+      "bytes": 189091,
+      "sha256": "d693857c895fd891650b5c3bcac595b51aa19d3a24af0079d505f688bbd9ff67"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-06.png",
+      "type": "file",
+      "bytes": 253666,
+      "sha256": "3f23c7f032f22b6217ca5a03cd05c0ae5cac1a61257de2c3185962357a38e21e"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-07.png",
+      "type": "file",
+      "bytes": 196650,
+      "sha256": "4d7efd0bb437debf054af449420ad3806f6f1dbf23c09b62a5d17ae0fae17974"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-08.png",
+      "type": "file",
+      "bytes": 177942,
+      "sha256": "70eabaef42e1eefb53fa1d32efcb3c4cbbedcc306e4cf32e0a56a20e86ad571c"
+    },
+    {
+      "path": "notebooks/roh/characters/ghost-09.png",
+      "type": "file",
+      "bytes": 219102,
+      "sha256": "9c305f4655907c8c1ad8f6455a64fc6c07a003734a84780e035b8a1af85db59d"
+    },
+    {
+      "path": "notebooks/roh/metadata/notebooks-manifest.json",
+      "type": "file",
+      "bytes": 2366,
+      "sha256": "a588d20e62dbb4180b9695e3ee42893868d3cfd7af267c54a49670896076fa14"
+    },
+    {
+      "path": "stickers/README.md",
+      "type": "file",
+      "bytes": 2942,
+      "sha256": "427f3aed5ce8db4d242a642e973a14aca3829274d37e6f1c01b756633bd9bf09"
+    },
+    {
+      "path": "stickers/concepts/gav-3-switch-sticker-concepts-v2.png",
+      "type": "file",
+      "bytes": 2022313,
+      "sha256": "2811dea261a1f31adae2a5575a72143f41ec38664f30837321663dcae0df9d43"
+    },
+    {
+      "path": "stickers/concepts/gav-3-switch-sticker-concepts-v3.png",
+      "type": "file",
+      "bytes": 2192937,
+      "sha256": "a1ef1071f05b73574e26613770112c8edd8c36fb3576324178c668a74ba99b5d"
+    },
+    {
+      "path": "stickers/concepts/gav-3-switch-sticker-concepts.png",
+      "type": "file",
+      "bytes": 2092052,
+      "sha256": "cf83033abd3232b1df8cbb7be7e3d91180997a3e1ebc531c4a34342e4934474e"
+    },
+    {
+      "path": "stickers/concepts/gorbe-3-switch-sticker-concepts-v2.png",
+      "type": "file",
+      "bytes": 1887288,
+      "sha256": "77e68282a5afd87340f3b9662e3009dc602a0255eab1a384307676b218f667bf"
+    },
+    {
+      "path": "stickers/concepts/gorbe-3-switch-sticker-concepts.png",
+      "type": "file",
+      "bytes": 1951965,
+      "sha256": "b74b6074f332fc0664a8cf92ad1d7b64921012154fa78d4ac984f78db125f183"
+    },
+    {
+      "path": "stickers/concepts/qolche-3-switch-sticker-concepts.png",
+      "type": "file",
+      "bytes": 1888136,
+      "sha256": "d4c002bfc09f3619bf953b1587cca21870b04f0c820e01cafd4d085ec27036dc"
+    },
+    {
+      "path": "stickers/concepts/roh-3-switch-sticker-concepts-v2.png",
+      "type": "file",
+      "bytes": 1710777,
+      "sha256": "e3d7c5881293ac81f4c9c767bfbad7af056a5344117eb51326454e18fbbbed1d"
+    },
+    {
+      "path": "stickers/concepts/roh-3-switch-sticker-concepts.png",
+      "type": "file",
+      "bytes": 1752913,
+      "sha256": "024f310731d7c38b2c8f180acfb56fd80ab9edf021cc3eb7a4ee5a2e265a1dcb"
+    },
+    {
+      "path": "stickers/production/PRINT-README.txt",
+      "type": "file",
+      "bytes": 3644,
+      "sha256": "6941ef7a4dd7aa610bea327ac0cf8e3653603303066e4b0cebbc79334576df5f"
+    },
+    {
+      "path": "stickers/production/cut/gav-01-artwork.svg",
+      "type": "file",
+      "bytes": 2310228,
+      "sha256": "478c419ff9e096f41eeb8d3659f4a43fb685c5074b527b5fe64c5ea9b37ee74d"
+    },
+    {
+      "path": "stickers/production/cut/gav-01-cut.svg",
+      "type": "file",
+      "bytes": 5306,
+      "sha256": "56b52391a1bea320270006762211a9072ac4f68218569933fd4053dcbe084670"
+    },
+    {
+      "path": "stickers/production/cut/gav-02-artwork.svg",
+      "type": "file",
+      "bytes": 2310585,
+      "sha256": "aaad3beafaa985d33f6803c3f629817af2e17c57c0550469b2ca273776c0c3f4"
+    },
+    {
+      "path": "stickers/production/cut/gav-02-cut.svg",
+      "type": "file",
+      "bytes": 5711,
+      "sha256": "d991cf31df2b2e6863c967b5db55b79942c530bd167db6643fe9572815379874"
+    },
+    {
+      "path": "stickers/production/cut/gav-03-artwork.svg",
+      "type": "file",
+      "bytes": 2311044,
+      "sha256": "0eb932a52995422ba50fe1f07fb3073415d12ce586383fd61f7e96c76755430f"
+    },
+    {
+      "path": "stickers/production/cut/gav-03-cut.svg",
+      "type": "file",
+      "bytes": 6135,
+      "sha256": "e41e5b89dda723e7b6c0c7ccf3cac5cd82e7208d80eb89c712580547dcaf71a6"
+    },
+    {
+      "path": "stickers/production/cut/gorbe-01-artwork.svg",
+      "type": "file",
+      "bytes": 2454971,
+      "sha256": "0f8c609860c9b21f8c49e177665e9a05b8af451329519598e79c042440424eb1"
+    },
+    {
+      "path": "stickers/production/cut/gorbe-01-cut.svg",
+      "type": "file",
+      "bytes": 7052,
+      "sha256": "fa1dfa531f53acd48f6e7a601247ed0e4fe79e0da0e8d45bf60a917756537725"
+    },
+    {
+      "path": "stickers/production/cut/gorbe-02-artwork.svg",
+      "type": "file",
+      "bytes": 2453237,
+      "sha256": "2bd1cd43f40957b47a7526130c94bb733a310ec9c8445f5fc39aa313d7963a5a"
+    },
+    {
+      "path": "stickers/production/cut/gorbe-02-cut.svg",
+      "type": "file",
+      "bytes": 5319,
+      "sha256": "105e6be2906621f76ce3aee6a367bec40b281055f6c4347d0cb22cb3e4d4734c"
+    },
+    {
+      "path": "stickers/production/cut/gorbe-03-artwork.svg",
+      "type": "file",
+      "bytes": 2454413,
+      "sha256": "c91ffe84e514dbd1d113ae3fb0b7e1ed0eb8f072e8263a97e6527db7ffa39521"
+    },
+    {
+      "path": "stickers/production/cut/gorbe-03-cut.svg",
+      "type": "file",
+      "bytes": 6494,
+      "sha256": "6ff5a0254767d77b9b9f1727272190a7151778a74e265cbaf316ee6b2b972272"
+    },
+    {
+      "path": "stickers/production/cut/qolche-01-artwork.svg",
+      "type": "file",
+      "bytes": 2524177,
+      "sha256": "e80a8505f1432055f84ec985d4272a352dbf142afb34161580a15cca360ee505"
+    },
+    {
+      "path": "stickers/production/cut/qolche-01-cut.svg",
+      "type": "file",
+      "bytes": 5342,
+      "sha256": "03c645741a53df9d008e138014c5ca395b25ffc386559ce03376a56a3bd9f0d8"
+    },
+    {
+      "path": "stickers/production/cut/qolche-02-artwork.svg",
+      "type": "file",
+      "bytes": 2524011,
+      "sha256": "4fb41e94094ea5553294f1ba6cf0ad85ca82943696395ce2a4547b9e9cf6a99a"
+    },
+    {
+      "path": "stickers/production/cut/qolche-02-cut.svg",
+      "type": "file",
+      "bytes": 5214,
+      "sha256": "51ff3370d7a5c132e564a5faf6baa5e8b3799137c24d5bd2e06ae0c525bf27be"
+    },
+    {
+      "path": "stickers/production/cut/qolche-03-artwork.svg",
+      "type": "file",
+      "bytes": 2523222,
+      "sha256": "b2fd1da1b3a9b08beb079ba7aff65e9734a53fcdca2264bac5f26de24a531fc3"
+    },
+    {
+      "path": "stickers/production/cut/qolche-03-cut.svg",
+      "type": "file",
+      "bytes": 4401,
+      "sha256": "8f2522b67e474086cb248d060deb88ca229d55b1907f806632197e7d02d8ffe7"
+    },
+    {
+      "path": "stickers/production/cut/roh-01-artwork.svg",
+      "type": "file",
+      "bytes": 2101643,
+      "sha256": "2936fce59bf8495b5de2918c7daf53631b9ef41d1c263d8f4f575e339ff1cc39"
+    },
+    {
+      "path": "stickers/production/cut/roh-01-cut.svg",
+      "type": "file",
+      "bytes": 4784,
+      "sha256": "c1102c761b8e6c0bba124d1af599885e6d51d999449b863f265bffe697405019"
+    },
+    {
+      "path": "stickers/production/cut/roh-02-artwork.svg",
+      "type": "file",
+      "bytes": 2100871,
+      "sha256": "7ca0582718c2123295185d37f57e2eb94f2c92967b2815f95dda05e208073e7e"
+    },
+    {
+      "path": "stickers/production/cut/roh-02-cut.svg",
+      "type": "file",
+      "bytes": 4010,
+      "sha256": "e0fed7629280a349e16c135c192a4f96cdbe4b9fbac9dac08a508196e41ef51e"
+    },
+    {
+      "path": "stickers/production/cut/roh-03-artwork.svg",
+      "type": "file",
+      "bytes": 2100439,
+      "sha256": "9eed5b1922b1ea4032d279de6e195e4c52cb4ebbd79b352018eda1bf4d4334b4"
+    },
+    {
+      "path": "stickers/production/cut/roh-03-cut.svg",
+      "type": "file",
+      "bytes": 3578,
+      "sha256": "74733603ec5dd39552ae995e425fd73c3c9b02409a16b1f600fc0eddb8d9a434"
+    },
+    {
+      "path": "stickers/production/dimensions.json",
+      "type": "file",
+      "bytes": 2609,
+      "sha256": "403f577375fe778363bfd6cd5e3f606931993d30baacc47869c4e3192fc05b4f"
+    },
+    {
+      "path": "stickers/production/nil-switch-stickers-print-package.zip",
+      "type": "file",
+      "bytes": 42209889,
+      "sha256": "92dc2eec75b0d029fa5792d988db922d8dcf1b88accb32710cc235b8aab97ec6"
+    },
+    {
+      "path": "stickers/production/pdf/cut-paths-A3.pdf",
+      "type": "file",
+      "bytes": 42214,
+      "sha256": "0e81e85d5414bf751e935c2c126ba47ad25c0fc130c07c3d2e15186101dd8342"
+    },
+    {
+      "path": "stickers/production/pdf/placement-proof-A3.pdf",
+      "type": "file",
+      "bytes": 8806505,
+      "sha256": "4d2231d6f56bda0696f9d469decd8633eee1932ab4460f7b1b0cbf6ccd72d25a"
+    },
+    {
+      "path": "stickers/production/pdf/print-artwork-A3.pdf",
+      "type": "file",
+      "bytes": 8801240,
+      "sha256": "1d22243b2197664f434c86beea4cb78a535fe567fe8d40fdd130dc9edc2d5f70"
+    },
+    {
+      "path": "stickers/production/png/gav-transparent-print-v2.png",
+      "type": "file",
+      "bytes": 1728454,
+      "sha256": "34074d6ec139f42c49732b813f671b68b83f04b780cd4573f920728f0fefcf76"
+    },
+    {
+      "path": "stickers/production/png/gav-transparent-print.png",
+      "type": "file",
+      "bytes": 1767355,
+      "sha256": "5380d9bb3ac0d97a3a049629c1e62498ed951f841fd644a5630cb6c157f9d465"
+    },
+    {
+      "path": "stickers/production/png/gorbe-transparent-print.png",
+      "type": "file",
+      "bytes": 1835703,
+      "sha256": "54fe80e8f14d264ac9f7d53a8b308c44a965332e8e60a65517f8f5a13ea73bc9"
+    },
+    {
+      "path": "stickers/production/png/qolche-transparent-print-v2.png",
+      "type": "file",
+      "bytes": 1888899,
+      "sha256": "33a816e58a565691b4eeaf822ec6411d622aa4fa964e9408f93621d5f8de8fef"
+    },
+    {
+      "path": "stickers/production/png/qolche-transparent-print.png",
+      "type": "file",
+      "bytes": 1771201,
+      "sha256": "745dcee3c29d87e3abaa2ad1c80b37d3110975a432026e6d0061d350b325aa9d"
+    },
+    {
+      "path": "stickers/production/png/roh-transparent-print.png",
+      "type": "file",
+      "bytes": 1572411,
+      "sha256": "18f8e50d09823c54d90aee46d168d3db6f48d443100c18b2a30cabcb66e02f80"
+    },
+    {
+      "path": "stickers/production/previews/print-01.png",
+      "type": "file",
+      "bytes": 175947,
+      "sha256": "13138127de479cfecdee7e6691448468169476d197730d0499d4909c7a9fc89a"
+    },
+    {
+      "path": "stickers/production/previews/print-06.png",
+      "type": "file",
+      "bytes": 336259,
+      "sha256": "69806424c073ed7c7ac5610ebf6bfc95a4020a4f47981b38c5b6c22ab34e3232"
+    },
+    {
+      "path": "stickers/production/previews/print-11.png",
+      "type": "file",
+      "bytes": 204677,
+      "sha256": "5dc2f14069f3d226c1733f0627e4c813499f443d4ed6e448e6b6e6e79759b067"
+    },
+    {
+      "path": "stickers/production/previews/proof-01.png",
+      "type": "file",
+      "bytes": 176880,
+      "sha256": "78cd724fb16e62be62a72f77e21789568187461ed2c5257c871f9531fcc960ac"
+    },
+    {
+      "path": "stickers/production/previews/proof-02.png",
+      "type": "file",
+      "bytes": 153984,
+      "sha256": "4d29b9282364ec1762b6807356dbf9599c6cf3ef8bcffa4298b84e59fe863d20"
+    },
+    {
+      "path": "stickers/production/previews/proof-03.png",
+      "type": "file",
+      "bytes": 160482,
+      "sha256": "8a8ea355d3d1353c812f419751f4dce18d1429411d560c26b5f9663a7c069614"
+    },
+    {
+      "path": "stickers/production/previews/proof-04.png",
+      "type": "file",
+      "bytes": 172764,
+      "sha256": "576cb81d45cef5a4718fbab8b1e8195e86d24242e082375c4f4a89e2b8e87b97"
+    },
+    {
+      "path": "stickers/production/previews/proof-05.png",
+      "type": "file",
+      "bytes": 171566,
+      "sha256": "e9e542bb3701af6a6a39d9081a9806b02da72a059bed473911309a05c34185d5"
+    },
+    {
+      "path": "stickers/production/previews/proof-06.png",
+      "type": "file",
+      "bytes": 344265,
+      "sha256": "79b00afb68b89ed1e31c0392c617bf1b4372462ba1caf2d13118bf0e95e8131b"
+    },
+    {
+      "path": "stickers/production/previews/proof-07.png",
+      "type": "file",
+      "bytes": 139092,
+      "sha256": "38315820a174953954a2fe32434a41f1886b2b579020848158a88fef4b3074fe"
+    },
+    {
+      "path": "stickers/production/previews/proof-08.png",
+      "type": "file",
+      "bytes": 166477,
+      "sha256": "68b6ebb763cb3e1567e16005f1d822f2a27ff7d2a1c4d4f5d635bd056a03fa2c"
+    },
+    {
+      "path": "stickers/production/previews/proof-09.png",
+      "type": "file",
+      "bytes": 113861,
+      "sha256": "63c10fcda0c3d6d0b0e08cc4c1dd8326d8d83da31565e4e4ec1d980b57a856a7"
+    },
+    {
+      "path": "stickers/production/previews/proof-10.png",
+      "type": "file",
+      "bytes": 178005,
+      "sha256": "ff716013aaaca4559b8930873da12a92393212317702e20ebd0bf5a642e2c285"
+    },
+    {
+      "path": "stickers/production/previews/proof-11.png",
+      "type": "file",
+      "bytes": 209504,
+      "sha256": "09b6c808b395c1a2baf546c3074d598556f6072083ddc71d64f27056d1bfeac9"
+    },
+    {
+      "path": "stickers/production/previews/proof-12.png",
+      "type": "file",
+      "bytes": 154861,
+      "sha256": "f4ce543194df9b02adede93faa60e7dc1de6e69970b93e7a340dcbc3c2dfd803"
+    },
+    {
+      "path": "stickers/production/tools/build_print.py",
+      "type": "file",
+      "bytes": 6389,
+      "sha256": "33ae16b5a9ee4ef36982119c1d63886915f2c1de30c0b21035fa611718333670"
+    },
+    {
+      "path": "stickers/revised-no-logo/PRINT-README.txt",
+      "type": "file",
+      "bytes": 1474,
+      "sha256": "4367590b9670ae3aa9ddf7c2e8da1087c07908d6f64a1fe4105d7a6ba82a0e7f"
+    },
+    {
+      "path": "stickers/revised-no-logo/PROMPT.txt",
+      "type": "file",
+      "bytes": 649,
+      "sha256": "d924aeda3124a7edc07cba0105fb26522626fc7ebe628cbc30213ebca2b74a81"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gav-01-artwork.svg",
+      "type": "file",
+      "bytes": 2272558,
+      "sha256": "65497287f15bddb344e8d01f4684fb206a17d7bf4973343861c47298aa15da16"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gav-01-cut.svg",
+      "type": "file",
+      "bytes": 7160,
+      "sha256": "178e368fc3415901f3d791ea4a723d5f923ae8f94b58cbf41d458edf59a77cd8"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gav-02-artwork.svg",
+      "type": "file",
+      "bytes": 2270697,
+      "sha256": "745843472def6bc2a02eca2bd935806b29fabf3decde925d753e657c5be8f8e7"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gav-02-cut.svg",
+      "type": "file",
+      "bytes": 5298,
+      "sha256": "67a8e1108b3c134722ad62ba519e64acb806760558c388172b1914f388a945e4"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gav-03-artwork.svg",
+      "type": "file",
+      "bytes": 2271114,
+      "sha256": "87d885e3175504fd9c76c7934fc4ee8121088c0483b048212d5e058771076d71"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gav-03-cut.svg",
+      "type": "file",
+      "bytes": 5763,
+      "sha256": "ec7814c7915fc8f9b44f084876cfffa458477acddb65b08dec19b0cfff78d95c"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gorbe-01-artwork.svg",
+      "type": "file",
+      "bytes": 2072280,
+      "sha256": "150e66e0dff59ffe02ac68b44d046d88d68634bf7f5d97316adbe81c49e81dcf"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gorbe-01-cut.svg",
+      "type": "file",
+      "bytes": 3804,
+      "sha256": "076c8911d4a5378b8a9669dbcf1362d35cb999a26f319fb246f1bd9091dd43e8"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gorbe-02-artwork.svg",
+      "type": "file",
+      "bytes": 2072707,
+      "sha256": "e350e0c6b8de07e661b51e1b4abfccad75b9e5366edeb062a88c7454f10d9bf1"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gorbe-02-cut.svg",
+      "type": "file",
+      "bytes": 4216,
+      "sha256": "a816fe4e33fcb9743ae156b03c75b0b20712a89cb27999d00d920811bf2371af"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gorbe-03-artwork.svg",
+      "type": "file",
+      "bytes": 2073104,
+      "sha256": "3439d0d8c8cb3b2cc1bd4b43f99a10d75e31dd5b03ecd095815311d3036e41e2"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/gorbe-03-cut.svg",
+      "type": "file",
+      "bytes": 4613,
+      "sha256": "301bccff33e9f73b8d18a4ea60a0b953170711e666841965e441be7afac7bd15"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/qolche-01-artwork.svg",
+      "type": "file",
+      "bytes": 1971565,
+      "sha256": "4d41edab1358a3889324cb9e4e747a5cfeb6c4e1a9d24ae4be244dd3285a72fc"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/qolche-01-cut.svg",
+      "type": "file",
+      "bytes": 4694,
+      "sha256": "788f6bf6ef16f6870db71504fdd38f2e69e01985693397e1fc73081f57f24ca8"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/qolche-02-artwork.svg",
+      "type": "file",
+      "bytes": 1970800,
+      "sha256": "64f9b48f9167340d12262550b4753a53a8ab61441019c0c14b45e55c285605ac"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/qolche-02-cut.svg",
+      "type": "file",
+      "bytes": 3914,
+      "sha256": "05c22643750f95fe2cea19b03babaabf5a6f88b4f67c1884eca59faa30e843f9"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/qolche-03-artwork.svg",
+      "type": "file",
+      "bytes": 1970443,
+      "sha256": "588a7a2ee1f5ce060dca449ca3e16b25291b00f0de49a00524b3d362f036c133"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/qolche-03-cut.svg",
+      "type": "file",
+      "bytes": 3556,
+      "sha256": "0b28b3c49cb872340d561275279ba2cf5a577e9b066ed0f2d63270c20a767850"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/roh-01-artwork.svg",
+      "type": "file",
+      "bytes": 2046869,
+      "sha256": "949d7b9a187982360ec5bc96e7f1276164359290c323d9246c5100c5e640e47e"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/roh-01-cut.svg",
+      "type": "file",
+      "bytes": 6512,
+      "sha256": "864f1a407371383b6dbb2dabdb73db4a1ba044007a1fbab21a47acf30b0e81bb"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/roh-02-artwork.svg",
+      "type": "file",
+      "bytes": 2046643,
+      "sha256": "2e4a65478dca8a50d5e4deefdf50f3f0c46f20d173900b5eab06e4f110e2f5f1"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/roh-02-cut.svg",
+      "type": "file",
+      "bytes": 6274,
+      "sha256": "725c000b41af2cd19d43db2c17b8728cf39959afcd2bacb2d08af4303db127c9"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/roh-03-artwork.svg",
+      "type": "file",
+      "bytes": 2046668,
+      "sha256": "22e3c10a287c5248c3b812d4866bbae073e56dc6b496c58561d8672de31e3bd6"
+    },
+    {
+      "path": "stickers/revised-no-logo/cut/roh-03-cut.svg",
+      "type": "file",
+      "bytes": 6296,
+      "sha256": "db20fa2b79280463c0902cee6c5e3c63a4fb575a1340b3f855a9719d9295a28a"
+    },
+    {
+      "path": "stickers/revised-no-logo/dimensions.json",
+      "type": "file",
+      "bytes": 2610,
+      "sha256": "cb782b6f1e15ea1b0535a5d5e9f6331b725259d5a76dfd4191fdc8e78e87718f"
+    },
+    {
+      "path": "stickers/revised-no-logo/gav-shock-transparent.png",
+      "type": "file",
+      "bytes": 1698811,
+      "sha256": "c5c44f7f852b59fa053bc77f0de42578901715cf6b5ee427e187ca91dd4d628a"
+    },
+    {
+      "path": "stickers/revised-no-logo/gorbe-shock-transparent.png",
+      "type": "file",
+      "bytes": 1551130,
+      "sha256": "e39417cecfbb22e0adc43938958dd48445b4d2221a2ce7050fc9eb44d2069f9f"
+    },
+    {
+      "path": "stickers/revised-no-logo/nil-stickers-corrected-no-logo.zip",
+      "type": "file",
+      "bytes": 37469214,
+      "sha256": "4a1499aa6d2759530fc10bd4f868190002b52d7d276b06f04459fc0e383cd68c"
+    },
+    {
+      "path": "stickers/revised-no-logo/pdf/cut-paths-A3.pdf",
+      "type": "file",
+      "bytes": 40105,
+      "sha256": "2100c8653a6a2b2334249dc8bbdbe9e404b980ba62e493d23887770ebe411294"
+    },
+    {
+      "path": "stickers/revised-no-logo/pdf/placement-proof-A3.pdf",
+      "type": "file",
+      "bytes": 7831284,
+      "sha256": "a7cb9a61db8e09fd7b1805a3e114962cc1579e6b70e9abbd1d1101c5964c60bc"
+    },
+    {
+      "path": "stickers/revised-no-logo/pdf/print-artwork-A3.pdf",
+      "type": "file",
+      "bytes": 7826015,
+      "sha256": "ec323990553c09ae25d17208c98ce1f7ddb548c4cfee4cf3eecb7b2494417256"
+    },
+    {
+      "path": "stickers/revised-no-logo/png/gav-shock-transparent.png",
+      "type": "file",
+      "bytes": 1698811,
+      "sha256": "c5c44f7f852b59fa053bc77f0de42578901715cf6b5ee427e187ca91dd4d628a"
+    },
+    {
+      "path": "stickers/revised-no-logo/png/gorbe-shock-transparent.png",
+      "type": "file",
+      "bytes": 1551130,
+      "sha256": "e39417cecfbb22e0adc43938958dd48445b4d2221a2ce7050fc9eb44d2069f9f"
+    },
+    {
+      "path": "stickers/revised-no-logo/png/qolche-shock-transparent.png",
+      "type": "file",
+      "bytes": 1474927,
+      "sha256": "4cad55a362058bb76eb59db61a152b93b566440a8cb09ab5c467ece235267926"
+    },
+    {
+      "path": "stickers/revised-no-logo/png/roh-shock-transparent.png",
+      "type": "file",
+      "bytes": 1530040,
+      "sha256": "78452059bf9add466d543c7097e57f3c723c1d23f8e9bc352ba4e704025d31b0"
+    },
+    {
+      "path": "stickers/revised-no-logo/previews/all-placement-pages.jpg",
+      "type": "file",
+      "bytes": 96454,
+      "sha256": "b7f733edb022af99498ec0d528cbd7d7528591343444410514569b531f35129d"
+    },
+    {
+      "path": "stickers/revised-no-logo/qolche-shock-transparent.png",
+      "type": "file",
+      "bytes": 1474927,
+      "sha256": "4cad55a362058bb76eb59db61a152b93b566440a8cb09ab5c467ece235267926"
+    },
+    {
+      "path": "stickers/revised-no-logo/roh-shock-transparent.png",
+      "type": "file",
+      "bytes": 1530040,
+      "sha256": "78452059bf9add466d543c7097e57f3c723c1d23f8e9bc352ba4e704025d31b0"
+    },
+    {
+      "path": "stickers/revised-no-logo/tools/build_print.py",
+      "type": "file",
+      "bytes": 6457,
+      "sha256": "6404318f0ebb3eccedd8b746fed330c7d1f1458047a7283ed62adb4e243237d5"
+    },
+    {
+      "path": "stickers/templates/single-frame-90mm-layout.svg",
+      "type": "file",
+      "bytes": 1075,
+      "sha256": "5816bece4e5b7aa101f55fa5cb643f48e4f1294d46342bdd8c4ec01340e686ba"
+    }
+  ]
+}
