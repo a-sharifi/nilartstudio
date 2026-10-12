@@ -73,3 +73,13 @@ compare each listed product with its detail response. Existing public visibility
 filtering, precision and pagination tests remain passing. No schema/API shape,
 data, inventory or publication workflow changes are included. This verifies query
 count, not production throughput or consistency across concurrent publications.
+
+
+## Product-SKU visibility reads (2026-10-12)
+
+Product-SKU lookup now checks only the published product ID before reading SKUs;
+it no longer loads product memberships. Published products use two SELECTs,
+including those with no public SKUs; draft/missing products use one and return
+404. Four HTTP regression cases measure this and preserve ordered public SKU
+results. The isolated PostgreSQL test also verifies SKU identity and exact price
+on this path. No API, schema, data or stock changes are included.

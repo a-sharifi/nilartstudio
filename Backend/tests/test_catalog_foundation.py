@@ -365,3 +365,28 @@ def test_empty_product_page_skips_association_queries(catalog):
     assert response.json()["items"] == []
     assert response.json()["total"] == 4
     assert len(statements) == 2
+
+
+@pytest.mark.parametrize("slug,status,size,queries", [
+    ("art-print", 200, 2, 2), ("empty", 200, 0, 2),
+    ("draft-product", 404, None, 1), ("missing", 404, None, 1),
+])
+def test_product_skus_only_query_visibility_and_skus(catalog, slug, status, size, queries):
+    client, engine, _ = catalog
+    statements = []
+
+    def record(connection, cursor, statement, parameters, context, executemany):
+        statements.append(statement)
+
+    event.listen(engine, "before_cursor_execute", record)
+    try:
+        response = client.get(f"/api/v1/catalog/products/{slug}/skus")
+    finally:
+        event.remove(engine, "before_cursor_execute", record)
+    assert response.status_code == status
+    assert len(statements) == queries
+    assert all("catalog_product_collections" not in sql and "catalog_product_categories" not in sql
+               for sql in statements)
+    if size is not None:
+        assert len(response.json()) == size
+        assert [item["code"] for item in response.json()] == (["PRINT-A", "PRINT-B"] if size else [])

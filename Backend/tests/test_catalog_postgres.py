@@ -57,6 +57,10 @@ def test_postgres_migrations_and_decimal_roundtrip():
                         assert len(products[0].collection_ids) == len(products[0].category_ids) == 2
                     skus, total = repository.page("skus", 1, 24)
                     assert total == 1 and skus[0].id == sku.id
+                    product_skus = repository.skus("demo-postgres-product")
+                    assert [item.id for item in product_skus] == [sku.id]
+                    assert product_skus[0].price.amount == amount
+                    assert repository.skus("missing") is None
             finally:
                 transaction.rollback()
     finally:

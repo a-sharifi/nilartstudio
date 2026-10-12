@@ -211,8 +211,10 @@ class SqlCatalogRepository:
         return None if row is None else self._entity(row)
 
     def skus(self, product_slug):
-        if self.detail("products", product_slug) is None:
+        product_id = self.session.scalar(select(ProductRow.id).where(
+            ProductRow.slug == product_slug, ProductRow.published.is_(True)))
+        if product_id is None:
             return None
         rows = self.session.scalars(self._statement("skus").where(
-            ProductRow.slug == product_slug).order_by(SKURow.code, SKURow.id)).all()
+            SKURow.product_id == product_id).order_by(SKURow.code, SKURow.id)).all()
         return [self._entity(row) for row in rows]
