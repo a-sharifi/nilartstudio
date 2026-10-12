@@ -316,3 +316,9 @@
 - pagination نزولی نسخه با cursor انحصاری `before_version` و limit پیش‌فرض ۲۰/حداکثر ۱۰۰ است؛ پایان صفحه cursor خالی دارد. محصول موجود بدون تاریخچه آرایه خالی و محصول ناموجود ۴۰۴ می‌گیرد.
 - آزمون PostgreSQL جدید مجوز، ترتیب، cursor، هویت actor/product، جداسازی محصول و bounds را پوشش می‌دهد؛ هر ۱۹۲ تست backend موفق است. lint/typecheck backend، تولید client، typecheck frontend و build Docker موفق‌اند؛ هشت سرویس سالم‌اند.
 - migration، داده واقعی، UI مدیر یا امکان تغییر audit اضافه نشده‌اند. CI راه دور تأیید نشده و هشدار Starlette/httpx باقی است.
+
+## تأیید رقابت و پیوستگی audit گزینه — ۲۰۲۶-۱۰-۱۲
+
+- probe دو اتصال PostgreSQL با barrier برای آغاز هم‌زمان نویسنده‌ها تقویت شد؛ ایجاد اولیه و جایگزینی draft نسخه ۱ هر دو پوشش دارند.
+- دقیقاً یک نویسنده موفق و دیگری conflict است؛ سند نهایی متعلق به برنده، تنها یک audit تازه و snapshot قبل/بعد صحیح تأیید می‌شود.
+- هر ۱۹۳ تست backend با PostgreSQL/Redis واقعی و lint فایل تغییرکرده موفق است؛ هشت سرویس سالم‌اند. فقط تست/مستندات تغییر کرده و build/typecheck/frontend تازه‌ای در این برش اجرا نشده است. CI راه دور تأیید نشده؛ هشدار Starlette/httpx باقی است.

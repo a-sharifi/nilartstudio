@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 192 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 193 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0009 |
@@ -398,6 +398,15 @@ The new PostgreSQL regression covers authorization, ordering/paging, product
 isolation, actor identity and bounds. All 192 backend tests, lint/backend typing,
 client generation, frontend typing and Docker build passed; eight services healthy.
 No migration, live data or admin UI changes. Remote CI remains unverified.
+
+## Concurrent option replacement verification (2026-10-12)
+
+The isolated two-connection PostgreSQL test now synchronizes writer starts and
+covers initial creation plus replacement of an existing version-1 draft. Exactly
+one succeeds and one conflicts; final document, audit count and before/after
+snapshots must match the winning write and prior document. All 193 backend tests
+and changed-file lint passed; eight services healthy. Tests/docs only: no fresh
+build/frontend/typecheck claim. Remote CI unverified; existing warning remains.
 
 ## Recommended continuation
 

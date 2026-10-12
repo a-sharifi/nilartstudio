@@ -3,6 +3,7 @@ import importlib.util
 import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from threading import Barrier
 from uuid import uuid4
 
 import pytest
@@ -153,7 +154,8 @@ def test_option_audit_failure_rolls_back_draft(draft_flow):
     assert db.scalar(text("SELECT count(*) FROM catalog_option_audits")) == 0
 
 
-def test_concurrent_initial_option_updates_and_migration_downgrade():
+@pytest.mark.parametrize("initial_version", [0, 1])
+def test_concurrent_option_updates_and_migration_downgrade(initial_version):
     url = os.environ.get("NILART_TEST_DATABASE_URL")
     if not url:
         pytest.skip("NILART_TEST_DATABASE_URL required")
@@ -170,22 +172,43 @@ def test_concurrent_initial_option_updates_and_migration_downgrade():
             connection.execute(text("INSERT INTO identity_accounts VALUES (:id)"), {"id": actor})
             connection.execute(text("INSERT INTO catalog_products (id,slug,title_fa,title_en,published) VALUES (:id,'test','هنر','Art',true)"), {"id": product})
 
-        def save(_):
+        initial_document = OptionDocument.model_validate(document()).snapshot()
+        if initial_version:
+            with Session(engine) as db:
+                db.execute(text(f'SET LOCAL search_path TO "{schema}"'))
+                SqlOptionDraftRepository(db).save(product, actor, 0, initial_document)
+                db.commit()
+        barrier = Barrier(2)
+        submitted = [OptionDocument.model_validate(document()).snapshot() for _ in range(2)]
+
+        def save(index):
             with Session(engine) as db:
                 db.execute(text(f'SET LOCAL search_path TO "{schema}"'))
                 try:
-                    result = SqlOptionDraftRepository(db).save(product, actor, 0, document())
+                    barrier.wait(timeout=10)
+                    SqlOptionDraftRepository(db).save(product, actor, initial_version, submitted[index])
                     db.commit()
-                    return result["version"]
+                    return index
                 except DraftError:
                     db.rollback()
                     return "conflict"
 
         with ThreadPoolExecutor(max_workers=2) as workers:
-            assert sorted(map(str, workers.map(save, range(2)))) == ["1", "conflict"]
+            results = list(workers.map(save, range(2)))
+            assert results.count("conflict") == 1
+            winner = next(result for result in results if result != "conflict")
         with engine.begin() as connection:
             connection.execute(text(f'SET LOCAL search_path TO "{schema}"'))
-            assert connection.scalar(text("SELECT count(*) FROM catalog_option_audits")) == 1
+            draft = connection.execute(text("SELECT version,document FROM catalog_option_drafts")).mappings().one()
+            assert draft["version"] == initial_version + 1
+            assert draft["document"] == submitted[winner]
+            audits = connection.execute(text('SELECT previous_version,version,"before","after" '
+                'FROM catalog_option_audits ORDER BY version')).mappings().all()
+            assert len(audits) == initial_version + 1
+            assert audits[-1]["previous_version"] == initial_version
+            assert audits[-1]["version"] == initial_version + 1
+            assert audits[-1]["after"] == draft["document"]
+            assert audits[-1]["before"] == (initial_document if initial_version else {"options": [], "combinations": []})
             with Operations.context(MigrationContext.configure(connection)):
                 module.downgrade()
             assert connection.scalar(text("SELECT count(*) FROM catalog_products")) == 1

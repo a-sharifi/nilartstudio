@@ -146,3 +146,12 @@ Use that cursor on the next read to avoid shifting pages when newer changes arri
 An existing product with no history returns an empty page; a missing product is
 404. No audit modification API is provided. The PostgreSQL regression covers
 permissions, cursor ordering, actor/product identity, product isolation and bounds.
+
+## Concurrent draft replacement verification (2026-10-12)
+
+The two-connection PostgreSQL probe now starts writers together using a barrier
+and covers both initial creation and replacement of a version-1 draft. Exactly
+one writer succeeds; the other gets a version conflict. The final document must
+match the winning submission, audit count must increase only once, and the last
+audit's before/after snapshots must match the prior/winning documents. These
+checks extend test coverage without changing runtime behavior.
