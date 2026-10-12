@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL | 130 passed | Separate test database, isolated transactional schemas |
+| Backend with PostgreSQL/Redis | 137 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -289,6 +289,18 @@ unchanged. Five new origin cases plus the real PostgreSQL logout flow passed;
 130 backend tests total. Lint/type checks passed. Non-browser API clients must send
 the configured Origin explicitly. No migration or frontend change was introduced;
 existing browser POSTs supply Origin. Remote CI remains unverified.
+
+## Real Redis rate-limit continuation (2026-10-12)
+
+Seven Docker-backed Redis cases now verify concurrent password phone/address
+caps, CSRF caps/expiry, OTP action caps/windows, hashed keys and real bootstrap
+outage behavior. Fixtures use localhost-only dynamic ports and temporary storage;
+only generated fixture containers are stopped/removed. The application Redis
+service/data is untouched. Set `NILART_TEST_REDIS_IMAGE` to enable these tests;
+backend CI now pulls/enables Redis 7. All 137 backend tests passed locally with
+PostgreSQL and Redis, plus lint/type checks. Runtime application code did not change;
+no new frontend build/browser result is claimed. Remote CI, deployment/proxy
+addressing, failover and live SMS delivery remain unverified.
 
 ## Recommended continuation
 

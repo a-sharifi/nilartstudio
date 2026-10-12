@@ -146,3 +146,21 @@ rechecks and server-confirmed logout behavior remain unchanged.
 Five origin probes and the PostgreSQL password/session/logout flow cover rejection,
 including a genuine valid-token request that leaves its session active when rejected.
 No application accounts or sessions were modified during this continuation.
+
+### Real Redis abuse-limit verification (2026-10-12)
+
+`tests/test_rate_limit_redis.py` creates disposable Redis containers with a
+random localhost-only port, temporary storage and persistence disabled. It never
+connects to the application Redis service or deletes application keys/volumes.
+`NILART_TEST_REDIS_IMAGE` opts into these Docker tests; without it they skip.
+The backend CI job now pulls Redis 7 and enables them explicitly.
+
+Concurrent probes verify password phone/address caps, CSRF caps and OTP request,
+verify and completion phone caps. Tests also check bounded key TTLs, hashed
+password-limit keys, non-extension of the CSRF window, and fresh allowance after
+that isolated key is removed. An HTTP bootstrap test exhausts its real Redis
+limit, then stops only its fixture container: the endpoint returns 503 with no
+cookie and no-store caching. Seven new cases passed with the full suite (137).
+This does not verify production proxy addressing, distributed deployment/failover,
+real SMS delivery or all OTP address/purpose abuse scenarios. No production auth
+release approval is implied. The existing Starlette/httpx warning remains.

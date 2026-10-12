@@ -19,6 +19,7 @@ jobs:
     env:
       NILART_TEST_DATABASE_URL: postgresql+psycopg://nilart:ci-local-only@localhost:5432/nilart_test
       TEST_DATABASE_URL: postgresql+psycopg://nilart:ci-local-only@localhost:5432/nilart_test
+      NILART_TEST_REDIS_IMAGE: redis:7-alpine
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,6 +29,7 @@ jobs:
           cache-dependency-path: Backend/requirements.lock
       - run: pip install -r Backend/requirements.lock
       - run: pip install --no-deps -e 'Backend[dev]'
+      - run: docker pull redis:7-alpine
       - run: pytest
         working-directory: Backend
       - run: ruff check .
