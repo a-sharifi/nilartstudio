@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL | 124 passed | Separate test database, isolated transactional schemas |
+| Backend with PostgreSQL | 125 passed | Separate test database, isolated transactional schemas |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -268,6 +268,17 @@ cases cover those interleavings and a real two-connection lock/rotation probe;
 124 backend tests passed. Test data lives only in isolated test schemas. No schema
 migration or frontend behavior changed, and this is not blanket serialization of
 role revocation or future commerce workflows. See `Backend/PROFILE.md`.
+
+## Transactional profile-permission continuation (2026-10-12)
+
+Profile writes now re-read role grants with `FOR SHARE` and re-require
+`account.write_self` inside the session-locked transaction. A role revoked after
+the initial request guard cannot authorize a later profile write. A two-connection
+probe proves a deletion waits after grant locking and proceeds after commit.
+All 125 backend tests passed; lint/type checks passed. No migration, role-management
+endpoint, administrator bootstrap or frontend change was introduced. Only this
+profile write has the additional transactional recheck; other business workflows
+must enforce their own permission/ownership/state concurrency rules.
 
 ## Recommended continuation
 

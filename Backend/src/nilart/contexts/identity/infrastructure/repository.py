@@ -10,9 +10,9 @@ class SqlIdentityRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def roles(self, account_id: str) -> list[str]:
+    def roles(self, account_id: str, *, lock: bool = False) -> list[str]:
         return list(self.session.execute(text("SELECT role FROM identity_account_roles "
-                                              "WHERE account_id=:id"),
+                                              "WHERE account_id=:id" + (" FOR SHARE" if lock else "")),
                                          {"id": account_id}).scalars())
 
     def account_for_update(self, phone: str) -> Account | None:

@@ -84,3 +84,14 @@ plus two real PostgreSQL connections proving rotation waits for the mutation
 transaction and proceeds after it finishes. Fixtures use separate test-database
 schemas; no application account or database was seeded/modified. This does not
 implement role-management or all business-operation concurrency guarantees.
+
+### Permission recheck inside the write transaction
+
+Profile PUT also reloads the current account roles with `FOR SHARE` after locking
+the session/account, then requires `account.write_self` again before writing.
+A role removed after the initial HTTP guard but before this recheck yields 403
+without a profile write. Once the grant rows are locked, competing role deletion
+waits until the mutation commits or rolls back. Ordinary role/access GET reads
+remain unlocked. This serializes authorization for this profile mutation only;
+future business mutations still need their own transactional permission/state rules.
+A PostgreSQL HTTP regression and two-connection role-delete probe cover the timing.

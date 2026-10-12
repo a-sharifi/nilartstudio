@@ -60,3 +60,13 @@ all cached access and the lifecycle listener. A later mount performs a fresh rea
 Server rendering returns a stable checking state without access data or API calls.
 This hook provides presentation state only; no private panel/business workflow is
 connected by this change and backend permission/ownership checks remain mandatory.
+
+### Transactional profile authorization (2026-10-12)
+
+Profile saving now rechecks `account.write_self` from current roles under row-share
+locks in the write transaction, after locking the session/account. Revocation before
+that check denies the write; deletion after it waits for transaction completion.
+The request's earlier principal is not the sole permission proof for a profile save.
+Other endpoints' ordinary role reads remain unchanged. This introduces no role-write
+API, bootstrap administrator or actual role changes, and does not complete audited
+role management or concurrency rules for future commerce workflows.

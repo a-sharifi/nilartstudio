@@ -91,3 +91,26 @@ def test_profile_rechecks_session_before_writing(flow, monkeypatch, change):
                         headers={"X-CSRF-Token": old_csrf})
     assert result.status_code == (403 if change == "rotate" else 401)
     assert db.execute(text("SELECT count(*) FROM identity_profiles")).scalar_one() == 0
+
+
+def test_profile_rechecks_role_revocation_before_writing(flow, monkeypatch):
+    client, db, sms = flow
+    _, login = register(client, sms)
+    original = SqlIdentityRepository.roles
+    revoked = False
+
+    def roles(self, owner, *, lock=False):
+        nonlocal revoked
+        result = original(self, owner, lock=lock)
+        if not lock and not revoked:
+            revoked = True
+            self.session.execute(text("DELETE FROM identity_account_roles WHERE account_id=:id"),
+                                 {"id": owner})
+        return result
+
+    monkeypatch.setattr(SqlIdentityRepository, "roles", roles)
+    result = client.put("/api/v1/account/profile", json={"full_name": "Must not save", "version": 0},
+                        headers={"X-CSRF-Token": login.json()["csrf_token"]})
+    assert result.status_code == 403
+    assert result.json()["code"] == "permission_denied"
+    assert db.execute(text("SELECT count(*) FROM identity_profiles")).scalar_one() == 0
