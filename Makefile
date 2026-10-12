@@ -17,9 +17,9 @@ export MINIO_DEVELOPMENT_IMAGE
 COMPOSE += -f $(ROOT)/infra/docker/compose.development-storage.yaml
 endif
 .DEFAULT_GOAL := help
-.PHONY: help install up down logs migrate test lint typecheck build api-client check design-reference backup-verify test-infra
+.PHONY: help install up down logs migrate test lint typecheck build api-client check design-reference backup-verify backup-check test-infra
 help:
-	@echo 'Targets: install up down logs migrate test lint typecheck build api-client check design-reference backup-verify test-infra'
+	@echo 'Targets: install up down logs migrate test lint typecheck build api-client check design-reference backup-verify backup-check test-infra'
 	@echo 'Options: PYTHON=python3.12 ENV=development|production ENV_FILE=/path/to/.env SERVICE=api'
 	@echo 'Optional development storage: MINIO_DEVELOPMENT_IMAGE=repository@sha256:digest'
 install:
@@ -67,3 +67,7 @@ backup-verify:
 	$(PYTHON) $(ROOT)/infra/scripts/postgres_backup.py --source-container "$(BACKUP_SOURCE_CONTAINER)" --output-dir "$(BACKUP_DIR)/postgres-$$(date -u +%Y%m%dT%H%M%SZ)"
 test-infra:
 	$(PYTHON) -m unittest discover -s $(ROOT)/infra/tests -v
+
+backup-check:
+	@test -n "$(BACKUP_PATH)" || { echo 'Set BACKUP_PATH to a trusted saved backup directory'; exit 1; }
+	$(PYTHON) $(ROOT)/infra/scripts/postgres_backup.py --verify-existing-dir "$(BACKUP_PATH)"

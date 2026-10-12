@@ -195,6 +195,19 @@ removed. See `docs/backup-restore.md`. This is one-database verification, exclud
 roles/ACLs, WAL/PITR, other service volumes, production recovery and off-host backup
 retention/encryption. It does not satisfy the full release backup gate.
 
+## Saved-backup recheck continuation (2026-10-12)
+
+`make backup-check BACKUP_PATH=...` / `--verify-existing-dir` now revalidates a
+trusted saved archive: strict report validation, SHA-256 before Docker, isolated
+restore and exact comparison with the saved migration/table-count inventory.
+Archive/report files remain unchanged on either success or failure. Older backups
+use their stored revision; no source database or existing restore target is used.
+Eight safety tests and one real Docker integration test passed, including corrupt
+checksums, invalid image/count metadata, mismatched inventories and saved-file
+preservation. The local 15-table, revision-0008 saved backup was also rechecked.
+This does not add signatures, row-by-row comparison, off-host storage or production
+recovery approval. No app code changed; prior app test results remain historical.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

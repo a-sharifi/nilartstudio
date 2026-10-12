@@ -1,9 +1,11 @@
+import hashlib
 import importlib.util
 import json
 import os
 import subprocess
 import tempfile
 import unittest
+from contextlib import nullcontext
 from pathlib import Path
 from unittest.mock import patch
 
@@ -63,6 +65,58 @@ class BackupTests(unittest.TestCase):
         self.assertNotIn("--volume", create)
         self.assertEqual(commands[-1], ["docker", "rm", "-f", target])
 
+    def saved_fixture(self, directory):
+        archive = Path(directory) / "postgres.dump"
+        archive.write_bytes(b"trusted fixture")
+        report = {"verified": True, "sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
+                  "postgres_image": "sha256:" + "a" * 64, "migration": "0008", "tables": []}
+        (Path(directory) / "verification.json").write_text(json.dumps(report))
+        return report
+
+    def test_changed_archive_is_rejected_before_docker_and_preserved(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.saved_fixture(directory)
+            archive = Path(directory) / "postgres.dump"
+            archive.write_bytes(b"corrupted")
+            with patch.object(backup, "isolated_postgres") as restore:
+                with self.assertRaisesRegex(RuntimeError, "checksum"):
+                    backup.verify_existing(Path(directory))
+                restore.assert_not_called()
+            self.assertEqual(archive.read_bytes(), b"corrupted")
+            self.assertTrue((Path(directory) / "verification.json").exists())
+
+    def test_invalid_report_image_is_rejected_before_docker(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self.saved_fixture(directory)
+            result["postgres_image"] = "untrusted:latest"
+            (Path(directory) / "verification.json").write_text(json.dumps(result))
+            with patch.object(backup, "isolated_postgres") as restore:
+                with self.assertRaisesRegex(RuntimeError, "report is invalid"):
+                    backup.verify_existing(Path(directory))
+                restore.assert_not_called()
+
+    def test_inventory_mismatch_is_rejected_without_rewriting_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.saved_fixture(directory)
+            report = Path(directory) / "verification.json"
+            original = report.read_bytes()
+            with patch.object(backup, "isolated_postgres", return_value=nullcontext("target")), \
+                 patch.object(backup, "restore_archive"), \
+                 patch.object(backup, "inventory", return_value={"migration": "0009", "tables": []}), \
+                 self.assertRaisesRegex(RuntimeError, "inventory does not match"):
+                backup.verify_existing(Path(directory))
+            self.assertEqual(report.read_bytes(), original)
+
+    def test_invalid_row_count_is_rejected_before_docker(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = self.saved_fixture(directory)
+            result["tables"] = [{"schema": "public", "table": "private", "rows": True}]
+            (Path(directory) / "verification.json").write_text(json.dumps(result))
+            with patch.object(backup, "isolated_postgres") as restore:
+                with self.assertRaisesRegex(RuntimeError, "inventory is invalid"):
+                    backup.verify_existing(Path(directory))
+                restore.assert_not_called()
+
 
 @unittest.skipUnless(os.environ.get("NILART_RUN_BACKUP_INTEGRATION") == "1",
                      "Explicit Docker integration opt-in required")
@@ -80,6 +134,9 @@ class DockerBackupTests(unittest.TestCase):
             """)
             output = Path(directory) / "backup"
             result = backup.backup_and_verify(source, output)
+            saved_report = (output / "verification.json").read_bytes()
+            self.assertEqual(backup.verify_existing(output), result)
+            self.assertEqual((output / "verification.json").read_bytes(), saved_report)
             self.assertTrue(result["verified"])
             self.assertEqual(result["migration"], "0008")
             counts = {entry["table"]: entry["rows"] for entry in result["tables"]}

@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import subprocess
 import time
 import uuid
@@ -116,20 +117,57 @@ def backup_and_verify(source, output, expected_migration="0008"):
         raise
 
 
+def verify_existing(directory):
+    archive = directory / "postgres.dump"
+    report = directory / "verification.json"
+    result = json.loads(report.read_text())
+    if (not isinstance(result, dict) or result.get("verified") is not True
+            or not isinstance(result.get("sha256"), str)
+            or not re.fullmatch(r"[0-9a-f]{64}", result["sha256"])
+            or not isinstance(result.get("postgres_image"), str)
+            or not re.fullmatch(r"sha256:[0-9a-f]{64}", result["postgres_image"])
+            or not isinstance(result.get("migration"), str) or not result["migration"]
+            or not isinstance(result.get("tables"), list)):
+        raise RuntimeError("Saved verification report is invalid")
+    for table in result["tables"]:
+        if (not isinstance(table, dict) or set(table) != {"schema", "table", "rows"}
+                or not isinstance(table["schema"], str) or not table["schema"]
+                or not isinstance(table["table"], str) or not table["table"]
+                or type(table["rows"]) is not int or table["rows"] < 0):
+            raise RuntimeError("Saved table inventory is invalid")
+    with archive.open("rb") as stream:
+        digest = hashlib.file_digest(stream, "sha256").hexdigest()
+    if digest != result["sha256"]:
+        raise RuntimeError("Saved archive checksum does not match the verification report")
+    with isolated_postgres(result["postgres_image"]) as target:
+        restore_archive(archive, target)
+        restored = inventory(target)
+        if restored != {"migration": result["migration"], "tables": result["tables"]}:
+            raise RuntimeError("Restored inventory does not match the saved verification report")
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-container", default="nilart-postgres-1")
-    parser.add_argument("--output-dir", type=Path, required=True,
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--verify-existing-dir", type=Path,
+                      help="Recheck a trusted saved backup without modifying it")
+    mode.add_argument("--output-dir", type=Path,
                         help="New directory under an existing parent; private artifacts retained")
     parser.add_argument("--expected-migration", default="0008")
     arguments = parser.parse_args()
     try:
-        result = backup_and_verify(arguments.source_container, arguments.output_dir,
-                                   arguments.expected_migration)
-    except (RuntimeError, OSError, subprocess.TimeoutExpired) as error:
+        if arguments.verify_existing_dir:
+            result = verify_existing(arguments.verify_existing_dir)
+        else:
+            result = backup_and_verify(arguments.source_container, arguments.output_dir,
+                                       arguments.expected_migration)
+    except (RuntimeError, OSError, ValueError, subprocess.TimeoutExpired) as error:
         parser.exit(1, f"Backup verification failed: {error}\n")
     print(f"Verified PostgreSQL restore: migration {result['migration']}, "
-          f"{len(result['tables'])} tables. Private artifacts: {arguments.output_dir}")
+          f"{len(result['tables'])} tables. Private artifacts: "
+          f"{arguments.verify_existing_dir or arguments.output_dir}")
 
 
 if __name__ == "__main__":

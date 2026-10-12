@@ -98,3 +98,7 @@ Run `make PYTHON=python3 backup-verify` for a read-only PostgreSQL backup and a
 restore drill in a new isolated temporary container. Private artifacts go to
 ignored `backups/`. See [backup and restore scope](docs/backup-restore.md) for
 requirements, tests and remaining production recovery work.
+
+Recheck an existing trusted backup without modifying it with
+`make PYTHON=python3 BACKUP_PATH=/private/saved-directory backup-check`.
+The archive checksum and restored migration/table inventory must match its saved report.
