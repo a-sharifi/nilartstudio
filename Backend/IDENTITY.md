@@ -164,3 +164,17 @@ cookie and no-store caching. Seven new cases passed with the full suite (137).
 This does not verify production proxy addressing, distributed deployment/failover,
 real SMS delivery or all OTP address/purpose abuse scenarios. No production auth
 release approval is implied. The existing Starlette/httpx warning remains.
+
+
+### OTP address limits and sign-in outages (2026-10-12)
+
+Nine additional disposable Redis cases verify OTP address caps across different
+phone numbers, independent request/verify/complete counters, and address-only
+verification/completion limiting without a phone. Rejected attempts do not extend
+shortened windows. Real Redis shutdown causes password login, OTP request/verify,
+registration completion and recovery completion to return
+`503 authentication_unavailable`, with no session cookie and `Cache-Control: no-store`.
+An unusable database dependency ensures these outage paths stop before database
+business work. No SMS is sent. The full local backend suite passes 146 tests;
+this update changes tests and documentation only. Production proxy address
+configuration, Redis failover and remote CI execution remain unverified.

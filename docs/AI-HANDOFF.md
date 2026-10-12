@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 137 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 146 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -301,6 +301,18 @@ backend CI now pulls/enables Redis 7. All 137 backend tests passed locally with
 PostgreSQL and Redis, plus lint/type checks. Runtime application code did not change;
 no new frontend build/browser result is claimed. Remote CI, deployment/proxy
 addressing, failover and live SMS delivery remain unverified.
+
+## OTP address/outage continuation (2026-10-12)
+
+Nine further disposable Redis cases cover shared-address OTP caps across distinct
+phones, independent action counters, address-only paths and unchanged expiry on
+rejection. Real Redis shutdown denies all five password/OTP sign-in endpoints
+with 503, no cookie and no-store before database business work. No SMS was sent.
+All 146 backend tests passed locally, and lint passed for the changed test file.
+All eight application services remain healthy; fixture containers were removed.
+Only tests/documentation changed, so no fresh frontend/build/typecheck result is
+claimed. Remote CI, production proxy address handling and Redis failover remain
+unverified. Existing Starlette/httpx warning remains.
 
 ## Recommended continuation
 

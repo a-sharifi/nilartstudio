@@ -118,3 +118,53 @@ def test_bootstrap_http_limit_and_real_outage_fail_closed(isolated_redis, monkey
             assert unavailable.headers["cache-control"] == "no-store"
     finally:
         app.dependency_overrides.pop(session_dependency, None)
+
+
+@pytest.mark.parametrize("action,limit", [("request", 30), ("verify", 60), ("complete", 30)])
+def test_otp_address_limits_across_phone_numbers(isolated_redis, action, limit):
+    url, _, _ = isolated_redis
+    with ThreadPoolExecutor(max_workers=12) as workers:
+        results = list(workers.map(
+            lambda index: otp_attempt_allowed(url, action, f"phone-{index}", "shared-ip"),
+            range(limit + 10)))
+    assert sum(results) == limit
+
+
+def test_otp_actions_have_independent_address_windows_without_phone(isolated_redis):
+    url, cache, _ = isolated_redis
+    for action, limit, window in [("request", 30, 3600), ("verify", 60, 300), ("complete", 30, 300)]:
+        assert all(otp_attempt_allowed(url, action, "", "shared-ip") for _ in range(limit))
+        assert not otp_attempt_allowed(url, action, "", "shared-ip")
+        keys = list(cache.scan_iter(match=f"auth:otp:{action}:*"))
+        assert len(keys) == 1
+        assert b":address:" in keys[0]
+        cache.expire(keys[0], 10)
+        assert not otp_attempt_allowed(url, action, "", "shared-ip")
+        assert 0 < cache.ttl(keys[0]) <= min(10, window)
+    assert len(list(cache.scan_iter())) == 3
+
+
+@pytest.mark.parametrize("path,body", [
+    ("login/password", {"phone": "+989123456789", "password": "test-password"}),
+    ("otp/request", {"phone": "+989123456789", "purpose": "register"}),
+    ("otp/verify", {"challenge_id": "00000000-0000-0000-0000-000000000001",
+                    "purpose": "register", "code": "123456"}),
+    ("register/complete", {"grant": "x" * 40, "password": "test-password"}),
+    ("recovery/complete", {"grant": "x" * 40, "password": "test-password"}),
+])
+def test_sign_in_endpoints_fail_closed_on_real_redis_outage(isolated_redis, monkeypatch, path, body):
+    url, _, name = isolated_redis
+    monkeypatch.setattr(settings, "redis_url", url)
+    # Any accidental database access will fail: the outage must deny before business work.
+    app.dependency_overrides[session_dependency] = lambda: object()
+    try:
+        subprocess.run(["docker", "stop", name], check=True, capture_output=True, timeout=30)
+        with TestClient(app) as client:
+            rejected = client.post(f"/api/v1/auth/{path}", json=body,
+                                   headers={"Origin": "http://localhost:8080"})
+            assert rejected.status_code == 503
+            assert rejected.json()["code"] == "authentication_unavailable"
+            assert "set-cookie" not in rejected.headers
+            assert rejected.headers["cache-control"] == "no-store"
+    finally:
+        app.dependency_overrides.pop(session_dependency, None)
