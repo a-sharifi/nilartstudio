@@ -268,3 +268,28 @@ or fixture data. No migration is needed: migration 0013 already supplies the
 unique `(sku_id, version)` audit index. Generated OpenAPI/client types include
 the endpoint and typed decimal-string snapshots. Admin UI and production SKU
 creation/publication remain subsequent slices.
+
+### Unpublished SKU authoring
+
+Migration `0014` adds independent SKU authoring versions and audits. Price
+versions remain independent. `POST /api/v1/admin/catalog/products/{product_id}/skus`
+accepts only an explicit, trimmed `code` (1–160 characters) and returns 201 with
+`sku_id`, `product_id`, `code`, `published:false` and `version:1`. Codes are globally
+unique; duplicates return 409. Products must already exist. Each request creates
+only its submitted SKU, with null price and currency.
+
+`GET /api/v1/admin/catalog/skus/{sku_id}` reads authoring metadata. Existing SKUs
+without an authoring version report zero. `PUT` on that path accepts `version`
+and `code`; stale versions return 409 and successful edits increment the version.
+Published SKU codes cannot be edited through this endpoint (409). Neither product
+ownership, publication, price nor option selections can be supplied in these
+bodies; additional fields are rejected. Publication and mapping draft combinations
+to published SKUs remain separate work.
+
+All endpoints require `catalog.manage`. Writes additionally check exact Origin,
+fresh CSRF and transactionally recheck locked session/account/roles. SKU/code
+changes, versions and before/after audit records commit together. A failed audit
+rolls back creation or editing. Audits record actor, product/SKU, UTC timestamp
+and versions; the creation snapshot has JSON null `before`. Public endpoints
+continue to hide unpublished SKUs, and authoring supplies no inventory or
+purchasing eligibility. No application SKUs are automatically created by migration.

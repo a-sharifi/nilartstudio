@@ -427,3 +427,10 @@
 - پاسخ typed شامل actor، SKU/product، زمان UTC، نسخه‌ها و before/after دقیق است؛ null همچنان نامشخص است و session/credential نمایش داده نمی‌شود. پاسخ‌ها no-store هستند؛ نبود SKU با ۴۰۴ و نداشتن مجوز با ۴۰۱/۴۰۳ مشخص می‌شود. migration یا تغییر داده تجاری لازم نبود.
 - هر ۲۲۱ تست backend با PostgreSQL/Redis مستقل موفق است؛ هفت تست جدید مقدار دقیق، null، isolation، pagination، revocation و حدود ورودی را پوشش می‌دهند. lint و mypy backend، بازتولید OpenAPI/client، typecheck frontend و build تولیدی Docker موفق‌اند؛ هر هشت سرویس سالم است.
 - درخواست زنده بدون نشست ۴۰۱/no-store می‌دهد. دیتابیس محلی همچنان صفر قیمت ثبت‌شده و صفر price audit دارد و ترکیب پکیج گربه ۱/۲/۱ محفوظ است. بررسی مرورگر مرحله قبل تاریخی و CI راه دور تأییدنشده است. ادامه: admin UI، ساخت/انتشار نسخه‌دار SKU و قرارداد موجودی.
+
+## پایه ایجاد و ویرایش SKU منتشرنشده — ۲۰۲۶-۱۰-۱۲
+
+- migration 0014 نسخه و audit مستقل authoring SKU را اضافه کرد. POST برای محصول موجود فقط کد صریح می‌گیرد و SKU با published=false و قیمت نامشخص می‌سازد. GET/PUT metadata نسخه‌دار دارند؛ نسخه قدیمی، کد تکراری و ویرایش SKU منتشرشده ۴۰۹ می‌دهد. تغییر محصول، قیمت و انتشار از این API امکان‌پذیر نیست.
+- catalog.manage، Origin دقیق، CSRF تازه و بازبینی قفل‌شده نشست/حساب/نقش برای write لازم‌اند. ایجاد/ویرایش، افزایش نسخه و audit در یک تراکنش‌اند؛ شکست audit ایجاد یا ویرایش را rollback می‌کند. فقط داده صریح ایجاد می‌شود و SKU منتشرنشده از پاسخ عمومی پنهان است.
+- هر ۲۳۷ تست backend با PostgreSQL/Redis مستقل موفق است؛ ۱۶ مورد جدید security، ورودی، isolation، duplicate، optimistic version، rollback و concurrency را پوشش می‌دهند. lint/mypy backend، بازتولید OpenAPI/client، typecheck frontend و build تولیدی Docker موفق‌اند. هر یازده تست backup شامل restore واقعی مستقل موفق است و revision پیش‌فرض 0014 شد.
+- migration محلی اعمال شد و هشت سرویس سالم‌اند. سه SKU fixture بدون قیمت، صفر authoring audit و ترکیب پکیج گربه محفوظ است؛ درخواست زنده بدون نشست ۴۰۱/no-store می‌دهد. UI تغییر نکرده؛ نتایج مرورگر قبلی تاریخی و CI راه دور تأییدنشده است. ادامه: mapping صریح option combination، انتشار بازبینی‌شده، سپس موجودی و admin UI.

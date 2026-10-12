@@ -735,6 +735,38 @@ unauthenticated history returns 401/no-store. Local DB still has zero price audi
 and zero priced SKUs; Cats bundle composition remains 1/2/1. Browser checks from
 the previous imagery slice remain historical; remote CI remains unverified.
 
+## Unpublished SKU authoring foundation (2026-10-12)
+
+Migration 0014 adds independent SKU authoring versions/audits. POST admin
+`/products/{product_id}/skus` creates only an explicitly submitted code, unpublished
+and unpriced. GET/PUT admin `/skus/{sku_id}` reads metadata and version-checks code
+edits. Published codes are immutable through this API. Missing records return
+404; duplicate codes/stale versions/published edits return 409. Existing untracked
+SKUs report version zero. Product membership and price are never reassigned.
+
+Every write requires catalog.manage, exact Origin, fresh CSRF and locked rechecks
+of session/account/roles. Create/edit plus audit plus version are atomic. Public
+catalog responses exclude these unpublished SKUs. No automatic option publication,
+stock, price, account or administrator assignment is added. Price authoring keeps
+its separate versions. No application SKU data is entered by this slice.
+
+Tests cover invalid codes/extra fields, authorization, fresh CSRF/session
+revocation, duplicate codes, stale versions, audit rollback for creation and
+editing, public isolation, concurrent duplicate creation and concurrent edits,
+and migration downgrade preserving catalog records. Backup expected revision
+advances to 0014. All 237 backend tests passed with isolated PostgreSQL/Redis;
+backend lint/configured mypy, OpenAPI/client regeneration and frontend typecheck
+passed. Production Docker build and eleven backup tests (including real isolated
+restore) passed. Local migration head is 0014; all eight services are healthy.
+Live private metadata returns 401/no-store without a session. Existing three
+fixture SKUs remain unpriced, authoring audits remain empty, and Cats composition
+is unchanged. No UI changed; prior browser results are historical. Remote CI
+is unverified.
+
+Next: explicit option-combination mapping and reviewed publication, followed by
+inventory contracts; admin UI remains separate. Do not enable purchase controls
+using fixture SKUs or infer business specifications/prices from the reference.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

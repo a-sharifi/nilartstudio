@@ -312,6 +312,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/catalog/skus/{sku_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read Sku */
+        get: operations["read_sku_api_v1_admin_catalog_skus__sku_id__get"];
+        /** Update Sku */
+        put: operations["update_sku_api_v1_admin_catalog_skus__sku_id__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/catalog/products/{product_id}/skus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Sku */
+        post: operations["create_sku_api_v1_admin_catalog_products__product_id__skus_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/login/password": {
         parameters: {
             query?: never;
@@ -1055,6 +1090,30 @@ export interface components {
          * @enum {string}
          */
         Role: "customer" | "artist" | "operations" | "finance" | "admin";
+        /** SKUAuthoringOutput */
+        SKUAuthoringOutput: {
+            /**
+             * Sku Id
+             * Format: uuid
+             */
+            sku_id: string;
+            /**
+             * Product Id
+             * Format: uuid
+             */
+            product_id: string;
+            /** Code */
+            code: string;
+            /** Published */
+            published: boolean;
+            /** Version */
+            version: number;
+        };
+        /** SKUCreate */
+        SKUCreate: {
+            /** Code */
+            code: string;
+        };
         /** SKUOutput */
         SKUOutput: {
             /**
@@ -1081,6 +1140,13 @@ export interface components {
             page: number;
             /** Page Size */
             page_size: number;
+        };
+        /** SKUUpdate */
+        SKUUpdate: {
+            /** Code */
+            code: string;
+            /** Version */
+            version: number;
         };
         /** SessionOutput */
         SessionOutput: {
@@ -1750,6 +1816,107 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PriceAuditPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_sku_api_v1_admin_catalog_skus__sku_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sku_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SKUAuthoringOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_sku_api_v1_admin_catalog_skus__sku_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sku_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SKUUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SKUAuthoringOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_sku_api_v1_admin_catalog_products__product_id__skus_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                product_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SKUCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SKUAuthoringOutput"];
                 };
             };
             /** @description Validation Error */
