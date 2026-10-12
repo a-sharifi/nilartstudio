@@ -199,3 +199,11 @@ four products from the pinned design reference. Published descriptions include a
 bilingual test-data notice; sample price/stock/options are not imported. No SKUs
 or commercial records are created. See `fixtures/README.md` for the opt-in importer,
 transaction rollback and existing-slug protection. Startup/migrations remain unseeded.
+
+## Published bundle frontend layout (2026-10-12)
+
+Live bundle list/detail routes use reference bundle cards and the original detail
+layout. Descriptions and explicit component quantities/codes come from the existing
+API. Missing commercial/media fields stay unknown; prototype notebook options,
+capacity calculations, discounts and cart callbacks are not invoked. No API/schema
+or data changes accompany this presentation correction.

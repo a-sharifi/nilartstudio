@@ -1117,3 +1117,31 @@ function BagIcon() {
     </svg>
   )
 }
+
+// The published contract supplies descriptions and fixed SKU quantities only.
+// Keep the reference detail structure without invoking prototype purchases/options.
+export function PublishedBundleDetail({ bundle, language, onNavigate }: {
+  bundle: import("../features/catalog/bundle-catalog").PublishedBundle;
+  language: 0 | 1; onNavigate: (name: string, route: string) => void;
+}) {
+  const t = (fa: string, en: string) => language === 0 ? fa : en;
+  const root = `/${language === 0 ? "fa" : "en"}/bundles`;
+  const name = t(bundle.title_fa, bundle.title_en);
+  const go = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault(); onNavigate(t("پکیج‌ها", "Bundles"), root);
+  };
+  return <div className="container product-detail-page bundle-detail-page">
+    <nav className="breadcrumb detail-breadcrumb" aria-label={t("مسیر صفحه", "Breadcrumb")}><a href={root} onClick={go}>{t("پکیج‌ها", "Bundles")}</a><span>/</span><span aria-current="page">{name}</span></nav>
+    <section className="product-main-layout">
+      <div className="bundle-gallery-column"><div className="product-gallery"><div className="gallery-main"><div className="gallery-surface"><div className="gallery-object"><span>{t("تصویر در دسترس نیست", "Image unavailable")}</span></div></div><span className="gallery-editorial">NILART STUDIO / EVERYDAY OBJECTS</span></div></div><div className="bundle-gallery-inventory"><span className="eyebrow">THE COMPLETE SET</span><h2>{t("اجزای منتشرشده پکیج", "Published bundle contents")}</h2><p>{t("فقط اجزای فهرست‌شده در این پکیج قرار دارند.", "Only the listed components belong to this bundle.")}</p></div></div>
+      <div className="product-purchase-panel bundle-purchase-panel"><div className="product-intro-top"><span className="eyebrow">NILART STUDIO</span></div><span className="bundle-page-label">{t("پکیج", "Bundle")}</span><h1>{name}</h1><p className="product-intro">{t(bundle.description_fa,bundle.description_en)}</p>
+        <section className="bundle-components" aria-labelledby="published-bundle-components"><div className="bundle-components-heading"><h2 id="published-bundle-components">{t("این پکیج شامل چیست؟", "What's included?")}</h2><span>{t("اجزای ثابت", "Fixed contents")}</span></div>
+          {bundle.components.map(part=><article className="bundle-component-card" key={part.sku_id}><div className="bundle-component-head"><div className="bundle-component-thumb" aria-hidden="true"><span>—</span></div><div><span className="component-fixed-count">{part.quantity.toLocaleString(language === 0 ? "fa-IR" : "en-US")} {t("عدد در هر پکیج", "per bundle")}</span><h3>{t(part.title_fa,part.title_en)}</h3><p><bdi>{part.code}</bdi></p></div></div><div className="bundle-component-footer"><span className="component-availability">{t("موجودی تأیید نشده", "Stock unconfirmed")}</span></div></article>)}
+          {!bundle.components.length && <p className="product-stock-state">{t("جزئیات اجزا در دسترس نیست", "Component details unavailable")}</p>}
+        </section>
+        <div className="bundle-price-breakdown"><p className="product-stock-state">{t("قیمت و تخفیف تأیید نشده", "Price and discount unconfirmed")}</p></div><button className="button primary product-add-button" disabled>{t("اطلاعات خرید تأیید نشده", "Purchase details unconfirmed")}</button><p className="product-reservation-note">{t("موجودی یا امکان خرید از این فهرست استنتاج نمی‌شود.", "This listing does not confirm inventory or purchase eligibility.")}</p>
+      </div>
+    </section>
+  </div>;
+}

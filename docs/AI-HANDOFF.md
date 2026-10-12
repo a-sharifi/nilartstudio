@@ -166,7 +166,7 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL/Redis | 196 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 77 passed | Includes native artwork catalog and commission submission/retry/session coverage |
+| Frontend tests | 80 passed | Includes native artwork, commission and published bundle coverage |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0012 |
 | Chromium catalog checks | 8 passed | Artwork navigation/search/mobile, shop/category and footer/bundle regressions; prior full-suite results are historical |
@@ -596,6 +596,36 @@ English/Persian shop plus collection detail were verified in Chromium. Persian
 mobile shop has no horizontal overflow. A second real PostgreSQL import was
 rejected without changing existing data. No frontend/API/schema changes or full
 backend suite/build rerun for this data-only request; remote CI is unverified.
+
+## Published bundle reference layout — 2026-10-12
+
+Live bundle list/detail routes now use the original bundle-card, product-gallery,
+two-column purchase panel and bundle-component structures. PublishedBundlesPage
+uses the homepage reference bundle section; PublishedBundleDetail in the original
+BundleDetailPage adapts the detail structure to the available public contract.
+All 42 reference CSS files remain byte-identical. The last generic
+LiveArtworksPage wrapper was removed. Prototype bundle options/calculation/cart
+remain limited to demo mode and are not invoked by published bundle views.
+
+The bounded, cancellable bundle adapter validates descriptions, explicit quantities,
+SKU codes and uniqueness, supports pagination/retry and distinguishes missing detail
+from service errors. Native states cover loading, empty, malformed/error and 404.
+Arbitrary components display their exact published names/quantities/codes; there
+is no assumption of notebook options or Cats membership. Images, stock, price,
+discounts and purchase eligibility remain unconfirmed. No fabricated media,
+prototype cart, automatic capacity or discount calculations are introduced.
+
+Validation: 80 frontend tests, lint/typecheck and production Docker build pass.
+Fourteen focused Chromium checks cover bundles, catalog, commissions and footer,
+including RTL mobile, invalid responses, retry, empty results and missing details.
+All eight services remain healthy. The local user-requested five collections/four
+products persist in PostgreSQL; this slice adds no bundle/SKU/data records and no
+backend/API/schema changes. Historical backend tests were not rerun. Remote CI
+remains unverified.
+
+Next: connect product detail routes to original ProductDetailPage and existing
+published product/SKU reads, retaining unknown inventory and disabled purchasing;
+then implement explicitly approved inventory/price and authoring contracts.
 
 ## Recommended continuation
 

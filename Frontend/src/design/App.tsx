@@ -46,7 +46,8 @@ import PrivacyPage from "./PrivacyPage"
 import { contactDemoConfig } from "./contact"
 import CommissionFlow from "../features/catalog/CommissionFlow"
 import { useArtworkCatalog } from "../features/catalog/artwork-catalog"
-import LiveArtworksPage from "../features/catalog/LiveArtworksPage"
+import PublishedBundlesPage from "./PublishedBundlesPage"
+import { useBundleCatalog } from "../features/catalog/bundle-catalog"
 import { isShopRoute } from "./shop"
 import ProductCard from "./ProductCard"
 import { mergeCart, productSlug, type CartLine } from "./product"
@@ -632,6 +633,8 @@ export default function App() {
   const homeMode = demoMode ? mode : liveCatalog.status
   const homeCollectionsMode = demoMode ? mode : liveCatalog.collectionsStatus
   const isProduct = page.startsWith("/products/")
+  const liveBundleSlug = /^\/(?:fa\/|en\/)?bundles\/[^/]+$/.test(page) ? page.split("/").pop() : undefined
+  const bundleCatalog = useBundleCatalog(!demoMode && /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page), liveBundleSlug)
   const isBundle = page.startsWith("/bundles/")
   const isCart = page === "/cart"
   const isCheckout = ["/checkout", "/checkout/address", "/checkout/delivery"].includes(page) || isPaymentRoute(page)
@@ -1820,7 +1823,7 @@ export default function App() {
             />
           </Suspense>
         ) : /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page) && !demoMode ? (
-          <LiveArtworksPage resource="bundles" language={lang} slug={/^\/(?:fa\/|en\/)?bundles\/[^/]+$/.test(page) ? page.split("/").pop() : undefined} navigate={navigate} />
+          <PublishedBundlesPage catalog={bundleCatalog} language={lang} slug={liveBundleSlug} onNavigate={navigate} />
         ) : isBundle ? (
           <Suspense
             fallback={
