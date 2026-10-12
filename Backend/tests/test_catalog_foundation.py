@@ -326,3 +326,42 @@ def test_associations_reject_duplicate_and_orphan_links(catalog, association, pa
             session.add(association(product_id=linked_product, **{field: linked_parent}))
             with pytest.raises(IntegrityError):
                 session.flush()
+
+
+@pytest.mark.parametrize("page_size,expected_count", [(1, 1), (24, 4)])
+def test_product_page_batches_published_associations(catalog, page_size, expected_count):
+    client, engine, _ = catalog
+    statements = []
+
+    def record(connection, cursor, statement, parameters, context, executemany):
+        statements.append(statement)
+
+    event.listen(engine, "before_cursor_execute", record)
+    try:
+        response = client.get(f"/api/v1/catalog/products?page_size={page_size}")
+    finally:
+        event.remove(engine, "before_cursor_execute", record)
+    assert response.status_code == 200
+    assert len(response.json()["items"]) == expected_count
+    assert len(statements) == 4  # Count, page, collection links, category links.
+    for item in response.json()["items"]:
+        detail = client.get(f"/api/v1/catalog/products/{item['slug']}").json()
+        assert item == detail
+
+
+def test_empty_product_page_skips_association_queries(catalog):
+    client, engine, _ = catalog
+    statements = []
+
+    def record(connection, cursor, statement, parameters, context, executemany):
+        statements.append(statement)
+
+    event.listen(engine, "before_cursor_execute", record)
+    try:
+        response = client.get("/api/v1/catalog/products?page=100")
+    finally:
+        event.remove(engine, "before_cursor_execute", record)
+    assert response.status_code == 200
+    assert response.json()["items"] == []
+    assert response.json()["total"] == 4
+    assert len(statements) == 2

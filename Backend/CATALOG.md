@@ -60,3 +60,16 @@ published product, and exactly one published SKU in a single transaction.
 Default price is unknown; `--price 12.345678 --currency IRT` explicitly sets it.
 No stock, inventory, or availability is created or inferred. Existing demo records
 are never overwritten; use another `--prefix demo-another` for another run.
+
+
+## Batched product-page associations (2026-10-12)
+
+Product pages fetch published collection/category memberships in two batch queries
+for the selected product IDs, preserving slug/ID ordering and empty memberships.
+A nonempty page uses four SELECTs (count, products, collections, categories),
+instead of two plus two per product. Empty pages skip membership queries.
+Three regression tests measure query counts for one/multiple/zero results and
+compare each listed product with its detail response. Existing public visibility,
+filtering, precision and pagination tests remain passing. No schema/API shape,
+data, inventory or publication workflow changes are included. This verifies query
+count, not production throughput or consistency across concurrent publications.

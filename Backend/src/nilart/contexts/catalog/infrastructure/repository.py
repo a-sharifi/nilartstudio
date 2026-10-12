@@ -160,6 +160,28 @@ class SqlCatalogRepository:
         return Category(row.id, row.slug, row.title_fa, row.title_en, row.published,
                         row.description_fa, row.description_en)
 
+    def _products(self, rows):
+        if not rows:
+            return []
+        ids = [row.id for row in rows]
+        collections: dict[PythonUUID, list[PythonUUID]] = {id_: [] for id_ in ids}
+        categories: dict[PythonUUID, list[PythonUUID]] = {id_: [] for id_ in ids}
+        for product_id, collection_id in self.session.execute(
+                select(ProductCollectionRow.product_id, CollectionRow.id)
+                .join(CollectionRow, ProductCollectionRow.collection_id == CollectionRow.id)
+                .where(ProductCollectionRow.product_id.in_(ids), CollectionRow.published.is_(True))
+                .order_by(CollectionRow.slug, CollectionRow.id)):
+            collections[product_id].append(collection_id)
+        for product_id, category_id in self.session.execute(
+                select(ProductCategoryRow.product_id, CategoryRow.id)
+                .join(CategoryRow, ProductCategoryRow.category_id == CategoryRow.id)
+                .where(ProductCategoryRow.product_id.in_(ids), CategoryRow.published.is_(True))
+                .order_by(CategoryRow.slug, CategoryRow.id)):
+            categories[product_id].append(category_id)
+        return [Product(row.id, row.slug, row.title_fa, row.title_en, row.published,
+                        row.description_fa, row.description_en,
+                        tuple(collections[row.id]), tuple(categories[row.id])) for row in rows]
+
     def page(self, resource, page, page_size, collection=None, category=None):
         statement = self._statement(resource)
         model = self.MODELS[resource]
@@ -179,7 +201,8 @@ class SqlCatalogRepository:
         key = getattr(model, "code" if resource == "skus" else "slug")
         rows = self.session.scalars(statement.order_by(key, model.id)
                                     .offset((page - 1) * page_size).limit(page_size)).all()
-        return [self._entity(row) for row in rows], total
+        entities = self._products(rows) if resource == "products" else [self._entity(row) for row in rows]
+        return entities, total
 
     def detail(self, resource, key):
         model = self.MODELS[resource]

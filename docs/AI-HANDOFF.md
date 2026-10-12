@@ -165,7 +165,7 @@ private caches must register cleanup/revalidation and forms must register their 
 
 | Current check | Result | Qualification |
 | --- | --- | --- |
-| Backend with PostgreSQL/Redis | 160 passed | Isolated database schemas and disposable Redis containers |
+| Backend with PostgreSQL/Redis | 163 passed | Isolated database schemas and disposable Redis containers |
 | Frontend tests | 64 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0008 |
@@ -335,6 +335,17 @@ All 160 backend tests, lint/type checks and Docker build passed; eight services
 are healthy. No frontend/migration changes. This covers pre-response failures;
 streaming/background failures and server-level traceback logging remain separate.
 Remote CI remains unverified and the existing Starlette/httpx warning remains.
+
+## Catalog batch-read continuation (2026-10-12)
+
+Product pages now batch published memberships in two queries for selected product
+IDs. Nonempty pages use four SELECTs; empty pages use two. Ordering, draft-link
+exclusion and empty memberships are preserved. Three new regression cases measure
+query counts and compare list/detail outputs. All 163 backend tests, lint/type
+checks and Docker build passed; eight local services are healthy. No frontend,
+API shape, migration or application data changes. Query counts do not establish
+production throughput or a snapshot across concurrent publication changes.
+Remote CI remains unverified; existing Starlette/httpx warning remains.
 
 ## Recommended continuation
 
