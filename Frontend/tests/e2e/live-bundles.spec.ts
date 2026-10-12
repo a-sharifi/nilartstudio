@@ -16,3 +16,12 @@ test("footer information pages render without backend guards", async ({ page }) 
     await expect(page.getByText("Backend connection required")).toHaveCount(0);
   }
 });
+
+test("static footer content remains readable on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/fa/faq");
+  await expect(page.getByRole("heading", { name: "سؤالات متداول", exact: true })).toBeVisible();
+  await page.getByText("آیا برای مرور فروشگاه باید وارد شوم؟").click();
+  await expect(page.getByText("خیر. صفحات عمومی فروشگاه، کالکشن‌ها، نقاشی‌ها و پکیج‌ها بدون ورود قابل مشاهده‌اند.")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});

@@ -166,7 +166,7 @@ private caches must register cleanup/revalidation and forms must register their 
 | Current check | Result | Qualification |
 | --- | --- | --- |
 | Backend with PostgreSQL/Redis | 196 passed | Isolated database schemas and disposable Redis containers |
-| Frontend tests | 71 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
+| Frontend tests | 72 passed | Includes adapter, shared-store and React-hook access lifecycle regressions |
 | Lint/type checks, both applications | Passed | Latest source |
 | Final Docker build and service health | Passed | All eight services healthy, migration head 0012 |
 | Chromium browser suite | 32 passed | Production development build; sensitive responses mocked |
@@ -468,6 +468,17 @@ regression and eight footer routes) passed; eight services healthy at head 0012.
 Backup defaults advance to 0012. Bundle authoring/options/discounts,
 inventory capacity/reservation, cart and payment remain outstanding. No seeds.
 Remote CI unverified; existing warning remains.
+
+## Static footer content completion (2026-10-12)
+
+Eight footer information pages now have bilingual introductions, content sections,
+breadcrumbs, shared navigation and shop/commission links; FAQ uses expandable
+answers. Responsive styling is isolated in features/design/static-info.css using
+existing tokens; imported CSS remains unchanged. Unpublished legal/contact details
+stay explicit, and no fake tracking/message/refund forms are introduced. All 72
+frontend tests, lint/typecheck and Docker build passed. Two focused Chromium tests
+verify all eight routes plus mobile FAQ interaction/no overflow; mobile screenshot
+was inspected. Backend/migration unchanged. Remote CI remains unverified.
 
 ## Recommended continuation
 
