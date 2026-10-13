@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useRef, useState } from "react"
 import {
   addressCountry,
@@ -222,7 +223,7 @@ export function AddressForm({
                   ? t("استان *", "Province *")
                   : t("شهر *", "City *")}
               </label>
-              <select
+              <SelectDropdown
                 id={`address-${key}`}
                 name={key}
                 value={draft[key]}
@@ -261,7 +262,7 @@ export function AddressForm({
                     {item.name[language]}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
               {error(key)}
               {key === "city" && (
                 <small

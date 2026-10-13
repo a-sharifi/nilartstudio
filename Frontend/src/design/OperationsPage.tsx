@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState } from "react"
 import {
   demoOpsService,
@@ -296,7 +297,7 @@ function OperationsOverview({
       {visibleFields.map((key) => (
         <label key={key}>
           {opsText(en, filterLabels[key])}
-          <select
+          <SelectDropdown
             value={filters[(key as keyof OpsFilters)]}
             onChange={(e) => setFilter(key as keyof OpsFilters, e.target.value)}
           >
@@ -306,7 +307,7 @@ function OperationsOverview({
                 {opsText(en, label)}
               </option>
             ))}
-          </select>
+          </SelectDropdown>
         </label>
       ))}
     </div>
@@ -413,7 +414,7 @@ function OperationsOverview({
             "Fictional data; no real receipt, consumption or QC approval. One sample operational warehouse.",
           )}
         </span>
-        <select
+        <SelectDropdown
           aria-label={t("حالت نمایشی عملیات", "Operations preview state")}
           value={mode}
           onChange={(e) => {
@@ -440,7 +441,7 @@ function OperationsOverview({
               {t(fa, english)}
             </option>
           ))}
-        </select>
+        </SelectDropdown>
       </div>
       {role === "owner" && (
         <div className="op-role-preview">

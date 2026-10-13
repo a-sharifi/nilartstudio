@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import PublishedBundleCard, { referenceBundleOrder } from "./PublishedBundleCard"
 import Mockup from "./Mockup"
 import { ReferenceProductImage } from "./ReferenceMedia"
@@ -2468,7 +2469,7 @@ export default function App() {
           {isTerms && (
             <div className="foundation-controls">
               <label htmlFor="terms-state">{t("حالت قوانین خرید · Demo", "Purchase terms state · Demo")}</label>
-              <select id="terms-state" value={termsMode} onChange={event => setTermsMode(event.target.value)}>
+              <SelectDropdown id="terms-state" value={termsMode} onChange={event => setTermsMode(event.target.value)}>
                 {[
                   ["normal", t("متن آموزشی نمونه", "Educational sample")],
                   ["loading", t("بارگذاری", "Loading")],
@@ -2476,23 +2477,23 @@ export default function App() {
                   ["error", t("خطای دریافت", "Loading error")],
                   ["translation", t("ترجمه منتشرنشده", "Unpublished translation")],
                 ].map(([value,label]) => <option key={value} value={value}>{label}</option>)}
-              </select>
+              </SelectDropdown>
               <p>{t("PUB-22 · داده حقوقی مصوب ارائه نشده است؛ متن آموزشی Demo است. خلاصه و متن کامل از یک منبع می‌آیند. نسخه و تاریخ فرضی، selector نسخه‌های ناموجود و کنترل پذیرش checkout ساخته نشده‌اند.", "PUB-22 · No approved legal document was supplied; copy is educational Demo content. Summary and full text share one source. No invented metadata, unsupported version selector or checkout acceptance control.")}</p>
             </div>
           )}
           {isContact && (
             <div className="foundation-controls">
               <label htmlFor="contact-state">{t("حالت تماس با ما · Demo", "Contact page state · Demo")}</label>
-              <select id="contact-state" value={contactMode} onChange={event => setContactMode(event.target.value)}>
+              <SelectDropdown id="contact-state" value={contactMode} onChange={event => setContactMode(event.target.value)}>
                 {contactPreviewModes.map(item => <option key={item.id} value={item.id}>{item.label[lang]}</option>)}
-              </select>
+              </SelectDropdown>
               <p>{t("PUB-19 · فرم عمومی بدون پیوست. کانال، آدرس، زمان پاسخ و شماره پیگیری فرضی ساخته نشده است. فرم، موضوع‌ها و روش‌های پاسخ Demo هستند؛ رسید موفقیت فقط نمایشی است و نتیجه نامشخص با همان درخواست بازیابی می‌شود.", "PUB-19 · Public form, no attachments. No invented channels, address, response time or message reference. Form, topics and reply methods are Demo-only; the receipt is simulated and an uncertain result is recovered using the same request.")}</p>
             </div>
           )}
           {isAbout && (
             <div className="foundation-controls">
               <label htmlFor="about-state">{t("حالت درباره ما · Demo", "About page state · Demo")}</label>
-              <select id="about-state" value={aboutMode} onChange={event => setAboutMode(event.target.value)}>
+              <SelectDropdown id="about-state" value={aboutMode} onChange={event => setAboutMode(event.target.value)}>
                 {[
                   ["normal", t("صفحه کامل؛ بدون داستان ساختگی", "Full page; no invented story")],
                   ["loading", t("بارگذاری محدود", "Partial loading")],
@@ -2502,7 +2503,7 @@ export default function App() {
                   ["no-collections", t("بدون کالکشن منتخب", "No featured collections")],
                   ["translation", t("ترجمه منتشرنشده", "Unpublished translation")],
                 ].map(([value,label]) => <option key={value} value={value}>{label}</option>)}
-              </select>
+              </SelectDropdown>
               <p>{t("PUB-18 · معرفی نمونه از متن brief. عکس واقعی برند، مؤسس یا کارگاه ارائه نشده؛ تصاویر جای‌نگهدارند. نام کالکشن‌ها و مسیرها از داده پروژه می‌آیند؛ برای qolche نام فارسی ساخته نشده است.", "PUB-18 · Sample introduction from the brief. No brand, founder or studio photography supplied; visuals are placeholders. Collection names and routes come from project data; no Persian name is invented for qolche.")}</p>
             </div>
           )}
@@ -2514,7 +2515,7 @@ export default function App() {
                   "Returns policy state · Demo",
                 )}
               </label>
-              <select
+              <SelectDropdown
                 id="returns-state"
                 value={returnsMode}
                 onChange={(event) => setReturnsMode(event.target.value)}
@@ -2541,7 +2542,7 @@ export default function App() {
                     {label}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
               <p>
                 {t(
                   "PUB-24 · راهنمای عمومی، نه فرم درخواست. هیچ مهلت، مبلغ، نسخه یا تاریخ فرضی منتشر نمی‌شود. شرط‌های قطعی باید از سیاست مصوب و توافق تاریخی همان خرید دریافت شوند.",
@@ -2555,7 +2556,7 @@ export default function App() {
               <label htmlFor="tracking-state">
                 {t("حالت پیگیری سفارش · Demo", "Order tracking state · Demo")}
               </label>
-              <select
+              <SelectDropdown
                 id="tracking-state"
                 value={trackingMode}
                 onChange={(event) => setTrackingMode(event.target.value)}
@@ -2565,7 +2566,7 @@ export default function App() {
                     {item.label[lang]}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
               <p>
                 {t(
                   "PUB-17 · داده‌ها، کد 123456، کشورها و زمان‌ها فقط Demo هستند؛ هیچ پیامک یا تأیید سفارش واقعی انجام نمی‌شود. فرمت سفارش، طول کد، زمان انتظار، مجوز نتیجه و لینک حمل باید از سرویس معتبر دریافت شوند.",
@@ -2579,7 +2580,7 @@ export default function App() {
               <label htmlFor="faq-state">
                 {t("حالت سؤالات متداول", "FAQ state")}
               </label>
-              <select
+              <SelectDropdown
                 id="faq-state"
                 value={faqMode}
                 onChange={(event) => setFaqMode(event.target.value)}
@@ -2600,7 +2601,7 @@ export default function App() {
                     {label}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
               <p>
                 {t(
                   "PUB-20 · متن نمونه از brief؛ فقط محتوای مصوب در نسخه واقعی منتشر می‌شود. جست‌وجو محلی است و داده خصوصی سفارش ندارد. موضوع، عبارت و پاسخ‌های باز مستقل‌اند.",
@@ -2614,7 +2615,7 @@ export default function App() {
               <label htmlFor="guide-state">
                 {t("حالت راهنمای خرید", "Buying guide state")}
               </label>
-              <select
+              <SelectDropdown
                 id="guide-state"
                 value={guideMode}
                 onChange={(event) => setGuideMode(event.target.value)}
@@ -2633,7 +2634,7 @@ export default function App() {
                     {label}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
               <p>
                 {t(
                   "PUB-21 · صفحه آموزشی عمومی. مثال‌ها نمایشی‌اند. کالکشن مستقل از دسته است؛ گرماژ، برگ و تعداد خرید مستقل‌اند. راهنمای تخصصی دفتر /guides/notebooks هنوز منتشر نشده و به FAQ هدایت می‌شود.",
@@ -2700,7 +2701,7 @@ export default function App() {
               <label htmlFor="cart-state-select">
                 {t("حالت سبد", "Cart state")}
               </label>
-              <select
+              <SelectDropdown
                 id="cart-state-select"
                 value={cartMode}
                 onChange={(event) => {
@@ -2793,7 +2794,7 @@ export default function App() {
                     {label}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
               <p>
                 {t(
                   "حالت‌های دارای «نمونه»، داده نمایشی جایگزین سبد می‌کنند. سایر حالت‌ها داده فعلی را حفظ می‌کنند.",
@@ -2817,7 +2818,7 @@ export default function App() {
               <label htmlFor="bundle-state-select">
                 {t("حالت پکیج", "Bundle state")}
               </label>
-              <select
+              <SelectDropdown
                 id="bundle-state-select"
                 value={bundleMode}
                 onChange={(e) => setBundleMode(e.target.value)}
@@ -2852,7 +2853,7 @@ export default function App() {
                     {label}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
               <h3>{t("انتخاب‌های نمونه", "Sample combinations")}</h3>
               <div className="foundation-buttons">
                 {[
@@ -2894,7 +2895,7 @@ export default function App() {
               <label htmlFor="product-state-select">
                 {t("وضعیت جزئیات محصول", "Product detail state")}
               </label>
-              <select
+              <SelectDropdown
                 id="product-state-select"
                 value={productMode}
                 onChange={(e) => setProductMode(e.target.value)}
@@ -2929,7 +2930,7 @@ export default function App() {
                     {label}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
               <h3>{t("ترکیب‌های نمونه", "Sample combinations")}</h3>
               <div className="foundation-buttons">
                 {[
@@ -2974,7 +2975,7 @@ export default function App() {
               <label htmlFor="state-select">
                 {t("وضعیت محتوا", "Content state")}
               </label>
-              <select
+              <SelectDropdown
                 id="state-select"
                 value={
                   isDetail ? detailMode : isCollections ? collectionsMode : mode
@@ -3033,7 +3034,7 @@ export default function App() {
                     {label}
                   </option>
                 ))}
-              </select>
+              </SelectDropdown>
             </>
           )}
           <label className="checkbox-label">

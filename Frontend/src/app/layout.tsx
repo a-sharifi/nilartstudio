@@ -4,6 +4,7 @@ import { NavigationGuardProvider } from "../features/navigation/NavigationGuardP
 import { SessionLifecycleProvider } from "../features/identity/SessionLifecycleProvider";
 import "../design/index.css";
 import "../styles/design-compatibility.css";
+import "../styles/typography.css";
 
 export const metadata: Metadata = {
   title: "نیل‌آرت | محیط توسعه",

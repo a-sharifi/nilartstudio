@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react"
 import {
   referenceDemoConfig,
@@ -571,7 +572,7 @@ export default function ReferencesPage({
       <div>
         <label>
           {t("وضعیت صفحه", "Page state")}
-          <select
+          <SelectDropdown
             value={mode}
             onChange={(e) => modeChange(e.target.value as ReferenceMode)}
           >
@@ -580,7 +581,7 @@ export default function ReferencesPage({
                 {t(fa, en)}
               </option>
             ))}
-          </select>
+          </SelectDropdown>
         </label>
         <label>
           <input

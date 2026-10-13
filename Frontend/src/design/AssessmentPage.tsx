@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useState } from "react"
 import { referenceErrors, type ReferenceDraft } from "./references"
 import {
@@ -893,7 +894,7 @@ export default function AssessmentPage({
         <div>
           <label>
             {t("حالت نمایش", "View state")}
-            <select
+            <SelectDropdown
               value={view}
               onChange={(e) => {
                 setView(e.target.value as AssessmentView)
@@ -920,11 +921,11 @@ export default function AssessmentPage({
                   {t(fa, en)}
                 </option>
               ))}
-            </select>
+            </SelectDropdown>
           </label>
           <label>
             {t("وضعیت کار · Demo", "Job status · Demo")}
-            <select
+            <SelectDropdown
               value={ownedJob?.status || ""}
               disabled={!valid || !authorized || view === "loading"}
               onChange={(e) =>
@@ -947,7 +948,7 @@ export default function AssessmentPage({
                   {t(stateText[value][0], stateText[value][1])}
                 </option>
               ))}
-            </select>
+            </SelectDropdown>
           </label>
         </div>
         {valid &&

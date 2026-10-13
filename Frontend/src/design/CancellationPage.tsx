@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import {
   useEffect,
   useRef,
@@ -900,7 +901,7 @@ export default function CancellationPage({
                       {t("الزامی", "Required")}
                     </span>
                   </label>
-                  <select
+                  <SelectDropdown
                     id="reason"
                     value={reason}
                     onChange={(event) => {
@@ -928,7 +929,7 @@ export default function CancellationPage({
                         {option.label[index]} · Demo
                       </option>
                     ))}
-                  </select>
+                  </SelectDropdown>
                   {errors.reason && (
                     <p id="reason-error" className="cancel-field-error">
                       {errorText(errors.reason)}

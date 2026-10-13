@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react"
 import { normalizeDigits, phoneCountries, validPhone } from "./checkout"
 import { AuthIcon } from "./AuthPage"
@@ -101,9 +102,9 @@ export default function PasswordForm({ en, suffix, navigate, onContext, phone, s
         <div className="password-field">
           <label htmlFor="login-phone">{t("شماره تلفن", "Phone number")}</label>
           <div className={`password-phone ${errors.phone ? "field-invalid" : ""}`} dir="ltr">
-            <select aria-label={liveSignIn ? t("کد کشور", "Country code") : t("کد کشور — تنظیمات Demo", "Country code — Demo configuration")} value={country} disabled={busy} onChange={(event) => { setCountry(event.target.value); setErrors((old) => ({ ...old, phone: undefined })) }}>
+            <SelectDropdown aria-label={liveSignIn ? t("کد کشور", "Country code") : t("کد کشور — تنظیمات Demo", "Country code — Demo configuration")} value={country} disabled={busy} onChange={(event) => { setCountry(event.target.value); setErrors((old) => ({ ...old, phone: undefined })) }}>
               {phoneCountries.filter((item) => !liveSignIn || item.id === "IR").map((item) => <option key={item.id} value={item.id}>{item.code} · {item.name[en ? 1 : 0]}</option>)}
-            </select>
+            </SelectDropdown>
             <input ref={phoneRef} id="login-phone" name="phone" type="tel" inputMode="tel" autoComplete="tel-national" value={phone} disabled={busy} placeholder="912 345 6789" aria-invalid={!!errors.phone} aria-describedby={`phone-hint${errors.phone ? " phone-error" : ""}`} onChange={(event) => { setPhone(normalizeDigits(event.target.value)); setErrors((old) => ({ ...old, phone: undefined })) }} />
           </div>
           <small id="phone-hint">{liveSignIn ? t("شماره موبایل ایران با ارقام فارسی یا انگلیسی.", "Iranian mobile number, using Persian or English digits.") : t("ارقام فارسی یا انگلیسی؛ قالب کشورها طبق تنظیمات Demo.", "Persian or English digits. Country formats follow Demo settings.")}</small>

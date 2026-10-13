@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState } from "react"
 import { referenceErrors, type ReferenceDraft } from "./references"
 import { preferenceStyles, type PreferencesDraft } from "./preferences"
@@ -1031,7 +1032,7 @@ export default function QuotePage({
         <div>
           <label>
             {t("حالت پیشنهاد", "Proposal state")}
-            <select
+            <SelectDropdown
               value={ownedQuote?.status || ""}
               disabled={!assessed || busy}
               onChange={(e) => demoState(e.target.value as QuoteStatus)}
@@ -1051,11 +1052,11 @@ export default function QuotePage({
                   {t(statuses[status][0], statuses[status][1])}
                 </option>
               ))}
-            </select>
+            </SelectDropdown>
           </label>
           <label>
             {t("حالت نمایش / عملیات", "View / operation state")}
-            <select
+            <SelectDropdown
               value={view}
               disabled={busy}
               onChange={(e) => {
@@ -1087,7 +1088,7 @@ export default function QuotePage({
                   {t(fa, en)}
                 </option>
               ))}
-            </select>
+            </SelectDropdown>
           </label>
         </div>
         {view === "changed" && (

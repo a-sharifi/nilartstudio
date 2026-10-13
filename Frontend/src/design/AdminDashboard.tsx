@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import "./admin.css"
 import OrdersPage from "./OrdersPage"
@@ -624,7 +625,7 @@ export default function AdminDashboard() {
             <span className="ad-avatar">{t("ن", "N")}</span>
             <label className="ad-role">
               <span>{t("مدیر نیل‌آرت", "NilArt manager")}</span>
-              <select
+              <SelectDropdown
                 aria-label={t("نقش نمایشی Demo", "Demo role")}
                 value={role}
                 onChange={(e) => {
@@ -641,7 +642,7 @@ export default function AdminDashboard() {
                 <option value="finance">
                   {t("مالی · Demo", "Finance · Demo")}
                 </option>
-              </select>
+              </SelectDropdown>
             </label>
             <button
               className="icon-button ad-logout"
@@ -710,7 +711,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="ad-period">
                   <Glyph name="calendar" />
-                  <select
+                  <SelectDropdown
                     aria-label={t("بازه زمانی", "Reporting period")}
                     value={period}
                     onChange={(e) => {
@@ -727,7 +728,7 @@ export default function AdminDashboard() {
                     <option value="custom">
                       {t("بازه سفارشی", "Custom range")}
                     </option>
-                  </select>
+                  </SelectDropdown>
                 </div>
               </div>
               {period === "custom" && (
@@ -782,7 +783,7 @@ export default function AdminDashboard() {
                     "All figures are samples. No live sales, finance or inventory connection.",
                   )}
                 </span>
-                <select
+                <SelectDropdown
                   aria-label={t("حالت نمایشی", "Preview state")}
                   value={mode}
                   onChange={(e) => {
@@ -800,7 +801,7 @@ export default function AdminDashboard() {
                   <option value="error">
                     {t("خطای بخش قیمت", "Price widget error")}
                   </option>
-                </select>
+                </SelectDropdown>
               </div>
               <section className="ad-attention">
                 {panelTitle(

@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useId, useRef, useState } from "react"
 import {
   challengeError,
@@ -548,7 +549,7 @@ export default function CheckoutAuth({
                 {t("شماره تلفن", "Phone number")}
               </label>
               <div className="checkout-phone-input">
-                <select
+                <SelectDropdown
                   value={country}
                   onChange={(event) => setCountry(event.target.value)}
                   aria-label={t("کد کشور", "Country code")}
@@ -563,7 +564,7 @@ export default function CheckoutAuth({
                       {item.code} · {item.id}
                     </option>
                   ))}
-                </select>
+                </SelectDropdown>
                 <input
                   id={`${id}-phone`}
                   dir="ltr"

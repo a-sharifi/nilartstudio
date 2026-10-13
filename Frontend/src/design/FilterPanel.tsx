@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useId, useState, type ReactNode } from "react"
 import { priceDigits, priceError } from "./shop"
 import { categories as defaultCategories } from "./data"
@@ -120,7 +121,7 @@ export default function FilterPanel({
         weights.length > 0 && (
           <fieldset>
             <legend>{t("گرماژ کاغذ", "Paper weight")}</legend>
-            <select
+            <SelectDropdown
               aria-label={t("گرماژ کاغذ", "Paper weight")}
               value={filters.weight}
               onChange={(e) => update({ weight: e.target.value })}
@@ -132,7 +133,7 @@ export default function FilterPanel({
                   {t("گرم", "gsm")}
                 </option>
               ))}
-            </select>
+            </SelectDropdown>
           </fieldset>
         )}
       {afterAttributes}

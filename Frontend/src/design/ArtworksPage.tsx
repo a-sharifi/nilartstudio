@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState } from "react"
 import "./artworks.css"
 import type { ArtworkCatalog, ArtworkRecord } from "../features/catalog/artwork-catalog"
@@ -662,7 +663,7 @@ export default function ArtworksPage({
               </button>
               <label className="art-sort">
                 {t("مرتب‌سازی:", "Sort by:")}
-                <select
+                <SelectDropdown
                   value={state.sort}
                   onChange={(e) => update({ sort: e.target.value })}
                 >
@@ -673,7 +674,7 @@ export default function ArtworksPage({
                   <option value="high">
                     {t("قیمت: زیاد به کم", "Price: high to low")}
                   </option>
-                </select>
+                </SelectDropdown>
               </label>
             </div>
           </div>
@@ -889,13 +890,13 @@ export default function ArtworksPage({
         <summary>{t("حالت‌های پروتوتایپ", "Prototype states")} · Demo</summary>
         <label>
           {t("وضعیت گالری", "Gallery state")}
-          <select value={mode} onChange={(e) => setMode(e.target.value)}>
+          <SelectDropdown value={mode} onChange={(e) => setMode(e.target.value)}>
             <option value="normal">Normal</option>
             <option value="loading">Loading</option>
             <option value="empty">Empty catalog</option>
             <option value="error">Network error</option>
             <option value="favorite-error">Favorite error</option>
-          </select>
+          </SelectDropdown>
         </label>
         <p>
           {t(

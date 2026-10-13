@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useState, type ReactNode } from "react"
 import { OrderDialog, OrderSkeleton } from "./OrderComponents"
 import {
@@ -450,7 +451,7 @@ export function FinanceDocumentTable({
       <div className="fn-doc-toolbar">
         <label>
           {en ? "Document status" : "وضعیت سند"}
-          <select
+          <SelectDropdown
             value={filter}
             onChange={(e) => {
               setFilter(e.target.value)
@@ -463,7 +464,7 @@ export function FinanceDocumentTable({
                 {finText(en, label)}
               </option>
             ))}
-          </select>
+          </SelectDropdown>
         </label>
         <span>
           {new Intl.NumberFormat(en ? "en" : "fa").format(filtered.length)}{" "}
@@ -698,10 +699,10 @@ export function ReceiptPaymentForm({
         <div className="fn-form-grid">
           <label>
             {en ? "Type" : "نوع"}
-            <select>
+            <SelectDropdown>
               <option>{en ? "Receipt" : "دریافت"}</option>
               <option>{en ? "Payment" : "پرداخت"}</option>
-            </select>
+            </SelectDropdown>
           </label>
           <label>
             {en ? "Related party" : "طرف حساب"}
@@ -709,12 +710,12 @@ export function ReceiptPaymentForm({
           </label>
           <label>
             {en ? "Financial account" : "حساب مالی"}
-            <select>
+            <SelectDropdown>
               <option>
                 {en ? "Operating bank account" : "حساب عملیاتی بانک"}
               </option>
               <option>{en ? "Store cash fund" : "صندوق فروشگاه"}</option>
-            </select>
+            </SelectDropdown>
           </label>
           <label>
             {en ? "Amount (toman)" : "مبلغ (تومان)"}

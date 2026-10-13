@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import {
   categories as defaultCategories,
@@ -356,7 +357,7 @@ export default function CollectionDetailPage({
             </button>
             <label className="sort-label">
               {t("مرتب‌سازی", "Sort by")}
-              <select
+              <SelectDropdown
                 value={state.sort}
                 onChange={(e) => update({ sort: e.target.value })}
               >
@@ -370,7 +371,7 @@ export default function CollectionDetailPage({
                 <option disabled value="popular">
                   {t("محبوب‌ترین — داده موجود نیست", "Most popular — no data")}
                 </option>
-              </select>
+              </SelectDropdown>
             </label>
           </div>
           <div className="detail-workspace">

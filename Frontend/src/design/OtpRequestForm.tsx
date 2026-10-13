@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react"
 import { normalizeDigits, normalizePhone, phoneCountries, validPhone } from "./checkout"
 import { AuthIcon } from "./AuthPage"
@@ -108,9 +109,9 @@ export default function OtpRequestForm({ en, suffix, navigate, phone, setPhone, 
         <div className="password-field">
           <label htmlFor="otp-phone">{recovering ? t("شماره تلفن حساب", "Account phone number") : t("شماره تلفن", "Phone number")}</label>
           <div className={`password-phone ${error ? "field-invalid" : ""}`} dir="ltr">
-            <select value={country} disabled={busy} aria-label={t("کد کشور — Demo", "Country code — Demo")} onChange={(event) => { setCountry(event.target.value); setError(null); setFlowPhone(null); if (state === "active" || state === "accepted") setState("initial") }}>
+            <SelectDropdown value={country} disabled={busy} aria-label={t("کد کشور — Demo", "Country code — Demo")} onChange={(event) => { setCountry(event.target.value); setError(null); setFlowPhone(null); if (state === "active" || state === "accepted") setState("initial") }}>
               {phoneCountries.filter((item) => !liveRequest || item.id === "IR").map((item) => <option key={item.id} value={item.id}>{item.code} · {item.name[en ? 1 : 0]}</option>)}
-            </select>
+            </SelectDropdown>
             <input ref={input} id="otp-phone" name="phone" type="tel" inputMode="tel" autoComplete="tel-national" dir="ltr" value={phone} disabled={busy} placeholder="912 345 6789" aria-invalid={!!error} aria-describedby={`otp-phone-hint${error ? " otp-phone-error" : ""}`} onChange={(event) => changePhone(event.target.value)} />
           </div>
           <small id="otp-phone-hint">{registering ? t("برای تأیید شماره، کد یک‌بارمصرف درخواست می‌شود.", "A one-time code will be requested to verify your phone number.") : t("از شماره تلفن حساب خود استفاده کنید.", "Use the phone number associated with your account.")}</small>

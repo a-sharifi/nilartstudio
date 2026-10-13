@@ -387,3 +387,7 @@ endpoint is introduced. The local fixture is explicitly opt-in and adds no price
 stock or purchasing capability; UI resolves only combinations with returned public
 SKUs. Product list contract is unchanged. OpenAPI/client types include the optional
 presentation fields. See fixtures/README.md for guarded test-data import.
+
+### Local reference test prices
+
+`nilart.bootstrap.design_test_prices --local-test-data --fixture fixtures/design-test-prices.json` explicitly prices ten existing TEST-REF notebook variants from the reference catalog (IRT). It requires local PostgreSQL and the reference test product marker, locks rows, preserves different existing prices, and runs in one transaction. Repeating the identical fixture is safe. These are sample prices, not approved retail prices or stock.

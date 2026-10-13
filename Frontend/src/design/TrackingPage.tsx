@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import TrackingResult from "./TrackingResult"
 import {
@@ -588,7 +589,7 @@ export default function TrackingPage({
                           "Country code — Demo options",
                         )}
                       </label>
-                      <select
+                      <SelectDropdown
                         id="tracking-country"
                         value={country}
                         onChange={(event) => setCountry(event.target.value)}
@@ -599,7 +600,7 @@ export default function TrackingPage({
                             {item.name[language]} {item.code}
                           </option>
                         ))}
-                      </select>
+                      </SelectDropdown>
                     </div>
                     <input
                       ref={phoneInput}

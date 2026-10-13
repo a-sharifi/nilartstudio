@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { ArtGalleryCard, DemoPainting, Symbol, works, type GalleryWork } from "./ArtworksPage"
 import type { ArtCartLine } from "./cart"
@@ -273,7 +274,7 @@ export default function ArtworkDetailPage({
       </summary>
       <label>
         {t("وضعیت", "State")}
-        <select
+        <SelectDropdown
           value={mode}
           onChange={(e) => changeMode(e.target.value as Mode)}
         >
@@ -282,7 +283,7 @@ export default function ArtworkDetailPage({
               {t(fa, en)}
             </option>
           ))}
-        </select>
+        </SelectDropdown>
       </label>
       <p>
         {t(

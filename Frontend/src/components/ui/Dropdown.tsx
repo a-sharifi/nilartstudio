@@ -4,6 +4,10 @@ import "./dropdown.css"
 
 export type DropdownOption = { value: string; label: string; disabled?: boolean }
 export type DropdownProps = {
+  id?: string
+  describedBy?: string
+  invalid?: boolean | "true" | "false" | "grammar" | "spelling"
+  required?: boolean
   options: DropdownOption[]
   value: string
   onChange: (value: string) => void
@@ -17,7 +21,7 @@ export type DropdownProps = {
 const normalize = (value: string) => value.normalize("NFKC").replace(/ي/g, "ی").replace(/ك/g, "ک").trim().toLocaleLowerCase()
 
 /** Controlled selection. Autocomplete filters choices; it never submits arbitrary text. */
-export default function Dropdown({ options, value, onChange, label, autocomplete = false, disabled = false, name, placeholder = "Choose an option", emptyMessage = "No matching options" }: DropdownProps) {
+export default function Dropdown({ id: inputId, describedBy, invalid, required, options, value, onChange, label, autocomplete = false, disabled = false, name, placeholder = "Choose an option", emptyMessage = "No matching options" }: DropdownProps) {
   const id = useId()
   const root = useRef<HTMLDivElement>(null)
   const input = useRef<HTMLInputElement>(null)
@@ -57,7 +61,7 @@ export default function Dropdown({ options, value, onChange, label, autocomplete
   return <div className={`nil-dropdown ${expanded ? "is-open" : ""}`} ref={root} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) close() }}>
     {name && <input type="hidden" name={name} value={value} disabled={disabled} />}
     <div className="nil-dropdown-control">
-      <input ref={input} role="combobox" aria-label={label} aria-expanded={expanded} aria-controls={`${id}-list`} aria-autocomplete={autocomplete ? "list" : "none"} aria-activedescendant={expanded && shown[active] ? `${id}-option-${active}` : undefined}
+      <input id={inputId} aria-describedby={describedBy} aria-invalid={invalid} aria-required={required} ref={input} role="combobox" aria-label={label || undefined} aria-expanded={expanded} aria-controls={`${id}-list`} aria-autocomplete={autocomplete ? "list" : "none"} aria-activedescendant={expanded && shown[active] ? `${id}-option-${active}` : undefined}
         autoComplete="off" disabled={disabled} readOnly={!autocomplete} placeholder={placeholder} value={expanded && autocomplete ? query : selected?.label || ""}
         onFocus={() => { if (autocomplete && !expanded) start() }} onClick={() => { if (!expanded) start() }} onChange={event => { setQuery(event.target.value); setActive(0); setOpen(true) }}
         onKeyDown={event => {

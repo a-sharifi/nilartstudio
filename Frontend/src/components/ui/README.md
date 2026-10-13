@@ -24,3 +24,7 @@ Labels, placeholders and empty messages should be localized by the caller.
 
 Used in shop collection filters (searchable) and sorting (not searchable), including
 the mobile filter dialog. The controlled onChange keeps existing query/draft logic.
+
+`SelectDropdown` adapts existing option children and controlled/uncontrolled select values to the same Dropdown renderer. It preserves field IDs, names, disabled choices/groups, change callbacks and validation descriptions. New forms should use Dropdown directly and explicitly choose whether autocomplete is enabled.
+
+The supplied Yekan Bakh archive's eight WOFF2 weights are self-hosted under `public/fonts/yekan-bakh`; typography.css applies them to both languages.

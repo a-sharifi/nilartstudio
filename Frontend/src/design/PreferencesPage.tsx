@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState } from "react"
 import { referenceErrors, type ReferenceDraft } from "./references"
 import {
@@ -1210,7 +1211,7 @@ export default function PreferencesPage({
         <div>
           <label>
             {t("حالت صفحه", "Page state")}
-            <select
+            <SelectDropdown
               value={mode}
               disabled={status === "saving"}
               onChange={(e) => {
@@ -1224,7 +1225,7 @@ export default function PreferencesPage({
                   {t(fa, en)}
                 </option>
               ))}
-            </select>
+            </SelectDropdown>
           </label>
           <label>
             <input

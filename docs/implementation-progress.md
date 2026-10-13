@@ -502,3 +502,13 @@
 - Cats sketchbook سایز/برگ/جلد مرجع، caption ابعاد و صفحات، helper برگ، 127 GSM نمونه، guide، مشخصات پویا و لینک پکیج واقعی دارد. انتخاب سازگار حفظ و ترکیب ارائه‌نشده غیرفعال می‌شود؛ SKU واقعی فقط پس از انتخاب کامل resolve می‌شود. سه دفتر دیگر فقط سایزهای صریح مرجع دارند؛ بدون حدس برگ/جلد.
 - importer محافظت‌شده فقط baseline fixture اصلی را ارتقا می‌دهد؛ دوازده SKU تست بدون قیمت اضافه و دو presentation دفتر Cats ایجاد شد. generic SKU پکیج‌ها محفوظ است؛ اکنون بیست SKU بدون قیمت و شش presentation در DB محلی وجود دارد. migration جدید ندارد و head برابر 0016 است.
 - ۲۵۹ تست backend با PostgreSQL/Redis مستقل، ۹۱ تست frontend و ۱۲ مورد مرورگر موفق‌اند؛ rollback/guard، ترکیب نامعتبر، انتخاب واقعی DB، guide، related bundles و فارسی mobile پوشش دارند. lint/typecheck/mypy، OpenAPI/client و Docker build موفق؛ تصاویر desktop/mobile بررسی و هشت سرویس سالم است. هر ۴۲ CSS مرجع بدون تغییر؛ CI راه دور تأییدنشده است.
+
+### 2026-10-13 — Shared dropdowns, supplied typography and local test basket
+
+Replaced all 65 remaining native selects with a shared Dropdown adapter, preserving controlled values, field names, IDs, validation descriptions, disabled option groups and callbacks. Extracted eight supplied Yekan Bakh WOFF2 weights and self-hosted them for both languages. Reference layout CSS remains unchanged; typography overrides are separate.
+
+Imported ten explicit reference notebook prices into existing local database variants through a guarded, transactional importer. Product detail now shows selected prices and quantity controls, and saves/removes selections in a browser-persisted local test basket. The basket is restricted to localhost and TEST-REF SKUs and explicitly states that it creates no order/payment or stock reservation. Unpriced products stay disabled. Real inventory, server carts and checkout remain subsequent work.
+
+Validation: backend 260 tests; frontend 92 tests; frontend typecheck/lint; Docker build and eight healthy services. Browser verification is recorded in the handoff after the final check. Remote CI is unverified.
+
+Final browser verification: all 11 relevant cases pass across the final runs, including shared dropdowns, Persian mobile filtering, reference product detail, supplied font loading, quantity selection and test basket persistence after reload. PostgreSQL confirms ten priced reference variants.

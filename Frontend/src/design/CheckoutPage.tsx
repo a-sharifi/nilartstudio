@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import CheckoutAmounts from "./CheckoutAmounts"
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import CheckoutAuth from "./CheckoutAuth"
@@ -671,7 +672,7 @@ export default function CheckoutPage({
             ))}
           </div>
           <h3>{t("حالت سرویس و مرور", "Service & review state")}</h3>
-          <select
+          <SelectDropdown
             value={mode}
             onChange={(event) => onMode(event.target.value)}
             aria-label={t("حالت سرویس", "Service state")}
@@ -700,7 +701,7 @@ export default function CheckoutPage({
                 {label}
               </option>
             ))}
-          </select>
+          </SelectDropdown>
           <h3>{t("یادداشت تحویل PUB-10", "PUB-10 handoff")}</h3>
           <p>
             {t(

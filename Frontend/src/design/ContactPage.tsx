@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import {
   contactCountries,
@@ -684,7 +685,7 @@ export default function ContactPage({
                     {t("موضوع پیام", "Message topic")}
                     {required}
                   </label>
-                  <select
+                  <SelectDropdown
                     id="contact-topic"
                     value={draft.topic}
                     onChange={(event) => update("topic", event.target.value)}
@@ -703,7 +704,7 @@ export default function ContactPage({
                         {topic.label[language]}
                       </option>
                     ))}
-                  </select>
+                  </SelectDropdown>
                   {fieldError("topic")}
                 </div>
                 {draft.topic === "order" && (
@@ -747,7 +748,7 @@ export default function ContactPage({
                     {t("روش دریافت پاسخ", "Reply method")}
                     {required}
                   </label>
-                  <select
+                  <SelectDropdown
                     id="contact-method"
                     value={draft.method}
                     onChange={(event) =>
@@ -770,7 +771,7 @@ export default function ContactPage({
                         {method.label[language]}
                       </option>
                     ))}
-                  </select>
+                  </SelectDropdown>
                   {fieldError("method")}
                   {config.demo && (
                     <p id="contact-method-note" className="contact-caption">
@@ -817,7 +818,7 @@ export default function ContactPage({
                         <label className="sr-only" htmlFor="contact-country">
                           {t("کد کشور", "Country code")}
                         </label>
-                        <select
+                        <SelectDropdown
                           id="contact-country"
                           value={draft.country}
                           onChange={(event) =>
@@ -830,7 +831,7 @@ export default function ContactPage({
                               {country.name[language]} {country.code}
                             </option>
                           ))}
-                        </select>
+                        </SelectDropdown>
                       </div>
                       <input
                         id="contact-phone"

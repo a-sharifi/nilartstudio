@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import {
   useEffect,
   useRef,
@@ -863,7 +864,7 @@ export default function RequestStatusPage({
                                 <label htmlFor="status-carrier">
                                   {t("شرکت حمل", "Carrier")}
                                 </label>
-                                <select
+                                <SelectDropdown
                                   id="status-carrier"
                                   value={carrier}
                                   onChange={(event) =>
@@ -886,7 +887,7 @@ export default function RequestStatusPage({
                                   <option value="courier">
                                     {t("پیک · Demo", "Courier · Demo")}
                                   </option>
-                                </select>
+                                </SelectDropdown>
                                 {shipmentErrors.carrier && (
                                   <p
                                     id="status-carrier-error"

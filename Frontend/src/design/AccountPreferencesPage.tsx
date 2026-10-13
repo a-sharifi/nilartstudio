@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import {
   useEffect,
   useRef,
@@ -683,7 +684,7 @@ export default function AccountPreferencesPage({
                     <label htmlFor="account-preferred-language">
                       {t("زبان ترجیحی", "Preferred language")}
                     </label>
-                    <select
+                    <SelectDropdown
                       id="account-preferred-language"
                       value={draft.language}
                       disabled={blocked}
@@ -705,7 +706,7 @@ export default function AccountPreferencesPage({
                     >
                       <option value="fa">فارسی</option>
                       <option value="en">English</option>
-                    </select>
+                    </SelectDropdown>
                     <small id="account-pref-language-hint">
                       {t(
                         "انتخاب زبان فعلاً محلی است؛ پس از ذخیره معتبر، همین صفحه با زبان جدید باز می‌شود.",

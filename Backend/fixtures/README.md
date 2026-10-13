@@ -122,3 +122,5 @@ are test specifications, never approved real stock or offers. Stored baseline
 presentations must exactly match the original fixture; modified profiles or
 existing variant codes reject the whole import. No automatic overwrite/reseed.
 Local totals become twenty unpriced SKUs and six product presentations.
+
+`design-test-prices.json` contains ten explicitly mapped notebook variant prices from design-reference/src/catalog.ts. No ghost notebook price, inventory, or real specifications are inferred. Import using the guarded design_test_prices module only against the local test catalog.

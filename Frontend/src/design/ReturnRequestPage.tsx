@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import {
   useEffect,
   useRef,
@@ -996,7 +997,7 @@ export default function ReturnRequestPage({
                               {t("الزامی", "Required")}
                             </span>
                           </label>
-                          <select
+                          <SelectDropdown
                             id={`reason-${item.id}`}
                             value={issue.reason}
                             onChange={(event) =>
@@ -1029,7 +1030,7 @@ export default function ReturnRequestPage({
                                   {option.label[index]} · Demo
                                 </option>
                               ))}
-                          </select>
+                          </SelectDropdown>
                           {errors[`reason-${item.id}`] && (
                             <p
                               id={`reason-error-${item.id}`}

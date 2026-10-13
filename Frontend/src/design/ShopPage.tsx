@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import Dropdown from "../components/ui/Dropdown"
 import { ReferenceProductImage, ReferenceBundleImage } from "./ReferenceMedia";
 import {
@@ -317,7 +318,7 @@ export default function ShopPage({
             {featureChoices.sheets.length > 0 && (
               <fieldset>
                 <legend>{t("تعداد برگ", "Sheet count")}</legend>
-                <select
+                <SelectDropdown
                   aria-label={t("تعداد برگ", "Sheet count")}
                   value={filters.sheets}
                   onChange={(event) =>
@@ -332,7 +333,7 @@ export default function ShopPage({
                       {number(n)} {t("برگ", "sheets")}
                     </option>
                   ))}
-                </select>
+                </SelectDropdown>
                 <small>
                   {t(
                     "تعداد برگ داخل دفتر، نه تعداد واحد خرید.",
@@ -344,7 +345,7 @@ export default function ShopPage({
             {featureChoices.covers.length > 0 && (
               <fieldset>
                 <legend>{t("نوع جلد", "Cover")}</legend>
-                <select
+                <SelectDropdown
                   aria-label={t("نوع جلد", "Cover")}
                   value={filters.cover}
                   onChange={(event) =>
@@ -357,7 +358,7 @@ export default function ShopPage({
                       {covers.find((c) => c.value === value)?.label[language]}
                     </option>
                   ))}
-                </select>
+                </SelectDropdown>
               </fieldset>
             )}
           </>

@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import {
   useEffect,
   useLayoutEffect,
@@ -521,7 +522,7 @@ export default function NotificationsPage({
               </fieldset>
               <label>
                 {t("موضوع", "Topic")}
-                <select
+                <SelectDropdown
                   value={category}
                   disabled={!loaded}
                   onChange={(event) => {
@@ -536,7 +537,7 @@ export default function NotificationsPage({
                       {t(fa, english)}
                     </option>
                   ))}
-                </select>
+                </SelectDropdown>
               </label>
             </section>
             <div className="notifications-list-heading">

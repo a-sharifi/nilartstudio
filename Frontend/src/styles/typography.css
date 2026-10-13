@@ -1,0 +1,10 @@
+@font-face {font-family:"Yekan Bakh";src:url("/fonts/yekan-bakh/100.woff2") format("woff2");font-weight:100;font-style:normal;font-display:swap;}
+@font-face {font-family:"Yekan Bakh";src:url("/fonts/yekan-bakh/200.woff2") format("woff2");font-weight:200;font-style:normal;font-display:swap;}
+@font-face {font-family:"Yekan Bakh";src:url("/fonts/yekan-bakh/300.woff2") format("woff2");font-weight:300;font-style:normal;font-display:swap;}
+@font-face {font-family:"Yekan Bakh";src:url("/fonts/yekan-bakh/400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
+@font-face {font-family:"Yekan Bakh";src:url("/fonts/yekan-bakh/500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap;}
+@font-face {font-family:"Yekan Bakh";src:url("/fonts/yekan-bakh/700.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap;}
+@font-face {font-family:"Yekan Bakh";src:url("/fonts/yekan-bakh/800.woff2") format("woff2");font-weight:800;font-style:normal;font-display:swap;}
+@font-face {font-family:"Yekan Bakh";src:url("/fonts/yekan-bakh/900.woff2") format("woff2");font-weight:900;font-style:normal;font-display:swap;}
+html body, html body [dir], html body input, html body button, html body textarea, html body select {font-family:"Yekan Bakh",sans-serif;}
+html body *:not(.wordmark > span):not(.sample-back > span) {font-family:"Yekan Bakh",sans-serif;}

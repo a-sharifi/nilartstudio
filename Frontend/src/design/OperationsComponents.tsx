@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useState, type ReactNode } from "react"
 import { OrderDialog, OrderSkeleton } from "./OrderComponents"
 import { formatMoney } from "./finance-data"
@@ -747,21 +748,21 @@ export function OpsOperationForm({
               </label>
               <label>
                 {en ? "Waste classification" : "نوع ضایعات"}
-                <select>
+                <SelectDropdown>
                   <option>{en ? "Unusual" : "غیرعادی"}</option>
                   <option>{en ? "Normal" : "عادی"}</option>
-                </select>
+                </SelectDropdown>
               </label>
             </>
           )}
           {kind === "adjustment" && (
             <label>
               {en ? "Operation type" : "نوع عملیات"}
-              <select>
+              <SelectDropdown>
                 <option>{en ? "Opening stock" : "موجودی افتتاحیه"}</option>
                 <option>{en ? "Documented increase" : "افزایش مستند"}</option>
                 <option>{en ? "Documented decrease" : "کاهش مستند"}</option>
-              </select>
+              </SelectDropdown>
             </label>
           )}
           <label>

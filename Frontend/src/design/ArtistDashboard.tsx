@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState } from "react"
 import {
   demoArtistService,
@@ -438,7 +439,7 @@ export default function ArtistDashboard() {
                 "All assignments, amounts and dates are samples; no live connection.",
               )}
             </span>
-            <select
+            <SelectDropdown
               aria-label={t("حالت پیش‌نمایش", "Preview state")}
               value={mode}
               onChange={(e) => {
@@ -461,7 +462,7 @@ export default function ArtistDashboard() {
                   {t(fa, en)}
                 </option>
               ))}
-            </select>
+            </SelectDropdown>
           </div>
           <div className="ar-freshness">
             <span>

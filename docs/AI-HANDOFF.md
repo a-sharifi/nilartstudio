@@ -1021,3 +1021,13 @@ High-risk rules for future work: lock final-stock reservations; idempotent callb
 Obtain approved SKU/stock data, material rates/target margin, shipping rules, customer policies, asset permissions, selected SMS/payment/AI providers, domain/VPS access and secure credentials. Test backup restoration in isolation. Verify private access, OTP abuse limits, CSRF, queue recovery, concurrency, RTL/LTR, design parity and limited real orders before release.
 
 An imported admin page or successful build does not satisfy these gates. Financial writes, real messaging, refunds and public deployment require specific authority. Report completed slices and outstanding limitations honestly.
+
+### 2026-10-13 — Dropdown/font/reference price update
+
+All existing selects now render through SelectDropdown, backed by the searchable Dropdown component (autocomplete remains an explicit option on Dropdown). Eight supplied Yekan Bakh WOFF2 weights are stored in Frontend/public/fonts/yekan-bakh; typography.css applies them without modifying reference CSS.
+
+Local database now contains ten reference notebook variant prices from fixtures/design-test-prices.json. The guarded importer is idempotent for identical prices and refuses different existing prices or non-fixture products. Product detail offers quantity and a persisted local browser test basket for priced TEST-REF SKUs. It does not connect to the existing prototype cart, create server orders, reserve inventory, or take payment. UI labels state these limits; do not describe this as production checkout. Ghost notebook and other unpriced SKUs remain unavailable for adding until explicitly supplied prices exist.
+
+Local checks: 260 backend tests and 92 frontend tests, frontend lint/typecheck, Docker build; all eight services healthy. Remote CI results remain unverified.
+
+Final browser verification: all 11 relevant cases pass across the final runs, including shared dropdowns, Persian mobile filtering, reference product detail, supplied font loading, quantity selection and test basket persistence after reload. PostgreSQL confirms ten priced reference variants.

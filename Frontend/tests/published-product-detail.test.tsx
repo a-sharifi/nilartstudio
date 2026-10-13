@@ -17,7 +17,7 @@ test("native product detail displays exact published price but never permits pur
  render(<PublishedProductDetail catalog={{product,skus:[option],status:"normal",retry:()=>{}}} language={1} collections={[]} onNavigate={()=>{}}/>);
  fireEvent.click(screen.getByRole("radio",{name:"SKU-EXACT"}));
  expect(screen.getByText(option.price.amount+" toman")).toBeTruthy();
- expect((screen.getByRole("button",{name:"Purchase details unconfirmed"}) as HTMLButtonElement).disabled).toBe(true);
+ expect((screen.getByRole("button",{name:"Add to test basket"}) as HTMLButtonElement).disabled).toBe(true);
  expect(screen.queryByText("Cats")).toBeNull();
 });
 test("products without SKUs remain visible with unknown prices",()=>{

@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState } from "react"
 import {
   demoOrderService,
@@ -230,7 +231,7 @@ export default function OrdersPage({
       {filterFields.map((key) => (
         <label key={key}>
           {orderText(en, labels[key])}
-          <select
+          <SelectDropdown
             value={filters[key]}
             onChange={(e) => updateFilter(key, e.target.value)}
           >
@@ -240,12 +241,12 @@ export default function OrdersPage({
                 {orderText(en, label)}
               </option>
             ))}
-          </select>
+          </SelectDropdown>
         </label>
       ))}
       <label>
         {t("نیاز به رسیدگی", "Needs attention")}
-        <select
+        <SelectDropdown
           value={filters.attention}
           onChange={(e) => updateFilter("attention", e.target.value)}
         >
@@ -255,7 +256,7 @@ export default function OrdersPage({
               {orderText(en, label)}
             </option>
           ))}
-        </select>
+        </SelectDropdown>
       </label>
     </div>
   )
@@ -354,7 +355,7 @@ export default function OrdersPage({
             "All orders and financial states are samples, not connected to a live service.",
           )}
         </span>
-        <select
+        <SelectDropdown
           aria-label={t("حالت نمایشی سفارش", "Order preview state")}
           value={mode}
           onChange={(e) => {
@@ -379,7 +380,7 @@ export default function OrdersPage({
               {t(fa, english)}
             </option>
           ))}
-        </select>
+        </SelectDropdown>
       </div>
       {library ? (
         <section className="od-library">
@@ -687,7 +688,7 @@ export default function OrdersPage({
                 </button>
                 <label className="od-sort">
                   <span>{t("مرتب‌سازی", "Sort by")}</span>
-                  <select
+                  <SelectDropdown
                     value={filters.sort}
                     onChange={(e) => updateFilter("sort", e.target.value)}
                   >
@@ -697,7 +698,7 @@ export default function OrdersPage({
                     <option value="oldest">
                       {t("قدیمی‌ترین", "Oldest first")}
                     </option>
-                  </select>
+                  </SelectDropdown>
                 </label>
               </div>
             </div>

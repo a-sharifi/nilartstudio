@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import {
   demoFinanceService,
@@ -212,9 +213,9 @@ export function FinanceExport({
       <div className="fn-export-controls">
         <label>
           {en ? "Format" : "قالب"}
-          <select value={format} onChange={(e) => setFormat(e.target.value)}>
+          <SelectDropdown value={format} onChange={(e) => setFormat(e.target.value)}>
             <option value="csv">CSV</option>
-          </select>
+          </SelectDropdown>
         </label>
         <span dir="ltr">
           {range.start} — {range.end} UTC
@@ -448,12 +449,12 @@ function AuthorizedFinancePage({
       <div className="fn-report-toolbar">
         <label className="fn-period-label">
           {t("بازه گزارش", "Reporting period")}
-          <select value={period} onChange={(e) => setPeriod(e.target.value)}>
+          <SelectDropdown value={period} onChange={(e) => setPeriod(e.target.value)}>
             <option value="1">{t("امروز", "Today")}</option>
             <option value="7">{t("۷ روز اخیر", "Last 7 days")}</option>
             <option value="30">{t("۳۰ روز اخیر", "Last 30 days")}</option>
             <option value="custom">{t("بازه سفارشی", "Custom range")}</option>
-          </select>
+          </SelectDropdown>
         </label>
         <span className="fn-time-basis">
           {t(
@@ -505,7 +506,7 @@ function AuthorizedFinancePage({
             "Fictional data · sample calendar through 14 Jun 2026 · operational, not official or tax accounting",
           )}
         </span>
-        <select
+        <SelectDropdown
           aria-label={t("حالت نمایشی مالی", "Finance preview state")}
           value={mode}
           onChange={(e) => {
@@ -531,7 +532,7 @@ function AuthorizedFinancePage({
               {t(fa, english)}
             </option>
           ))}
-        </select>
+        </SelectDropdown>
       </div>
       <div className="fn-freshness">
         <span>

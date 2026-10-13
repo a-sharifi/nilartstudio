@@ -72,8 +72,8 @@ test("Cats notebook uses reference size, sheets and cover families backed by DB 
  await page.locator(".option-cover").getByRole("radio",{name:/^3 mm/}).check();
  await expect(page.locator(".selection-summary")).toHaveText("A4 · 50 sheets · 3 mm hard cover");
  await expect(page.locator(".product-specifications")).toContainText("127 gsm — design sample");
- await expect(page.locator(".product-price-summary")).toContainText("Price unavailable");
- await expect(page.locator(".product-add-button")).toBeDisabled();
+ await expect(page.locator(".product-price-summary")).toContainText("245000 toman");
+ await expect(page.locator(".product-add-button")).toBeEnabled();
  await page.getByRole("button",{name:"Size guide",exact:true}).click();
  await expect(page.locator("dialog[open] .size-comparison > div")).toHaveCount(3);
  await page.keyboard.press("Escape");

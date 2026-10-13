@@ -1,0 +1,52 @@
+[
+  {
+    "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-1",
+    "amount": "245000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-2",
+    "amount": "345000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-3",
+    "amount": "185000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-4",
+    "amount": "205000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-5",
+    "amount": "255000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-6",
+    "amount": "275000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-7",
+    "amount": "125000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CAT-RULED-1",
+    "amount": "145000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CAT-RULED-2",
+    "amount": "105000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-CAT-RULED-HARD-1",
+    "amount": "195000",
+    "currency": "IRT"
+  }
+]

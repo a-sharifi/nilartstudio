@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react"
 import type { ArtistOrder, ArtistStage, AssessmentRequest } from "./artist-data"
 
@@ -641,7 +642,7 @@ export function ArtistListTable({
       <div className="ar-list-tools">
         <label>
           {artistText(locale, "مرحله", "Stage")}
-          <select
+          <SelectDropdown
             value={filter}
             onChange={(e) => {
               setFilter(e.target.value)
@@ -656,7 +657,7 @@ export function ArtistListTable({
                 {label[locale === "fa" ? 0 : 1]}
               </option>
             ))}
-          </select>
+          </SelectDropdown>
         </label>
         <span>
           {new Intl.NumberFormat(locale).format(filtered.length)}{" "}

@@ -1,3 +1,4 @@
+import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react"
 import {
   canShowDemoDraft,
@@ -313,7 +314,7 @@ export default function CommissionsPage({
       <div>
         <label>
           {t("وضعیت صفحه", "Page state")}
-          <select
+          <SelectDropdown
             value={mode}
             onChange={(e) => setPreview(e.target.value as CommissionMode)}
           >
@@ -322,7 +323,7 @@ export default function CommissionsPage({
                 {t(fa, en)}
               </option>
             ))}
-          </select>
+          </SelectDropdown>
         </label>
         {onDemoSignIn && (
           <label className="commission-demo-session">
