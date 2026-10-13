@@ -17,6 +17,7 @@ from nilart.contexts.identity.domain.rules import (
 )
 from nilart.contexts.identity.infrastructure.otp import (
     DisabledSmsSender,
+    RedisSandboxSmsSender,
     SecureOtpSecrets,
     SmsUnavailable,
     SqlOtpRepository,
@@ -30,12 +31,12 @@ router = APIRouter(prefix="/api/v1/auth", tags=["identity"])
 
 class OtpRequest(BaseModel):
     phone: str = Field(max_length=32)
-    purpose: OtpPurpose
+    purpose: Literal[OtpPurpose.REGISTER, OtpPurpose.LOGIN, OtpPurpose.RECOVERY]
 
 
 class OtpVerification(BaseModel):
     challenge_id: UUID
-    purpose: OtpPurpose
+    purpose: Literal[OtpPurpose.REGISTER, OtpPurpose.LOGIN, OtpPurpose.RECOVERY]
     code: str = Field(pattern=r"^[0-9]{6}$")
 
     @field_validator("code", mode="before")
@@ -51,20 +52,21 @@ class CompletePassword(BaseModel):
 
 class ChallengeOutput(BaseModel):
     challenge_id: UUID
-    purpose: OtpPurpose
+    purpose: Literal[OtpPurpose.REGISTER, OtpPurpose.LOGIN, OtpPurpose.RECOVERY]
     expires_at: datetime
     resend_after_seconds: Literal[60]
     delivery_status: Literal["accepted"]
+    sandbox: bool = False
 
 
 class GrantOutput(BaseModel):
     grant: str
-    purpose: OtpPurpose
+    purpose: Literal[OtpPurpose.REGISTER, OtpPurpose.LOGIN, OtpPurpose.RECOVERY]
     expires_in_seconds: Literal[600]
 
 
 def sms_dependency() -> SmsSender:
-    return DisabledSmsSender()
+    return RedisSandboxSmsSender(settings.redis_url, settings.environment) if settings.sms_mode == "sandbox" else DisabledSmsSender()
 
 
 def service(db: Session, sms: SmsSender) -> OtpService:
@@ -111,7 +113,7 @@ def request_otp(body: OtpRequest, request: Request, response: Response,
     response.headers["Cache-Control"] = "no-store"
     return {"challenge_id": challenge.id, "purpose": body.purpose,
             "expires_at": challenge.expires.isoformat(), "resend_after_seconds": 60,
-            "delivery_status": "accepted"}
+            "delivery_status": "accepted", "sandbox": settings.sms_mode == "sandbox"}
 
 
 @router.post("/otp/verify", response_model=SessionOutput | GrantOutput)

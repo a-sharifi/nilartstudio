@@ -43,7 +43,7 @@ and at most 512 UTF-8 bytes; previous demo policy is not production policy.
 
 **SMS is deliberately disabled by default.** No production provider was selected.
 Request returns `sms_unavailable` rather than claiming delivery. The sender port is
-injectable; only tests use a capturing adapter. A real adapter must have bounded
+injectable; an explicitly configured development sandbox inbox is now available. A real adapter must have bounded
 timeouts and return normally only after provider acceptance. `delivery_status:
 accepted` means provider acceptance, not delivery to a handset. Unknown/failed
 provider outcomes return `otp_request_unconfirmed`; database changes roll back.
@@ -202,3 +202,34 @@ that log records only error class and request ID. Two injected session/access
 failures verify this behavior without accessing application data. This covers
 errors before a response starts; streaming/background failures and server-level
 traceback logging require separate review. All 160 backend tests pass locally.
+
+## Account security and sandbox SMS (2026-10-13)
+
+`/api/v1/account/security` provides GET methods/sessions, DELETE sessions/{id},
+POST password, and POST phone/request plus phone/verify. Session IDs are public UUIDs,
+never authentication tokens. Session deletion is ownership-filtered and idempotent.
+Password changes require the current password and revoke every session and outstanding
+credential/phone challenge after an atomic audit. Redis rate-limit failure denies writes.
+
+Phone changes require the current password, a normalized unused phone and an owned
+three-minute challenge. Codes are HMAC protected, limited to five attempts, purpose
+bound, and never usable through the registration/login/recovery endpoints. Confirmation
+changes the phone, increments the access version, audits the change and revokes all
+sessions. Reauthentication is required. All protected security mutations use exact
+Origin, fresh CSRF and transactionally rechecked session/permission.
+
+The original reference security component is connected to these API results; prototype
+success timers and preview controls are excluded in live mode. Phone change extends
+reference form patterns. Private inputs and snapshots clear on account/session changes.
+
+Set `NILART_SMS_MODE=sandbox` explicitly for local development, with an independent
+`NILART_OTP_HMAC_KEY` of at least 32 bytes. Production rejects sandbox configuration.
+Sandbox messages expire in Redis after 180 seconds; responses and UI label simulated
+delivery and never expose the code. An operator can read an unexpired local code:
+
+```sh
+docker compose --env-file .env -f infra/docker/compose.yaml exec -T api \
+  python -m nilart.bootstrap.sandbox_sms --phone +989XXXXXXXXX
+```
+
+Disabled remains the default. Real SMS provider integration is still a launch gate.

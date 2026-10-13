@@ -10,7 +10,7 @@ from nilart.bootstrap.settings import settings
 from nilart.contexts.catalog.application.options import UpdateOptionDraft
 from nilart.contexts.catalog.domain.options import OptionDocument
 from nilart.contexts.catalog.infrastructure.options import DraftError, SqlOptionDraftRepository
-from nilart.contexts.identity.domain.permissions import Principal, Role
+from nilart.contexts.identity.domain.permissions import Principal
 from nilart.contexts.identity.infrastructure.repository import SqlIdentityRepository
 from nilart.contexts.identity.infrastructure.secrets import token_digest
 from nilart.contexts.identity.presentation.access import require_permission
@@ -48,7 +48,7 @@ def update_options(product_id: UUID, body: DraftUpdate, request: Request,
     account = session_account(request, db, lock=True)
     if not account:
         return failure(request, "unauthenticated", 401)
-    current = Principal(account.id, frozenset(Role(role) for role in SqlIdentityRepository(db).roles(account.id, lock=True)))
+    current = SqlIdentityRepository(db).principal(account.id, lock=True)
     if account.id != principal.account_id or not current.allows("catalog.manage"):
         return failure(request, "permission_denied", 403)
     csrf = request.headers.get("X-CSRF-Token", "")

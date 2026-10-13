@@ -1,6 +1,6 @@
 # Nilart — AI engineering handoff
 
-Updated 2026-10-12. This is an implemented foundation, **not a finished commerce platform**. Use Git history for the exact source revision.
+Updated 2026-10-13. This is an implemented foundation, **not a finished commerce platform**. Use Git history for the exact source revision.
 
 ## Instructions for the receiving AI
 
@@ -1008,7 +1008,7 @@ healthy. No real prices/stock/purchases created; remote CI unverified.
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.
 2. Adopt shared session/private-cache cleanup and revalidation in each future private feature; reuse the navigation provider and extend guards as new forms are connected.
-3. Implement audited role management and explicitly approved first-admin bootstrap; enforce ownership/artist assignment on business endpoints.
+3. Continue the accepted `docs/panel-implementation-plan.md` from the remaining milestone 1 acceptance work. Audited role management/bootstrap and security contracts now exist; enforce ownership/artist assignment on each future business endpoint.
 4. Finish Next route/layout/SSR migration in small visually verified steps using the pinned components, desktop/mobile and both languages.
 5. Select SMS provider with the user; implement bounded observable delivery without fake live success.
 6. Implement media provisioning/private access and approved display-asset imports.
@@ -1031,3 +1031,30 @@ Local database now contains ten reference notebook variant prices from fixtures/
 Local checks: 260 backend tests and 92 frontend tests, frontend lint/typecheck, Docker build; all eight services healthy. Remote CI results remain unverified.
 
 Final browser verification: all 11 relevant cases pass across the final runs, including shared dropdowns, Persian mobile filtering, reference product detail, supplied font loading, quantity selection and test basket persistence after reload. PostgreSQL confirms ten priced reference variants.
+
+## 2026-10-13 — Milestone 1: audited access and account security
+
+Implemented migrations 0017–0018, granular permission overrides, audited role/restriction
+management with optimistic versions and last-manager protection, an explicit first-admin
+operator command, safe session listing/revocation, password changes and owned verified
+phone changes. All protected writes recheck Origin/CSRF/current permissions in their
+transaction. Development sandbox SMS is explicitly configured and rejected in production.
+No administrator was automatically assigned.
+
+Connected `/fa|en/admin/users` and roles aliases through the reference admin shell;
+connected the original customer security screen and a reference-pattern phone-change
+form. Live shells omit prototype role switches and fake counters. Account changes clear
+private data; unsaved edits and stale/ambiguous writes are guarded. The 129-view register
+and full accepted eight-milestone plan are saved beside this document.
+
+Local verification: 272 backend tests (isolated PostgreSQL/Redis, concurrent access writes,
+rollback and audit atomicity), 95 frontend tests, three new browser checks, backend
+ruff/mypy, frontend lint/type checks, generated OpenAPI/client, Docker builds and eight
+healthy services. Mobile admin and desktop security screenshots reviewed. Browser tests
+use mocked contracts; backend tests exercise the real isolated database. This is not
+visual acceptance of every language, viewport or required state.
+
+Milestone 1 remains partial: complete restricted-account/recovery/shared-system journeys
+and broader route/layout acceptance are still required. Milestones 2–8 remain required.
+No stock, orders, payments, costing, fulfillment or artist workflow was added by this
+slice. Remote CI results are separate and currently unverified.

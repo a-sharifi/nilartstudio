@@ -21,6 +21,9 @@ ROLE_PERMISSIONS: dict[Role, frozenset[str]] = {
                            "finance.read", "finance.write", "payments.read", "payments.refund",
                            "pricing.publish", "identity.manage", "commissions.manage"}),
 }
+ROLE_PERMISSIONS[Role.ADMIN] |= {"finance.export", "support.manage", "content.manage"}
+KNOWN_PERMISSIONS = frozenset(permission for permissions in ROLE_PERMISSIONS.values() for permission in permissions) | {"account.write_self"}
+
 ROLE_PERMISSIONS = {role: permissions | {"account.write_self"}
                     for role, permissions in ROLE_PERMISSIONS.items()}
 
@@ -29,10 +32,12 @@ ROLE_PERMISSIONS = {role: permissions | {"account.write_self"}
 class Principal:
     account_id: str
     roles: frozenset[Role]
+    grants: frozenset[str] = frozenset()
+    denials: frozenset[str] = frozenset()
 
     @property
     def permissions(self) -> frozenset[str]:
-        return frozenset(permission for role in self.roles for permission in ROLE_PERMISSIONS[role])
+        return (frozenset(permission for role in self.roles for permission in ROLE_PERMISSIONS[role]) | (self.grants & KNOWN_PERMISSIONS)) - self.denials
 
     def allows(self, permission: str) -> bool:
         return permission in self.permissions

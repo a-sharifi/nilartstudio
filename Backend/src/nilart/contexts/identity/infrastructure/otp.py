@@ -24,6 +24,27 @@ class DisabledSmsSender:
         raise SmsUnavailable("SMS adapter is not configured")
 
 
+class RedisSandboxSmsSender:
+    """Explicit development-only inbox. Codes expire and never enter HTTP responses/logs."""
+    def __init__(self, redis_url: str, environment: str):
+        if environment != "development":
+            raise SmsUnavailable("Sandbox SMS requires development")
+        self.redis_url = redis_url
+
+    def send_code(self, phone: str, code: str, purpose: OtpPurpose) -> None:
+        import json
+
+        from redis import Redis
+
+        cache = Redis.from_url(self.redis_url, socket_connect_timeout=2, socket_timeout=2)
+        try:
+            cache.set("sandbox:sms:" + token_digest(phone), json.dumps({"code": code, "purpose": purpose.value}), ex=180)
+        except Exception as exc:
+            raise SmsUnavailable("Sandbox inbox unavailable") from exc
+        finally:
+            cache.close()
+
+
 class SecureOtpSecrets:
     def __init__(self, key: bytes):
         if len(key) < 32:
@@ -118,6 +139,7 @@ class SqlOtpRepository(SqlIdentityRepository):
                                       "WHERE id=:id"), {"hash": password_hash, "id": account_id})
             self.session.execute(text("DELETE FROM identity_sessions WHERE account_id=:id"),
                                  {"id": account_id})
+            self.session.execute(text("UPDATE identity_phone_changes SET consumed=true WHERE account_id=:id"), {"id": account_id})
             self.session.execute(text("UPDATE identity_password_grants SET consumed=true "
                                       "WHERE phone=:phone"), {"phone": phone})
             self.session.execute(text("UPDATE identity_otp_challenges SET consumed=true "

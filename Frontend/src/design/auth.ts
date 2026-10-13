@@ -12,6 +12,7 @@ export interface DemoVerifyFlow {
 }
 
 export interface LiveVerifyFlow {
+  sandbox?: boolean
   demo: false
   purpose: Purpose
   maskedPhone: string

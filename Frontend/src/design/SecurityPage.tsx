@@ -45,9 +45,11 @@ const previews: [SecurityMode, string, string][] = [
 export default function SecurityPage({
   page,
   navigate,
+  liveApi,
 }: {
   page: string
   navigate: (route: string) => void
+  liveApi?: import("../features/identity/security").LiveSecurityApi
 }) {
   const en = page.startsWith("/en/"),
     index = en ? 1 : 0,
@@ -83,7 +85,19 @@ export default function SecurityPage({
   const changeLock = useRef(false),
     sessionLock = useRef(false),
     timers = useRef(new Set<ReturnType<typeof setTimeout>>())
-  const fixture = securityFixture(mode)
+  const [liveSnapshot,setLiveSnapshot]=useState<Awaited<ReturnType<NonNullable<typeof liveApi>["load"]>>|null>(null)
+  const liveGeneration=useRef(0)
+  const fixture = liveApi ? liveSnapshot || {...securityFixture("denied"),owner:"",minimum:12,sessions:[],maskedPhone:"",phoneVerified:false,passwordEnabled:false,otpEnabled:false,canChange:false,canManageSessions:false} : securityFixture(mode)
+  const canRevoke=(session:typeof fixture.sessions[number])=>liveApi?!!liveSnapshot&&!session.current:canRevokeSession(session,fixture.owner,fixture.canManageSessions)
+  useEffect(()=>{
+    if(!liveApi)return
+    const clear=()=>{liveGeneration.current++;setLiveSnapshot(null);setDraft({current:"",next:"",confirm:""});setShow({current:false,next:false,confirm:false});setModal(null);setRemovedSessions([]);setState("idle");setMode("denied")}
+    const load=async()=>{const request=++liveGeneration.current;try{const value=await liveApi.load();if(request===liveGeneration.current){setLiveSnapshot(value);setMode("sessions")}}catch(error){if(request===liveGeneration.current){setLiveSnapshot(null);setMode(error instanceof Error && ["unauthenticated","permission_denied"].includes(error.message)?"denied":"sessions-load-error")}}}
+    setMode("loading");void load()
+    const unregister=liveApi.registerPrivateCache(clear)
+    const unsubscribe=liveApi.subscribe(event=>{if(event.type==="changed"){clear();if(event.signedOut)return}void load()})
+    return()=>{liveGeneration.current++;unregister();unsubscribe()}
+  },[liveApi])
   const privateVisible =
     mode !== "denied" && mode !== "loading" && state !== "success-relogin"
   const busy = state === "submitting",
@@ -156,14 +170,14 @@ export default function SecurityPage({
       return
     }
     clearPasswords()
-    if (internalRoute(route)) proceed()
+    if (liveApi || internalRoute(route)) proceed()
     else showDestination(route)
   }
   const follow = (route: string) => (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     event.preventDefault()
     clearPasswords()
-    if (internalRoute(route)) navigate(route)
+    if (liveApi || internalRoute(route)) navigate(route)
     else showDestination(route)
   }
   const change = (key: keyof PasswordDraft, value: string) => {
@@ -184,15 +198,15 @@ export default function SecurityPage({
         "تکرار رمز جدید را وارد کنید.",
         "Confirm your new password.",
       ),
-      rules: t(
+      rules: (liveApi?t("رمز باید بین ۱۲ تا ۱۲۸ نویسه باشد.","Password must contain 12–128 characters."):t(
         "شرایط رمز جدید را مطابق قرارداد نمونه رعایت کنید.",
         "Meet the new password requirements in the fixture contract.",
-      ),
+      )),
       mismatch: t("رمزها با هم مطابقت ندارند.", "The passwords do not match."),
-      incorrect: t(
+      incorrect: (liveApi?t("رمز فعلی درست نیست.","The current password is incorrect."):t(
         "رمز فعلی درست نیست. • پاسخ Demo",
         "The current password is incorrect. • Demo response",
-      ),
+      )),
     })[code]
   const submit = (event: FormEvent) => {
     event.preventDefault()
@@ -207,6 +221,18 @@ export default function SecurityPage({
           )
           ?.focus(),
       )
+      return
+    }
+    if(liveApi){
+      changeLock.current=true;setState("submitting");setLive("")
+      const request=liveGeneration.current
+      void liveApi.change(draft).then(()=>{clearPasswords();setLiveSnapshot(null);setMode("normal");setState("success-relogin");setLive(t("رمز تغییر کرد و همه نشست‌ها پایان یافتند.","Password changed and all sessions ended."))}).catch(error=>{
+        if(request!==liveGeneration.current)return
+        const code=error instanceof Error?error.message:""
+        if(code==="incorrect_current_password"){setErrors({current:"incorrect"});setState("incorrect")}
+        else if(code==="rate_limited"){setMode("limited");setState("idle")}
+        else{setState(code==="result_unknown"?"unknown":"server");setLive(t("تغییر رمز تأیید نشد.","Password change was not confirmed."))}
+      }).finally(()=>{changeLock.current=false})
       return
     }
     // Explicit fixture-response simulation. Never verify a password against a client-side stored credential.
@@ -270,6 +296,7 @@ export default function SecurityPage({
   }
   const check = () => {
     if (checking) return
+    if(liveApi){setChecking(true);void liveApi.load().then(value=>{setLiveSnapshot(value);setLive(t("نشست هنوز فعال است؛ نتیجه تغییر رمز تأیید نشده است.","The session remains active; password change is unconfirmed."))}).catch(()=>setLive(t("وضعیت تأیید نشد؛ دوباره ارسال نکنید و از ورود یا بازیابی رمز استفاده کنید.","Status is unconfirmed. Use sign-in or password recovery before resubmitting."))).finally(()=>setChecking(false));return}
     setChecking(true)
     later(() => {
       setChecking(false)
@@ -290,7 +317,7 @@ export default function SecurityPage({
     if (
       id !== "others" &&
       (!target ||
-        !canRevokeSession(target, fixture.owner, fixture.canManageSessions))
+        !canRevoke(target))
     )
       return
     origin.current = event.currentTarget
@@ -306,10 +333,15 @@ export default function SecurityPage({
     const ids = sessions
       .filter(
         (session) =>
-          canRevokeSession(session, fixture.owner, fixture.canManageSessions) &&
+          canRevoke(session) &&
           (revokeTarget === "others" || session.id === revokeTarget),
       )
       .map((session) => session.id)
+    if(liveApi){
+      const request=liveGeneration.current
+      void liveApi.revoke(ids).then(()=>{if(request!==liveGeneration.current)return;setRemovedSessions(previous=>[...previous,...ids]);setModal(null);setRevokeTarget(null);setLive(t("نشست‌های انتخاب‌شده پایان یافتند.","Selected sessions ended."))}).catch(()=>{if(request===liveGeneration.current)setSessionError(t("پایان نشست تأیید نشد. فهرست را دوباره دریافت کنید.","Revocation is unconfirmed. Reload the session list."))}).finally(()=>{sessionLock.current=false;setSessionBusy(false)})
+      return
+    }
     later(() => {
       sessionLock.current = false
       setSessionBusy(false)
@@ -358,7 +390,7 @@ export default function SecurityPage({
     setModal(null)
     setRevokeTarget(null)
   }
-  const policyText =
+  const policyText = liveApi ? t("پس از تغییر رمز، همه نشست‌ها پایان می‌یابند و ورود دوباره لازم است.","Changing your password ends all sessions and requires sign-in again.") :
     fixture.sessionPolicy === "other-sessions"
       ? t(
           "پس از تغییر رمز، نشست‌های دیگر از حساب خارج می‌شوند؛ نشست جاری معتبر می‌ماند. • سیاست Demo",
@@ -421,6 +453,7 @@ export default function SecurityPage({
       activeSection="security"
       onBeforeNavigate={beforePanelNavigation}
       panelTitle={t("امنیت حساب", "Account security")}
+      liveMode={!!liveApi}
     >
       <div className="security-page">
         <nav
@@ -448,6 +481,7 @@ export default function SecurityPage({
             <Glyph name="shield" size={31} />
           </span>
         </div>
+        {!liveApi && <>
         <div className="security-demo">
           <span>Demo</span>
           <p>
@@ -457,6 +491,9 @@ export default function SecurityPage({
             )}
           </p>
         </div>
+        </>}
+        {liveApi && mode==="sessions-load-error" && <div className="security-warning" role="alert"><p>{t("دریافت اطلاعات امنیت ممکن نشد.","Unable to load security settings.")}</p><button className="button secondary" onClick={()=>{const request=++liveGeneration.current;setMode("loading");void liveApi.load().then(value=>{if(request===liveGeneration.current){setLiveSnapshot(value);setMode("sessions")}}).catch(()=>{if(request===liveGeneration.current)setMode("sessions-load-error")})}}>{t("دوباره تلاش کنید","Try again")}</button></div>}
+        {liveSnapshot?.sandboxSms && <p className="security-warning">{t("پیامک در حالت آزمایشی محلی است.","SMS uses the local sandbox.")}</p>}
         <div className="security-live" role="status" aria-live="polite">
           {live}
         </div>
@@ -499,16 +536,16 @@ export default function SecurityPage({
               <Glyph name="check" size={32} />
             </span>
             <h2>
-              {t(
+              {(liveApi?t("رمز عبور تغییر کرد","Your password has been changed"):t(
                 "رمز عبور تغییر کرد · Demo",
                 "Your password has been changed · Demo",
-              )}
+              ))}
             </h2>
             <p>
-              {t(
+              {(liveApi?t("نشست جاری و سایر نشست‌ها پایان یافتند. برای ادامه وارد شوید.","Current and other sessions ended. Sign in to continue."):t(
                 "در پاسخ نمونه، نشست جاری و سایر نشست‌ها پایان یافته‌اند؛ نمای خصوصی حذف شده است. هیچ تغییر یا ابطال واقعی انجام نشده است.",
                 "In the fixture response, current and other sessions have ended; the private view is removed. No actual change or revocation occurred.",
-              )}
+              ))}
             </p>
             <a className="button primary" href={login} onClick={follow(login)}>
               {t("ورود دوباره", "Sign in again")}
@@ -544,7 +581,7 @@ export default function SecurityPage({
                   <bdi>{fixture.maskedPhone}</bdi>
                   <span className="security-verified">
                     <Glyph name="check" size={13} />
-                    {t("تأییدشده · Demo", "Verified · Demo")}
+                    {t(liveApi?(fixture.phoneVerified?"تأییدشده":"تأیید نشده"):"تأییدشده · Demo",liveApi?(fixture.phoneVerified?"Verified":"Unconfirmed"):"Verified · Demo")}
                   </span>
                 </div>
                 <div>
@@ -554,8 +591,8 @@ export default function SecurityPage({
                   <strong>
                     <Glyph name="check" size={14} />
                     {fixture.passwordEnabled
-                      ? t("فعال · Demo", "Enabled · Demo")
-                      : t("غیرفعال · Demo", "Disabled · Demo")}
+                      ? t(liveApi?"فعال":"فعال · Demo",liveApi?"Enabled":"Enabled · Demo")
+                      : t(liveApi?"غیرفعال":"غیرفعال · Demo",liveApi?"Unavailable":"Disabled · Demo")}
                   </strong>
                 </div>
                 <div>
@@ -565,8 +602,8 @@ export default function SecurityPage({
                   <strong>
                     <Glyph name="check" size={14} />
                     {fixture.otpEnabled
-                      ? t("فعال · Demo", "Enabled · Demo")
-                      : t("غیرفعال · Demo", "Disabled · Demo")}
+                      ? t(liveApi?"فعال":"فعال · Demo",liveApi?"Enabled":"Enabled · Demo")
+                      : t(liveApi?"غیرفعال":"غیرفعال · Demo",liveApi?"Unavailable":"Disabled · Demo")}
                   </strong>
                 </div>
               </div>
@@ -608,10 +645,10 @@ export default function SecurityPage({
                       <Glyph name="check" size={22} />
                       <div>
                         <strong>
-                          {t(
+                          {(liveApi?t("رمز عبور تغییر کرد","Your password has been changed"):t(
                             "رمز عبور تغییر کرد · Demo",
                             "Your password has been changed · Demo",
-                          )}
+                          ))}
                         </strong>
                         <p>
                           {t(
@@ -703,7 +740,7 @@ export default function SecurityPage({
                         />
                         {t(
                           `حداقل ${fixture.minimum} نویسه طبق قرارداد نمونه`,
-                          `At least ${fixture.minimum} characters under the fixture contract`,
+                          liveApi?`12–128 characters`:`At least ${fixture.minimum} characters under the fixture contract`,
                         )}
                         <span>
                           {draft.next.length >= fixture.minimum
@@ -712,10 +749,10 @@ export default function SecurityPage({
                         </span>
                       </p>
                       <small>
-                        {t(
+                        {(liveApi?t("رمز باید بین ۱۲ تا ۱۲۸ نویسه و حداکثر ۵۱۲ بایت باشد. فاصله‌های رمز تغییر داده نمی‌شوند.","Password must contain 12–128 characters and at most 512 bytes. Password spaces are preserved."):t(
                           "قواعد از تنظیمات Demo احراز هویت موجود بازاستفاده شده‌اند؛ الزام استفاده‌نکردن از رمز قبلی یا قواعد اضافه فرض نشده است.",
                           "Rules reuse the existing authentication Demo configuration; no reuse prohibition or extra requirements are assumed.",
-                        )}
+                        ))}
                       </small>
                     </section>
                     <section className="security-session-policy">
@@ -785,12 +822,12 @@ export default function SecurityPage({
                         : t("تغییر رمز عبور", "Change password")}
                       <Glyph name="arrow" size={17} />
                     </button>
-                    <p className="security-submit-demo">
+                    {!liveApi && <p className="security-submit-demo">
                       {t(
                         "اقدام و نتیجه فقط شبیه‌سازی Demo هستند؛ رمز در ذخیره دائمی یا URL قرار نمی‌گیرد.",
                         "Actions and results are Demo simulations only; passwords are not placed in persistent storage or URLs.",
                       )}
-                    </p>
+                    </p>}
                   </form>
                 </section>
                 {fixture.sessionsEnabled && (
@@ -804,10 +841,10 @@ export default function SecurityPage({
                           {t("نشست‌های حساب", "Account sessions")}
                         </h2>
                         <p>
-                          {t(
+                          {(liveApi?t("نشست‌های فعال این حساب؛ اطلاعات دستگاه ثبت نشده است.","Active sessions for this account; device information is not recorded."):t(
                             "قابلیت مدیریت و مجوز در قرارداد Demo فعال است؛ این نشست‌ها واقعی نیستند.",
                             "Management capability and permission are enabled in the Demo contract; these are not real sessions.",
-                          )}
+                          ))}
                         </p>
                       </div>
                     </div>
@@ -830,10 +867,10 @@ export default function SecurityPage({
                       </div>
                     ) : !sessions.length ? (
                       <p className="security-empty-sessions">
-                        {t(
+                        {(liveApi?t("نشست فعالی برای نمایش نیست.","No active sessions to display."):t(
                           "در پاسخ نمونه، نشستی برای نمایش ثبت نشده است.",
                           "No sessions are listed in the fixture response.",
-                        )}
+                        ))}
                       </p>
                     ) : (
                       <>
@@ -849,10 +886,10 @@ export default function SecurityPage({
                               <div>
                                 <h3>{session.device[index]}</h3>
                                 <p>
-                                  {t(
+                                  {(liveApi?t("زمان ایجاد نشست","Session created"):t(
                                     "آخرین فعالیت گزارش‌شده",
                                     "Reported last activity",
-                                  )}
+                                  ))}
                                   :{" "}
                                   <time dateTime={session.lastActivity}>
                                     {new Intl.DateTimeFormat(
@@ -868,10 +905,10 @@ export default function SecurityPage({
                               </div>
                               {session.current ? (
                                 <span className="security-current-session">
-                                  {t(
+                                  {(liveApi?t("نشست جاری","Current session"):t(
                                     "نشست جاری · Demo",
                                     "Current session · Demo",
-                                  )}
+                                  ))}
                                 </span>
                               ) : (
                                 <button
@@ -993,9 +1030,9 @@ export default function SecurityPage({
               "Account security is separate from your orders and payments.",
             )}
           </span>
-          <span>Nilart · Demo</span>
+          <span>{liveApi?"Nilart":"Nilart · Demo"}</span>
         </footer>
-        <details className="dash-preview">
+        {!liveApi && <details className="dash-preview">
           <summary>
             {t("حالت‌های پیش‌نمایش", "Preview states")} <bdi>USER-13 · Demo</bdi>
           </summary>
@@ -1019,7 +1056,7 @@ export default function SecurityPage({
               {t("نشست منقضی", "Expired session")}
             </a>
           </div>
-        </details>
+        </details>}
         <dialog
           ref={dialog}
           className="security-dialog modal"
@@ -1054,14 +1091,14 @@ export default function SecurityPage({
             <div>
               <p>
                 {revokeTarget === "others"
-                  ? t(
+                  ? (liveApi?t("نشست‌های دیگر پایان می‌یابند و نشست جاری باقی می‌ماند.","Other sessions will end; the current session remains."):t(
                       "در پاسخ نمونه، فقط نشست‌های غیرجاری انتخاب شده‌اند. نشست جاری باقی می‌ماند؛ این اقدام حذف حساب یا لغو سفارش نیست.",
                       "The fixture selects only non-current sessions. The current session remains; this does not delete the account or cancel orders.",
-                    )
-                  : t(
+                    ))
+                  : (liveApi?t("نشست انتخاب‌شده پایان می‌یابد و نشست جاری باقی می‌ماند.","The selected session will end; the current session remains."):t(
                       "فقط نشست انتخاب‌شده در محدوده مجوز نمونه خارج می‌شود؛ نشست جاری باقی می‌ماند.",
                       "Only the selected session is signed out within the fixture permission; the current session remains.",
-                    )}
+                    ))}
               </p>
               <div className="security-revoke-summary">
                 {sessions
@@ -1076,10 +1113,10 @@ export default function SecurityPage({
                   ))}
               </div>
               <small>
-                {t(
+                {(liveApi?t("تأیید این اقدام، دسترسی نشست انتخاب‌شده را پایان می‌دهد.","Confirming this action ends access for the selected session."):t(
                   "مجوز این عملیات در پاسخ Demo معتبر است؛ در نسخه واقعی تأیید نشست و احراز هویت مجدد تابع سرویس است. هیچ ابطال واقعی انجام نمی‌شود.",
                   "Operation permission is valid in the Demo response; real session checks and reauthentication follow the service policy. No actual revocation occurs.",
-                )}
+                ))}
               </small>
               {sessionError && (
                 <p className="security-operation-error" role="alert">

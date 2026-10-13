@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from nilart.bootstrap.settings import settings
 from nilart.contexts.catalog.infrastructure.prices import PriceError, SqlSKUPriceRepository
-from nilart.contexts.identity.domain.permissions import Principal, Role
+from nilart.contexts.identity.domain.permissions import Principal
 from nilart.contexts.identity.infrastructure.repository import SqlIdentityRepository
 from nilart.contexts.identity.infrastructure.secrets import token_digest
 from nilart.contexts.identity.presentation.access import require_permission
@@ -58,8 +58,7 @@ def update_price(sku_id: UUID, body: PriceUpdate, request: Request,
     account = session_account(request, db, lock=True)
     if not account:
         return failure(request, "unauthenticated", 401)
-    roles = SqlIdentityRepository(db).roles(account.id, lock=True)
-    current = Principal(account.id, frozenset(Role(role) for role in roles))
+    current = SqlIdentityRepository(db).principal(account.id, lock=True)
     if account.id != principal.account_id or not current.allows("catalog.manage"):
         return failure(request, "permission_denied", 403)
     csrf = request.headers.get("X-CSRF-Token", "")

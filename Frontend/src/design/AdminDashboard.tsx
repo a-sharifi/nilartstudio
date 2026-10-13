@@ -101,7 +101,7 @@ function Glyph({ name = "grid" }: { name?: string }) {
   )
 }
 
-export default function AdminDashboard() {
+export default function AdminDashboard({live}: {live?: {path:string;title:string;children:ReactNode;navigate:(path:string)=>void;permissions:readonly string[]}} = {}) {
   const [en, setEn] = useState(location.pathname.startsWith("/en/"))
   const [role, setRole] = useState<Role>("owner")
   const [mode, setMode] = useState("normal")
@@ -541,6 +541,12 @@ export default function AdminDashboard() {
       "awaiting-artist",
     ],
   ]
+  if (live) {
+    const liveBase=`/${live.path.startsWith("/en/")?"en":"fa"}/admin`
+    const allowedGroups=["orders.read_all","catalog.manage","pricing.publish","inventory.manage","finance.read","commissions.manage","identity.manage"]
+    const sidebar=<><div className="ad-brand"><span className="wordmark"><span>nilart<span className="wordmark-dot">.</span></span><small>ART, IN EVERY DETAIL</small></span><span className="ad-brand-caption">{t("پنل مدیریت نیل‌آرت","NilArt administration")}</span></div><nav aria-label={t("ناوبری مدیریت","Admin navigation")}><button onClick={()=>live.navigate(liveBase)}><Glyph/>{t("داشبورد","Dashboard")}</button>{groups.filter((_,index)=>live.permissions.includes(allowedGroups[index])).map(([title,icon,items])=><details key={title} open={title===t("سیستم","System")}><summary><Glyph name={icon}/><span>{title}</span><Glyph name="chevron"/></summary><div>{items.map(([fa,english,route])=><button key={route} className={live.path===liveBase+route?"ad-nav-active":""} aria-current={live.path===liveBase+route?"page":undefined} onClick={()=>{setDrawer(false);live.navigate(liveBase+route)}}>{t(fa,english)}</button>)}</div></details>)}</nav><div className="ad-sidebar-bottom"><span className="ad-avatar">ن</span><div><strong>{t("فضای کار نیل‌آرت","NilArt workspace")}</strong><small>{t("هنر، با نظم بیشتر","A little more order, for art")}</small></div></div></>
+    return <div className="ad-app" dir={en?"ltr":"rtl"}><aside className="ad-sidebar">{sidebar}</aside><div className="ad-workspace"><header className="ad-topbar"><div className="ad-top-start"><button className="icon-button ad-mobile-menu" aria-label={t("باز کردن منو","Open menu")} onClick={()=>setDrawer(true)}><Glyph name="menu"/></button><span>{t("مدیریت کسب‌وکار","Business management")}</span></div><div className="ad-top-actions"><a className="ad-store" href={en?"/en":"/fa"}>{t("مشاهده فروشگاه","View store")}<Glyph name="link"/></a><button className="language-button" onClick={()=>live.navigate(live.path.replace(/^\/(fa|en)/,en?"/fa":"/en"))}>{en?"فارسی":"EN"}</button><a className="icon-button ad-logout" href={`/${en?"en":"fa"}/auth/logout`} aria-label={t("خروج از حساب","Sign out")}><Glyph name="logout"/></a></div></header><main className="ad-main"><div className="ad-panel-head"><div><h1>{live.title}</h1></div></div>{live.children}</main></div><dialog ref={drawerDialog} className="ad-drawer" onCancel={()=>setDrawer(false)}><button className="icon-button" aria-label={t("بستن منو","Close menu")} onClick={()=>setDrawer(false)}><Glyph name="close"/></button>{sidebar}</dialog></div>
+  }
   if (!session)
     return (
       <div className="ad-session" dir={en ? "ltr" : "rtl"}>

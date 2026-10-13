@@ -1,0 +1,13 @@
+.ad-main .identity-editor {display:grid;gap:var(--space-6);}
+.identity-editor fieldset {border:1px solid var(--border);border-radius:var(--radius-card);padding:var(--space-4);display:grid;gap:var(--space-3);min-width:0;}
+.identity-editor legend {padding-inline:var(--space-2);font-weight:600;}
+.identity-editor fieldset:first-of-type {grid-template-columns:repeat(auto-fit,minmax(130px,1fr));}
+.identity-editor fieldset:first-of-type label,.identity-editor .identity-restriction {display:flex;align-items:center;gap:var(--space-2);min-height:44px;}
+.identity-editor fieldset:nth-of-type(2)>label {display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,240px);gap:var(--space-4);align-items:center;}
+.identity-editor input[type=checkbox] {width:18px;height:18px;accent-color:var(--accent);}
+.identity-editor textarea {width:100%;min-height:110px;border:1px solid var(--border);border-radius:var(--radius-control);padding:var(--space-3);background:var(--surface);color:var(--text);}
+.identity-editor .button {justify-self:start;}
+.ad-main .identity-accounts {overflow-x:auto;}
+.identity-accounts table {width:100%;border-collapse:collapse;text-align:start;}
+.identity-accounts th,.identity-accounts td {padding:var(--space-3);border-bottom:1px solid var(--border);}
+@media(max-width:600px){.identity-editor fieldset:nth-of-type(2)>label{grid-template-columns:1fr;gap:var(--space-2);}.identity-accounts th,.identity-accounts td{padding:var(--space-2);}}

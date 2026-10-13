@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from nilart.bootstrap.settings import settings
 from nilart.contexts.commissions.repository import SqlCommissionRepository, SubmissionConflict
-from nilart.contexts.identity.domain.permissions import Principal, Role
+from nilart.contexts.identity.domain.permissions import Principal
 from nilart.contexts.identity.infrastructure.repository import SqlIdentityRepository
 from nilart.contexts.identity.infrastructure.secrets import token_digest
 from nilart.contexts.identity.presentation.access import require_permission
@@ -49,8 +49,8 @@ def submit(body: CommissionBrief, request: Request, db: Session = Depends(sessio
     account = session_account(request, db, lock=True)
     if not account:
         return failure(request, "unauthenticated", 401)
-    roles = SqlIdentityRepository(db).roles(account.id, lock=True)
-    if account.id != principal.account_id or not Principal(account.id, frozenset(Role(role) for role in roles)).allows("account.write_self"):
+    current = SqlIdentityRepository(db).principal(account.id, lock=True)
+    if account.id != principal.account_id or not current.allows("account.write_self"):
         return failure(request, "permission_denied", 403)
     csrf = request.headers.get("X-CSRF-Token", "")
     if not csrf or len(csrf) > 128 or not hmac.compare_digest(token_digest(csrf), account.csrf_hash):

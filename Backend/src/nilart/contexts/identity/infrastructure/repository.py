@@ -4,6 +4,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from nilart.contexts.identity.application.service import Account, SessionAccount
+from nilart.contexts.identity.domain.permissions import Principal, Role
 
 
 class SqlIdentityRepository:
@@ -14,6 +15,15 @@ class SqlIdentityRepository:
         return list(self.session.execute(text("SELECT role FROM identity_account_roles "
                                               "WHERE account_id=:id" + (" FOR SHARE" if lock else "")),
                                          {"id": account_id}).scalars())
+
+    def principal(self, account_id: str, *, lock: bool = False) -> Principal:
+        roles = self.roles(account_id, lock=lock)
+        overrides = self.session.execute(text("SELECT permission,allowed FROM identity_permission_overrides "
+                                               "WHERE account_id=:id" + (" FOR SHARE" if lock else "")),
+                                         {"id": account_id}).mappings().all()
+        return Principal(account_id, frozenset(Role(role) for role in roles),
+                         frozenset(row["permission"] for row in overrides if row["allowed"]),
+                         frozenset(row["permission"] for row in overrides if not row["allowed"]))
 
     def account_for_update(self, phone: str) -> Account | None:
         row = self.session.execute(text("SELECT id, phone, password_hash, phone_verified, blocked "

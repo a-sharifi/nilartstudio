@@ -1,0 +1,60 @@
+import {expect,test} from "@playwright/test"
+const owner="00000000-0000-4000-8000-000000000001",id="00000000-0000-4000-8000-000000000002"
+const account={id,phone:"+989123456780",phone_verified:true,blocked:false,version:0,roles:["customer"],overrides:{},permissions:["account.read_self"]}
+
+test("unauthenticated management and artist routes deny access without loading private records",async({page})=>{
+ let reads=0
+ await page.route("**/api/v1/auth/access",route=>route.fulfill({status:401,json:{code:"unauthenticated"}}))
+ await page.route("**/api/v1/admin/identity/**",route=>{reads++;return route.fulfill({status:500,json:{}})})
+ await page.goto("/en/admin/users")
+ await expect(page.getByRole("heading",{name:"Access denied"})).toBeVisible()
+ await page.goto("/en/artist")
+ await expect(page.getByRole("heading",{name:"Access denied"})).toBeVisible()
+ expect(reads).toBe(0)
+})
+
+test("reference admin shell edits roles and protects unsaved changes on mobile",async({page})=>{
+ let saved:Record<string,unknown>|undefined
+ await page.route("**/api/v1/auth/access",route=>route.fulfill({json:{account_id:owner,roles:["admin"],permissions:["identity.manage"]}}))
+ await page.route("**/api/v1/auth/session/csrf",route=>route.fulfill({json:{csrf_token:"test-csrf"}}))
+ await page.route("**/api/v1/admin/identity/accounts",route=>route.fulfill({json:{items:[account],next_cursor:null}}))
+ await page.route("**/api/v1/admin/identity/permissions",route=>route.fulfill({json:["payments.refund"]}))
+ await page.route(`**/api/v1/admin/identity/accounts/${id}/audits`,route=>route.fulfill({json:[]}))
+ await page.route(`**/api/v1/admin/identity/accounts/${id}/access`,route=>{saved=route.request().postDataJSON();return route.fulfill({json:{...account,...saved,version:1}})})
+ await page.setViewportSize({width:390,height:844})
+ await page.goto("/en/admin/users")
+ await page.getByRole("button",{name:"Edit access"}).click()
+ await page.getByRole("checkbox",{name:"finance",exact:true}).check()
+ await page.getByRole("combobox",{name:"payments.refund"}).click()
+ await page.getByRole("option",{name:"Allow",exact:true}).click()
+ await page.getByLabel("Reason for change").fill("Assign finance responsibilities")
+ await page.getByRole("button",{name:"Reload",exact:true}).click()
+ await expect(page.getByRole("dialog")).toBeVisible()
+ await page.getByRole("button",{name:"Keep editing"}).click()
+ await page.getByRole("button",{name:"Confirm and save access"}).click()
+ await expect(page.getByText("Access saved and audited.",{exact:true})).toBeVisible()
+ expect(saved?.roles).toEqual(["customer","finance"])
+ expect(saved?.overrides).toEqual({"payments.refund":true})
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy()
+ await page.screenshot({path:"/tmp/nilart-admin-users-mobile.png",fullPage:true})
+})
+
+test("live reference security page clears password fields after confirmed change",async({page})=>{
+ await page.route("**/api/v1/account/profile",route=>route.fulfill({json:{account_id:owner,phone:"+989123456789",full_name:"",version:0}}))
+ await page.route("**/api/v1/account/security/methods",route=>route.fulfill({json:{password_enabled:true,otp_enabled:false,can_change:true,sandbox_sms:false}}))
+ await page.route("**/api/v1/account/security/sessions",route=>route.fulfill({json:[{id,created_at:"2026-10-13T10:00:00Z",expires_at:"2026-10-14T10:00:00Z",current:true}]}))
+ await page.route("**/api/v1/auth/session/csrf",route=>route.fulfill({json:{csrf_token:"test-csrf"}}))
+ let payload:unknown
+ await page.route("**/api/v1/account/security/password",route=>{payload=route.request().postDataJSON();return route.fulfill({json:{reauthenticate:true}})})
+ await page.goto("/en/account/security")
+ await expect(page.getByText("Current session",{exact:true})).toBeVisible()
+ await expect(page.getByText("Preview states",{exact:true})).toHaveCount(0)
+ await page.getByLabel("Current password",{exact:true}).fill("a current passphrase")
+ await page.getByLabel("New password",{exact:true}).fill("a new secure passphrase")
+ await page.getByLabel("Confirm new password",{exact:true}).fill("a new secure passphrase")
+ await page.getByRole("button",{name:"Change password",exact:true}).click()
+ await expect(page.getByRole("heading",{name:"Your password has been changed"})).toBeVisible()
+ expect(payload).toEqual({current_password:"a current passphrase",new_password:"a new secure passphrase"})
+ await expect(page.getByLabel("Current password",{exact:true})).toHaveCount(0)
+ await page.screenshot({path:"/tmp/nilart-security-confirmed-desktop.png",fullPage:true})
+})

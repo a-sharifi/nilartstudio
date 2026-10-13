@@ -512,3 +512,30 @@ Imported ten explicit reference notebook prices into existing local database var
 Validation: backend 260 tests; frontend 92 tests; frontend typecheck/lint; Docker build and eight healthy services. Browser verification is recorded in the handoff after the final check. Remote CI is unverified.
 
 Final browser verification: all 11 relevant cases pass across the final runs, including shared dropdowns, Persian mobile filtering, reference product detail, supplied font loading, quantity selection and test basket persistence after reload. PostgreSQL confirms ten priced reference variants.
+
+## 2026-10-13 — Milestone 1: audited access and account security
+
+Implemented migrations 0017–0018, granular permission overrides, audited role/restriction
+management with optimistic versions and last-manager protection, an explicit first-admin
+operator command, safe session listing/revocation, password changes and owned verified
+phone changes. All protected writes recheck Origin/CSRF/current permissions in their
+transaction. Development sandbox SMS is explicitly configured and rejected in production.
+No administrator was automatically assigned.
+
+Connected `/fa|en/admin/users` and roles aliases through the reference admin shell;
+connected the original customer security screen and a reference-pattern phone-change
+form. Live shells omit prototype role switches and fake counters. Account changes clear
+private data; unsaved edits and stale/ambiguous writes are guarded. The 129-view register
+and full accepted eight-milestone plan are saved beside this document.
+
+Local verification: 272 backend tests (isolated PostgreSQL/Redis, concurrent access writes,
+rollback and audit atomicity), 95 frontend tests, three new browser checks, backend
+ruff/mypy, frontend lint/type checks, generated OpenAPI/client, Docker builds and eight
+healthy services. Mobile admin and desktop security screenshots reviewed. Browser tests
+use mocked contracts; backend tests exercise the real isolated database. This is not
+visual acceptance of every language, viewport or required state.
+
+Milestone 1 remains partial: complete restricted-account/recovery/shared-system journeys
+and broader route/layout acceptance are still required. Milestones 2–8 remain required.
+No stock, orders, payments, costing, fulfillment or artist workflow was added by this
+slice. Remote CI results are separate and currently unverified.

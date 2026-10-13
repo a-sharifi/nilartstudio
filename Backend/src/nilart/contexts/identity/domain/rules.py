@@ -17,6 +17,7 @@ class OtpPurpose(StrEnum):
     REGISTER = "register"
     LOGIN = "login"
     RECOVERY = "recovery"
+    PHONE_CHANGE = "phone_change"
 
 
 def normalize_digits(value: str) -> str:

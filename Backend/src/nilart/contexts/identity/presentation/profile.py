@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from nilart.bootstrap.settings import settings
 from nilart.contexts.identity.application.profile import UpdateProfile
-from nilart.contexts.identity.domain.permissions import Principal, Role
+from nilart.contexts.identity.domain.permissions import Principal
 from nilart.contexts.identity.domain.rules import IdentityError
 from nilart.contexts.identity.infrastructure.profile import SqlProfileRepository
 from nilart.contexts.identity.infrastructure.repository import SqlIdentityRepository
@@ -50,8 +50,7 @@ def update_profile(body: ProfileUpdate, request: Request, response: Response,
     account = session_account(request, db, lock=True)
     if not account:
         return failure(request, "unauthenticated", 401)
-    current_roles = SqlIdentityRepository(db).roles(account.id, lock=True)
-    current_principal = Principal(account.id, frozenset(Role(role) for role in current_roles))
+    current_principal = SqlIdentityRepository(db).principal(account.id, lock=True)
     if not current_principal.allows("account.write_self"):
         return failure(request, "permission_denied", 403)
     csrf = request.headers.get("X-CSRF-Token", "")

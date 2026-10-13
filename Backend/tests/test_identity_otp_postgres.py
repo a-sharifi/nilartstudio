@@ -46,7 +46,7 @@ def flow(monkeypatch):
             connection.execute(text(f'CREATE SCHEMA "{schema}"'))
             connection.execute(text(f'SET LOCAL search_path TO "{schema}"'))
             with Operations.context(MigrationContext.configure(connection)):
-                for filename in ["0005_identity.py", "0006_identity_otp.py", "0007_identity_roles.py", "0008_identity_profiles.py"]:
+                for filename in ["0005_identity.py", "0006_identity_otp.py", "0007_identity_roles.py", "0008_identity_profiles.py", "0017_identity_management.py", "0018_phone_changes.py"]:
                     spec = importlib.util.spec_from_file_location(filename, directory / filename)
                     module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(module)

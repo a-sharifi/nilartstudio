@@ -1330,7 +1330,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SessionOutput"
+                  "$ref": "#/components/schemas/nilart__contexts__identity__presentation__router__SessionOutput"
                 }
               }
             }
@@ -1491,7 +1491,7 @@
                 "schema": {
                   "anyOf": [
                     {
-                      "$ref": "#/components/schemas/SessionOutput"
+                      "$ref": "#/components/schemas/nilart__contexts__identity__presentation__router__SessionOutput"
                     },
                     {
                       "$ref": "#/components/schemas/GrantOutput"
@@ -1538,7 +1538,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SessionOutput"
+                  "$ref": "#/components/schemas/nilart__contexts__identity__presentation__router__SessionOutput"
                 }
               }
             }
@@ -1579,7 +1579,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SessionOutput"
+                  "$ref": "#/components/schemas/nilart__contexts__identity__presentation__router__SessionOutput"
                 }
               }
             }
@@ -1640,6 +1640,453 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProfileOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/identity/permissions": {
+      "get": {
+        "tags": [
+          "identity-management"
+        ],
+        "summary": "Permissions",
+        "operationId": "permissions_api_v1_admin_identity_permissions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array",
+                  "title": "Response Permissions Api V1 Admin Identity Permissions Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/identity/accounts": {
+      "get": {
+        "tags": [
+          "identity-management"
+        ],
+        "summary": "Accounts",
+        "operationId": "accounts_api_v1_admin_identity_accounts_get",
+        "parameters": [
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 25,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/identity/accounts/{account_id}": {
+      "get": {
+        "tags": [
+          "identity-management"
+        ],
+        "summary": "Account",
+        "operationId": "account_api_v1_admin_identity_accounts__account_id__get",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Account Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/identity/accounts/{account_id}/access": {
+      "put": {
+        "tags": [
+          "identity-management"
+        ],
+        "summary": "Update",
+        "operationId": "update_api_v1_admin_identity_accounts__account_id__access_put",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Account Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/identity/accounts/{account_id}/audits": {
+      "get": {
+        "tags": [
+          "identity-management"
+        ],
+        "summary": "Audits",
+        "operationId": "audits_api_v1_admin_identity_accounts__account_id__audits_get",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Account Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/nilart__contexts__identity__presentation__management__AuditOutput"
+                  },
+                  "title": "Response Audits Api V1 Admin Identity Accounts  Account Id  Audits Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/account/security/methods": {
+      "get": {
+        "tags": [
+          "account-security"
+        ],
+        "summary": "Methods",
+        "operationId": "methods_api_v1_account_security_methods_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecurityMethods"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/account/security/sessions": {
+      "get": {
+        "tags": [
+          "account-security"
+        ],
+        "summary": "Sessions",
+        "operationId": "sessions_api_v1_account_security_sessions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/nilart__contexts__identity__presentation__security__SessionOutput"
+                  },
+                  "type": "array",
+                  "title": "Response Sessions Api V1 Account Security Sessions Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/account/security/sessions/{session_id}": {
+      "delete": {
+        "tags": [
+          "account-security"
+        ],
+        "summary": "Revoke",
+        "operationId": "revoke_api_v1_account_security_sessions__session_id__delete",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/account/security/password": {
+      "post": {
+        "tags": [
+          "account-security"
+        ],
+        "summary": "Password",
+        "operationId": "password_api_v1_account_security_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/account/security/phone/request": {
+      "post": {
+        "tags": [
+          "account-security"
+        ],
+        "summary": "Request Phone",
+        "operationId": "request_phone_api_v1_account_security_phone_request_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneChallenge"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/account/security/phone/verify": {
+      "post": {
+        "tags": [
+          "account-security"
+        ],
+        "summary": "Verify Phone",
+        "operationId": "verify_phone_api_v1_account_security_phone_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhoneVerification"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneResult"
                 }
               }
             }
@@ -1721,6 +2168,138 @@
         ],
         "title": "AccessOutput"
       },
+      "AccessUpdate": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Version"
+          },
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Roles"
+          },
+          "overrides": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object",
+            "maxProperties": 100,
+            "title": "Overrides"
+          },
+          "blocked": {
+            "type": "boolean",
+            "title": "Blocked"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1,
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version",
+          "roles",
+          "overrides",
+          "blocked",
+          "reason"
+        ],
+        "title": "AccessUpdate"
+      },
+      "AccountOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "phone": {
+            "type": "string",
+            "title": "Phone"
+          },
+          "phone_verified": {
+            "type": "boolean",
+            "title": "Phone Verified"
+          },
+          "blocked": {
+            "type": "boolean",
+            "title": "Blocked"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            },
+            "type": "array",
+            "title": "Roles"
+          },
+          "overrides": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object",
+            "title": "Overrides"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "phone",
+          "phone_verified",
+          "blocked",
+          "version",
+          "roles",
+          "overrides",
+          "permissions"
+        ],
+        "title": "AccountOutput"
+      },
+      "AccountPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AccountOutput"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "AccountPage"
+      },
       "ArtworkOutput": {
         "properties": {
           "id": {
@@ -1791,67 +2370,11 @@
         ],
         "title": "ArtworkPage"
       },
-      "AuditOutput": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "configuration_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Configuration Id"
-          },
-          "product_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Product Id"
-          },
-          "actor_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Actor Id"
-          },
-          "previous_version": {
-            "type": "integer",
-            "title": "Previous Version"
-          },
-          "version": {
-            "type": "integer",
-            "title": "Version"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
-          },
-          "before": {
-            "$ref": "#/components/schemas/OptionDocument"
-          },
-          "after": {
-            "$ref": "#/components/schemas/OptionDocument"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "configuration_id",
-          "product_id",
-          "actor_id",
-          "previous_version",
-          "version",
-          "created_at",
-          "before",
-          "after"
-        ],
-        "title": "AuditOutput"
-      },
       "AuditPage": {
         "properties": {
           "items": {
             "items": {
-              "$ref": "#/components/schemas/AuditOutput"
+              "$ref": "#/components/schemas/nilart__contexts__catalog__presentation__options__AuditOutput"
             },
             "type": "array",
             "title": "Items"
@@ -2031,7 +2554,13 @@
             "title": "Challenge Id"
           },
           "purpose": {
-            "$ref": "#/components/schemas/OtpPurpose"
+            "type": "string",
+            "enum": [
+              "register",
+              "login",
+              "recovery"
+            ],
+            "title": "Purpose"
           },
           "expires_at": {
             "type": "string",
@@ -2047,6 +2576,11 @@
             "type": "string",
             "const": "accepted",
             "title": "Delivery Status"
+          },
+          "sandbox": {
+            "type": "boolean",
+            "title": "Sandbox",
+            "default": false
           }
         },
         "type": "object",
@@ -2457,7 +2991,13 @@
             "title": "Grant"
           },
           "purpose": {
-            "$ref": "#/components/schemas/OtpPurpose"
+            "type": "string",
+            "enum": [
+              "register",
+              "login",
+              "recovery"
+            ],
+            "title": "Purpose"
           },
           "expires_in_seconds": {
             "type": "integer",
@@ -2748,15 +3288,6 @@
         ],
         "title": "OptionDocument"
       },
-      "OtpPurpose": {
-        "type": "string",
-        "enum": [
-          "register",
-          "login",
-          "recovery"
-        ],
-        "title": "OtpPurpose"
-      },
       "OtpRequest": {
         "properties": {
           "phone": {
@@ -2765,7 +3296,13 @@
             "title": "Phone"
           },
           "purpose": {
-            "$ref": "#/components/schemas/OtpPurpose"
+            "type": "string",
+            "enum": [
+              "register",
+              "login",
+              "recovery"
+            ],
+            "title": "Purpose"
           }
         },
         "type": "object",
@@ -2783,7 +3320,13 @@
             "title": "Challenge Id"
           },
           "purpose": {
-            "$ref": "#/components/schemas/OtpPurpose"
+            "type": "string",
+            "enum": [
+              "register",
+              "login",
+              "recovery"
+            ],
+            "title": "Purpose"
           },
           "code": {
             "type": "string",
@@ -2819,6 +3362,123 @@
           "password"
         ],
         "title": "PasswordLogin"
+      },
+      "PasswordResult": {
+        "properties": {
+          "reauthenticate": {
+            "type": "boolean",
+            "title": "Reauthenticate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reauthenticate"
+        ],
+        "title": "PasswordResult"
+      },
+      "PasswordUpdate": {
+        "properties": {
+          "current_password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Current Password"
+          },
+          "new_password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 12,
+            "title": "New Password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "current_password",
+          "new_password"
+        ],
+        "title": "PasswordUpdate"
+      },
+      "PhoneChallenge": {
+        "properties": {
+          "challenge_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Challenge Id"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "sandbox": {
+            "type": "boolean",
+            "title": "Sandbox"
+          }
+        },
+        "type": "object",
+        "required": [
+          "challenge_id",
+          "expires_at",
+          "sandbox"
+        ],
+        "title": "PhoneChallenge"
+      },
+      "PhoneRequest": {
+        "properties": {
+          "phone": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Phone"
+          },
+          "current_password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Current Password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "phone",
+          "current_password"
+        ],
+        "title": "PhoneRequest"
+      },
+      "PhoneResult": {
+        "properties": {
+          "reauthenticate": {
+            "type": "boolean",
+            "title": "Reauthenticate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reauthenticate"
+        ],
+        "title": "PhoneResult"
+      },
+      "PhoneVerification": {
+        "properties": {
+          "challenge_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Challenge Id"
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$",
+            "title": "Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "challenge_id",
+          "code"
+        ],
+        "title": "PhoneVerification"
       },
       "PriceAuditOutput": {
         "properties": {
@@ -3626,30 +4286,33 @@
         ],
         "title": "SKUUpdate"
       },
-      "SessionOutput": {
+      "SecurityMethods": {
         "properties": {
-          "account_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Account Id"
+          "password_enabled": {
+            "type": "boolean",
+            "title": "Password Enabled"
           },
-          "csrf_token": {
-            "type": "string",
-            "title": "Csrf Token"
+          "otp_enabled": {
+            "type": "boolean",
+            "title": "Otp Enabled"
           },
-          "expires_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Expires At"
+          "can_change": {
+            "type": "boolean",
+            "title": "Can Change"
+          },
+          "sandbox_sms": {
+            "type": "boolean",
+            "title": "Sandbox Sms"
           }
         },
         "type": "object",
         "required": [
-          "account_id",
-          "csrf_token",
-          "expires_at"
+          "password_enabled",
+          "otp_enabled",
+          "can_change",
+          "sandbox_sms"
         ],
-        "title": "SessionOutput"
+        "title": "SecurityMethods"
       },
       "ValidationError": {
         "properties": {
@@ -3690,6 +4353,173 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "nilart__contexts__catalog__presentation__options__AuditOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "configuration_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Configuration Id"
+          },
+          "product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Product Id"
+          },
+          "actor_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Actor Id"
+          },
+          "previous_version": {
+            "type": "integer",
+            "title": "Previous Version"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "before": {
+            "$ref": "#/components/schemas/OptionDocument"
+          },
+          "after": {
+            "$ref": "#/components/schemas/OptionDocument"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "configuration_id",
+          "product_id",
+          "actor_id",
+          "previous_version",
+          "version",
+          "created_at",
+          "before",
+          "after"
+        ],
+        "title": "AuditOutput"
+      },
+      "nilart__contexts__identity__presentation__management__AuditOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "actor_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Id"
+          },
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Account Id"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "changes": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Changes"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "actor_id",
+          "account_id",
+          "action",
+          "changes",
+          "reason",
+          "created_at"
+        ],
+        "title": "AuditOutput"
+      },
+      "nilart__contexts__identity__presentation__router__SessionOutput": {
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Account Id"
+          },
+          "csrf_token": {
+            "type": "string",
+            "title": "Csrf Token"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "account_id",
+          "csrf_token",
+          "expires_at"
+        ],
+        "title": "SessionOutput"
+      },
+      "nilart__contexts__identity__presentation__security__SessionOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "current": {
+            "type": "boolean",
+            "title": "Current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "expires_at",
+          "current"
+        ],
+        "title": "SessionOutput"
       }
     }
   }

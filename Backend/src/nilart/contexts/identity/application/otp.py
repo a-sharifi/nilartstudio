@@ -66,6 +66,8 @@ class OtpService:
         self.repository, self.secrets, self.sms = repository, secrets, sms
 
     def request(self, phone: str, purpose: OtpPurpose) -> Challenge:
+        if purpose == OtpPurpose.PHONE_CHANGE:
+            raise IdentityError("invalid_purpose")
         phone, now = normalize_phone(phone), datetime.now(UTC)
         self.repository.lock_phone(phone, purpose)
         latest = self.repository.latest_created(phone, purpose)
@@ -80,6 +82,8 @@ class OtpService:
         return challenge
 
     def verify(self, id: str, purpose: OtpPurpose, code: str) -> SessionGrant | str:
+        if purpose == OtpPurpose.PHONE_CHANGE:
+            raise IdentityError("invalid_purpose")
         challenge, now = self.repository.challenge_for_update(id), datetime.now(UTC)
         if not challenge:
             raise IdentityError("invalid_or_expired_challenge")
@@ -106,7 +110,7 @@ class OtpService:
         now, digest = datetime.now(UTC), self.secrets.digest(token)
         grant = self.repository.grant_for_update(digest)
         if (not grant or grant.consumed or grant.expires <= now or grant.purpose != purpose
-                or purpose == OtpPurpose.LOGIN):
+                or purpose in {OtpPurpose.LOGIN, OtpPurpose.PHONE_CHANGE}):
             raise IdentityError("invalid_or_expired_grant")
         self.repository.consume_grant(digest)
         password_hash = self.secrets.password_hash(password)

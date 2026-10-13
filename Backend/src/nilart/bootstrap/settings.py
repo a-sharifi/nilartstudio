@@ -1,3 +1,4 @@
+from typing import Literal
 from urllib.parse import urlsplit
 
 from pydantic import SecretStr, model_validator
@@ -12,9 +13,12 @@ class Settings(BaseSettings):
     broker_url: str = "amqp://nilart:local-only@localhost:5672//"
     public_origin: str = "http://localhost:8080"
     otp_hmac_key: SecretStr | None = None
+    sms_mode: Literal["disabled", "sandbox"] = "disabled"
 
     @model_validator(mode="after")
     def validate_origin(self):
+        if self.sms_mode == "sandbox" and self.environment != "development":
+            raise ValueError("Sandbox SMS is permitted only in development")
         origin = urlsplit(self.public_origin)
         if (origin.scheme not in {"http", "https"} or not origin.hostname
                 or origin.username or origin.password or origin.path or origin.query

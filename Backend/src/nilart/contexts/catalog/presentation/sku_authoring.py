@@ -11,7 +11,7 @@ from nilart.contexts.catalog.infrastructure.sku_authoring import (
     SKUAuthoringError,
     SqlSKUAuthoringRepository,
 )
-from nilart.contexts.identity.domain.permissions import Principal, Role
+from nilart.contexts.identity.domain.permissions import Principal
 from nilart.contexts.identity.infrastructure.repository import SqlIdentityRepository
 from nilart.contexts.identity.infrastructure.secrets import token_digest
 from nilart.contexts.identity.presentation.access import require_permission
@@ -50,8 +50,7 @@ def write_access(request, db, principal):
     account = session_account(request, db, lock=True)
     if not account:
         return None, failure(request, "unauthenticated", 401)
-    roles = SqlIdentityRepository(db).roles(account.id, lock=True)
-    current = Principal(account.id, frozenset(Role(role) for role in roles))
+    current = SqlIdentityRepository(db).principal(account.id, lock=True)
     if account.id != principal.account_id or not current.allows("catalog.manage"):
         return None, failure(request, "permission_denied", 403)
     csrf = request.headers.get("X-CSRF-Token", "")

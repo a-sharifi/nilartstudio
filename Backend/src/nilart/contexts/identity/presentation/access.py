@@ -15,8 +15,7 @@ def authenticated_principal(request: Request, db: Session = Depends(session_depe
     if not account:
         raise HTTPException(status_code=401, detail={"code": "unauthenticated"},
                             headers={"Cache-Control": "no-store"})
-    roles = SqlIdentityRepository(db).roles(account.id)
-    return Principal(account.id, frozenset(Role(role) for role in roles))
+    return SqlIdentityRepository(db).principal(account.id)
 
 
 def require_permission(permission: str):
