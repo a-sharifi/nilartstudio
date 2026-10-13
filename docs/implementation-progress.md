@@ -483,3 +483,9 @@
 - ArtworkDetailPage و stylesheet اصلی مرجع، gallery، purchase panel، key specs، section nav، about، spec table و shipping حفظ شدند؛ renderer جدید اضافه نشد. موجودی ناشناخته صریح شد؛ home breadcrumb زبان را حفظ می‌کند، modified click عادی است و صفحه جاری مشخص شد.
 - ۸۸ تست frontend و ۹ مورد مرورگر، lint/typecheck و build Docker موفق‌اند. sections، متن API، داده ناشناخته، خرید/zoom غیرفعال، skeleton بارگذاری، retry/404 و فارسی mobile بدون overflow پوشش دارند؛ تصاویر desktop/mobile بررسی شدند. هر ۴۲ CSS مرجع بدون تغییر و هشت سرویس سالم است.
 - backend/DB تغییر نکرد؛ تصاویر/قاب/هنرمند/مشخصات/قیمت یا موجودی ساختگی اضافه نشد. CI راه دور تأییدنشده است.
+
+## داده آزمایشی آثار مرجع در PostgreSQL — ۲۰۲۶-۱۰-۱۳
+
+- نه عنوان دوزبانه اثر از ArtworksPage مرجع با importer اختیاری وارد DB محلی شد؛ description صریحاً داده تست و تأیید نشدن تصویر/هنرمند/مشخصات/قیمت/موجودی را اعلام می‌کند. قیمت و available/sold نمایشی، قاب یا اصالت وارد نشد. migration/API جدید ندارد و startup بدون seed است.
+- تعارض slug پیش از insert رد می‌شود؛ overwrite ندارد و تراکنش شکست را rollback می‌کند. لیست و detail و feature خانه داده DB را می‌خوانند؛ اکنون نه اثر تست کنار هشت محصول، هشت SKU بدون قیمت و سه پکیج وجود دارد. دستور بازتولید در Backend/fixtures/README.md ثبت شد.
+- ۲۵۷ تست backend با PostgreSQL/Redis مستقل و ۱۱ مورد مرورگر موفق‌اند؛ DB واقعی، متن دوزبانه/خانه، conflict/rollback و regression آثار پوشش دارند. lint/mypy backend، lint/typecheck frontend و build Docker موفق‌اند و هشت سرویس سالم است. runtime/styles frontend تغییر نکرد؛ CI راه دور تأییدنشده است.

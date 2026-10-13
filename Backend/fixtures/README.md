@@ -87,3 +87,19 @@ The sticker/bookmark SKU IDs are shared across bundles. Adds two products and tw
 explicitly unpriced test SKUs. Existing identities cause an atomic failure before
 any inserts; no prototype stock, prices or discounts are copied. Local totals
 become eight products, eight unpriced SKUs and three bundles after all fixtures.
+
+### Reference artwork descriptions
+
+Explicitly import nine bilingual artwork test descriptions from
+`design-reference/src/ArtworksPage.tsx` into the local database:
+
+```sh
+docker compose --env-file .env -f infra/docker/compose.yaml cp Backend/fixtures/design-artworks.json api:/tmp/nilart-design-artworks.json
+docker compose --env-file .env -f infra/docker/compose.yaml exec -T api python -m nilart.bootstrap.design_artworks --local-test-data --fixture /tmp/nilart-design-artworks.json
+```
+
+Run after rebuilding the API image. Existing slugs cause rejection before inserts;
+all inserts share one transaction. Titles match the pinned reference. Bilingual
+descriptions identify test data explicitly. No prototype prices, available/sold
+states, artist, dimensions, frames, assets or authenticity claims are imported.
+Local total: nine published test descriptions; production startup remains unseeded.

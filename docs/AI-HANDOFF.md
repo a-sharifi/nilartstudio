@@ -936,6 +936,24 @@ mobile without overflow. Desktop/mobile screenshots reviewed. Typecheck/lint and
 production Docker build pass; all 42 reference CSS files byte-identical and eight
 services healthy. Backend/database unchanged; remote CI unverified.
 
+## Local reference artwork test data — 2026-10-13
+
+The opt-in local importer/JSON fixture creates all nine bilingual reference artwork
+titles as published PostgreSQL descriptions. Every description identifies test data
+and unconfirmed image/artist/specifications/price/availability. No prototype
+financial, inventory, authenticity or frame claims are copied. There is no migration
+or API contract change. Existing identities are preflight rejected, with no overwrite;
+caller transaction rolls back failures. Startup remains unseeded. Reproduction is
+in Backend/fixtures/README.md. Local catalog now includes nine test artworks in
+addition to eight products, eight unpriced SKUs and three bundles. Live gallery,
+details and homepage use these database records with the existing reference UI.
+
+Validation: 257 backend tests with isolated PostgreSQL/Redis and 11 browser cases
+pass, including real DB records, bilingual detail/home content, rollback/conflict,
+unknown pricing/stock and existing artwork UI regressions. Backend lint/mypy,
+frontend typecheck/lint and Docker build pass; eight services healthy. Frontend
+runtime/style/API contracts unchanged; remote CI unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.
