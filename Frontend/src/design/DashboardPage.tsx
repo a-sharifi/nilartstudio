@@ -301,7 +301,7 @@ export default function DashboardPage({
               aria-label={notificationUnreadCount === undefined ? t("اعلان‌ها", "Notifications") : notificationUnreadCount === null ? t("اعلان‌ها؛ تعداد خوانده‌نشده نامشخص", "Notifications; unread count unknown") : `${t("اعلان‌های خوانده‌نشده", "Unread notifications")}: ${notificationUnreadCount}`}
             >
               <Glyph name="bell" />
-              {notificationUnreadCount === undefined ? <span className="dash-alert-dot" /> : typeof notificationUnreadCount === "number" && notificationUnreadCount > 0 ? <bdi className="dash-notification-count">{notificationUnreadCount.toLocaleString(en ? "en" : "fa")}</bdi> : null}
+              {notificationUnreadCount === undefined ? (!liveMode ? <span className="dash-alert-dot" /> : null) : typeof notificationUnreadCount === "number" && notificationUnreadCount > 0 ? <bdi className="dash-notification-count">{notificationUnreadCount.toLocaleString(en ? "en" : "fa")}</bdi> : null}
             </a>
             <a
               className="icon-button"

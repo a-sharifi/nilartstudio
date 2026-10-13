@@ -9,6 +9,7 @@ test("reference security form uses live password callback and displays actual se
  render(<SecurityPage page="/en/account/security" navigate={vi.fn()} liveApi={api}/>)
  await screen.findByText("Current session")
  expect(screen.queryByText("Preview states")).toBeNull()
+ expect(document.querySelector(".dash-alert-dot")).toBeNull()
  fireEvent.change(screen.getByLabelText("Current password"),{target:{value:"a current passphrase"}})
  fireEvent.change(screen.getByLabelText("New password"),{target:{value:"a new secure passphrase"}})
  fireEvent.change(screen.getByLabelText("Confirm new password"),{target:{value:"a new secure passphrase"}})

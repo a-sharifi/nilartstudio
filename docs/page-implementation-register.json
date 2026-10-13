@@ -727,7 +727,8 @@
       "acceptance_evidence": [
         "Backend/tests/test_identity_management_postgres.py",
         "Frontend/tests/live-security.test.tsx",
-        "Frontend/tests/e2e/panel-management.spec.ts (mocked browser contracts; desktop English)"
+        "Frontend/tests/e2e/panel-management.spec.ts (mocked browser contracts; desktop English and mobile Persian phone change)",
+        "Frontend/tests/phone-change.test.tsx"
       ]
     },
     {

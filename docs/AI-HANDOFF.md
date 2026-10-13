@@ -1048,7 +1048,7 @@ private data; unsaved edits and stale/ambiguous writes are guarded. The 129-view
 and full accepted eight-milestone plan are saved beside this document.
 
 Local verification: 272 backend tests (isolated PostgreSQL/Redis, concurrent access writes,
-rollback and audit atomicity), 95 frontend tests, three new browser checks, backend
+rollback and audit atomicity), 96 frontend tests, four new browser checks, backend
 ruff/mypy, frontend lint/type checks, generated OpenAPI/client, Docker builds and eight
 healthy services. Mobile admin and desktop security screenshots reviewed. Browser tests
 use mocked contracts; backend tests exercise the real isolated database. This is not
@@ -1058,3 +1058,5 @@ Milestone 1 remains partial: complete restricted-account/recovery/shared-system 
 and broader route/layout acceptance are still required. Milestones 2–8 remain required.
 No stock, orders, payments, costing, fulfillment or artist workflow was added by this
 slice. Remote CI results are separate and currently unverified.
+
+Phone-change follow-up: unsaved fields/challenges are guarded, confirmed verification returns to sign-in after revocation, and live customer headers omit the prototype unread dot. Persian mobile phone-change browser flow and a focused unit test pass. GitHub connector returned no commit statuses or PR workflow runs; push CI remains unverified.
