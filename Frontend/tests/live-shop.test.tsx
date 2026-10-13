@@ -15,7 +15,8 @@ test("reference shop renders published products without SKU, price or stock gues
   expect(screen.getByText("Purchase details unconfirmed")).toBeTruthy()
   expect(screen.queryByText(/Sample mockup/)).toBeNull()
   expect(screen.queryByRole("button", { name: /favorite/i })).toBeNull()
-  fireEvent.change(screen.getByRole("combobox", { name: "Collection" }), { target: { value: "art" } })
+  fireEvent.click(screen.getByRole("combobox", { name: "Collection" }))
+  fireEvent.click(screen.getByRole("option", { name: "Art" }))
   expect(props.onQueryChange).toHaveBeenCalledWith("collection=art")
 })
 

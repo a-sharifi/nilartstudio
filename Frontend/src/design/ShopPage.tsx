@@ -1,3 +1,4 @@
+import Dropdown from "../components/ui/Dropdown"
 import { ReferenceProductImage, ReferenceBundleImage } from "./ReferenceMedia";
 import {
   useEffect,
@@ -296,22 +297,11 @@ export default function ShopPage({
         beforeCategory={
           <fieldset>
             <legend>{t("کالکشن", "Collection")}</legend>
-            <select
-              aria-label={t("کالکشن", "Collection")}
-              value={filters.collection}
-              onChange={(event) =>
-                change({ ...filters, collection: event.target.value })
-              }
-            >
-              <option value="">{t("همه کالکشن‌ها", "All collections")}</option>
-              {collections
-                .filter((c) => c.published)
-                .map((c) => (
-                  <option value={c.slug} key={c.slug}>
-                    {collectionName(c, language)}
-                  </option>
-                ))}
-            </select>
+            <Dropdown label={t("کالکشن", "Collection")} value={filters.collection}
+              autocomplete emptyMessage={t("کالکشنی پیدا نشد", "No matching collections")}
+              placeholder={t("جست‌وجو یا انتخاب کالکشن", "Search or choose a collection")}
+              onChange={value=>change({...filters,collection:value})}
+              options={[{value:"",label:t("همه کالکشن‌ها","All collections")},...collections.filter(c=>c.published).map(c=>({value:c.slug,label:collectionName(c,language)}))]} />
             {scope && (
               <small>
                 {t(
@@ -594,21 +584,9 @@ export default function ShopPage({
                 </button>
                 <label className="sort-label">
                   {t("مرتب‌سازی", "Sort by")}
-                  <select
-                    value={query.sort}
-                    disabled={!loaded}
-                    onChange={(event) =>
-                      update({ sort: event.target.value as ShopQuery["sort"] })
-                    }
-                  >
-                    <option value="newest">{t("جدیدترین", "Newest")}</option>
-                    <option value="low">
-                      {t("قیمت: کم به زیاد", "Price: low to high")}
-                    </option>
-                    <option value="high">
-                      {t("قیمت: زیاد به کم", "Price: high to low")}
-                    </option>
-                  </select>
+                  <Dropdown label={t("مرتب‌سازی", "Sort by")} value={query.sort} disabled={!loaded}
+                    autocomplete={false} onChange={value=>update({sort:value as ShopQuery["sort"]})}
+                    options={[{value:"newest",label:t("جدیدترین","Newest")},{value:"low",label:t("قیمت: کم به زیاد","Price: low to high")},{value:"high",label:t("قیمت: زیاد به کم","Price: high to low")}]} />
                 </label>
               </div>
               {!scope && (

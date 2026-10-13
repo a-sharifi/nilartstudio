@@ -954,6 +954,27 @@ unknown pricing/stock and existing artwork UI regressions. Backend lint/mypy,
 frontend typecheck/lint and Docker build pass; eight services healthy. Frontend
 runtime/style/API contracts unchanged; remote CI unverified.
 
+## Reusable dropdown with optional autocomplete — 2026-10-13
+
+Frontend/src/components/ui/Dropdown.tsx provides a controlled dropdown with
+`autocomplete` enabled/disabled (default false), localized labels/placeholder/empty
+message, disabled choices/control and optional hidden form field. Autocomplete
+filters labels, normalizes Persian letters and commits only existing choices.
+Keyboard arrows/Enter/Home/End (non-searchable), Escape, Tab, outside dismissal,
+selected checkmarks and scroll-to-active are supported. Escape inside the mobile
+filter sheet closes the dropdown before dismissing the sheet.
+
+Shop collection filters use searchable mode; sorting uses the same component with
+autocomplete disabled. Both retain existing query and mobile draft/apply behavior.
+Styles are isolated in dropdown.css; all 42 original reference CSS files remain
+byte-identical. Component usage is documented beside its source in README.md.
+
+Validation: 91 frontend tests and seven browser cases pass, covering both modes,
+disabled options, no arbitrary values, Persian matching, real collection filtering,
+sort selection, mobile apply/Escape and category/shop regressions. Typecheck/lint
+and production Docker build pass; desktop/mobile screenshots reviewed and eight
+services healthy. Backend/data unchanged; remote CI unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

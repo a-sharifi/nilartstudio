@@ -1,0 +1,17 @@
+.nil-dropdown { position:relative; min-width:0; width:100%; font:inherit; }
+.nil-dropdown-control { display:flex; align-items:center; border:1px solid #ded6ca; border-radius:12px; background:#fff; transition:border-color .15s,box-shadow .15s; }
+.nil-dropdown-control:focus-within { border-color:#a54b32; box-shadow:0 0 0 3px #a54b3217; }
+.nil-dropdown .nil-dropdown-control input { min-width:0; width:100%; padding:12px 14px; border:0; border-radius:12px; background:transparent; color:inherit; font:inherit; outline:none; box-shadow:none; cursor:pointer; }
+.nil-dropdown .nil-dropdown-control input:not([readonly]) { cursor:text; }
+.nil-dropdown-control button { display:grid; place-items:center; flex-shrink:0; width:36px; height:40px; padding:0; border:0; background:transparent; color:#786c60; }
+.nil-dropdown-control button svg { transition:transform .15s; }
+.nil-dropdown.is-open svg { transform:rotate(180deg); }
+.nil-dropdown-control:has(input:disabled) { opacity:.55; background:#f2eee7; }
+.nil-dropdown-menu { position:absolute; inset-inline:0; top:calc(100% + 6px); z-index:30; padding:6px; border:1px solid #e5ddd1; border-radius:14px; background:#fffdf9; box-shadow:0 12px 30px #35291c1c; }
+.nil-dropdown-menu ul { list-style:none; margin:0; padding:0; max-height:240px; overflow:auto; overscroll-behavior:contain; }
+.nil-dropdown-menu li { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 12px; border-radius:8px; cursor:pointer; overflow-wrap:anywhere; }
+.nil-dropdown-menu li[data-active="true"] { background:#f1e8de; }
+.nil-dropdown-menu li[aria-selected="true"] { color:#a54b32; font-weight:600; }
+.nil-dropdown-menu li[aria-disabled="true"] { opacity:.45; cursor:not-allowed; }
+.nil-dropdown-empty { margin:0; padding:12px; color:#83766a; font-size:.9em; }
+.sort-label:has(> .nil-dropdown) { white-space:nowrap; }

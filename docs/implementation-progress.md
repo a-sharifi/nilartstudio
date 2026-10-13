@@ -489,3 +489,9 @@
 - نه عنوان دوزبانه اثر از ArtworksPage مرجع با importer اختیاری وارد DB محلی شد؛ description صریحاً داده تست و تأیید نشدن تصویر/هنرمند/مشخصات/قیمت/موجودی را اعلام می‌کند. قیمت و available/sold نمایشی، قاب یا اصالت وارد نشد. migration/API جدید ندارد و startup بدون seed است.
 - تعارض slug پیش از insert رد می‌شود؛ overwrite ندارد و تراکنش شکست را rollback می‌کند. لیست و detail و feature خانه داده DB را می‌خوانند؛ اکنون نه اثر تست کنار هشت محصول، هشت SKU بدون قیمت و سه پکیج وجود دارد. دستور بازتولید در Backend/fixtures/README.md ثبت شد.
 - ۲۵۷ تست backend با PostgreSQL/Redis مستقل و ۱۱ مورد مرورگر موفق‌اند؛ DB واقعی، متن دوزبانه/خانه، conflict/rollback و regression آثار پوشش دارند. lint/mypy backend، lint/typecheck frontend و build Docker موفق‌اند و هشت سرویس سالم است. runtime/styles frontend تغییر نکرد؛ CI راه دور تأییدنشده است.
+
+## Dropdown مشترک با autocomplete اختیاری — ۲۰۲۶-۱۰-۱۳
+
+- Dropdown جدید با حالت searchable و غیرsearchable، keyboard، selected/checkmark، disabled، empty state، normalization فارسی و hidden input اختیاری ساخته شد؛ متن دلخواه مقدار انتخاب نمی‌شود. autocomplete پیش‌فرض false و از prop فعال/غیرفعال می‌شود.
+- فیلتر کالکشن فروشگاه searchable و sort همان کامپوننت بدون autocomplete است؛ query و draft/apply موبایل محفوظ است. Escape اول dropdown را می‌بندد. CSS جدید جداست و هر ۴۲ stylesheet مرجع بدون تغییر مانده؛ راهنمای استفاده کنار کامپوننت ثبت شد.
+- ۹۱ تست frontend و هفت مورد مرورگر، lint/typecheck و build Docker موفق؛ تصویر desktop/mobile بررسی و هشت سرویس سالم است. backend/DB تغییر نکرد و CI راه دور تأییدنشده است.
