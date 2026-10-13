@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { covers, notebook, optionState, sizes, type Selection } from "./product"
 import type { SKU } from "./catalog"
 
@@ -61,94 +62,33 @@ export default function ProductOptions({
         })),
     },
   ]
-  return (
-    <div className="product-option-groups">
-      {groups.map((group) => (
-        <fieldset
-          key={group.key}
-          disabled={disabled}
-          className={`product-option-group option-${group.key}`}
-        >
-          <legend>
-            {group.label}
-            <span className="option-required">
-              {selection[group.key]
-                ? t("انتخاب شد", "Selected")
-                : t("انتخاب کنید", "Choose an option")}
-            </span>
-          </legend>
-          {group.key === "size" && (
-            <button type="button" className="option-guide-link" onClick={guide}>
-              {t("راهنمای سایز", "Size guide")}
-            </button>
-          )}
-          <div className="product-radio-grid">
-            {group.choices.map((choice) => {
-              const status = optionState(
-                selection,
-                group.key,
-                choice.value,
-                unavailable,
-                variants,
-              )
-              const selected = selection[group.key] === choice.value
-              return (
-                <label
-                  key={choice.value}
-                  className={`product-radio ${
-                    selected ? "selected" : ""
-                  } ${status}`}
-                >
-                  <input
-                    type="radio"
-                    name={`product-${group.key}`}
-                    value={choice.value}
-                    checked={selected}
-                    disabled={status === "not-offered"}
-                    onChange={() => onChange(group.key, choice.value)}
-                  />
-                  <span className="radio-title">
-                    <span dir={group.key === "size" ? "ltr" : undefined}>
-                      {choice.name}
-                    </span>
-                    {selected && (
-                      <span className="radio-check" aria-hidden="true">
-                        ✓
-                      </span>
-                    )}
-                  </span>
-                  {choice.caption && <small>{choice.caption}</small>}
-                  {status === "not-offered" && (
-                    <small className="option-status">
-                      {t(
-                        bundle
-                          ? "این گزینه در این پکیج ارائه نمی‌شود."
-                          : "این ترکیب ارائه نمی‌شود.",
-                        bundle
-                          ? "This option isn't offered in this bundle."
-                          : "This combination isn't offered.",
-                      )}
-                    </small>
-                  )}
-                  {status === "out-of-stock" && (
-                    <small className="option-status">
-                      {t("فعلاً ناموجود", "Currently out of stock")}
-                    </small>
-                  )}
-                </label>
-              )
-            })}
-          </div>
-          {group.key === "sheets" && (
-            <p className="option-helper">
-              {t(
-                "تعداد برگ داخل هر دفتر؛ نه تعداد دفتر خریداری‌شده. تعداد روی چاپ‌شده به مشخصات محصول بستگی دارد.",
-                "Sheets inside each notebook, not the number of notebooks you buy. Printed sides depend on product specifications.",
-              )}
-            </p>
-          )}
-        </fieldset>
-      ))}
-    </div>
-  )
+  return <div className="product-option-groups">{groups.map(group =>
+    <ProductOptionGroup key={group.key} id={group.key} label={group.label}
+      selected={selection[group.key]} disabled={disabled} language={language}
+      onChange={value=>onChange(group.key,value)}
+      choices={group.choices.map(choice=>({...choice,status:optionState(selection,group.key,choice.value,unavailable,variants)}))}
+      guide={group.key === "size" ? <button type="button" className="option-guide-link" onClick={guide}>{t("راهنمای سایز","Size guide")}</button> : undefined}
+      helper={group.key === "sheets" ? t("تعداد برگ داخل هر دفتر؛ نه تعداد دفتر خریداری‌شده. تعداد روی چاپ‌شده به مشخصات محصول بستگی دارد.","Sheets inside each notebook, not the number of notebooks you buy. Printed sides depend on product specifications.") : undefined}
+      bundle={bundle}/>
+  )}</div>
+}
+
+// The reference option renderer is shared by prototype families and published SKUs.
+export function ProductOptionGroup({id,label,selected,choices,onChange,language,disabled=false,guide,helper,bundle=false}: {
+ id:string;label:string;selected:string;choices:{value:string;name:string;caption?:string;status?:string}[];
+ onChange:(value:string)=>void;language:0|1;disabled?:boolean;guide?:ReactNode;helper?:string;bundle?:boolean;
+}) {
+ const t=(fa:string,en:string)=>language===0?fa:en
+ return <fieldset disabled={disabled} className={`product-option-group option-${id}`}>
+  <legend>{label}<span className="option-required">{selected?t("انتخاب شد","Selected"):t("انتخاب کنید","Choose an option")}</span></legend>
+  {guide}
+  <div className="product-radio-grid">{choices.map(choice=><label key={choice.value} className={`product-radio ${selected===choice.value?"selected":""} ${choice.status || ""}`}>
+   <input type="radio" name={`product-${id}`} value={choice.value} checked={selected===choice.value} disabled={choice.status==="not-offered"} onChange={()=>onChange(choice.value)}/>
+   <span className="radio-title"><span dir={id==="size"?"ltr":undefined}>{choice.name}</span>{selected===choice.value&&<span className="radio-check" aria-hidden="true">✓</span>}</span>
+   {choice.caption&&<small>{choice.caption}</small>}
+   {choice.status==="not-offered"&&<small className="option-status">{t(bundle?"این گزینه در این پکیج ارائه نمی‌شود.":"این ترکیب ارائه نمی‌شود.",bundle?"This option isn't offered in this bundle.":"This combination isn't offered.")}</small>}
+   {choice.status==="out-of-stock"&&<small className="option-status">{t("فعلاً ناموجود","Currently out of stock")}</small>}
+  </label>)}</div>
+  {helper&&<p className="option-helper">{helper}</p>}
+ </fieldset>
 }

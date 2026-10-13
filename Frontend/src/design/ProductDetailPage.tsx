@@ -6,7 +6,7 @@ import ProductCard from "./ProductCard"
 import BundleResultCard from "./BundleResultCard"
 import BundleStillLife from "./BundleStillLife"
 import ProductGallery, { type ProductDialog } from "./ProductGallery"
-import ProductOptions from "./ProductOptions"
+import ProductOptions, { ProductOptionGroup } from "./ProductOptions"
 import {
   changeSelection,
   covers,
@@ -1038,6 +1038,7 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
   const product = catalog.product;
   const sku = catalog.skus.find(row=>row.id === selected);
   const root = `/${language === 0 ? "fa" : "en"}`;
+  const collectionRoute = (slug = "") => `/collections${slug ? `/${encodeURIComponent(slug)}` : ""}?language=${language === 0 ? "fa" : "en"}`;
   const go = (event: React.MouseEvent<HTMLAnchorElement>, name: string, route: string) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault(); onNavigate(name,route);
@@ -1061,20 +1062,20 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
   return <div className="container product-detail-page">
     <nav className="breadcrumb detail-breadcrumb" aria-label={t("مسیر صفحه","Breadcrumb")}>
       <a href={root} onClick={e=>go(e,t("خانه","Home"),root)}>{t("خانه","Home")}</a><span>/</span>
-      <a href={`${root}/collections`} onClick={e=>go(e,t("کالکشن‌ها","Collections"),`${root}/collections`)}>{t("کالکشن‌ها","Collections")}</a><span>/</span>
-      {memberships[0] && <><a href={`${root}/collections/${memberships[0].slug}`} onClick={e=>go(e,memberships[0].name[language],`${root}/collections/${memberships[0].slug}`)}>{memberships[0].name[language]}</a><span>/</span></>}
+      <a href={collectionRoute()} onClick={e=>go(e,t("کالکشن‌ها","Collections"),collectionRoute())}>{t("کالکشن‌ها","Collections")}</a><span>/</span>
+      {memberships[0] && <><a href={collectionRoute(memberships[0].slug)} onClick={e=>go(e,memberships[0].name[language],collectionRoute(memberships[0].slug))}>{memberships[0].name[language]}</a><span>/</span></>}
       <span aria-current="page">{name}</span>
     </nav>
     <section className="product-main-layout">
       <ProductGallery key={product.id} language={language} media={media} images={images} productName={name} renderDialog={renderDialog} renderView={content?.kind !== "book" ? ()=>media : undefined} />
       <div className="product-purchase-panel">
-        <div className="product-intro-top">{memberships.length ? memberships.map(row=><a key={row.id} className="eyebrow" href={`${root}/collections/${encodeURIComponent(row.slug)}`} onClick={e=>go(e,row.name[language],`${root}/collections/${encodeURIComponent(row.slug)}`)}>{row.name[language]}</a>) : <span className="eyebrow">NILART STUDIO</span>}<div>
+        <div className="product-intro-top">{memberships.length ? memberships.map(row=><a key={row.id} className="eyebrow" href={collectionRoute(row.slug)} onClick={e=>go(e,row.name[language],collectionRoute(row.slug))}>{row.name[language]}</a>) : <span className="eyebrow">NILART STUDIO</span>}<div>
           <button className="icon-button" disabled aria-label={t("ذخیره در علاقه‌مندی‌ها","Save to favorites")}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>
           <button className="icon-button" onClick={share} aria-label={t("اشتراک‌گذاری لینک","Share product link")}><ShareIcon/></button>
         </div></div>
         <h1>{name}</h1><p className="product-intro">{content ? local(content.intro) : t(product.description_fa,product.description_en)}</p>
         {shareMessage && <p className="product-feedback" role="status">{shareMessage}</p>}
-        <section className="product-option-groups" aria-labelledby="published-product-options"><h2 id="published-product-options" className="sr-only">{t("گزینه‌های منتشرشده","Published options")}</h2>{catalog.skus.length ? <fieldset className="product-option-group"><legend>{t("گزینه محصول","Product option")}</legend><div className="product-radio-grid">{catalog.skus.map(row=><label className={`product-radio ${selected === row.id ? "selected" : ""}`} key={row.id}><input type="radio" name="published-sku" value={row.id} checked={selected===row.id} onChange={()=>setSelected(row.id)}/><span className="radio-title"><bdi>{optionLabel(row.code)}</bdi></span></label>)}</div></fieldset> : <p className="product-stock-state">{t("هنوز گزینه‌ای منتشر نشده است.","No published options yet.")}</p>}</section>
+        <section className="product-option-groups" aria-labelledby="published-product-options"><h2 id="published-product-options" className="sr-only">{t("گزینه‌های منتشرشده","Published options")}</h2>{catalog.skus.length ? <ProductOptionGroup id="published-sku" label={t("گزینه محصول","Product option")} selected={selected} choices={catalog.skus.map(row=>({value:row.id,name:optionLabel(row.code)}))} onChange={setSelected} language={language}/> : <p className="product-stock-state">{t("هنوز گزینه‌ای منتشر نشده است.","No published options yet.")}</p>}</section>
         <div className="selection-summary" aria-live="polite">{sku ? optionLabel(sku.code) : t("گزینه محصول را انتخاب کنید.","Choose a product option.")}</div>
         <div className="quantity-section"><label htmlFor="published-product-quantity">{t("تعداد محصول","Quantity")}</label><div className="quantity-stepper"><button disabled aria-label={t("کم‌کردن تعداد","Decrease quantity")}>−</button><input id="published-product-quantity" value={language === 0 ? "۱" : "1"} disabled readOnly/><button disabled aria-label={t("افزایش تعداد","Increase quantity")}>+</button></div><p>{t("موجودی تأیید نشده","Stock unconfirmed")}</p></div>
         <div className="product-price-summary" role="status"><div className="unit-price"><span>{t("قیمت هر محصول","Unit price")}</span><strong>{price}</strong></div></div>
@@ -1083,6 +1084,6 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
     </section>
     <section className="product-information" aria-labelledby="published-product-about"><div><span className="eyebrow">A LITTLE SPACE FOR YOUR IDEAS</span><h2 id="published-product-about">{t("درباره محصول","About this product")}</h2><p>{content ? local(content.about) : t(product.description_fa,product.description_en)}</p></div><div className="product-specifications"><h2>{t("مشخصات محصول","Product specifications")}</h2><dl>{(content?.specifications || []).map((fact,index)=><div key={index}><dt>{local(fact.label)}</dt><dd dir="auto">{local(fact.value)}</dd></div>)}<div><dt>{t("گزینه انتخاب‌شده","Selected option")}</dt><dd dir="auto">{sku ? optionLabel(sku.code) : t("انتخاب نشده","Not selected")}</dd></div></dl><small>{t("مشخصات نهایی پس از تأیید برند ارائه می‌شود.","Final specifications await brand approval.")}</small></div></section>
     <section className="product-delivery"><h2>{t("ارسال و شرایط خرید","Delivery and purchase conditions")}</h2><p>{content ? local(content.delivery) : t("هزینه و روش ارسال و شرایط مرجوعی در انتظار تأیید است.","Shipping and return conditions await confirmation.")}</p><a className="text-link" href={`${root}/returns`} onClick={e=>go(e,t("شرایط لغو و مرجوعی","Cancellation and return policy"),`${root}/returns`)}>{t("شرایط لغو و مرجوعی","Cancellation and return policy")} ↗</a></section>
-    {related.length > 0 && <section className="product-related"><div className="product-related-heading"><h2>{t("از همین کالکشن","More from this collection")}</h2><a className="text-link" href={`${root}/collections/${memberships[0].slug}`} onClick={e=>go(e,memberships[0].name[language],`${root}/collections/${memberships[0].slug}`)}>{t("مشاهده کالکشن","Explore collection")} ↗</a></div><div className="product-grid">{related.map(row=><ProductCard live key={row.id} name={row.name[language]} route={`${root}/products/${row.slug}`} collection={memberships.find(collection=>row.collections.includes(collection.slug))?.name[language] || ""} options="" language={language} media={<ReferenceProductImage slug={row.slug} language={language}/>} arrow={<span aria-hidden="true">↗</span>} heart={null} onNavigate={onNavigate} priceUnavailableLabel={t("قیمت در دسترس نیست","Price unavailable")} availabilityLabel={t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}/>)}</div></section>}
+    {related.length > 0 && <section className="product-related"><div className="product-related-heading"><h2>{t("از همین کالکشن","More from this collection")}</h2><a className="text-link" href={collectionRoute(memberships[0].slug)} onClick={e=>go(e,memberships[0].name[language],collectionRoute(memberships[0].slug))}>{t("مشاهده کالکشن","Explore collection")} ↗</a></div><div className="product-grid">{related.map(row=><ProductCard live key={row.id} name={row.name[language]} route={`${root}/products/${row.slug}`} collection={memberships.find(collection=>row.collections.includes(collection.slug))?.name[language] || ""} options="" language={language} media={<ReferenceProductImage slug={row.slug} language={language}/>} arrow={<span aria-hidden="true">↗</span>} heart={null} onNavigate={onNavigate} priceUnavailableLabel={t("قیمت در دسترس نیست","Price unavailable")} availabilityLabel={t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}/>)}</div></section>}
   </div>;
 }

@@ -38,3 +38,26 @@ test("notebook detail retains reference thumbnail and keyboard navigation", asyn
   await expect(page.locator(".product-specifications")).toContainText("Cats");
   await expect(page.locator(".product-related .product-card")).toHaveCount(4);
 });
+
+test("published options use the reference group renderer and real collection links", async ({ page }) => {
+  await page.goto("/en/products/sticker-cows");
+  const group = page.locator(".product-option-group.option-published-sku");
+  await expect(group.locator(".option-required")).toHaveText("Choose an option");
+  await group.getByRole("radio", {name:"Sticker set",exact:true}).check();
+  await expect(group.locator(".option-required")).toHaveText("Selected");
+  await expect(group.locator(".product-radio.selected .radio-check")).toHaveText("✓");
+  await expect(page.locator(".selection-summary")).toHaveText("Sticker set");
+  await expect(page.locator(".product-gallery .mockup.sand").first()).toBeVisible();
+  await expect(page.locator(".product-price-summary")).toContainText("Price unavailable");
+  await expect(page.locator(".product-add-button")).toBeDisabled();
+  await expect(page.locator(".product-intro-top a")).toHaveAttribute("href", "/collections/gav?language=en");
+  await page.screenshot({path:"/tmp/nilart-shared-product-options-desktop.png",fullPage:true});
+  await page.goto("/collections/gav?language=en");
+  await expect(page.getByRole("heading",{name:"Cows Collection",exact:true})).toBeVisible();
+  await page.setViewportSize({width:390,height:844});
+  await page.goto("/fa/products/sticker-cows");
+  await page.locator(".product-option-group").getByRole("radio").check();
+  await expect(page.locator(".option-required")).toHaveText("انتخاب شد");
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+  await page.screenshot({path:"/tmp/nilart-shared-product-options-mobile.png",fullPage:true});
+});

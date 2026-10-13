@@ -882,6 +882,25 @@ Docker build pass. Desktop and Persian mobile screenshots reviewed; all 42 refer
 CSS files byte-identical and eight services healthy. Backend unchanged; remote CI
 unverified. No prices, inventory or purchase capability created.
 
+## Shared reference product option rendering — 2026-10-13
+
+ProductGallery/Modal/ProductCard remain the original reference components. The
+reference ProductOptions now delegates its radio fieldset to ProductOptionGroup;
+the published detail uses that same renderer for explicitly published SKU choices.
+It preserves the original option-required label, radio grid, selected/checkmark,
+status messages, guide/helper placement and CSS classes. Prototype option families
+retain their existing behavior; live products do not infer notebook families or
+stock. Product collection breadcrumbs, intro links and related collection actions
+now use supported /collections routes with an explicit language query, including
+direct load. Published presentation and exact prices remain database-backed.
+
+Validation: 88 frontend tests and 13 browser cases pass, including selected state,
+actual sticker/bookmark/notebook content, exact decimal prices, gallery keyboard/
+zoom/focus, collection direct load, mobile Persian and homepage/bundle/filter
+regressions. Typecheck/lint and production Docker build pass; desktop/mobile images
+reviewed. All 42 reference CSS files remain byte-identical; eight services healthy.
+Backend/database unchanged; remote CI unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.
