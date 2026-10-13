@@ -599,3 +599,10 @@ Verification: 108 frontend tests, frontend types/lint, 12 artwork browser checks
 All nine local artwork detail documents now include bilingual surface (300 gsm drawing paper — sample) and frame (unframed — sample) labels. Key specs and the expanded specification table read the same persisted values. Optional fields preserve unknown states for legacy documents. The guarded importer may fill only missing surface/frame fields when every previously saved value matches; different existing values remain protected. No migration, price or inventory change. OpenAPI/client types updated.
 
 Verification: 113 frontend tests, frontend types/lint, 2 isolated PostgreSQL tests covering upgrade rollback/idempotency/conflict protection, focused backend lint, Docker API/web builds and browser checks across all nine Persian detail pages plus English passed. Shared reference CSS unchanged. Remote CI reported separately.
+
+
+## Optional artwork frames — 2026-10-13
+
+All nine local sample artwork documents now offer an optional wood frame with the reference 650000 IRT surcharge. Bilingual framed labels and explicit frame-price amounts are persisted; missing options remain unavailable on other records. Selection updates the reference frame preview, key/expanded specs and displayed total, retaining the same artwork stock. Unframed restores the base amount. Sample purchases remain disabled. The guarded importer only fills missing frame metadata while protecting existing different values. OpenAPI/client types updated.
+
+Local checks: 114 frontend tests, frontend lint/types, 2 PostgreSQL importer tests, focused backend lint, API/web Docker builds, eight healthy services, and browser checks for both selection directions across all nine artworks passed. Remote CI is reported separately.

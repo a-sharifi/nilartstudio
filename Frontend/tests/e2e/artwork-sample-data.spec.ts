@@ -47,6 +47,11 @@ test("all artwork details display persisted surface and frame labels",async({pag
   await expect(page.locator(".ad-key-specs > div").nth(1).locator("dd")).toHaveText(work.details.surface_fa)
   await expect(page.locator(".ad-key-specs > div").nth(3).locator("dd")).toHaveText(work.details.frame_fa)
   await expect(page.locator(".ad-spec-table")).toContainText(work.details.surface_fa)
+  await page.locator('input[name="art-frame"]').nth(1).check()
+  await expect(page.locator(".ad-key-specs > div").nth(3).locator("dd")).toHaveText("با قاب چوبی — نمونه")
+  await expect(page.locator(".ad-price-block strong")).toContainText((Number(work.details.price_amount)+650000).toLocaleString("fa-IR"))
+  await page.locator('input[name="art-frame"]').first().check()
+  await expect(page.locator(".ad-price-block strong")).toContainText(Number(work.details.price_amount).toLocaleString("fa-IR"))
  }
  await page.goto("/en/artworks/afternoon")
  await expect(page.locator(".ad-key-specs")).toContainText("300 gsm drawing paper — sample")

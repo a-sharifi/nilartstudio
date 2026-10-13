@@ -17,7 +17,10 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   },
   {
     "slug": "earth-memory",
@@ -37,7 +40,10 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   },
   {
     "slug": "blue-distance",
@@ -57,7 +63,10 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   },
   {
     "slug": "olive-light",
@@ -77,7 +86,10 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   },
   {
     "slug": "afternoon",
@@ -97,7 +109,10 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   },
   {
     "slug": "sun-warmth",
@@ -117,7 +132,10 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   },
   {
     "slug": "green-horizon",
@@ -137,7 +155,10 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   },
   {
     "slug": "terracotta",
@@ -157,7 +178,10 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   },
   {
     "slug": "last-light",
@@ -177,6 +201,9 @@
     "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
     "surface_en": "300 gsm drawing paper — sample",
     "frame_fa": "بدون قاب — نمونه",
-    "frame_en": "Unframed — sample"
+    "frame_en": "Unframed — sample",
+    "framed_fa": "با قاب چوبی — نمونه",
+    "framed_en": "Wood frame — sample",
+    "frame_price_amount": "650000"
   }
 ]

@@ -2929,6 +2929,44 @@
             ],
             "title": "Frame En"
           },
+          "framed_fa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Framed Fa"
+          },
+          "framed_en": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Framed En"
+          },
+          "frame_price_amount": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?:0|[1-9]\\d{0,11})(?:\\.\\d{1,2})?$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frame Price Amount"
+          },
           "sample": {
             "type": "boolean",
             "const": true,

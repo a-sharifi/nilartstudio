@@ -45,7 +45,7 @@ def test_details_import_is_atomic_idempotent_and_publication_safe(flow):
         seed_artwork_details(db, [entry])
         raise RuntimeError("rollback")
     assert db.scalar(text("SELECT count(*) FROM catalog_artwork_details")) == 0
-    legacy = {key: value for key, value in entry.items() if key not in {"surface_fa", "surface_en", "frame_fa", "frame_en"}}
+    legacy = {key: value for key, value in entry.items() if key not in {"surface_fa", "surface_en", "frame_fa", "frame_en", "framed_fa", "framed_en", "frame_price_amount"}}
     seed_artwork_details(db, [legacy])
     db.commit()
     with pytest.raises(RuntimeError), db.begin_nested():

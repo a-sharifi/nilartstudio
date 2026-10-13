@@ -25,7 +25,7 @@ def seed_artwork_details(db, entries):
             raise ValueError("Expected local test artwork")
         existing = db.scalar(text("SELECT document FROM catalog_artwork_details WHERE artwork_id=:id"), {"id": artwork["id"]})
         if existing is not None and existing != document:
-            additions = {"surface_fa", "surface_en", "frame_fa", "frame_en"}
+            additions = {"surface_fa", "surface_en", "frame_fa", "frame_en", "framed_fa", "framed_en", "frame_price_amount"}
             old_base = {key: value for key, value in existing.items() if key not in additions}
             new_base = {key: value for key, value in document.items() if key not in additions}
             if old_base != new_base or any(existing.get(key) is not None and existing[key] != document[key] for key in additions):

@@ -980,6 +980,12 @@ export interface components {
             frame_fa?: string | null;
             /** Frame En */
             frame_en?: string | null;
+            /** Framed Fa */
+            framed_fa?: string | null;
+            /** Framed En */
+            framed_en?: string | null;
+            /** Frame Price Amount */
+            frame_price_amount?: string | null;
             /**
              * Sample
              * @constant

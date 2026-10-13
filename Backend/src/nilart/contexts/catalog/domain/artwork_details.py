@@ -21,4 +21,7 @@ class ArtworkDetails(BaseModel):
     surface_en: str | None = Field(default=None, min_length=1, max_length=200)
     frame_fa: str | None = Field(default=None, min_length=1, max_length=200)
     frame_en: str | None = Field(default=None, min_length=1, max_length=200)
+    framed_fa: str | None = Field(default=None, min_length=1, max_length=200)
+    framed_en: str | None = Field(default=None, min_length=1, max_length=200)
+    frame_price_amount: str | None = Field(default=None, pattern=r"^(?:0|[1-9]\d{0,11})(?:\.\d{1,2})?$")
     sample: Literal[True]

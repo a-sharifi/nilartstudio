@@ -95,8 +95,8 @@ export default function ArtworkDetailPage({
   const drag = useRef<{ x: number; y: number; panX: number; panY: number } | null>(
     null,
   )
-  const hasFrameOptions = !live && work?.id === "quiet-morning"
-  const views: View[] = live ? ["full"] : hasFrameOptions
+  const hasFrameOptions = live ? work?.catalogRecord?.details?.frame_price_amount!=null&&!!work.catalogRecord.details.framed_fa&&!!work.catalogRecord.details.framed_en : work?.id === "quiet-morning"
+  const views: View[] = live ? hasFrameOptions?["full","frame"]:["full"] : hasFrameOptions
     ? ["full", "detail", "frame"]
     : ["full", "detail"]
   const resetZoom = () => {
@@ -135,7 +135,7 @@ export default function ArtworkDetailPage({
   }, [view])
   const metadata=work?.catalogRecord?.details
   const surfaceLabel=metadata?.surface_fa&&metadata.surface_en?t(metadata.surface_fa,metadata.surface_en):live?unknown:t("بوم — نمونه","Canvas — demo")
-  const frameLabel=metadata?.frame_fa&&metadata.frame_en?t(metadata.frame_fa,metadata.frame_en):live?unknown:frame?t("با قاب چوبی — نمونه","Wood frame — demo"):t("بدون قاب — نمونه","Unframed — demo")
+  const frameLabel=frame&&metadata?.framed_fa&&metadata.framed_en?t(metadata.framed_fa,metadata.framed_en):metadata?.frame_fa&&metadata.frame_en?t(metadata.frame_fa,metadata.frame_en):live?unknown:frame?t("با قاب چوبی — نمونه","Wood frame — demo"):t("بدون قاب — نمونه","Unframed — demo")
   const medium =
     work?.medium === "colored-pencil" ? t("مدادرنگی","Colored pencil") : live && !work?.medium ? unknown : work?.medium === "oil"
       ? t("رنگ روغن", "Oil painting")
@@ -143,7 +143,7 @@ export default function ArtworkDetailPage({
   const price =
     work?.price === null || !work
       ? null
-      : (newPrice ?? work.price) + (frame ? 650000 : 0)
+      : (newPrice ?? work.price) + (frame ? live?Number(metadata?.frame_price_amount??0)/(metadata?.currency==="IRR"?10:1):650000 : 0)
   const status = stockLost
     ? "unavailable"
     : mode === "sold"
@@ -576,7 +576,7 @@ export default function ArtworkDetailPage({
                       : t("بدون قاب", "Unframed")}
                     <small>
                       {v
-                        ? `+ ${num(650000)} ${t("تومان", "Toman")}`
+                        ? `+ ${num(live?Number(metadata?.frame_price_amount??0)/(metadata?.currency==="IRR"?10:1):650000)} ${t("تومان", "Toman")}`
                         : t("قیمت پایه", "Base price")}
                     </small>
                   </span>
