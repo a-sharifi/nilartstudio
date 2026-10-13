@@ -1,3 +1,6 @@
+import {useNavigationGuard} from "../features/navigation/NavigationGuardProvider"
+import {sessionLifecycle} from "../features/identity/session-lifecycle"
+import type {addressApi} from "../features/customer/api"
 import { useEffect, useRef, useState, type MouseEvent } from "react"
 import DashboardPage, { Glyph } from "./DashboardPage"
 import { AddressDetails, AddressForm } from "./AddressFields"
@@ -28,8 +31,10 @@ export default function AddressesPage({
   page,
   search,
   navigate,
+  liveApi,
 }: {
   page: string
+  liveApi?: typeof addressApi
   search: string
   navigate: (route: string) => void
 }) {
@@ -38,8 +43,8 @@ export default function AddressesPage({
     t = (fa: string, english: string) => (en ? english : fa)
   const prefix = en ? "/en" : "/fa",
     account = `${prefix}/account`
-  const [mode, setMode] = useState<AddressesMode>("normal"),
-    [addresses, setAddresses] = useState(() => demoAddresses().addresses)
+  const [mode, setMode] = useState<AddressesMode>(liveApi?"loading":"normal"),
+    [addresses, setAddresses] = useState<Address[]>(() => liveApi?[]:demoAddresses().addresses)
   const [dialogKind, setDialogKind] = useState<DialogKind>(null),
     [initial, setInitial] = useState<Address | null>(null),
     [deleting, setDeleting] = useState<Address | null>(null)
@@ -86,7 +91,14 @@ export default function AddressesPage({
     if (dialogKind && !dialog.current?.open) dialog.current?.showModal()
     else if (!dialogKind && dialog.current?.open) dialog.current.close()
   }, [dialogKind])
+  const formDirty=useRef(false),leaveAction=useRef<(()=>void)|null>(null),leaveDialog=useRef<HTMLDialogElement>(null),registerGuard=useNavigationGuard()
+  const [leaving,setLeaving]=useState(false)
+  const guard=(proceed:()=>void)=>{if(mutationLock.current)return false;if(!liveApi || !formDirty.current){proceed();return true};leaveAction.current=proceed;setLeaving(true);return false}
+  useEffect(()=>{if(!liveApi)return;registerGuard(guard);const unload=(event:BeforeUnloadEvent)=>{if(formDirty.current || mutationLock.current){event.preventDefault();event.returnValue=""}};window.addEventListener("beforeunload",unload);return()=>{registerGuard(null);window.removeEventListener("beforeunload",unload)}},[liveApi,registerGuard])
+  useEffect(()=>{if(leaving)leaveDialog.current?.showModal();else leaveDialog.current?.close()},[leaving])
+  const navigateLive=(route:string)=>guard(()=>navigate(route))
   const close = () => {
+    formDirty.current=false
     setDialogKind(null)
     setInitial(null)
     setDeleting(null)
@@ -113,7 +125,7 @@ export default function AddressesPage({
     origin.current =
       event?.currentTarget || document.activeElement as HTMLElement
     conflictInjected.current = false
-    setInitial({ ...address })
+    setInitial({ ...address, id: address.id || (liveApi ? crypto.randomUUID() : "") })
     setSaveError("")
     setConflict(null)
     setCityFailure(mode === "city-error")
@@ -121,10 +133,25 @@ export default function AddressesPage({
     setFormKey((value) => value + 1)
     setDialogKind("form")
   }
+  const liveGeneration=useRef(0)
+  const loadLive=async()=>{
+    if(!liveApi)return
+    const stamp=++liveGeneration.current;setMode("loading")
+    try {const values=await liveApi.load();if(stamp===liveGeneration.current){setAddresses(values);setMode("normal")}}
+    catch {if(stamp===liveGeneration.current)setMode("network")}
+  }
+  useEffect(()=>{if(!liveApi)return;void loadLive();const clear=sessionLifecycle.registerPrivateCache(()=>{liveGeneration.current++;setAddresses([]);setInitial(null);setDeleting(null);setDialogKind(null);setMode("denied");setSaveError("");setLeaving(false);leaveAction.current=null;formDirty.current=false});return()=>{liveGeneration.current++;clear()}},[liveApi])
+  const liveMutation=async(address:Address,remove=false)=>{
+    if(!liveApi || mutationLock.current)return
+    mutationLock.current=true;setBusy(true);setSaveError("");const stamp=liveGeneration.current
+    try {const values=await (remove?liveApi.remove(address):liveApi.save(address));if(stamp!==liveGeneration.current)return;setAddresses(values);close();setLive(t("تغییر آدرس ذخیره شد.","Address change saved."))}
+    catch(error){if(stamp!==liveGeneration.current)return;const message=error instanceof Error && error.message==="record_version_conflict"?t("نسخه آدرس تغییر کرده است؛ دوباره فهرست را دریافت کنید.","Address version changed; reload the list."):t("تغییر تأیید نشد؛ ورودی‌ها حفظ شده‌اند. پیش از تکرار، فهرست را بررسی کنید.","Change unconfirmed; inputs retained. Check the list before retrying.");setSaveError(message);setCardErrors(previous=>({...previous,[address.id]:message}))}
+    finally {mutationLock.current=false;setBusy(false)}
+  }
   const follow = (route: string) => (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     event.preventDefault()
-    if (route === account || route.includes("/auth/")) navigate(route)
+    if (liveApi || route === account || route.includes("/auth/")) navigateLive(route)
     else {
       origin.current = event.currentTarget
       setDestination(route)
@@ -132,6 +159,7 @@ export default function AddressesPage({
     }
   }
   const save = (draft: Address) => {
+    if(liveApi){void liveMutation(draft);return}
     if (mutationLock.current || !loaded) return
     mutationLock.current = true
     setBusy(true)
@@ -206,6 +234,7 @@ export default function AddressesPage({
     })
   }
   const setDefault = (address: Address) => {
+    if(liveApi){void liveMutation({...address,default:true});return}
     if (mutationLock.current || !loaded) return
     mutationLock.current = true
     setPendingId(address.id)
@@ -255,6 +284,7 @@ export default function AddressesPage({
     })
   }
   const remove = () => {
+    if(liveApi && deleting){void liveMutation(deleting,true);return}
     if (!deleting || mutationLock.current || !loaded) return
     mutationLock.current = true
     setBusy(true)
@@ -315,6 +345,7 @@ export default function AddressesPage({
     })
   }
   const loadCities = () => {
+    if(liveApi){setCityLoading(false);setCityFailure(false);return}
     const stamp = ++cityGeneration.current
     setCityLoading(true)
     later(() => {
@@ -361,6 +392,7 @@ export default function AddressesPage({
     setRetrying(false)
   }
   const retry = () => {
+    if(liveApi){void loadLive();return}
     if (retrying) return
     setRetrying(true)
     later(() => {
@@ -376,8 +408,9 @@ export default function AddressesPage({
   return (
     <DashboardPage
       page={page}
-      navigate={navigate}
+      navigate={navigateLive}
       renderMedia={() => null}
+      liveMode={!!liveApi}
       activeSection="addresses"
       panelTitle={t("آدرس‌های شما", "Your addresses")}
     >
@@ -416,7 +449,7 @@ export default function AddressesPage({
             {t("افزودن آدرس", "Add address")}
           </button>
         </div>
-        <div className="account-addresses-demo">
+        {!liveApi && <div className="account-addresses-demo">
           <span>Demo</span>
           <p>
             {t(
@@ -424,7 +457,7 @@ export default function AddressesPage({
               "Addresses, phone numbers, region lists and responses are fixtures; no real service is connected. Do not use these addresses for actual shipping.",
             )}
           </p>
-        </div>
+        </div>}
         <div
           className="account-addresses-live"
           role="status"
@@ -486,7 +519,7 @@ export default function AddressesPage({
               <h2>{t("دفترچه آدرس شما", "Your address book")}</h2>
               <span>
                 {addresses.length.toLocaleString(en ? "en" : "fa")}{" "}
-                {t("آدرس نمونه", "sample addresses")}
+                {liveApi ? t("آدرس", "addresses") : t("آدرس نمونه", "sample addresses")}
               </span>
             </div>
             {!addresses.length ? (
@@ -553,7 +586,7 @@ export default function AddressesPage({
                         </span>
                       )}
                     </header>
-                    <AddressDetails address={address} language={language} />
+                    <AddressDetails address={address} language={language} demo={!liveApi} />
                     {mode === "unsupported" && address.id === "demo-work" && (
                       <p className="account-address-coverage">
                         {t(
@@ -680,9 +713,9 @@ export default function AddressesPage({
               "Thoughtful details, for a calmer delivery.",
             )}
           </span>
-          <span>Nilart · Demo</span>
+          <span>{liveApi?"Nilart":"Nilart · Demo"}</span>
         </footer>
-        <details className="dash-preview">
+        {!liveApi && <details className="dash-preview">
           <summary>
             {t("حالت‌های پیش‌نمایش", "Preview states")} <bdi>USER-11 · Demo</bdi>
           </summary>
@@ -714,7 +747,7 @@ export default function AddressesPage({
               {t("نشست منقضی", "Expired session")}
             </a>
           </div>
-        </details>
+        </details>}
         <dialog
           ref={dialog}
           className={`address-dialog account-address-dialog ${
@@ -757,19 +790,19 @@ export default function AddressesPage({
           </div>
           {dialogKind === "form" && initial && permitted && (
             <>
-              <p className="account-address-form-demo">
+              {!liveApi && <p className="account-address-form-demo">
                 Demo ·{" "}
                 {t(
                   "ذخیره نمونه، نه سرویس واقعی؛ تلفن گیرنده شماره ورود را تغییر نمی‌دهد.",
                   "Fixture saving, not a real service; recipient phone does not change the sign-in number.",
                 )}
-              </p>
+              </p>}
               {conflict && (
                 <div className="account-address-conflict" role="alert">
                   <strong>
                     {t("نسخه جدید برای بررسی", "New version for review")}
                   </strong>
-                  <AddressDetails address={conflict} language={language} />
+                  <AddressDetails address={conflict} language={language} demo={!liveApi} />
                   <p>
                     {t(
                       "بارگذاری نسخه جدید، ورودی‌های فعلی فرم را جایگزین می‌کند؛ این کار فقط با انتخاب صریح شما انجام می‌شود.",
@@ -795,6 +828,8 @@ export default function AddressesPage({
               <AddressForm
                 key={formKey}
                 initial={initial}
+                live={!!liveApi}
+                onDirtyChange={value=>{formDirty.current=value}}
                 language={language}
                 busy={busy}
                 offline={false}
@@ -821,7 +856,7 @@ export default function AddressesPage({
                 <strong dir="auto">
                   {deleting.label || t("آدرس بدون عنوان", "Untitled address")}
                 </strong>
-                <AddressDetails address={deleting} language={language} />
+                <AddressDetails address={deleting} language={language} demo={!liveApi} />
               </div>
               {deleting.default && (
                 <p className="account-address-delete-default-note">
@@ -856,8 +891,8 @@ export default function AddressesPage({
               </div>
               <small>
                 {t(
-                  "حذف و پاسخ فقط Demo هستند؛ سفارش یا مرسوله لغو نمی‌شود.",
-                  "Deletion and response are Demo only; no order or shipment is cancelled.",
+                  liveApi?"این آدرس از حساب حذف می‌شود؛ نشانی سفارش‌های قبلی تغییر نمی‌کند.":"حذف و پاسخ فقط Demo هستند؛ سفارش یا مرسله لغو نمی‌شود.",
+                  liveApi?"This address is removed from your account; historical order addresses remain unchanged.":"Deletion and response are Demo only; no order or shipment is cancelled.",
                 )}
               </small>
             </div>
@@ -896,6 +931,7 @@ export default function AddressesPage({
           )}
         </dialog>
       </div>
+      <dialog ref={leaveDialog} className="account-address-dialog account-address-confirm-dialog" aria-labelledby="address-leave-title" onCancel={()=>{leaveAction.current=null;setLeaving(false)}}><h2 id="address-leave-title">{t("تغییرات ذخیره نشده","Unsaved changes")}</h2><p>{t("تغییرات ذخیره نشده کنار گذاشته شوند؟","Discard your unsaved changes?")}</p><button className="button secondary" onClick={()=>{leaveAction.current=null;setLeaving(false)}}>{t("ادامه ویرایش","Keep editing")}</button><button className="button primary" onClick={()=>{const proceed=leaveAction.current;leaveAction.current=null;formDirty.current=false;setLeaving(false);close();proceed?.()}}>{t("کنار گذاشتن تغییرات","Discard changes")}</button></dialog>
     </DashboardPage>
   )
 }

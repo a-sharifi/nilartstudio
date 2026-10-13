@@ -556,12 +556,18 @@
       "proposed_route": "/account",
       "required": true,
       "milestone": 6,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "DashboardPage.tsx",
       "extension_pattern": null,
       "read_permission": "account.read_self",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/account/panel"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_panel_postgres.py",
+        "Frontend/tests/e2e/customer-panel.spec.ts",
+        "docs/implementation-progress.md: 2026-10-13 persisted customer-panel features; remaining design/workflow gaps apply"
+      ]
     },
     {
       "id": "USER-02",
@@ -673,12 +679,18 @@
       "proposed_route": "/account/favorites",
       "required": true,
       "milestone": 6,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "FavoritesPage.tsx",
       "extension_pattern": null,
       "read_permission": "account.read_self",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/account/panel"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_panel_postgres.py",
+        "Frontend/tests/e2e/customer-panel.spec.ts",
+        "docs/implementation-progress.md: 2026-10-13 persisted customer-panel features; remaining design/workflow gaps apply"
+      ]
     },
     {
       "id": "USER-11",
@@ -686,12 +698,18 @@
       "proposed_route": "/account/addresses",
       "required": true,
       "milestone": 6,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "AddressesPage.tsx",
       "extension_pattern": null,
       "read_permission": "account.read_self",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/account/panel"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_panel_postgres.py",
+        "Frontend/tests/e2e/customer-panel.spec.ts",
+        "docs/implementation-progress.md: 2026-10-13 persisted customer-panel features; remaining design/workflow gaps apply"
+      ]
     },
     {
       "id": "USER-12",
@@ -737,12 +755,18 @@
       "proposed_route": "/account/preferences",
       "required": true,
       "milestone": 6,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "AccountPreferencesPage.tsx",
       "extension_pattern": null,
       "read_permission": "account.read_self",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/account/panel"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_panel_postgres.py",
+        "Frontend/tests/e2e/customer-panel.spec.ts",
+        "docs/implementation-progress.md: 2026-10-13 persisted customer-panel features; remaining design/workflow gaps apply"
+      ]
     },
     {
       "id": "USER-15",
@@ -750,12 +774,18 @@
       "proposed_route": "/account/support",
       "required": true,
       "milestone": 6,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "SupportPage.tsx",
       "extension_pattern": null,
       "read_permission": "account.read_self",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/account/panel"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_panel_postgres.py",
+        "Frontend/tests/e2e/customer-panel.spec.ts",
+        "docs/implementation-progress.md: 2026-10-13 persisted customer-panel features; remaining design/workflow gaps apply"
+      ]
     },
     {
       "id": "USER-16",
@@ -763,12 +793,18 @@
       "proposed_route": "/account/support/:id",
       "required": true,
       "milestone": 6,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "SupportConversationPage.tsx",
       "extension_pattern": null,
       "read_permission": "account.read_self",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/account/panel"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_panel_postgres.py",
+        "Frontend/tests/e2e/customer-panel.spec.ts",
+        "docs/implementation-progress.md: 2026-10-13 persisted customer-panel features; remaining design/workflow gaps apply"
+      ]
     },
     {
       "id": "USER-17",
@@ -776,12 +812,18 @@
       "proposed_route": "/account/notifications",
       "required": true,
       "milestone": 6,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "NotificationsPage.tsx",
       "extension_pattern": null,
       "read_permission": "account.read_self",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/account/panel"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_panel_postgres.py",
+        "Frontend/tests/e2e/customer-panel.spec.ts",
+        "docs/implementation-progress.md: 2026-10-13 persisted customer-panel features; remaining design/workflow gaps apply"
+      ]
     },
     {
       "id": "ART-01",

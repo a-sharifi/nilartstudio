@@ -46,7 +46,7 @@
 | AUTH-09 | نشست منقضی / Session Expired | 1 | foundation | AuthPage.tsx |
 | AUTH-10 | حساب محدود / Account Restricted | 1 | prototype | AuthPage.tsx |
 | AUTH-11 | خروج از حساب / Sign-out | 1 | connected_partial | AuthPage.tsx |
-| USER-01 | داشبورد مشتری / Customer Dashboard | 6 | prototype | DashboardPage.tsx |
+| USER-01 | داشبورد مشتری / Customer Dashboard | 6 | connected_partial | DashboardPage.tsx |
 | USER-02 | فهرست سفارش‌ها / Orders | 5 | prototype | App.tsx |
 | USER-03 | جزئیات سفارش / Order Detail | 5 | prototype | App.tsx |
 | USER-04 | رسید و فاکتور / Receipt | 5 | prototype | ReceiptPage.tsx |
@@ -55,14 +55,14 @@
 | USER-07 | وضعیت مرجوعی و وجه / Return & Refund Status | 6 | prototype | RequestStatusPage.tsx |
 | USER-08 | دانلودها / Digital Downloads | 6 | prototype | DownloadsPage.tsx |
 | USER-09 | تأیید طرح و اصلاحات / Artwork Approval | 7 | prototype | ArtworkReviewPage.tsx |
-| USER-10 | علاقه‌مندی / Favorites | 6 | prototype | FavoritesPage.tsx |
-| USER-11 | آدرس‌ها / Addresses | 6 | prototype | AddressesPage.tsx |
+| USER-10 | علاقه‌مندی / Favorites | 6 | connected_partial | FavoritesPage.tsx |
+| USER-11 | آدرس‌ها / Addresses | 6 | connected_partial | AddressesPage.tsx |
 | USER-12 | پروفایل / Profile | 6 | connected_partial | ProfilePage.tsx |
 | USER-13 | امنیت / Security | 1 | connected_partial | SecurityPage.tsx |
-| USER-14 | تنظیمات زبان و اعلان / Preferences | 6 | prototype | AccountPreferencesPage.tsx |
-| USER-15 | پشتیبانی و تیکت جدید / Support | 6 | prototype | SupportPage.tsx |
-| USER-16 | جزئیات تیکت / Ticket Thread | 6 | prototype | SupportConversationPage.tsx |
-| USER-17 | اعلان‌ها / Notifications | 6 | prototype | NotificationsPage.tsx |
+| USER-14 | تنظیمات زبان و اعلان / Preferences | 6 | connected_partial | AccountPreferencesPage.tsx |
+| USER-15 | پشتیبانی و تیکت جدید / Support | 6 | connected_partial | SupportPage.tsx |
+| USER-16 | جزئیات تیکت / Ticket Thread | 6 | connected_partial | SupportConversationPage.tsx |
+| USER-17 | اعلان‌ها / Notifications | 6 | connected_partial | NotificationsPage.tsx |
 | ART-01 | داشبورد هنرمند / Artist Dashboard | 7 | prototype | ArtistDashboard.tsx |
 | ART-02 | سفارش‌های هنرمند / Assigned Orders | 7 | missing | ArtistDashboard.tsx |
 | ART-03 | بررسی سفارش / Artist Order Detail | 7 | missing | ArtistDashboard.tsx |

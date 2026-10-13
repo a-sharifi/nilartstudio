@@ -541,3 +541,17 @@ No stock, orders, payments, costing, fulfillment or artist workflow was added by
 slice. Remote CI results are separate and currently unverified.
 
 Phone-change follow-up: unsaved fields/challenges are guarded, confirmed verification returns to sign-in after revocation, and live customer headers omit the prototype unread dot. Persian mobile phone-change browser flow and a focused unit test pass. GitHub connector returned no commit statuses or PR workflow runs; push CI remains unverified.
+
+## 2026-10-13 — Persisted customer-panel features (partial delivery)
+
+Migration 0019 adds owned address, preference, favorite, support-message and notification records. Protected writes recheck the current session/permission and Origin/CSRF under an account lock; optimistic versions protect edits. Audit and outbox records commit with the change and omit private message/address contents. Ticket creation/replies use persisted idempotency keys. Staff replies require support.manage; no external SMS is sent.
+
+Connected the original AddressesPage, AccountPreferencesPage and SupportPage to confirmed API results. Added owned conversations, notifications, published-catalog favorites and actual dashboard counts using the reference shell/patterns. Product details can save favorites. Inputs survive failed writes; private data clears on account changes. New address retries reuse their identifier. Empty accounts receive empty states, not reference records. All reference CSS remains unchanged.
+
+Acceptance remains partial: favorites, conversations, notifications and dashboard require full original-component parity and Persian/mobile/state acceptance. Address region choices still come from the limited reference region list; nationwide coverage is not established. Support attachments are disabled until private media storage exists. Preference SMS delivery is unavailable. Bundle/artwork favorite buttons and read-only UI controls remain follow-up work.
+
+USER-02–09 remain required: persisted orders, receipt, cancellation, returns/refunds, download entitlements and artwork approval need authoritative commerce/fulfillment/commission contracts. This slice does not create stock, paid orders, payments or private-file entitlements. The complete user-panel request is unfinished.
+
+Verification evidence: isolated PostgreSQL tests cover ownership, validation, revoked permissions, optimistic conflicts, idempotency, unpublished favorite visibility, default addresses, atomic audit/outbox rollback and event deduplication. Five browser tests use mocked contracts for address reload, preference acknowledgement, support conversation, notification acknowledgement and guest denial. Browser checks and isolated database tests are separate evidence; no end-to-end paid purchase is claimed. Remote CI remains unverified.
+
+Final local checks for this slice: 281 backend tests, 96 frontend tests and five customer browser checks passed; ruff/mypy, frontend lint/types, generated client, Docker build and eight service health checks passed. Migration downgrade/re-upgrade preserves identity records in an isolated schema. All 42 reference CSS files remain byte-identical. Concurrent customer writes and every rendered design state still need broader acceptance.

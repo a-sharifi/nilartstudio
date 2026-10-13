@@ -87,10 +87,16 @@ def consume_event(session: Session, envelope: dict) -> bool:
     No dynamic task names, imports, callbacks, or business handler execution.
     PostgreSQL's unique constraint serializes concurrent duplicate deliveries.
     """
-    if envelope.get("event_type") != PING_EVENT:
+    if envelope.get("event_type") not in {PING_EVENT, "customer.record_changed"}:
         raise ValueError("unsupported event type")
     if not isinstance(envelope.get("payload"), dict):
         raise ValueError("payload must be a JSON object")
+    if envelope.get("event_type") == "customer.record_changed":
+        payload = envelope["payload"]
+        UUID(str(payload["account_id"]))
+        UUID(str(payload["record_id"]))
+        if payload.get("kind") not in {"address","preferences","favorite","ticket","message","notification"} or payload.get("action") not in {"saved","deleted"}:
+            raise ValueError("unsupported customer event")
     event_id = UUID(str(envelope["id"]))
     inserted = session.execute(insert(processed_events).values(
         event_id=event_id, processed_at=datetime.now(timezone.utc),
@@ -99,5 +105,6 @@ def consume_event(session: Session, envelope: dict) -> bool:
     )).scalar_one_or_none()
     if inserted is None:
         return False
-    # Infrastructure ping deliberately has no business side effects.
+    # Customer changes are already committed atomically with their notification/audit.
+    # This event acknowledges that signal; it does not send external messages.
     return True

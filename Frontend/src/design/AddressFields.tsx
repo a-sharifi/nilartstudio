@@ -1,5 +1,5 @@
 import SelectDropdown from "../components/ui/SelectDropdown";
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   addressCountry,
   addressErrors,
@@ -11,8 +11,10 @@ import "./address.css"
 export function AddressDetails({
   address,
   language,
+  demo = true,
 }: {
   address: Address
+  demo?: boolean
   language: 0 | 1
 }) {
   const province = addressCountry.provinces.find(
@@ -24,7 +26,7 @@ export function AddressDetails({
       <strong dir="auto">{address.name}</strong>
       <span dir="ltr">
         {addressCountry.code}{" "}
-        {address.phone.startsWith("900000")
+        {demo && address.phone.startsWith("900000")
           ? "9•• ••• •••• · DEMO"
           : address.phone}
       </span>
@@ -35,7 +37,7 @@ export function AddressDetails({
       <small>
         {language === 0 ? "کد پستی" : "Postal code"}:{" "}
         <bdi dir="ltr">
-          {address.postal.startsWith("000000")
+          {demo && address.postal.startsWith("000000")
             ? "•••••••••• · DEMO"
             : address.postal}
         </bdi>
@@ -57,8 +59,12 @@ export function AddressForm({
   context = "checkout",
   cityLoading = false,
   onProvinceChange,
+  onDirtyChange,
+  live = false,
 }: {
   initial: Address
+  live?: boolean
+  onDirtyChange?: (dirty:boolean)=>void
   language: 0 | 1
   busy: boolean
   cityFailure: boolean
@@ -76,6 +82,7 @@ export function AddressForm({
   const form = useRef<HTMLFormElement>(null)
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
   const dirty = JSON.stringify(draft) !== JSON.stringify(initial)
+  useEffect(()=>{onDirtyChange?.(dirty);return()=>onDirtyChange?.(false)},[dirty,onDirtyChange])
   const [discard, setDiscard] = useState(false)
   const change = (key: keyof Address, value: string | boolean) => {
     setDraft((d) => ({
@@ -210,8 +217,8 @@ export function AddressForm({
           <strong>{addressCountry.name[language]}</strong>
           <small>
             {t(
-              "مقصدهای نمونه این فروشگاه در ایران هستند.",
-              "Demo delivery destinations are in Iran.",
+              live?"نشانی گیرنده در ایران.":"مقصدهای نمونه این فروشگاه در ایران هستند.",
+              live?"Recipient address in Iran.":"Demo delivery destinations are in Iran.",
             )}
           </small>
         </div>

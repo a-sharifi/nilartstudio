@@ -3,6 +3,11 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { isStaticInfoPage } from "./information-routes";
 import App from "../../design/App";
+import CustomerPages from "../customer/CustomerPages";
+import AddressesPage from "../../design/AddressesPage";
+import {addressApi,preferencesApi,supportApi} from "../customer/api";
+import SupportPage from "../../design/SupportPage";
+import AccountPreferencesPage from "../../design/AccountPreferencesPage";
 import PanelAccessBoundary from "../identity/PanelAccessBoundary";
 import AccountManagementPage from "../admin/AccountManagementPage";
 import AdminDashboard from "../../design/AdminDashboard";
@@ -26,6 +31,18 @@ export default function DesignRuntime() {
   const search = useSearchParams();
   const registerGuard = useNavigationGuard();
   const demo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+  if (!demo && /^\/(fa|en)\/account\/support\/?$/.test(pathname)) {
+    return <PanelAccessBoundary permission="account.read_self" path={pathname}><SupportPage key={pathname} page={pathname} search={search.toString()} navigate={route=>router.push(route)} registerGuard={registerGuard} liveApi={supportApi}/></PanelAccessBoundary>;
+  }
+  if (!demo && /^\/(fa|en)\/account\/preferences\/?$/.test(pathname)) {
+    return <PanelAccessBoundary permission="account.read_self" path={pathname}><AccountPreferencesPage key={pathname} page={pathname} navigate={route=>router.push(route)} registerGuard={registerGuard} liveApi={preferencesApi}/></PanelAccessBoundary>;
+  }
+  if (!demo && /^\/(fa|en)\/account\/addresses\/?$/.test(pathname)) {
+    return <PanelAccessBoundary permission="account.read_self" path={pathname}><AddressesPage key={pathname} page={pathname} search={search.toString()} navigate={route=>router.push(route)} liveApi={addressApi}/></PanelAccessBoundary>;
+  }
+  if (!demo && /^\/(fa|en)\/account(?:\/(favorites|preferences|notifications|support)(?:\/[0-9a-f-]{36})?)?\/?$/.test(pathname)) {
+    return <PanelAccessBoundary permission="account.read_self" path={pathname}><CustomerPages key={pathname} path={pathname.replace(/\/$/, "")} navigate={route=>router.push(route)}/></PanelAccessBoundary>;
+  }
   if (!demo && /^\/(fa|en)\/admin\/(users|roles)\/?$/.test(pathname)) {
     return <PanelAccessBoundary permission="identity.manage" path={pathname}><AccountManagementPage key={pathname} path={pathname} navigate={route=>router.push(route)}/></PanelAccessBoundary>;
   }

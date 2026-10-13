@@ -1,3 +1,4 @@
+import FavoriteButton from "../features/customer/FavoriteButton";
 import TestProductCart from "../components/ui/TestProductCart";
 import Mockup from "./Mockup";
 import { ReferenceProductImage, ReferenceBundleImage } from "./ReferenceMedia";
@@ -1086,7 +1087,7 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
       <ProductGallery key={product.id} language={language} media={media} images={images} productName={name} renderDialog={renderDialog} renderView={content?.kind !== "book" ? ()=>media : undefined} />
       <div className="product-purchase-panel">
         <div className="product-intro-top">{memberships.length ? memberships.map(row=><a key={row.id} className="eyebrow" href={collectionRoute(row.slug)} onClick={e=>go(e,row.name[language],collectionRoute(row.slug))}>{row.name[language]}</a>) : <span className="eyebrow">NILART STUDIO</span>}<div>
-          <button className="icon-button" disabled aria-label={t("ذخیره در علاقه‌مندی‌ها","Save to favorites")}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>
+          <FavoriteButton kind="product" id={product.id} language={language}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></FavoriteButton>
           <button className="icon-button" onClick={share} aria-label={t("اشتراک‌گذاری لینک","Share product link")}><ShareIcon/></button>
         </div></div>
         <h1>{name}</h1><p className="product-intro">{content ? local(content.intro) : t(product.description_fa,product.description_en)}</p>

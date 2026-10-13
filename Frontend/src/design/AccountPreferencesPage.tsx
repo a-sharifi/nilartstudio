@@ -1,3 +1,5 @@
+import {sessionLifecycle} from "../features/identity/session-lifecycle"
+import type {preferencesApi} from "../features/customer/api"
 import SelectDropdown from "../components/ui/SelectDropdown";
 import {
   useEffect,
@@ -49,7 +51,9 @@ export default function AccountPreferencesPage({
   page,
   navigate,
   registerGuard,
+  liveApi,
 }: {
+  liveApi?: typeof preferencesApi
   page: string
   navigate: (route: string) => void
   registerGuard: (guard: ReferenceNavigationGuard | null) => void
@@ -59,7 +63,7 @@ export default function AccountPreferencesPage({
     t = (fa: string, english: string) => (en ? english : fa)
   const prefix = en ? "/en" : "/fa",
     account = `${prefix}/account`
-  const [mode, setMode] = useState<AccountPreferencesMode>("normal")
+  const [mode, setMode] = useState<AccountPreferencesMode>(liveApi?"loading":"normal")
   const [record, setRecord] = useState(
     () => accountPreferencesFixture("normal", en ? "en" : "fa").record,
   )
@@ -89,7 +93,7 @@ export default function AccountPreferencesPage({
     timers = useRef(new Set<ReturnType<typeof setTimeout>>())
   const focusAfterLanguage = useRef(false),
     lastPage = useRef(page)
-  const basePolicy = accountPreferencesFixture(mode, record.language).policy
+  const basePolicy = liveApi ? {...accountPreferencesFixture("normal", record.language).policy,smsStatus:"unavailable" as const} : accountPreferencesFixture(mode, record.language).policy
   const policy = smsChanged
     ? { ...basePolicy, smsStatus: "unavailable" as const }
     : basePolicy
@@ -210,7 +214,7 @@ export default function AccountPreferencesPage({
       return
     }
     requestLeave(() => {
-      if (internalRoute(route)) proceed()
+      if (liveApi || internalRoute(route)) proceed()
       else showDestination(route)
     })
   }
@@ -218,7 +222,7 @@ export default function AccountPreferencesPage({
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     event.preventDefault()
     requestLeave(() => {
-      if (internalRoute(route)) navigate(route)
+      if (liveApi || internalRoute(route)) navigate(route)
       else showDestination(route)
     })
   }
@@ -290,6 +294,10 @@ export default function AccountPreferencesPage({
       )?.focus()
     })
   }
+  const liveId=useRef(crypto.randomUUID()),liveGeneration=useRef(0)
+  const loadLive=async()=>{if(!liveApi)return;const stamp=++liveGeneration.current;setMode("loading");try{const result=await liveApi.load(en?"en":"fa");if(stamp!==liveGeneration.current)return;liveId.current=result.id;setRecord(result.record);authoritative.current=result.record;setDraft(accountPreferenceDraft(result.record));setMode("normal");setState("idle");lock.current=false;dirtyRef.current=false}catch{if(stamp===liveGeneration.current)setMode("network")}}
+  useEffect(()=>{if(!liveApi)return;void loadLive();const clear=sessionLifecycle.registerPrivateCache(()=>{liveGeneration.current++;setMode("denied");setDraft({language:"fa",choices:{}});setRecord(previous=>({...previous,owner:"",choices:{}}));setLatest(null);setModal(null)});return()=>{liveGeneration.current++;clear()}},[liveApi])
+  const saveLive=async()=>{if(!liveApi)return;lock.current=true;setState("saving");const stamp=liveGeneration.current;try{const result=await liveApi.save(liveId.current,record,draft);if(stamp!==liveGeneration.current)return;setRecord(result);setDraft(accountPreferenceDraft(result));authoritative.current=result;setState("success");dirtyRef.current=false;setLive(t("ترجیحات ذخیره شد.","Preferences saved."));if(result.language!==(en?"en":"fa"))navigate(`/${result.language}/account/preferences`)}catch(error){if(stamp!==liveGeneration.current)return;const conflict=error instanceof Error && error.message==="record_version_conflict";setState(conflict?"conflict":"unknown");setLive(t("ذخیره تأیید نشد؛ پیش از تکرار نسخه ذخیره‌شده را بررسی کنید.","Save unconfirmed; check the saved version before retrying."))}finally{lock.current=false}}
   const submit = (event: FormEvent) => {
     event.preventDefault()
     if (lock.current || blocked || !loaded || !dirty) return
@@ -299,6 +307,7 @@ export default function AccountPreferencesPage({
       focusError(validation)
       return
     }
+    if(liveApi){void saveLive();return}
     const submitted = {
       language: draft.language,
       choices: Object.fromEntries(
@@ -411,6 +420,7 @@ export default function AccountPreferencesPage({
     })
   }
   const check = () => {
+    if(liveApi){void loadLive();return}
     if (checking) return
     setChecking(true)
     later(() => {
@@ -563,6 +573,7 @@ export default function AccountPreferencesPage({
   }
   return (
     <DashboardPage
+      liveMode={!!liveApi}
       page={page}
       navigate={navigate}
       renderMedia={() => null}
@@ -598,7 +609,7 @@ export default function AccountPreferencesPage({
             <Glyph name="sliders" size={30} />
           </span>
         </div>
-        <div className="account-pref-demo">
+        {!liveApi && <div className="account-pref-demo">
           <span>Demo</span>
           <p>
             {t(
@@ -606,7 +617,7 @@ export default function AccountPreferencesPage({
               "Categories, channels, policies and preferences are fixtures; no real service is connected. No actual consent or message delivery is implied.",
             )}
           </p>
-        </div>
+        </div>}
         <div className="account-pref-live" role="status" aria-live="polite">
           {live}
         </div>
@@ -744,7 +755,7 @@ export default function AccountPreferencesPage({
                       </p>
                     </div>
                     <span className="account-pref-required-badge">
-                      {t("ضروری", "Required")} · Demo
+                      {t("ضروری", "Required")}{!liveApi && " · Demo"}
                     </span>
                   </div>
                   <ul>
@@ -1113,9 +1124,9 @@ export default function AccountPreferencesPage({
               "Clear communication, on your terms.",
             )}
           </span>
-          <span>Nilart · Demo</span>
+          <span>{liveApi?"Nilart":"Nilart · Demo"}</span>
         </footer>
-        <details className="dash-preview">
+        {!liveApi && <details className="dash-preview">
           <summary>
             {t("حالت‌های پیش‌نمایش", "Preview states")} <bdi>USER-14 · Demo</bdi>
           </summary>
@@ -1153,7 +1164,7 @@ export default function AccountPreferencesPage({
               )}
             </a>
           </div>
-        </details>
+        </details>}
         <dialog
           ref={dialog}
           className="account-pref-dialog modal"

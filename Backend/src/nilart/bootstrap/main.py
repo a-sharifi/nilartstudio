@@ -17,6 +17,8 @@ from nilart.contexts.catalog.presentation.router import router as catalog_router
 from nilart.contexts.catalog.presentation.sku_authoring import router as sku_authoring_router
 from nilart.contexts.catalog.presentation.sku_mappings import router as sku_mappings_router
 from nilart.contexts.commissions.router import router as commissions_router
+from nilart.contexts.customer.router import admin_router as customer_admin_router
+from nilart.contexts.customer.router import router as customer_router
 from nilart.contexts.identity.presentation.access import router as access_router
 from nilart.contexts.identity.presentation.management import router as management_router
 from nilart.contexts.identity.presentation.otp_router import router as otp_router
@@ -42,6 +44,8 @@ app.include_router(profile_router)
 app.include_router(management_router)
 app.include_router(security_router)
 app.include_router(phone_router)
+app.include_router(customer_router)
+app.include_router(customer_admin_router)
 
 
 @app.middleware("http")
