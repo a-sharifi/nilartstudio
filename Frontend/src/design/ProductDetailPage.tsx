@@ -1,3 +1,4 @@
+import Mockup from "./Mockup";
 import { ReferenceProductImage } from "./ReferenceMedia";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { catalogBundles, catalogProducts, itemOptions } from "./catalog"
@@ -1022,37 +1023,66 @@ function BagIcon() {
   )
 }
 
-// Published descriptions and SKU codes are distinct from notebook demo options.
-export function PublishedProductDetail({ catalog, language, collections, onNavigate }: {
+// Product detail uses the original gallery and layout with published database content.
+export function PublishedProductDetail({ catalog, language, collections, onNavigate, renderDialog = () => null, relatedProducts = [] }: {
   catalog: import("../features/catalog/product-detail").ProductDetail;
   language: 0 | 1; collections: import("./data").Collection[];
   onNavigate: (name: string, route: string) => void;
+  renderDialog?: ProductDialog;
+  relatedProducts?: import("./catalog").CatalogProduct[];
 }) {
   const t = (fa: string, en: string) => language === 0 ? fa : en;
+  const local = (copy: {fa:string;en:string}) => language === 0 ? copy.fa : copy.en;
   const [selected,setSelected] = useState("");
+  const [shareMessage,setShareMessage] = useState("");
   const product = catalog.product;
   const sku = catalog.skus.find(row=>row.id === selected);
-  const root = `/${language === 0 ? "fa" : "en"}/shop`;
+  const root = `/${language === 0 ? "fa" : "en"}`;
   const go = (event: React.MouseEvent<HTMLAnchorElement>, name: string, route: string) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault(); onNavigate(name,route);
   };
   if (catalog.status === "loading") return <div className="container product-detail-page" aria-busy="true"><h1 className="sr-only">{t("بارگذاری محصول", "Loading product")}</h1><div className="product-main-layout"><div className="skeleton product-gallery-skeleton"/><div className="product-loading-info">{Array.from({length:8},(_,i)=><div key={i} className="skeleton skeleton-line"/>)}</div></div></div>;
-  if (catalog.status !== "normal" || !product) return <div className="container product-detail-page"><section className="collections-state" role={catalog.status === "error" ? "alert" : undefined}><h1>{catalog.status === "not-found" ? t("این محصول پیدا نشد.","Product not found.") : t("دریافت محصول ممکن نشد.","Unable to load product.")}</h1>{catalog.status === "error" && <button className="button secondary" onClick={catalog.retry}>{t("دوباره تلاش کنید","Try again")}</button>}<a href={root} className="button primary" onClick={e=>go(e,t("فروشگاه","Shop"),root)}>{t("مشاهده فروشگاه","Browse shop")}</a></section></div>;
+  if (catalog.status !== "normal" || !product) return <div className="container product-detail-page"><section className="collections-state" role={catalog.status === "error" ? "alert" : undefined}><h1>{catalog.status === "not-found" ? t("این محصول پیدا نشد.","Product not found.") : t("دریافت محصول ممکن نشد.","Unable to load product.")}</h1>{catalog.status === "error" && <button className="button secondary" onClick={catalog.retry}>{t("دوباره تلاش کنید","Try again")}</button>}<a href={`${root}/shop`} className="button primary" onClick={e=>go(e,t("فروشگاه","Shop"),`${root}/shop`)}>{t("مشاهده فروشگاه","Browse shop")}</a></section></div>;
   const name = t(product.title_fa,product.title_en);
+  const content = product.presentation;
   const memberships = collections.filter(row=>product.collection_ids.includes(row.id));
+  const related = relatedProducts.filter(row=>row.slug !== product.slug && memberships.some(collection=>row.collections.includes(collection.slug))).slice(0,4);
   const amount = sku?.price?.amount;
   const exactPrice = amount ? (language === 0 ? amount.replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[Number(d)]) : amount) : "";
+  const price = sku?.price ? `${exactPrice} ${sku.price.currency === "IRT" ? t("تومان","toman") : t("ریال","rial")}` : t("قیمت در دسترس نیست","Price unavailable");
+  const media = content ? <Mockup color={content.color} kind={content.kind} /> : <ReferenceProductImage slug={product.slug} language={language} />;
+  const optionLabel = (code:string) => content?.option_labels?.[code] ? local(content.option_labels[code]) : code;
+  const images = content?.gallery.map(image=>({label:[image.label.fa,image.label.en] as [string,string],view:image.view})) || [{label:["نمای روبرو","Front view"] as [string,string],view:"front"}];
+  const share = async () => {
+    try { await navigator.clipboard.writeText(window.location.href); setShareMessage(t("لینک محصول کپی شد.","Product link copied.")); }
+    catch { setShareMessage(t("کپی لینک ممکن نشد؛ لینک را از نوار آدرس کپی کنید.","Unable to copy; copy the link from the address bar.")); }
+  };
   return <div className="container product-detail-page">
-    <nav className="breadcrumb detail-breadcrumb" aria-label={t("مسیر صفحه","Breadcrumb")}><a href={root} onClick={e=>go(e,t("فروشگاه","Shop"),root)}>{t("فروشگاه","Shop")}</a><span>/</span><span aria-current="page">{name}</span></nav>
+    <nav className="breadcrumb detail-breadcrumb" aria-label={t("مسیر صفحه","Breadcrumb")}>
+      <a href={root} onClick={e=>go(e,t("خانه","Home"),root)}>{t("خانه","Home")}</a><span>/</span>
+      <a href={`${root}/collections`} onClick={e=>go(e,t("کالکشن‌ها","Collections"),`${root}/collections`)}>{t("کالکشن‌ها","Collections")}</a><span>/</span>
+      {memberships[0] && <><a href={`${root}/collections/${memberships[0].slug}`} onClick={e=>go(e,memberships[0].name[language],`${root}/collections/${memberships[0].slug}`)}>{memberships[0].name[language]}</a><span>/</span></>}
+      <span aria-current="page">{name}</span>
+    </nav>
     <section className="product-main-layout">
-      <div className="product-gallery"><div className="gallery-main"><div className="gallery-surface"><div className="gallery-object"><ReferenceProductImage slug={product.slug} language={language} /></div></div><span className="gallery-editorial">NILART STUDIO / EVERYDAY OBJECTS</span></div></div>
-      <div className="product-purchase-panel"><div className="product-intro-top">{memberships.length ? memberships.map(row=><a key={row.id} className="eyebrow" href={`/collections/${encodeURIComponent(row.slug)}`} onClick={e=>go(e,row.name[language],`/collections/${encodeURIComponent(row.slug)}`)}>{row.name[language]}</a>) : <span className="eyebrow">NILART STUDIO</span>}</div><h1>{name}</h1><p className="product-intro">{t(product.description_fa,product.description_en)}</p>
-        <section className="product-option-groups" aria-labelledby="published-product-options"><h2 id="published-product-options">{t("گزینه‌های منتشرشده","Published options")}</h2>{catalog.skus.length ? <fieldset className="product-option-group"><legend>{t("کد گزینه را انتخاب کنید","Select an option code")}</legend><div className="product-radio-grid">{catalog.skus.map(row=><label className={`product-radio ${selected === row.id ? "selected" : ""}`} key={row.id}><input type="radio" name="published-sku" value={row.id} checked={selected===row.id} onChange={()=>setSelected(row.id)}/><span className="radio-title"><bdi>{row.code}</bdi></span></label>)}</div></fieldset> : <p className="product-stock-state">{t("هنوز گزینه‌ای منتشر نشده است.","No published options yet.")}</p>}</section>
-        <div className="product-price-summary" role="status"><strong>{sku?.price ? `${exactPrice} ${sku.price.currency === "IRT" ? t("تومان","toman") : t("ریال","rial")}` : t("قیمت در دسترس نیست","Price unavailable")}</strong><p className="product-stock-state">{t("موجودی تأیید نشده","Stock unconfirmed")}</p></div>
-        <button className="button primary product-add-button" disabled>{t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}</button><p className="product-reservation-note">{t("نمایش گزینه و قیمت، موجودی یا امکان خرید را تأیید نمی‌کند.","An option and price do not confirm stock or purchase eligibility.")}</p>
+      <ProductGallery key={product.id} language={language} media={media} images={images} productName={name} renderDialog={renderDialog} renderView={content?.kind !== "book" ? ()=>media : undefined} />
+      <div className="product-purchase-panel">
+        <div className="product-intro-top">{memberships.length ? memberships.map(row=><a key={row.id} className="eyebrow" href={`${root}/collections/${encodeURIComponent(row.slug)}`} onClick={e=>go(e,row.name[language],`${root}/collections/${encodeURIComponent(row.slug)}`)}>{row.name[language]}</a>) : <span className="eyebrow">NILART STUDIO</span>}<div>
+          <button className="icon-button" disabled aria-label={t("ذخیره در علاقه‌مندی‌ها","Save to favorites")}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></button>
+          <button className="icon-button" onClick={share} aria-label={t("اشتراک‌گذاری لینک","Share product link")}><ShareIcon/></button>
+        </div></div>
+        <h1>{name}</h1><p className="product-intro">{content ? local(content.intro) : t(product.description_fa,product.description_en)}</p>
+        {shareMessage && <p className="product-feedback" role="status">{shareMessage}</p>}
+        <section className="product-option-groups" aria-labelledby="published-product-options"><h2 id="published-product-options" className="sr-only">{t("گزینه‌های منتشرشده","Published options")}</h2>{catalog.skus.length ? <fieldset className="product-option-group"><legend>{t("گزینه محصول","Product option")}</legend><div className="product-radio-grid">{catalog.skus.map(row=><label className={`product-radio ${selected === row.id ? "selected" : ""}`} key={row.id}><input type="radio" name="published-sku" value={row.id} checked={selected===row.id} onChange={()=>setSelected(row.id)}/><span className="radio-title"><bdi>{optionLabel(row.code)}</bdi></span></label>)}</div></fieldset> : <p className="product-stock-state">{t("هنوز گزینه‌ای منتشر نشده است.","No published options yet.")}</p>}</section>
+        <div className="selection-summary" aria-live="polite">{sku ? optionLabel(sku.code) : t("گزینه محصول را انتخاب کنید.","Choose a product option.")}</div>
+        <div className="quantity-section"><label htmlFor="published-product-quantity">{t("تعداد محصول","Quantity")}</label><div className="quantity-stepper"><button disabled aria-label={t("کم‌کردن تعداد","Decrease quantity")}>−</button><input id="published-product-quantity" value={language === 0 ? "۱" : "1"} disabled readOnly/><button disabled aria-label={t("افزایش تعداد","Increase quantity")}>+</button></div><p>{t("موجودی تأیید نشده","Stock unconfirmed")}</p></div>
+        <div className="product-price-summary" role="status"><div className="unit-price"><span>{t("قیمت هر محصول","Unit price")}</span><strong>{price}</strong></div></div>
+        <button className="button primary product-add-button" disabled><BagIcon/>{t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}</button><p className="product-reservation-note">{t("نمایش گزینه و قیمت، موجودی یا امکان خرید را تأیید نمی‌کند.","An option and price do not confirm stock or purchase eligibility.")}</p>
       </div>
     </section>
-    <section className="product-information" aria-labelledby="published-product-about"><div><span className="eyebrow">MADE FOR EVERYDAY</span><h2 id="published-product-about">{t("درباره محصول","About this product")}</h2><p>{t(product.description_fa,product.description_en)}</p></div><div className="product-specifications"><h3>{t("مشخصات محصول","Product specifications")}</h3><p>{t("ابعاد، مواد و مشخصات تکمیلی تأیید نشده‌اند.","Dimensions, materials and further specifications are unconfirmed.")}</p></div></section>
+    <section className="product-information" aria-labelledby="published-product-about"><div><span className="eyebrow">A LITTLE SPACE FOR YOUR IDEAS</span><h2 id="published-product-about">{t("درباره محصول","About this product")}</h2><p>{content ? local(content.about) : t(product.description_fa,product.description_en)}</p></div><div className="product-specifications"><h2>{t("مشخصات محصول","Product specifications")}</h2><dl>{(content?.specifications || []).map((fact,index)=><div key={index}><dt>{local(fact.label)}</dt><dd dir="auto">{local(fact.value)}</dd></div>)}<div><dt>{t("گزینه انتخاب‌شده","Selected option")}</dt><dd dir="auto">{sku ? optionLabel(sku.code) : t("انتخاب نشده","Not selected")}</dd></div></dl><small>{t("مشخصات نهایی پس از تأیید برند ارائه می‌شود.","Final specifications await brand approval.")}</small></div></section>
+    <section className="product-delivery"><h2>{t("ارسال و شرایط خرید","Delivery and purchase conditions")}</h2><p>{content ? local(content.delivery) : t("هزینه و روش ارسال و شرایط مرجوعی در انتظار تأیید است.","Shipping and return conditions await confirmation.")}</p><a className="text-link" href={`${root}/returns`} onClick={e=>go(e,t("شرایط لغو و مرجوعی","Cancellation and return policy"),`${root}/returns`)}>{t("شرایط لغو و مرجوعی","Cancellation and return policy")} ↗</a></section>
+    {related.length > 0 && <section className="product-related"><div className="product-related-heading"><h2>{t("از همین کالکشن","More from this collection")}</h2><a className="text-link" href={`${root}/collections/${memberships[0].slug}`} onClick={e=>go(e,memberships[0].name[language],`${root}/collections/${memberships[0].slug}`)}>{t("مشاهده کالکشن","Explore collection")} ↗</a></div><div className="product-grid">{related.map(row=><ProductCard live key={row.id} name={row.name[language]} route={`${root}/products/${row.slug}`} collection={memberships.find(collection=>row.collections.includes(collection.slug))?.name[language] || ""} options="" language={language} media={<ReferenceProductImage slug={row.slug} language={language}/>} arrow={<span aria-hidden="true">↗</span>} heart={null} onNavigate={onNavigate} priceUnavailableLabel={t("قیمت در دسترس نیست","Price unavailable")} availabilityLabel={t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}/>)}</div></section>}
   </div>;
 }

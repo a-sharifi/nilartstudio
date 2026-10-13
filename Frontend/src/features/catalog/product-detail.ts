@@ -1,6 +1,15 @@
+import { z } from "zod";
 import { useEffect, useState } from "react";
 export type PublishedSKU = { id: string; product_id: string; code: string; price: {amount: string; currency: "IRT" | "IRR"} | null };
-export type PublishedProduct = { id: string; slug: string; title_fa: string; title_en: string; description_fa: string; description_en: string; collection_ids: string[]; category_ids: string[] };
+const copy = z.object({fa:z.string().min(1),en:z.string().min(1)});
+const presentationSchema = z.object({
+ intro:copy,about:copy,kind:z.enum(["book","bookmark","stickers"]),color:z.enum(["sage","lilac","sand","rose","blue"]),
+ gallery:z.array(z.object({label:copy,view:z.enum(["front","back","inside","detail"])})).min(1).max(10),
+ option_labels:z.record(z.string(),copy).optional(),
+ specifications:z.array(z.object({label:copy,value:copy})).max(20),delivery:copy,
+});
+export type ProductPresentation = z.infer<typeof presentationSchema>;
+export type PublishedProduct = { id: string; slug: string; title_fa: string; title_en: string; description_fa: string; description_en: string; collection_ids: string[]; category_ids: string[]; presentation?: ProductPresentation | null };
 export type ProductDetail = { product: PublishedProduct | null; skus: PublishedSKU[]; status: "loading" | "normal" | "error" | "not-found"; retry: () => void };
 export function mapPublishedProduct(value: unknown): PublishedProduct {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw Error("Invalid product");
@@ -8,6 +17,7 @@ export function mapPublishedProduct(value: unknown): PublishedProduct {
   for (const key of ["id","slug","title_fa","title_en","description_fa","description_en"]) if (typeof row[key] !== "string") throw Error("Invalid product");
   if (!row.id || !row.slug) throw Error("Invalid product identity");
   for (const key of ["collection_ids","category_ids"]) if (!Array.isArray(row[key]) || (row[key] as unknown[]).some(id=>typeof id !== "string" || !id)) throw Error("Invalid memberships");
+  if (row.presentation != null) presentationSchema.parse(row.presentation);
   return row as PublishedProduct;
 }
 export function mapPublishedSKUs(value: unknown, productId: string): PublishedSKU[] {

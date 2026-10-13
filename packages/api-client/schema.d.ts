@@ -924,6 +924,13 @@ export interface components {
             /** Order */
             order: number;
         };
+        /** LocalizedCopy */
+        LocalizedCopy: {
+            /** Fa */
+            fa: string;
+            /** En */
+            en: string;
+        };
         /** MappingOutput */
         MappingOutput: {
             /**
@@ -1091,6 +1098,34 @@ export interface components {
             version: number;
             price: components["schemas"]["ExplicitPrice"] | null;
         };
+        /** ProductDetailOutput */
+        ProductDetailOutput: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Slug */
+            slug: string;
+            /** Title Fa */
+            title_fa: string;
+            /** Title En */
+            title_en: string;
+            /** Description Fa */
+            description_fa: string;
+            /** Description En */
+            description_en: string;
+            /** Collection Ids */
+            collection_ids: string[];
+            /** Category Ids */
+            category_ids: string[];
+            presentation?: components["schemas"]["ProductPresentation"] | null;
+        };
+        /** ProductFact */
+        ProductFact: {
+            label: components["schemas"]["LocalizedCopy"];
+            value: components["schemas"]["LocalizedCopy"];
+        };
         /** ProductOutput */
         ProductOutput: {
             /**
@@ -1123,6 +1158,39 @@ export interface components {
             page: number;
             /** Page Size */
             page_size: number;
+        };
+        /** ProductPresentation */
+        ProductPresentation: {
+            intro: components["schemas"]["LocalizedCopy"];
+            about: components["schemas"]["LocalizedCopy"];
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "book" | "bookmark" | "stickers";
+            /**
+             * Color
+             * @enum {string}
+             */
+            color: "sage" | "lilac" | "sand" | "rose" | "blue";
+            /** Gallery */
+            gallery: components["schemas"]["ProductView"][];
+            /** Specifications */
+            specifications: components["schemas"]["ProductFact"][];
+            /** Option Labels */
+            option_labels?: {
+                [key: string]: components["schemas"]["LocalizedCopy"];
+            };
+            delivery: components["schemas"]["LocalizedCopy"];
+        };
+        /** ProductView */
+        ProductView: {
+            label: components["schemas"]["LocalizedCopy"];
+            /**
+             * View
+             * @enum {string}
+             */
+            view: "front" | "back" | "inside" | "detail";
         };
         /** ProfileOutput */
         ProfileOutput: {
@@ -1439,7 +1507,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ProductOutput"];
+                    "application/json": components["schemas"]["ProductDetailOutput"];
                 };
             };
             /** @description Validation Error */

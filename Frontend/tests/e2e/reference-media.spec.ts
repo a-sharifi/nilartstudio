@@ -4,7 +4,7 @@ test("database reference products and Cats bundle use the supplied illustrations
   await page.goto("/en/shop");
   await expect(page.locator('.shop-result .mockup').first()).toBeVisible();
   await page.goto("/en/products/cats-sketchbook-127gsm");
-  await expect(page.locator(".product-gallery .mockup.sage svg")).toBeVisible();
+  await expect(page.locator(".product-gallery .mockup.sage svg").first()).toBeVisible();
   await expect(page.locator(".product-add-button")).toBeDisabled();
   await page.goto("/en/bundles");
   await expect(page.locator(".bundle-image > .bundle-still-life")).toBeVisible();

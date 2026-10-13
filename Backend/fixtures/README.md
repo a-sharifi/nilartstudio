@@ -48,3 +48,26 @@ Existing product slugs, SKU codes or bundle slugs cause a transactional failure;
 this command never overwrites them. All descriptions carry the bilingual test
 notice. The frontend uses the original SVG mockups and `BundleStillLife` for
 explicitly associated reference slugs; unrelated records keep missing media.
+
+### Database-backed reference product details
+
+After the design catalog and Cats bundle fixtures, import the four product detail
+profiles explicitly:
+
+```sh
+docker compose --env-file .env -f infra/docker/compose.yaml cp Backend/fixtures/design-product-details.json api:/tmp/nilart-design-product-details.json
+docker compose --env-file .env -f infra/docker/compose.yaml cp Backend/src/nilart/bootstrap/design_product_details.py api:/tmp/nilart-design-product-details.py
+docker compose --env-file .env -f infra/docker/compose.yaml exec -T api python /tmp/nilart-design-product-details.py --local-test-data --fixture /tmp/nilart-design-product-details.json
+```
+
+Requires migration 0016 and existing products carrying the bilingual local test
+notice. Creates four published test presentation documents and three unpriced
+SKUs for Ghosts notebook, Cows stickers and Love bookmark. It never overwrites
+profiles/SKU codes, and validates every document before inserting anything.
+
+The notebook gallery views and notebook copy come from the pinned product detail
+reference. Bookmark/sticker details adapt that layout to their reference product
+names, kinds, palettes and collection memberships; they do not claim notebook
+sizes, sheet counts, paper weights or materials. All illustrations are the original
+SVG mockups. Readable option labels are explicitly associated with fixture SKU
+codes in the database. No prototype prices or stock are imported.

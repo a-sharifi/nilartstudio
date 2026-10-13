@@ -229,7 +229,9 @@ def test_migration_preserves_existing_collection_and_reverses():
             modules[1].upgrade()
             assert connection.execute(text("SELECT description_en FROM catalog_collections "
                                            "WHERE slug = 'existing'")).scalar_one() == ""
-            assert set(Base.metadata.tables).issubset(inspect(connection).get_table_names())
+            # 0016 product presentations are covered by their own migration test.
+            foundation_tables = set(Base.metadata.tables) - {"catalog_product_presentations"}
+            assert foundation_tables.issubset(inspect(connection).get_table_names())
             assert {column["name"] for column in inspect(connection).get_columns(
                 "catalog_products")} == {"id", "slug", "title_fa", "title_en",
                                           "published", "description_fa", "description_en"}

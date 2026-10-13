@@ -1,7 +1,17 @@
 from decimal import Decimal
 from uuid import UUID as PythonUUID
 
-from sqlalchemy import Boolean, CheckConstraint, ForeignKey, Numeric, String, Text, func, select
+from sqlalchemy import (
+    JSON,
+    Boolean,
+    CheckConstraint,
+    ForeignKey,
+    Numeric,
+    String,
+    Text,
+    func,
+    select,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column
 from sqlalchemy.types import TypeDecorator
@@ -68,6 +78,14 @@ class ProductRow(Base):
     published: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     description_fa: Mapped[str] = mapped_column(Text, default="", server_default="")
     description_en: Mapped[str] = mapped_column(Text, default="", server_default="")
+
+
+class ProductPresentationRow(Base):
+    __tablename__ = "catalog_product_presentations"
+    product_id: Mapped[PythonUUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("catalog_products.id"), primary_key=True)
+    document: Mapped[dict] = mapped_column(JSON)
+    published: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
 
 
 class ProductCollectionRow(Base):

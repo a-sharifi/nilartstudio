@@ -26,3 +26,9 @@ test("products without SKUs remain visible with unknown prices",()=>{
  expect(screen.getByText("No published options yet.")).toBeTruthy();
  expect(screen.getByText("Price unavailable")).toBeTruthy();
 });
+test("database presentation validates product-specific media and nonempty galleries",()=>{
+ const presentation = {intro:{fa:"نشانک",en:"Bookmark"},about:{fa:"نمونه",en:"Sample"},kind:"bookmark",color:"rose",gallery:[{label:{fa:"نما",en:"Front view"},view:"front"}],specifications:[],delivery:{fa:"ارسال",en:"Delivery"}};
+ expect(mapPublishedProduct({...product,presentation}).presentation?.kind).toBe("bookmark");
+ expect(()=>mapPublishedProduct({...product,presentation:{...presentation,gallery:[]}})).toThrow();
+ expect(()=>mapPublishedProduct({...product,presentation:{...presentation,kind:"unknown"}})).toThrow();
+});

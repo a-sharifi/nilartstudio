@@ -323,7 +323,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProductOutput"
+                  "$ref": "#/components/schemas/ProductDetailOutput"
                 }
               }
             }
@@ -2510,6 +2510,29 @@
         ],
         "title": "Label"
       },
+      "LocalizedCopy": {
+        "properties": {
+          "fa": {
+            "type": "string",
+            "maxLength": 3000,
+            "minLength": 1,
+            "title": "Fa"
+          },
+          "en": {
+            "type": "string",
+            "maxLength": 3000,
+            "minLength": 1,
+            "title": "En"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "fa",
+          "en"
+        ],
+        "title": "LocalizedCopy"
+      },
       "MappingOutput": {
         "properties": {
           "configuration_id": {
@@ -2957,6 +2980,90 @@
         ],
         "title": "PriceUpdate"
       },
+      "ProductDetailOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "title_fa": {
+            "type": "string",
+            "title": "Title Fa"
+          },
+          "title_en": {
+            "type": "string",
+            "title": "Title En"
+          },
+          "description_fa": {
+            "type": "string",
+            "title": "Description Fa"
+          },
+          "description_en": {
+            "type": "string",
+            "title": "Description En"
+          },
+          "collection_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Collection Ids"
+          },
+          "category_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Category Ids"
+          },
+          "presentation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProductPresentation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "title_fa",
+          "title_en",
+          "description_fa",
+          "description_en",
+          "collection_ids",
+          "category_ids"
+        ],
+        "title": "ProductDetailOutput"
+      },
+      "ProductFact": {
+        "properties": {
+          "label": {
+            "$ref": "#/components/schemas/LocalizedCopy"
+          },
+          "value": {
+            "$ref": "#/components/schemas/LocalizedCopy"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "title": "ProductFact"
+      },
       "ProductOutput": {
         "properties": {
           "id": {
@@ -3044,6 +3151,100 @@
           "page_size"
         ],
         "title": "ProductPage"
+      },
+      "ProductPresentation": {
+        "properties": {
+          "intro": {
+            "$ref": "#/components/schemas/LocalizedCopy"
+          },
+          "about": {
+            "$ref": "#/components/schemas/LocalizedCopy"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "book",
+              "bookmark",
+              "stickers"
+            ],
+            "title": "Kind"
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "sage",
+              "lilac",
+              "sand",
+              "rose",
+              "blue"
+            ],
+            "title": "Color"
+          },
+          "gallery": {
+            "items": {
+              "$ref": "#/components/schemas/ProductView"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Gallery"
+          },
+          "specifications": {
+            "items": {
+              "$ref": "#/components/schemas/ProductFact"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Specifications"
+          },
+          "option_labels": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LocalizedCopy"
+            },
+            "type": "object",
+            "maxProperties": 1000,
+            "title": "Option Labels"
+          },
+          "delivery": {
+            "$ref": "#/components/schemas/LocalizedCopy"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "intro",
+          "about",
+          "kind",
+          "color",
+          "gallery",
+          "specifications",
+          "delivery"
+        ],
+        "title": "ProductPresentation"
+      },
+      "ProductView": {
+        "properties": {
+          "label": {
+            "$ref": "#/components/schemas/LocalizedCopy"
+          },
+          "view": {
+            "type": "string",
+            "enum": [
+              "front",
+              "back",
+              "inside",
+              "detail"
+            ],
+            "title": "View"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "label",
+          "view"
+        ],
+        "title": "ProductView"
       },
       "ProfileOutput": {
         "properties": {

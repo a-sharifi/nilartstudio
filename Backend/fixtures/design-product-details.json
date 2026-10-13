@@ -1,0 +1,312 @@
+[
+  {
+    "slug": "cats-sketchbook-127gsm",
+    "sku_code": null,
+    "document": {
+      "intro": {
+        "fa": "دفتر طراحی با طرح کالکشن گربه. سایز، تعداد برگ و جلد دلخواهت را از گزینه‌های موجود انتخاب کن.",
+        "en": "A sketchbook featuring the Cats collection. Choose your size, sheet count, and cover from available options."
+      },
+      "about": {
+        "fa": "جایی برای ثبت ایده‌ها و همراه‌داشتن دنیای تصویری محبوبتان. این متن و گزینه‌ها نمونه طراحی‌اند؛ مشخصات نهایی از داده تأییدشده برند جایگزین می‌شوند.",
+        "en": "A place to keep your ideas and your favorite visual world close. This copy and these options are design samples; approved brand specifications will replace them."
+      },
+      "kind": "book",
+      "color": "sage",
+      "gallery": [
+        {
+          "label": {
+            "fa": "جلد جلو",
+            "en": "Front cover"
+          },
+          "view": "front"
+        },
+        {
+          "label": {
+            "fa": "پشت دفتر",
+            "en": "Back cover"
+          },
+          "view": "back"
+        },
+        {
+          "label": {
+            "fa": "داخل دفتر",
+            "en": "Inside notebook"
+          },
+          "view": "inside"
+        },
+        {
+          "label": {
+            "fa": "کاغذ و صحافی",
+            "en": "Paper & binding"
+          },
+          "view": "detail"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "گربه",
+            "en": "Cats"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "دفتر طراحی",
+            "en": "Sketchbook"
+          }
+        },
+        {
+          "label": {
+            "fa": "ابعاد نهایی",
+            "en": "Final dimensions"
+          },
+          "value": {
+            "fa": "در انتظار داده تأییدشده برند",
+            "en": "Awaiting approved brand data"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-DESIGN-CATS-BOOK": {
+          "fa": "دفتر طراحی ۱۲۷ گرم",
+          "en": "127 gsm sketchbook"
+        }
+      }
+    }
+  },
+  {
+    "slug": "notebook-ghosts",
+    "sku_code": "TEST-DESIGN-GHOSTS-NOTEBOOK",
+    "document": {
+      "intro": {
+        "fa": "دفتر خط‌دار از کالکشن روح.",
+        "en": "Ruled notebook from the Ghosts collection."
+      },
+      "about": {
+        "fa": "جایی برای ثبت ایده‌ها و همراه‌داشتن دنیای تصویری محبوبتان. این متن و گزینه‌ها نمونه طراحی‌اند؛ مشخصات نهایی از داده تأییدشده برند جایگزین می‌شوند.",
+        "en": "A place to keep your ideas and your favorite visual world close. This copy and these options are design samples; approved brand specifications will replace them."
+      },
+      "kind": "book",
+      "color": "lilac",
+      "gallery": [
+        {
+          "label": {
+            "fa": "جلد جلو",
+            "en": "Front cover"
+          },
+          "view": "front"
+        },
+        {
+          "label": {
+            "fa": "پشت دفتر",
+            "en": "Back cover"
+          },
+          "view": "back"
+        },
+        {
+          "label": {
+            "fa": "داخل دفتر",
+            "en": "Inside notebook"
+          },
+          "view": "inside"
+        },
+        {
+          "label": {
+            "fa": "کاغذ و صحافی",
+            "en": "Paper & binding"
+          },
+          "view": "detail"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "روح",
+            "en": "Ghosts"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "دفتر خط‌دار",
+            "en": "Ruled notebook"
+          }
+        },
+        {
+          "label": {
+            "fa": "ابعاد نهایی",
+            "en": "Final dimensions"
+          },
+          "value": {
+            "fa": "در انتظار داده تأییدشده برند",
+            "en": "Awaiting approved brand data"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-DESIGN-GHOSTS-NOTEBOOK": {
+          "fa": "دفتر خط‌دار",
+          "en": "Ruled notebook"
+        }
+      }
+    }
+  },
+  {
+    "slug": "sticker-cows",
+    "sku_code": "TEST-DESIGN-COWS-STICKERS",
+    "document": {
+      "intro": {
+        "fa": "ست استیکر از کالکشن گاو.",
+        "en": "Sticker set from the Cows collection."
+      },
+      "about": {
+        "fa": "نمونه‌ای از کالکشن برای همراه‌داشتن دنیای تصویری محبوبتان. مشخصات نهایی پس از تأیید برند ارائه می‌شود.",
+        "en": "A design sample from the collection, to keep your favorite visual world close. Final specifications await brand approval."
+      },
+      "kind": "stickers",
+      "color": "sand",
+      "gallery": [
+        {
+          "label": {
+            "fa": "نمای روبرو",
+            "en": "Front view"
+          },
+          "view": "front"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "گاو",
+            "en": "Cows"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "ست استیکر",
+            "en": "Sticker set"
+          }
+        },
+        {
+          "label": {
+            "fa": "ابعاد نهایی",
+            "en": "Final dimensions"
+          },
+          "value": {
+            "fa": "در انتظار داده تأییدشده برند",
+            "en": "Awaiting approved brand data"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-DESIGN-COWS-STICKERS": {
+          "fa": "ست استیکر",
+          "en": "Sticker set"
+        }
+      }
+    }
+  },
+  {
+    "slug": "bookmark-love",
+    "sku_code": "TEST-DESIGN-LOVE-BOOKMARK",
+    "document": {
+      "intro": {
+        "fa": "نشانک از کالکشن عشق.",
+        "en": "Bookmark from the Love collection."
+      },
+      "about": {
+        "fa": "نمونه‌ای از کالکشن برای همراه‌داشتن دنیای تصویری محبوبتان. مشخصات نهایی پس از تأیید برند ارائه می‌شود.",
+        "en": "A design sample from the collection, to keep your favorite visual world close. Final specifications await brand approval."
+      },
+      "kind": "bookmark",
+      "color": "rose",
+      "gallery": [
+        {
+          "label": {
+            "fa": "نمای روبرو",
+            "en": "Front view"
+          },
+          "view": "front"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "عشق",
+            "en": "Love"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "نشانک",
+            "en": "Bookmark"
+          }
+        },
+        {
+          "label": {
+            "fa": "ابعاد نهایی",
+            "en": "Final dimensions"
+          },
+          "value": {
+            "fa": "در انتظار داده تأییدشده برند",
+            "en": "Awaiting approved brand data"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-DESIGN-LOVE-BOOKMARK": {
+          "fa": "نشانک",
+          "en": "Bookmark"
+        }
+      }
+    }
+  }
+]

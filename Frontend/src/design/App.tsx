@@ -1674,7 +1674,7 @@ export default function App() {
             />
           </Suspense>
         ) : isProduct && !demoMode ? (
-          <PublishedProductDetail key={page} catalog={liveProduct} language={lang} collections={collections} onNavigate={navigate} />
+          <PublishedProductDetail key={page} catalog={liveProduct} language={lang} collections={collections} relatedProducts={liveCatalog.data.products} onNavigate={navigate} renderDialog={(open, onClose, title, children, kind) => <Modal open={open} onClose={onClose} title={title} kind={kind}>{children}</Modal>} />
         ) : isProduct ? (
           <Suspense
             fallback={

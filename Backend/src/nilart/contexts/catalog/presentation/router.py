@@ -13,7 +13,9 @@ from nilart.contexts.catalog.application.queries import (
     ListCollections,
     ListProductSKUs,
 )
+from nilart.contexts.catalog.domain.presentation import ProductPresentation
 from nilart.contexts.catalog.infrastructure.repository import (
+    ProductPresentationRow,
     SqlCatalogRepository,
     SqlCollectionRepository,
 )
@@ -58,6 +60,10 @@ class CatalogDetail(CollectionOutput):
 class ProductOutput(CatalogDetail):
     collection_ids: list[UUID]
     category_ids: list[UUID]
+
+
+class ProductDetailOutput(ProductOutput):
+    presentation: ProductPresentation | None = None
 
 
 class MoneyOutput(BaseModel):
@@ -130,9 +136,14 @@ def products(session: SessionDependency, page: Page = 1, page_size: PageSize = 2
                        total=total, page=page, page_size=page_size)
 
 
-@router.get("/products/{slug}", response_model=ProductOutput)
+@router.get("/products/{slug}", response_model=ProductDetailOutput, response_model_exclude_unset=True)
 def product_detail(slug: CatalogKey, session: SessionDependency):
-    return output(GetCatalog(SqlCatalogRepository(session)).execute("products", slug), ProductOutput)
+    product = output(GetCatalog(SqlCatalogRepository(session)).execute("products", slug), ProductOutput)
+    presentation = session.get(ProductPresentationRow, product.id)
+    data = product.model_dump()
+    if presentation and presentation.published:
+        data["presentation"] = ProductPresentation.model_validate(presentation.document)
+    return ProductDetailOutput(**data)
 
 
 @router.get("/products/{slug}/skus", response_model=list[SKUOutput])

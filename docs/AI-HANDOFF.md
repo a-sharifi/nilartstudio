@@ -801,6 +801,37 @@ Next: reviewed publication with immutable public option snapshots and freshness
 checks under the same product/SKU locks, then inventory contracts and admin UI.
 Existing published test fixtures need no automatic mapping or inferred options.
 
+## Database-backed product detail reference layout (2026-10-13)
+
+The live PublishedProductDetail now uses original ProductGallery, native modal,
+thumbnail/navigation/zoom gestures, full breadcrumb, intro action row, native
+option/selection/quantity/price layout, specifications dl and delivery section.
+Related product cards use published records from the same collection.
+Closing zoom restores trigger focus. Share copies the actual product URL; favorites
+and quantity/purchase remain disabled without their backend contracts. All 42
+reference CSS files stay byte-identical. Bookmark/sticker details use their actual
+reference kinds and palettes; notebook-only fields/interior views are not inferred.
+
+Migration 0016 adds validated published presentation documents. Product detail
+responses include them optionally; product lists and details without published
+presentation remain unchanged. Frontend validates bilingual copy, gallery and
+media before use. Presentation is separate from private draft option mappings.
+The opt-in local import creates four profiles and three unpriced test SKUs;
+readable option labels also live in DB. Six products, five collections, four
+categories, six unpriced SKUs and one Cats bundle now exist locally. Existing test
+notices and bundle composition remain preserved. Fixture README has reproduction.
+
+Validation: all 255 backend tests passed with isolated PostgreSQL/Redis;
+87 frontend tests and 13 browser cases passed. Browser tests cover actual DB
+bookmark content, lightbox/focus restoration, Persian mobile, notebook keyboard
+navigation and related collection cards. Desktop/mobile screenshots were inspected.
+Backend/frontend lint, configured mypy, frontend typecheck, OpenAPI/client generation
+and production Docker build passed. Eleven backup tests, including real isolated
+restore, passed. Local head is 0016; all eight services are healthy and all 42
+reference CSS files remain byte-identical. No real prices, stock, admin
+roles or purchase eligibility are created. Reviewed SKU publication/immutable
+public option snapshots and inventory remain subsequent work; remote CI unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

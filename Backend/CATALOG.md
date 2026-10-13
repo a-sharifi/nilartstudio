@@ -324,3 +324,21 @@ publication, inventory, inferred prices or purchasing are added. Local fixtures
 are preserved and remain unmapped. Subsequent reviewed publication must validate
 mapping freshness while holding these same locks, and define a published snapshot
 contract independently of mutable drafts.
+
+### Product detail presentation
+
+Migration 0016 stores validated bilingual product presentation documents separately
+from SKU option drafts. Public product **detail** responses include optional
+`presentation` only when both product and presentation are published; product list
+responses are unchanged. A missing/unpublished presentation leaves the prior
+product response unchanged. The document supplies intro, about, media kind/palette,
+explicit gallery views, specification label/value rows, readable SKU option labels
+and delivery copy. It includes no inferred prices, stock or purchase eligibility.
+
+The local opt-in fixture and reproduction steps are in `fixtures/README.md`.
+No authoring/publication endpoint for presentation content is added here.
+Unpublished draft SKU mappings remain private and are never rendered as published
+product option families. Frontend validates the presentation before using it,
+retains exact decimal SKU prices, and uses the original ProductGallery and detail
+CSS/layout. Gallery zoom and closing restore focus; bookmark/sticker galleries do
+not render notebook interiors. Quantity/purchase remain disabled pending inventory.

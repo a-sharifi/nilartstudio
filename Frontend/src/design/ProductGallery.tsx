@@ -33,6 +33,7 @@ export default function ProductGallery({
   const name = productName || notebookCopy.name[language]
   const [active, setActive] = useState(0)
   const [zoom, setZoom] = useState(false)
+  const zoomTarget = useRef<HTMLButtonElement>(null)
   const startX = useRef<number | null>(null)
   const swiped = useRef(false)
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
@@ -91,6 +92,7 @@ export default function ProductGallery({
       <div className="gallery-main" {...gesture}>
         <button
           className="gallery-zoom-target"
+          ref={zoomTarget}
           onClick={() => {
             if (swiped.current) {
               swiped.current = false
@@ -166,6 +168,7 @@ export default function ProductGallery({
         () => {
           swiped.current = false
           setZoom(false)
+          requestAnimationFrame(() => zoomTarget.current?.focus())
         },
         gallery[active].label[language],
         <div className="product-lightbox" {...gesture}>
