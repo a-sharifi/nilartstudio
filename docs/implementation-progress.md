@@ -572,3 +572,12 @@ Local verification: 282 backend tests, 99 frontend tests and ten related browser
 Home, shop and collection product cards display “از / From” with the cheapest explicitly priced published variant from the existing paginated SKU API. Exact decimal and currency comparisons preserve the selected price currency. Price display is independent of inventory; missing prices or a failed price lookup do not invent a default or prevent browsing. Reference card styling is unchanged.
 
 Local verification: 102 frontend tests, 5 browser checks, frontend lint/type checking, Docker build and eight healthy services. Browser checks cover Persian/English prices and lookup failure. No backend schema or API changes. Remote CI is reported separately.
+
+
+## Remaining homepage and bundle prices — 2026-10-13
+
+Applied explicit local test prices to Ghosts notebook variants (145000 IRT), Cows stickers (45000 IRT) and Love bookmark (30000 IRT, using the reference bookmark sample price rather than the homepage zero/unavailable placeholder). The guarded opt-in importer validates test markers, rejects production mode and conflicting prices, and remains transactional/idempotent. No inventory was created.
+
+Removed unconfirmed-purchase badges from homepage/shop browsing cards without claiming stock availability. Bundle cards now quote the cheapest authored allowed component options, multiply component quantities and apply the saved discount using exact decimal arithmetic. Missing data retains an unavailable price. Homepage Cats/everyday totals are 195000/180000 IRT. Reference CSS remains unchanged.
+
+Local checks: 107 frontend tests, 7 browser checks, 2 focused backend importer tests, frontend types/lint and focused backend lint passed. Web Docker build passed; all eight services healthy. Unrelated ongoing panel work remains outside this commit. Remote CI is reported separately.

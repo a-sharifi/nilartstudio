@@ -782,10 +782,7 @@ export default function ShopPage({
                       availabilityLabel:
                         result.price === undefined
                           ? result.unavailableReason === "unknown"
-                            ? t(
-                                "اطلاعات خرید تأیید نشده",
-                                "Purchase details unconfirmed",
-                              )
+                            ? undefined
                             : t("ناموجود", "Out of stock")
                           : undefined,
                       priceUnavailableLabel:

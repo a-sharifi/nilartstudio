@@ -2006,7 +2006,6 @@ export default function App() {
                       <ProductCard
                         key={p.id}
                         live={!demoMode}
-                        availabilityLabel={!demoMode ? t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed") : undefined}
                         priceUnavailableLabel={!demoMode ? t("قیمت در دسترس نیست","Price unavailable") : undefined}
                         name={local(p.name)}
                         route={`/${lang === 0 ? "fa" : "en"}/products/${p.id}`}

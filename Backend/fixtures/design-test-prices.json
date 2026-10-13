@@ -48,5 +48,30 @@
     "code": "TEST-REF-CAT-RULED-HARD-1",
     "amount": "195000",
     "currency": "IRT"
+  },
+  {
+    "code": "TEST-DESIGN-GHOSTS-NOTEBOOK",
+    "amount": "145000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-NOTEBOOK-GHOSTS-1",
+    "amount": "145000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-REF-NOTEBOOK-GHOSTS-2",
+    "amount": "145000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-DESIGN-COWS-STICKERS",
+    "amount": "45000",
+    "currency": "IRT"
+  },
+  {
+    "code": "TEST-DESIGN-LOVE-BOOKMARK",
+    "amount": "30000",
+    "currency": "IRT"
   }
 ]

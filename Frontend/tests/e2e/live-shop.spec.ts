@@ -10,7 +10,7 @@ test("shop shows published API products in English and Persian", async ({ page }
   await page.goto("/en/shop");
   await expect(page.getByRole("heading", { name: "Nilart shop" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Real product" })).toBeVisible();
-  await expect(page.getByText("Purchase details unconfirmed")).toBeVisible();
+  await expect(page.locator(".stock-badge")).toHaveCount(0);
   await expect(page.getByText("Prototype states")).toHaveCount(0);
   await page.goto("/fa/shop");
   await expect(page.getByRole("heading", { name: "محصول واقعی" })).toBeVisible();

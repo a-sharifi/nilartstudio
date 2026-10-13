@@ -135,3 +135,7 @@ docker compose --env-file .env -f infra/docker/compose.yaml exec -T api python -
 ```
 
 This explicitly maps the reference Cats bundle's five permitted notebook variants, everyday/keepsake notebook choices, collection copy, fixed discounts (30000/25000/30000 toman), and shared sticker/bookmark sample prices (35000/30000 toman). It requires existing test-marked products/bundles, rejects other environments/remote database hosts and different existing prices or presentations, and commits atomically. An identical rerun is safe. No stock, reservation, cart, payment or order is created. The public presentation endpoint omits unpublished or foreign-product choices; the original public bundle list/detail contracts remain unchanged.
+
+### Remaining homepage sample prices
+
+The guarded `design_test_prices` importer also accepts TEST-DESIGN codes for explicitly test-marked products. Ghosts notebook variants use the reference homepage 145000 toman, Cows stickers 45000 toman. Love bookmark uses the reference bookmark sample price 30000 toman for local testing (its homepage reference has a zero/unavailable placeholder). These are sample prices, not approved production offers; no stock is created. Repeating an identical import is safe, while different existing prices still reject the transaction.

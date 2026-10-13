@@ -1,5 +1,5 @@
 import {describe,expect,it} from "vitest"
-import {bundleQuote,displayBundleMoney,selectBundleOption,bundleOptionOffered} from "../src/features/catalog/bundle-detail"
+import {cheapestBundleQuote,bundleQuote,displayBundleMoney,selectBundleOption,bundleOptionOffered} from "../src/features/catalog/bundle-detail"
 const sku=(amount:string,currency:"IRT"|"IRR"="IRT")=>({id:"sku",product_id:"product",code:"CODE",price:{amount,currency}})
 describe("published bundle price preview",()=>{
  it("multiplies component and bundle quantities with exact decimals",()=>{
@@ -24,4 +24,13 @@ it("reference option changes retain compatible fields and clear invalid dependen
  expect(bundleOptionOffered(previous,"size","A6",groups,combinations)).toBe(true)
  expect(selectBundleOption(previous,"size","A6",groups,combinations)).toEqual({size:"A6",sheets:"50",cover:""})
  expect(bundleOptionOffered({size:"A6",sheets:"50"},"cover","3mm",groups,combinations)).toBe(false)
+})
+
+it("starting bundle quotes honor authored choices, repeated quantities and missing prices",()=>{
+ const bundle={id:"b",slug:"b",title_fa:"",title_en:"",description_fa:"",description_en:"",components:[{product_slug:"p",sku_id:"base",code:"BASE",quantity:2,title_fa:"",title_en:""}]}
+ const document={intro:{fa:"",en:""},contents:{fa:"",en:""},collection_slug:"c",collection_title:{fa:"",en:""},sample:true,discount:{amount:"5",currency:"IRT" as const},allow_discount_stacking:false,component_choices:[{component_sku_id:"base",allowed_sku_ids:["allowed","expensive"]}]}
+ const products={p:{product:{} as never,skus:[{...sku("1"),id:"excluded"},{...sku("10"),id:"allowed"},{...sku("20"),id:"expensive"}]}}
+ expect(cheapestBundleQuote(bundle,document,products)?.price).toBe(15000000n)
+ expect(cheapestBundleQuote(bundle,document,{})).toBeNull()
+ expect(cheapestBundleQuote(bundle,null,products)).toBeNull()
 })

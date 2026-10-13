@@ -62,3 +62,18 @@ export function bundleOptionOffered(selection:Record<string,string>,key:string,v
  const prior=groups.slice(0,groups.indexOf(key))
  return combinations.some(item=>item.selections[key]===value&&prior.every(field=>!selection[field]||item.selections[field]===selection[field]))
 }
+
+// Choose only authored alternatives; quantities and the authored discount remain exact.
+export function cheapestBundleQuote(bundle:PublishedBundle,document:BundlePresentation|null,products:Record<string,BundleProduct>){
+ if(!document)return null
+ const parts=bundle.components.map(component=>{
+  const entry=component.product_slug?products[component.product_slug]:undefined
+  const choices=document.component_choices.find(choice=>choice.component_sku_id===component.sku_id)?.allowed_sku_ids??[component.sku_id]
+  const eligible=entry?.skus.filter(sku=>choices.includes(sku.id)&&sku.price)??[]
+  const currency=document.discount?.currency??eligible[0]?.price?.currency
+  const sku=eligible.filter(sku=>sku.price?.currency===currency).sort((a,b)=>bundlePriceUnits(a.price!.amount)<bundlePriceUnits(b.price!.amount)?-1:bundlePriceUnits(a.price!.amount)>bundlePriceUnits(b.price!.amount)?1:0)[0]
+  return {sku,quantity:component.quantity}
+ })
+ const currency=parts[0]?.sku?.price?.currency
+ return bundleQuote(parts,document.discount??(currency?{amount:"0",currency}:null),1)
+}

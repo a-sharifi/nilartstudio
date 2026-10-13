@@ -36,3 +36,22 @@ def test_test_prices_are_exact_idempotent_and_do_not_overwrite():
         with pytest.raises(ValueError, match="Expected local"):
             seed_test_prices(db, [{**fixture[0], "code": "real-sku"}])
     engine.dispose()
+
+
+def test_homepage_fixture_is_complete_and_development_only(monkeypatch):
+    import json
+    import sys
+    from pathlib import Path
+
+    from nilart.bootstrap.design_test_prices import main
+
+    entries = json.loads((Path(__file__).parents[1] / "fixtures/design-test-prices.json").read_text())
+    prices = {entry["code"]: entry["amount"] for entry in entries}
+    assert prices["TEST-DESIGN-GHOSTS-NOTEBOOK"] == "145000"
+    assert prices["TEST-DESIGN-COWS-STICKERS"] == "45000"
+    assert prices["TEST-DESIGN-LOVE-BOOKMARK"] == "30000"
+    monkeypatch.setenv("NILART_ENVIRONMENT", "production")
+    monkeypatch.setattr(sys, "argv", ["import", "--local-test-data", "--fixture", "unused.json"])
+    with pytest.raises(SystemExit) as error:
+        main()
+    assert error.value.code == 2

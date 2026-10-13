@@ -12,7 +12,7 @@ test("reference shop renders published products without SKU, price or stock gues
   const { container } = render(<ShopPage {...props} />)
   expect(container.querySelector(".shop-grid")).toBeTruthy()
   expect(screen.getByRole("heading", { name: "Real product" })).toBeTruthy()
-  expect(screen.getByText("Purchase details unconfirmed")).toBeTruthy()
+  expect(container.querySelector(".stock-badge")).toBeNull()
   expect(screen.queryByText(/Sample mockup/)).toBeNull()
   expect(screen.queryByRole("button", { name: /favorite/i })).toBeNull()
   fireEvent.click(screen.getByRole("combobox", { name: "Collection" }))

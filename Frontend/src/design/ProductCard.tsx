@@ -85,7 +85,7 @@ export default function ProductCard(props: ProductCardProps) {
             {heart}
           </button>
         )}
-        {(availabilityLabel || (price === undefined && !startingPrice)) && (
+        {(availabilityLabel || (!live && price === undefined && !startingPrice)) && (
           <span className="stock-badge">
             {availabilityLabel || t("ناموجود", "Out of stock")}
           </span>

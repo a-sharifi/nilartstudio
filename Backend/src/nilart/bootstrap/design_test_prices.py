@@ -18,7 +18,7 @@ def seed_test_prices(session, fixture):
     for entry in fixture:
         row = session.scalar(select(SKURow).where(SKURow.code == entry["code"]).with_for_update())
         product = session.get(ProductRow, row.product_id) if row else None
-        if not row or not row.code.startswith("TEST-REF-") or not product or product.description_en != NOTICE_EN:
+        if not row or not row.code.startswith(("TEST-REF-", "TEST-DESIGN-")) or not product or product.description_en != NOTICE_EN:
             raise ValueError("Expected local reference test SKU")
         amount = Decimal(str(entry["amount"]))
         if not amount.is_finite() or amount < 0 or entry["currency"] not in {"IRT", "IRR"}:
@@ -38,6 +38,8 @@ def main():
     parser.add_argument("--local-test-data", action="store_true", required=True)
     parser.add_argument("--fixture", type=Path, required=True)
     args = parser.parse_args()
+    if os.environ.get("NILART_ENVIRONMENT", "development") != "development":
+        parser.error("Reference test data is restricted to development")
     url = make_url(os.environ["NILART_DATABASE_URL"])
     if url.get_backend_name() != "postgresql" or url.host not in {"postgres", "localhost", "127.0.0.1"}:
         parser.error("Only local PostgreSQL is supported")
