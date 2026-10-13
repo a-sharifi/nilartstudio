@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 export type PublishedBundle = {
  id: string; slug: string; title_fa: string; title_en: string;
  description_fa: string; description_en: string;
- components: { sku_id: string; code: string; quantity: number; title_fa: string; title_en: string }[];
+ components: { product_slug?: string | null; sku_id: string; code: string; quantity: number; title_fa: string; title_en: string }[];
 };
 export type BundleCatalog = { items: PublishedBundle[]; status: "loading" | "normal" | "error" | "not-found"; retry: () => void };
 export function mapBundle(value: unknown): PublishedBundle {
@@ -13,6 +13,7 @@ export function mapBundle(value: unknown): PublishedBundle {
  const seen = new Set<string>();
  for (const part of row.components) {
   if (!part || typeof part !== "object" || !Number.isSafeInteger(part.quantity) || part.quantity <= 0 || [part.sku_id, part.code, part.title_fa, part.title_en].some(value => typeof value !== "string") || !part.sku_id || !part.code || seen.has(part.sku_id)) throw Error("Invalid bundle component");
+  if (part.product_slug != null && (typeof part.product_slug !== "string" || !part.product_slug)) throw Error("Invalid component product");
   seen.add(part.sku_id);
  }
  return row as PublishedBundle;

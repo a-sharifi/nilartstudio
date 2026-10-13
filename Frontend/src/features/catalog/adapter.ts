@@ -29,7 +29,7 @@ export function mapCollection(value: unknown): Collection {
   const name = localized(r)
   return {
     id: str(r.id), slug: str(r.slug), published: r.published !== false,
-    name, originalName: name[0], color: str(r.color, "sage"),
+    name, originalName: name[0], color: str(r.color, ({gorbe:"sage",roh:"lilac",gav:"sand",qolche:"blue",love:"rose"} as Record<string,string>)[str(r.slug)] || "sage"),
     caption: localized(r, "caption"), description: localized(r, "description"),
     image: str(r.image_url) || undefined, imageAlt: localized(r, "image_alt"),
   }
@@ -37,7 +37,7 @@ export function mapCollection(value: unknown): Collection {
 export function mapCategory(value: unknown): CatalogData["categories"][number] {
   const r = row(value)
   if (!str(r.id) || !str(r.slug)) throw new Error("Invalid category")
-  return { id: str(r.slug) || str(r.id), name: localized(r), kind: str(r.kind, "book"), color: str(r.color, "sand") }
+  return { id: str(r.slug) || str(r.id), name: localized(r), kind: str(r.kind, ({stickers:"stickers",bookmarks:"bookmark"} as Record<string,string>)[str(r.slug)] || "book"), color: str(r.color, ({sketchbooks:"sand",notebooks:"sage",stickers:"lilac",bookmarks:"rose"} as Record<string,string>)[str(r.slug)] || "sand") }
 }
 export function mapProduct(value: unknown, collections: Collection[] = [], categories: unknown[] = []): CatalogProduct {
   const r = row(value)
@@ -121,7 +121,9 @@ export function useLiveCatalog(slug?: string) {
   return { ...(state.key === slug ? state : { status: "loading", collectionsStatus: "loading", data: empty }), retry: () => setRevision(v => v + 1) }
 }
 export function homepageProducts(data: CatalogData): typeof demoProducts {
-  return data.products.filter(p => p.published).map(p => {
+  const picks=["cats-sketchbook-127gsm","notebook-ghosts","sticker-cows","bookmark-love"]
+  const rank=(slug:string)=>picks.includes(slug)?picks.indexOf(slug):picks.length
+  return data.products.filter(p => p.published).sort((a,b)=>rank(a.slug)-rank(b.slug)).map(p => {
     const available = p.skus.filter(s => s.stock > 0).sort((a, b) => a.price - b.price)
     return { id: p.slug, name: p.name, collection: data.collections.findIndex(c => p.collections.includes(c.slug)),
       kind: p.kind, options: [...new Set(p.skus.map(s => s.size).filter(Boolean))].join(" · "),

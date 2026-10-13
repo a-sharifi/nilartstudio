@@ -71,3 +71,19 @@ names, kinds, palettes and collection memberships; they do not claim notebook
 sizes, sheet counts, paper weights or materials. All illustrations are the original
 SVG mockups. Readable option labels are explicitly associated with fixture SKU
 codes in the database. No prototype prices or stock are imported.
+
+### Remaining reference bundle sets
+
+After the Cats bundle fixture, import its two reference companion sets:
+
+```sh
+docker compose --env-file .env -f infra/docker/compose.yaml cp Backend/src/nilart/bootstrap/design_bundle_sets.py api:/tmp/nilart-design-bundle-sets.py
+docker compose --env-file .env -f infra/docker/compose.yaml exec -T api python /tmp/nilart-design-bundle-sets.py --local-test-data
+```
+
+Creates Cats everyday and keepsake bundles from `design-reference/src/catalog.ts`,
+with a ruled or hardcover notebook, two Cats stickers and one Cats bookmark.
+The sticker/bookmark SKU IDs are shared across bundles. Adds two products and two
+explicitly unpriced test SKUs. Existing identities cause an atomic failure before
+any inserts; no prototype stock, prices or discounts are copied. Local totals
+become eight products, eight unpriced SKUs and three bundles after all fixtures.

@@ -1,3 +1,4 @@
+import PublishedBundleCard, { referenceBundleOrder } from "./PublishedBundleCard"
 import Mockup from "./Mockup"
 import { ReferenceProductImage } from "./ReferenceMedia"
 import CheckoutPaymentPage from "./CheckoutPaymentPage"
@@ -37,7 +38,7 @@ import {
   useState,
   type ReactNode,
 } from "react"
-import { categories as demoCategories, collections as demoCollections, products as demoProducts, demoMode, type Localized } from "./data"
+import { demoCategories, demoCollections, products as demoProducts, demoMode, type Localized } from "./data"
 import { homepageProducts, useLiveCatalog } from "../features/catalog/adapter"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import CollectionCard, { CollectionSkeleton } from "./CollectionCard"
@@ -428,14 +429,15 @@ export default function App() {
   const isDetail = isCollections && page !== "/collections"
   const liveCatalog = useLiveCatalog(isDetail ? page.split("/")[2] : undefined)
   const collections = demoMode ? demoCollections : liveCatalog.data.collections
-  const categories = demoMode ? demoCategories : liveCatalog.data.categories
+  const categories = demoMode ? demoCategories : [...liveCatalog.data.categories].sort((a,b)=>(demoCategories.findIndex(row=>row.id===a.id)+1 || 999)-(demoCategories.findIndex(row=>row.id===b.id)+1 || 999))
   const products = demoMode ? demoProducts : homepageProducts(liveCatalog.data)
   const homeMode = demoMode ? mode : liveCatalog.status
   const homeCollectionsMode = demoMode ? mode : liveCatalog.collectionsStatus
   const isProduct = /^\/(?:fa\/|en\/)?products\/[^/]+$/.test(page)
   const liveProduct = useProductDetail(!demoMode && isProduct, isProduct ? page.split("/").pop() : undefined)
   const liveBundleSlug = /^\/(?:fa\/|en\/)?bundles\/[^/]+$/.test(page) ? page.split("/").pop() : undefined
-  const bundleCatalog = useBundleCatalog(!demoMode && /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page), liveBundleSlug)
+  const isHomePage = ["/", "/fa", "/en"].includes(page)
+  const bundleCatalog = useBundleCatalog(!demoMode && (isHomePage || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page)), liveBundleSlug)
   const isBundle = page.startsWith("/bundles/")
   const isCart = page === "/cart"
   const isCheckout = ["/checkout", "/checkout/address", "/checkout/delivery"].includes(page) || isPaymentRoute(page)
@@ -449,7 +451,7 @@ export default function App() {
   const isTerms = isTermsRoute(page)
   const isArtworks = /^(\/fa|\/en)?\/artworks$/.test(page)
   const isArtworkDetail = /^\/(?:fa\/|en\/)?artworks\/[^/]+$/.test(page)
-  const artworkCatalog = useArtworkCatalog(!demoMode && (isArtworks || isArtworkDetail), isArtworkDetail ? page.split("/").pop() : undefined)
+  const artworkCatalog = useArtworkCatalog(!demoMode && (isArtworks || isArtworkDetail || isHomePage), isArtworkDetail ? page.split("/").pop() : undefined)
   const isCommissions = isCommissionRoute(page)
   const isReferences = isReferencesRoute(page)
   const isPreferences = isPreferencesRoute(page)
@@ -1624,7 +1626,7 @@ export default function App() {
             />
           </Suspense>
         ) : /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page) && !demoMode ? (
-          <PublishedBundlesPage catalog={bundleCatalog} language={lang} slug={liveBundleSlug} onNavigate={navigate} />
+          <PublishedBundlesPage catalog={bundleCatalog} language={lang} slug={liveBundleSlug} onNavigate={navigate} renderDialog={(open,onClose,title,children,kind)=><Modal open={open} onClose={onClose} title={title} kind={kind}>{children}</Modal>} />
         ) : isBundle ? (
           <Suspense
             fallback={
@@ -1881,8 +1883,9 @@ export default function App() {
               ) : (
                 <div className="collection-grid">
                   {!demoMode && homeCollectionsMode === "loading" && Array.from({ length: 5 }, (_, i) => <CollectionSkeleton key={i} compact />)}
-                  {collections
+                  {[...collections]
                     .filter((c) => c.published)
+                    .sort((a,b)=>(demoCollections.findIndex(row=>row.slug===a.slug)+1 || 999)-(demoCollections.findIndex(row=>row.slug===b.slug)+1 || 999))
                     .map((c, i) =>
                       homeCollectionsMode === "loading" ? (
                         <CollectionSkeleton key={c.id} compact />
@@ -1897,7 +1900,7 @@ export default function App() {
                             <>
                               <Mockup
                                 color={c.color}
-                                kind={i === 4 ? "bookmark" : "book"}
+                                kind={c.slug === "love" ? "bookmark" : "book"}
                               />
                               <span className="collection-index">0{i + 1}</span>
                             </>
@@ -1990,7 +1993,7 @@ export default function App() {
               ) : (
                 <div className="product-grid" aria-busy={homeMode === "loading"}>
                   {!demoMode && homeMode === "loading" && Array.from({ length: 4 }, (_, i) => <div className="skeleton-card" key={i}><div className="skeleton skeleton-image" /><div className="skeleton skeleton-line" /><div className="skeleton skeleton-line short" /><div className="skeleton skeleton-line" /></div>)}
-                  {products.map((p) =>
+                  {products.slice(0,4).map((p) =>
                     homeMode === "loading" ? (
                       <div className="skeleton-card" key={p.id}>
                         <div className="skeleton skeleton-image" />
@@ -2001,8 +2004,11 @@ export default function App() {
                     ) : (
                       <ProductCard
                         key={p.id}
+                        live={!demoMode}
+                        availabilityLabel={!demoMode ? t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed") : undefined}
+                        priceUnavailableLabel={!demoMode ? t("قیمت در دسترس نیست","Price unavailable") : undefined}
                         name={local(p.name)}
-                        route={`/products/${p.id}`}
+                        route={`/${lang === 0 ? "fa" : "en"}/products/${p.id}`}
                         collection={
                           collections[p.collection] ? t("کالکشن ", "") +
                           local(collections[p.collection].name) +
@@ -2020,10 +2026,10 @@ export default function App() {
                         favorite={demoMode && favorites.includes(
                           p.id === productSlug ? "cat-sketch-127" : p.id,
                         )}
-                        onFavorite={() =>
+                        onFavorite={demoMode ? () =>
                           toggleFavorite(
                             p.id === productSlug ? "cat-sketch-127" : p.id,
-                          )
+                          ) : undefined
                         }
                       />
                     ),
@@ -2046,7 +2052,7 @@ export default function App() {
                     route="/bundles"
                   />
                   <div className="bundle-grid">
-                    {!demoMode && <div className="empty-state">{t("هنوز پکیجی منتشر نشده است.", "No bundles have been published yet.")}</div>}
+                    {!demoMode && (bundleCatalog.status === "loading" ? Array.from({length:2},(_,index)=><div key={index} className="skeleton skeleton-bundle"/>) : bundleCatalog.status === "error" ? <div className="empty-state" role="alert"><p>{t("دریافت پکیج‌ها ممکن نشد.","Unable to load bundles.")}</p><button className="button secondary" onClick={bundleCatalog.retry}>{t("دوباره تلاش کنید","Try again")}</button></div> : bundleCatalog.items.length === 0 ? <div className="empty-state">{t("هنوز پکیجی منتشر نشده است.","No bundles have been published yet.")}</div> : [...bundleCatalog.items].sort(referenceBundleOrder).slice(0,2).map(bundle=><PublishedBundleCard key={bundle.id} bundle={bundle} language={lang} onNavigate={navigate}/>))}
                     {(demoMode ? [0, 1] : []).map((i) =>
                       mode === "loading" ? (
                         <div key={i} className="skeleton skeleton-bundle" />
@@ -2164,13 +2170,15 @@ export default function App() {
                   </div>
                   <div className="artwork-copy">
                     <span className="eyebrow">ORIGINAL ARTWORKS</span>
-                    <h3>{t("نقاشی‌های آماده", "Original artworks")}</h3>
+                    {!demoMode && artworkCatalog.status === "error" && <div role="alert"><p>{t("دریافت آثار ممکن نشد.","Unable to load artworks.")}</p><button className="button secondary" onClick={artworkCatalog.retry}>{t("دوباره تلاش کنید","Try again")}</button></div>}
+                    <h3>{!demoMode && artworkCatalog.items[0] ? artworkCatalog.items[0].title[lang] : t("نقاشی‌های آماده", "Original artworks")}</h3>
                     <p>
-                      {t(
+                      {!demoMode && artworkCatalog.items[0]?.catalogRecord ? (lang === 0 ? artworkCatalog.items[0].catalogRecord.description_fa : artworkCatalog.items[0].catalogRecord.description_en) : t(
                         "آثاری برای دیدن، انتخاب‌کردن و داشتن.",
                         "Artworks to discover, choose, and make your own.",
                       )}
                     </p>
+                    {!demoMode && artworkCatalog.status === "normal" && artworkCatalog.items.length === 0 && <small className="demo-price">{t("هنوز اثری منتشر نشده است.","No published artworks yet.")}</small>}
                     {arrowLink(
                       t("مشاهده نقاشی‌ها", "Explore artworks"),
                       "/artworks",

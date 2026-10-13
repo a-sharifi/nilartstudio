@@ -2266,6 +2266,17 @@
       },
       "ComponentOutput": {
         "properties": {
+          "product_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product Slug"
+          },
           "sku_id": {
             "type": "string",
             "format": "uuid",

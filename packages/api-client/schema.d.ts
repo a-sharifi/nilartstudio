@@ -830,6 +830,8 @@ export interface components {
         };
         /** ComponentOutput */
         ComponentOutput: {
+            /** Product Slug */
+            product_slug?: string | null;
             /**
              * Sku Id
              * Format: uuid

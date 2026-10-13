@@ -13,11 +13,11 @@ class SqlBundleRepository:
         if not items:
             return []
         result = {item["id"]: {**item, "components": []} for item in items}
-        rows = self.session.execute(text("SELECT c.bundle_id,c.sku_id,c.quantity,s.code,p.title_fa,p.title_en "
+        rows = self.session.execute(text("SELECT c.bundle_id,c.sku_id,c.quantity,s.code,p.title_fa,p.title_en,p.slug AS product_slug "
             "FROM catalog_bundle_components c JOIN catalog_skus s ON s.id=c.sku_id JOIN catalog_products p ON p.id=s.product_id "
             "WHERE c.bundle_id=ANY(:ids) ORDER BY s.code,s.id"), {"ids": list(result)}).mappings()
         for row in rows:
-            result[row["bundle_id"]]["components"].append({key: row[key] for key in ["sku_id", "quantity", "code", "title_fa", "title_en"]})
+            result[row["bundle_id"]]["components"].append({key: row[key] for key in ["sku_id", "quantity", "code", "title_fa", "title_en", "product_slug"]})
         return list(result.values())
 
     def page(self, page, page_size):

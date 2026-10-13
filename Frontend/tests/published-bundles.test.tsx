@@ -21,3 +21,10 @@ test("reference bundle detail displays explicit contents and blocks purchases", 
   expect(screen.queryByText("Cats collection")).toBeNull();
   expect(screen.queryByText("Choose notebook options")).toBeNull();
 });
+test("component product identities provide real links without inferred commercial facts",()=>{
+ const bundle={...fixture,components:[{...fixture.components[0],product_slug:"cat-stickers"}]};
+ render(<PublishedBundlesPage catalog={{items:[bundle],status:"normal",retry:()=>{}}} slug="test-set" language={1} onNavigate={()=>{}}/>);
+ expect(screen.getAllByRole("link",{name:"Product"})[0].getAttribute("href")).toBe("/en/products/cat-stickers");
+ expect(screen.getByText("Price and discount unconfirmed")).toBeTruthy();
+ expect(()=>mapBundle({...fixture,components:[{...fixture.components[0],product_slug:42}]})).toThrow();
+});

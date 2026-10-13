@@ -12,6 +12,7 @@ router = APIRouter(prefix="/api/v1/catalog/bundles", tags=["bundles"])
 
 
 class ComponentOutput(BaseModel):
+    product_slug: str | None = None
     sku_id: UUID
     quantity: int
     code: str

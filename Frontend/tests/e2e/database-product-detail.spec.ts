@@ -36,5 +36,5 @@ test("notebook detail retains reference thumbnail and keyboard navigation", asyn
   await expect(page.locator("dialog[open] .gallery-view-inside")).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.locator(".product-specifications")).toContainText("Cats");
-  await expect(page.locator(".product-related .product-card")).toHaveCount(2);
+  await expect(page.locator(".product-related .product-card")).toHaveCount(4);
 });

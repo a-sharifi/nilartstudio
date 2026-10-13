@@ -832,6 +832,39 @@ reference CSS files remain byte-identical. No real prices, stock, admin
 roles or purchase eligibility are created. Reviewed SKU publication/immutable
 public option snapshots and inventory remain subsequent work; remote CI unverified.
 
+## Complete reference bundle presentation and database homepage — 2026-10-13
+
+Live bundle list/detail and homepage share the original bundle card layout.
+Known reference bundles use all four original still-life/gallery views, native
+zoom/modal, keyboard/swipe navigation and focus restoration. Details show the
+explicit fixed composition with reference component visuals, product links,
+share, delivery/conditions and related component cards. Component API records
+now include the published product_slug from the SKU/product join. Unknown
+reference media remains unavailable rather than guessed. Prices, discounts,
+stock and purchasing stay unconfirmed; no cart/inventory contract was added.
+
+The homepage reads published collections, categories, four reference product
+picks and the first two bundles from the catalog API. Reference ordering and
+palettes are preserved. Bundle loading/error/retry/empty states do not inject
+sample results. Published artwork copy is read when available; an empty artwork
+catalog remains visibly empty. No simulated favorites or purchases are offered.
+
+The opt-in local bundle-set importer adds the everyday/keepsake bundles with
+their ruled/hardcover notebook products, sharing the existing Cats sticker and
+bookmark SKUs. All three bundles contain one notebook, two stickers and one
+bookmark. Preflight identity conflicts reject the entire import; the caller's
+transaction rolls back failures. Local totals are eight products, eight unpriced
+SKUs, three bundles, five collections and four categories. No migration is needed;
+head remains 0016. Fixture reproduction is in Backend/fixtures/README.md.
+
+Validation: 256 backend tests with isolated PostgreSQL/Redis, 88 frontend tests
+and 16 browser cases pass. Browser coverage includes actual database homepage
+content/order, all bundle gallery views, zoom/focus, component links, retry/empty
+states and Persian mobile without overflow. Desktop/mobile screenshots were
+reviewed. Backend/frontend lint, mypy, frontend typecheck, generated OpenAPI/client
+and production Docker build pass. All eight local services are healthy; all 42
+reference CSS files remain byte-identical. Remote CI has not been verified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.
