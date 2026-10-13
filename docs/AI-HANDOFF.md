@@ -901,6 +901,24 @@ regressions. Typecheck/lint and production Docker build pass; desktop/mobile ima
 reviewed. All 42 reference CSS files remain byte-identical; eight services healthy.
 Backend/database unchanged; remote CI unverified.
 
+## Reference artwork list verification — 2026-10-13
+
+Live artwork listing uses the original ArtworksPage/ArtGalleryCard, search,
+filter panel/mobile sheet, pagination and loading/error/empty sections. No alternate
+list renderer or CSS was introduced. Published records now explicitly show unknown
+availability rather than implying an inventory result. Filter sheet close, Escape
+and Apply restore focus to the original filter trigger; canceled drafts remain
+unapplied. Images and artist/material/dimensions/prices are unknown until provided
+by their contracts. The local artwork database remains empty; browser fixtures are
+isolated and no artwork offers were seeded.
+
+Validation: 88 frontend tests and nine browser cases pass, covering published card
+layout, six-card pagination, search by description, detail/back/reload, mobile
+apply/cancel/focus, retry/empty and homepage/bundle regressions. Desktop/Persian
+mobile screenshots reviewed; typecheck/lint and production Docker build pass.
+All 42 reference CSS files remain byte-identical and eight services healthy.
+Backend/database unchanged; remote CI unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

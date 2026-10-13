@@ -28,6 +28,7 @@ test("native gallery uses API cards without fixture images, artist, price or ava
   expect(container.querySelector(".art-layout")).toBeTruthy()
   expect(container.querySelector(".art-card")).toBeTruthy()
   expect(screen.getByText("Price not listed")).toBeTruthy()
+  expect(screen.getByText("Availability unconfirmed")).toBeTruthy()
   expect(screen.queryByText("Quiet morning")).toBeNull()
   expect(container.querySelector(".demo-painting")).toBeNull()
   expect(screen.queryByRole("button", { name: /favorites/i })).toBeNull()

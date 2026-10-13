@@ -351,6 +351,11 @@ export default function ArtworksPage({
   const [draft, setDraft] = useState(state.filters)
   const [sheet, setSheet] = useState(false)
   const dialog = useRef<HTMLDialogElement>(null)
+  const filterTrigger = useRef<HTMLButtonElement>(null)
+  const closeSheet = () => {
+    setSheet(false)
+    requestAnimationFrame(() => filterTrigger.current?.focus())
+  }
   const [previewMode, setMode] = useState("normal")
   const mode = catalog ? catalog.status === "normal" && catalog.items.length === 0 ? "empty" : catalog.status : previewMode
   const source: GalleryWork[] = catalog?.items ?? works
@@ -644,6 +649,7 @@ export default function ArtworksPage({
             </span>
             <div>
               <button
+                ref={filterTrigger}
                 className="button secondary art-mobile-filter"
                 onClick={() => {
                   setDraft(f)
@@ -913,14 +919,14 @@ export default function ArtworksPage({
       <dialog
         ref={dialog}
         className="art-filter-sheet"
-        onCancel={() => setSheet(false)}
+        onCancel={closeSheet}
         aria-labelledby="art-sheet-title"
       >
         <div className="art-sheet-head">
           <h2 id="art-sheet-title">{t("فیلتر نقاشی‌ها", "Filter artworks")}</h2>
           <button
             className="icon-button"
-            onClick={() => setSheet(false)}
+            onClick={closeSheet}
             aria-label={t("بستن", "Close")}
           >
             <Symbol name="close" />
@@ -932,7 +938,7 @@ export default function ArtworksPage({
           disabled={priceError}
           onClick={() => {
             update({ filters: draft })
-            setSheet(false)
+            closeSheet()
           }}
         >
           {t("اعمال فیلترها", "Apply filters")}
@@ -1011,7 +1017,7 @@ export function ArtGalleryCard({
       <div className="art-card-info">
         <div className="art-card-status">
           <span className={work.status}>
-            {work.status === "available"
+            {work.catalogRecord ? t("موجودی تأیید نشده", "Availability unconfirmed") : work.status === "available"
               ? t("موجود", "Available")
               : work.status === "sold"
                 ? t("فروخته‌شده", "Sold")

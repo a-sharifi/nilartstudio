@@ -471,3 +471,9 @@
 - ProductOptions مرجع و جزئیات زنده از ProductOptionGroup مشترک استفاده می‌کنند؛ fieldset، radio grid، وضعیت انتخاب، checkmark، راهنما و پیام گزینه‌ها همان مرجع است. Gallery/Modal/ProductCard اصلی حفظ شدند؛ داده گزینه زنده فقط SKU منتشرشده است و خانواده دفتر یا موجودی استنتاج نمی‌شود.
 - لینک کالکشن breadcrumb، intro و related به مسیر پشتیبانی‌شده با زبان صریح اصلاح شد؛ بارگذاری مستقیم هم بررسی شد. داده presentation و قیمت دقیق بدون تغییر از DB خوانده می‌شوند.
 - ۸۸ تست frontend و ۱۳ مورد مرورگر موفق‌اند؛ انتخاب، sticker/bookmark/notebook، قیمت دقیق، gallery/zoom/focus، لینک مستقیم، فارسی mobile و regression خانه/پکیج/فیلتر پوشش دارند. lint/typecheck و build Docker موفق؛ تصاویر desktop/mobile بازبینی شدند. هر ۴۲ CSS مرجع بدون تغییر و هشت سرویس سالم است. backend/DB تغییر نکرد و CI راه دور تأییدنشده است.
+
+## بررسی لیست آثار با کامپوننت مرجع — ۲۰۲۶-۱۰-۱۳
+
+- ArtworksPage و ArtGalleryCard اصلی، search، filter panel/sheet، pagination و loading/error/empty مرجع حفظ شدند؛ CSS یا renderer جایگزین اضافه نشد. موجودی ناشناخته در کارت زنده صریح نمایش داده می‌شود. close/Escape/Apply sheet فوکوس را برمی‌گرداند و cancel انتخاب موقت را ثبت نمی‌کند.
+- ۸۸ تست frontend و ۹ مورد مرورگر، lint/typecheck و build Docker موفق‌اند. کارت DB، pagination شش‌تایی، جست‌وجوی description، detail/back/reload، فارسی mobile، cancel/apply/focus و retry/empty پوشش دارند. تصاویر desktop/mobile بررسی شدند؛ هر ۴۲ CSS مرجع بدون تغییر و هشت سرویس سالم است.
+- داده یا پیشنهاد اثر وارد DB نشد؛ fixture مرورگر مستقل است و فهرست محلی خالی می‌ماند. هنرمند/تصویر/ابعاد/قیمت/موجودی استنتاج نشد؛ backend تغییر نکرد و CI راه دور تأییدنشده است.
