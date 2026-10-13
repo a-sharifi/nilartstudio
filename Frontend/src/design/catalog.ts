@@ -13,6 +13,7 @@ export type SKU = {
   imageIndex?: number
 }
 export type CatalogProduct = {
+  startingPrice?: import("../features/catalog/catalog-price").CatalogPrice
   id: string
   slug: string
   type: "product"

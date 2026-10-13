@@ -1,3 +1,4 @@
+import {minimumVariantPrices} from "./catalog-price"
 import { useEffect, useState } from "react"
 import { demoMode, type Collection, type Localized, type demoCategories, type demoProducts } from "../../design/data"
 import type { CatalogProduct } from "../../design/catalog"
@@ -91,10 +92,11 @@ export function useLiveCatalog(slug?: string) {
       const collections = (await list("/collections", controller.signal)).map(mapCollection)
       if (controller.signal.aborted) return
       setState({ key: slug, status: "loading", collectionsStatus: "normal", data: { ...empty, collections } })
-      const [categoryResult, productResult, detailResult] = await Promise.allSettled([
+      const [categoryResult, productResult, detailResult, priceResult] = await Promise.allSettled([
         list("/categories", controller.signal),
         list(slug ? `/products?collection=${encodeURIComponent(slug)}` : "/products", controller.signal),
         slug ? request(`/collections/${encodeURIComponent(slug)}`, controller.signal) : Promise.resolve(null),
+        list("/skus",controller.signal).then(minimumVariantPrices),
       ])
       if (controller.signal.aborted) return
       const data: CatalogData = { collections,
@@ -106,6 +108,7 @@ export function useLiveCatalog(slug?: string) {
       }
       data.products = productResult.status === "fulfilled"
         ? productResult.value.map(value => mapProduct(value, data.collections, categoryResult.status === "fulfilled" ? categoryResult.value : [])) : []
+      if(priceResult.status==="fulfilled")data.products=data.products.map(product=>({...product,startingPrice:priceResult.value.get(product.id)}))
       const status = slug && detailResult.status === "rejected"
         ? (detailResult.reason instanceof Error && detailResult.reason.message === "not-found" ? "not-found" : "error")
         : productResult.status === "rejected" || categoryResult.status === "rejected" ? "error" : "normal"
@@ -120,13 +123,13 @@ export function useLiveCatalog(slug?: string) {
   }, [slug, revision])
   return { ...(state.key === slug ? state : { status: "loading", collectionsStatus: "loading", data: empty }), retry: () => setRevision(v => v + 1) }
 }
-export function homepageProducts(data: CatalogData): typeof demoProducts {
+export function homepageProducts(data: CatalogData): (typeof demoProducts[number] & {startingPrice?: import("./catalog-price").CatalogPrice})[] {
   const picks=["cats-sketchbook-127gsm","notebook-ghosts","sticker-cows","bookmark-love"]
   const rank=(slug:string)=>picks.includes(slug)?picks.indexOf(slug):picks.length
   return data.products.filter(p => p.published).sort((a,b)=>rank(a.slug)-rank(b.slug)).map(p => {
     const available = p.skus.filter(s => s.stock > 0).sort((a, b) => a.price - b.price)
     return { id: p.slug, name: p.name, collection: data.collections.findIndex(c => p.collections.includes(c.slug)),
-      kind: p.kind, options: [...new Set(p.skus.map(s => s.size).filter(Boolean))].join(" · "),
+      startingPrice:p.startingPrice, kind: p.kind, options: [...new Set(p.skus.map(s => s.size).filter(Boolean))].join(" · "),
       price: available[0]?.price ?? 0, available: available.length > 0 }
   })
 }

@@ -431,7 +431,7 @@ export default function App() {
   const liveCatalog = useLiveCatalog(isDetail ? page.split("/")[2] : undefined)
   const collections = demoMode ? demoCollections : liveCatalog.data.collections
   const categories = demoMode ? demoCategories : [...liveCatalog.data.categories].sort((a,b)=>(demoCategories.findIndex(row=>row.id===a.id)+1 || 999)-(demoCategories.findIndex(row=>row.id===b.id)+1 || 999))
-  const products = demoMode ? demoProducts : homepageProducts(liveCatalog.data)
+  const products: (typeof demoProducts[number] & {startingPrice?: import("../features/catalog/catalog-price").CatalogPrice})[] = demoMode ? demoProducts : homepageProducts(liveCatalog.data)
   const homeMode = demoMode ? mode : liveCatalog.status
   const homeCollectionsMode = demoMode ? mode : liveCatalog.collectionsStatus
   const isProduct = /^\/(?:fa\/|en\/)?products\/[^/]+$/.test(page)
@@ -2016,6 +2016,7 @@ export default function App() {
                           t("", " collection") : ""
                         }
                         options={p.options}
+                        startingPrice={!demoMode?p.startingPrice:undefined}
                         price={p.available ? p.price : undefined}
                         language={lang}
                         media={

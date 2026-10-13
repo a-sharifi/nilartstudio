@@ -765,6 +765,7 @@ export default function ShopPage({
                       options,
                       optionsDirection: "auto" as const,
                       price: result.price,
+                      startingPrice: liveCatalog && item.type==="product" ? item.startingPrice : undefined,
                       from: result.from,
                       language,
                       arrow,

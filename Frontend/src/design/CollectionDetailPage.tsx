@@ -538,6 +538,7 @@ export default function CollectionDetailPage({
                         <ProductCard
                           key={item.id}
                           {...common}
+                          startingPrice={!demo?item.startingPrice:undefined}
                           favorite={demo && favorites.includes(item.id)}
                           onFavorite={() => favorite(item.id)}
                         />

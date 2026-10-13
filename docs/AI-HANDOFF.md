@@ -1082,3 +1082,10 @@ Migration 0020 and an optional public presentation endpoint provide explicit all
 These are marked test prices, not approved retail data. Inventory remains unconfirmed; adding a bundle to a real cart stays unavailable. Stock flags and successful purchases are not fabricated to match the prototype. Exact original copy may differ where the database title or actual business state differs.
 
 Local verification: 282 backend tests, 99 frontend tests and ten related browser checks passed. Persian mobile and English desktop screenshots were reviewed against the running pinned reference. Frontend lint/types, backend ruff/mypy, generated API client, Docker builds and all eight services passed. All 42 retained reference stylesheets are byte-identical. Remote CI remains unverified.
+
+
+## Product-card starting prices — 2026-10-13
+
+Home, shop and collection product cards display “از / From” with the cheapest explicitly priced published variant from the existing paginated SKU API. Exact decimal and currency comparisons preserve the selected price currency. Price display is independent of inventory; missing prices or a failed price lookup do not invent a default or prevent browsing. Reference card styling is unchanged.
+
+Local verification: 102 frontend tests, 5 browser checks, frontend lint/type checking, Docker build and eight healthy services. Browser checks cover Persian/English prices and lookup failure. No backend schema or API changes. Remote CI is reported separately.

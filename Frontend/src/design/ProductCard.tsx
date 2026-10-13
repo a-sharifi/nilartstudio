@@ -1,3 +1,4 @@
+import {formatCatalogAmount,type CatalogPrice} from "../features/catalog/catalog-price"
 import type { ReactNode } from "react"
 
 export type ProductCardProps = {
@@ -7,6 +8,7 @@ export type ProductCardProps = {
   collection: string
   options: string
   price?: number
+  startingPrice?: CatalogPrice
   language: 0 | 1
   media: ReactNode
   arrow: ReactNode
@@ -34,6 +36,7 @@ export default function ProductCard(props: ProductCardProps) {
     collection,
     options,
     price,
+    startingPrice,
     language,
     media,
     arrow,
@@ -82,7 +85,7 @@ export default function ProductCard(props: ProductCardProps) {
             {heart}
           </button>
         )}
-        {(availabilityLabel || price === undefined) && (
+        {(availabilityLabel || (price === undefined && !startingPrice)) && (
           <span className="stock-badge">
             {availabilityLabel || t("ناموجود", "Out of stock")}
           </span>
@@ -105,7 +108,9 @@ export default function ProductCard(props: ProductCardProps) {
           {bundleSummary || options || "—"}
         </p>
         <div className="product-price">
-          {price === undefined ? (
+          {startingPrice ? <>
+            {t("از ","From ")}<strong>{formatCatalogAmount(startingPrice.amount,language)}</strong>{" "}{startingPrice.currency==="IRT"?t("تومان","toman"):t("ریال","rial")}
+          </> : price === undefined ? (
             <span className="unavailable">
               {priceUnavailableLabel || t("ناموجود", "Out of stock")}
             </span>
