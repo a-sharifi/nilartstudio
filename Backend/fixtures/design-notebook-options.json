@@ -1,0 +1,844 @@
+[
+  {
+    "slug": "cats-sketchbook-127gsm",
+    "expected_document": {
+      "intro": {
+        "fa": "دفتر طراحی با طرح کالکشن گربه. سایز، تعداد برگ و جلد دلخواهت را از گزینه‌های موجود انتخاب کن.",
+        "en": "A sketchbook featuring the Cats collection. Choose your size, sheet count, and cover from available options."
+      },
+      "about": {
+        "fa": "جایی برای ثبت ایده‌ها و همراه‌داشتن دنیای تصویری محبوبتان. این متن و گزینه‌ها نمونه طراحی‌اند؛ مشخصات نهایی از داده تأییدشده برند جایگزین می‌شوند.",
+        "en": "A place to keep your ideas and your favorite visual world close. This copy and these options are design samples; approved brand specifications will replace them."
+      },
+      "kind": "book",
+      "color": "sage",
+      "gallery": [
+        {
+          "label": {
+            "fa": "جلد جلو",
+            "en": "Front cover"
+          },
+          "view": "front"
+        },
+        {
+          "label": {
+            "fa": "پشت دفتر",
+            "en": "Back cover"
+          },
+          "view": "back"
+        },
+        {
+          "label": {
+            "fa": "داخل دفتر",
+            "en": "Inside notebook"
+          },
+          "view": "inside"
+        },
+        {
+          "label": {
+            "fa": "کاغذ و صحافی",
+            "en": "Paper & binding"
+          },
+          "view": "detail"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "گربه",
+            "en": "Cats"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "دفتر طراحی",
+            "en": "Sketchbook"
+          }
+        },
+        {
+          "label": {
+            "fa": "ابعاد نهایی",
+            "en": "Final dimensions"
+          },
+          "value": {
+            "fa": "در انتظار داده تأییدشده برند",
+            "en": "Awaiting approved brand data"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-DESIGN-CATS-BOOK": {
+          "fa": "دفتر طراحی ۱۲۷ گرم",
+          "en": "127 gsm sketchbook"
+        }
+      }
+    },
+    "document": {
+      "intro": {
+        "fa": "دفتر طراحی با طرح کالکشن گربه. سایز، تعداد برگ و جلد دلخواهت را از گزینه‌های موجود انتخاب کن.",
+        "en": "A sketchbook featuring the Cats collection. Choose your size, sheet count, and cover from available options."
+      },
+      "about": {
+        "fa": "جایی برای ثبت ایده‌ها و همراه‌داشتن دنیای تصویری محبوبتان. این متن و گزینه‌ها نمونه طراحی‌اند؛ مشخصات نهایی از داده تأییدشده برند جایگزین می‌شوند.",
+        "en": "A place to keep your ideas and your favorite visual world close. This copy and these options are design samples; approved brand specifications will replace them."
+      },
+      "kind": "book",
+      "color": "sage",
+      "gallery": [
+        {
+          "label": {
+            "fa": "جلد جلو",
+            "en": "Front cover"
+          },
+          "view": "front"
+        },
+        {
+          "label": {
+            "fa": "پشت دفتر",
+            "en": "Back cover"
+          },
+          "view": "back"
+        },
+        {
+          "label": {
+            "fa": "داخل دفتر",
+            "en": "Inside notebook"
+          },
+          "view": "inside"
+        },
+        {
+          "label": {
+            "fa": "کاغذ و صحافی",
+            "en": "Paper & binding"
+          },
+          "view": "detail"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "گربه",
+            "en": "Cats"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "دفتر طراحی",
+            "en": "Sketchbook"
+          }
+        },
+        {
+          "label": {
+            "fa": "گرماژ کاغذ",
+            "en": "Paper weight"
+          },
+          "value": {
+            "fa": "۱۲۷ گرم — نمونه طراحی",
+            "en": "127 gsm — design sample"
+          }
+        },
+        {
+          "label": {
+            "fa": "ابعاد نهایی",
+            "en": "Final dimensions"
+          },
+          "value": {
+            "fa": "در انتظار داده تأییدشده برند",
+            "en": "Awaiting approved brand data"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-DESIGN-CATS-BOOK": {
+          "fa": "دفتر طراحی ۱۲۷ گرم",
+          "en": "127 gsm sketchbook"
+        },
+        "TEST-REF-CATS-SKETCHBOOK-127GSM-1": {
+          "fa": "A4 · 50 · 3mm",
+          "en": "A4 · 50 · 3mm"
+        },
+        "TEST-REF-CATS-SKETCHBOOK-127GSM-2": {
+          "fa": "A4 · 100 · 2mm",
+          "en": "A4 · 100 · 2mm"
+        },
+        "TEST-REF-CATS-SKETCHBOOK-127GSM-3": {
+          "fa": "A5 · 50 · 2mm",
+          "en": "A5 · 50 · 2mm"
+        },
+        "TEST-REF-CATS-SKETCHBOOK-127GSM-4": {
+          "fa": "A5 · 50 · 3mm",
+          "en": "A5 · 50 · 3mm"
+        },
+        "TEST-REF-CATS-SKETCHBOOK-127GSM-5": {
+          "fa": "A5 · 100 · 2mm",
+          "en": "A5 · 100 · 2mm"
+        },
+        "TEST-REF-CATS-SKETCHBOOK-127GSM-6": {
+          "fa": "A5 · 100 · 3mm",
+          "en": "A5 · 100 · 3mm"
+        },
+        "TEST-REF-CATS-SKETCHBOOK-127GSM-7": {
+          "fa": "A6 · 50 · 2mm",
+          "en": "A6 · 50 · 2mm"
+        }
+      },
+      "option_groups": [
+        {
+          "id": "size",
+          "label": {
+            "fa": "سایز دفتر",
+            "en": "Notebook size"
+          },
+          "choices": [
+            {
+              "value": "A4",
+              "label": {
+                "fa": "A4",
+                "en": "A4"
+              },
+              "caption": {
+                "fa": "۲۱۰ × ۲۹۷ میلی‌متر",
+                "en": "210 × 297 mm"
+              }
+            },
+            {
+              "value": "A5",
+              "label": {
+                "fa": "A5",
+                "en": "A5"
+              },
+              "caption": {
+                "fa": "۱۴۸ × ۲۱۰ میلی‌متر",
+                "en": "148 × 210 mm"
+              }
+            },
+            {
+              "value": "A6",
+              "label": {
+                "fa": "A6",
+                "en": "A6"
+              },
+              "caption": {
+                "fa": "۱۰۵ × ۱۴۸ میلی‌متر",
+                "en": "105 × 148 mm"
+              }
+            }
+          ]
+        },
+        {
+          "id": "sheets",
+          "label": {
+            "fa": "تعداد برگ هر دفتر",
+            "en": "Sheets per notebook"
+          },
+          "helper": {
+            "fa": "تعداد برگ داخل هر دفتر؛ نه تعداد دفتر خریداری‌شده. تعداد روی چاپ‌شده به مشخصات محصول بستگی دارد.",
+            "en": "Sheets inside each notebook, not the number of notebooks you buy. Printed sides depend on product specifications."
+          },
+          "choices": [
+            {
+              "value": "50",
+              "label": {
+                "fa": "۵۰ برگ",
+                "en": "50 sheets"
+              },
+              "caption": {
+                "fa": "۱۰۰ صفحه",
+                "en": "100 pages"
+              }
+            },
+            {
+              "value": "100",
+              "label": {
+                "fa": "۱۰۰ برگ",
+                "en": "100 sheets"
+              },
+              "caption": {
+                "fa": "۲۰۰ صفحه",
+                "en": "200 pages"
+              }
+            }
+          ]
+        },
+        {
+          "id": "cover",
+          "label": {
+            "fa": "نوع جلد",
+            "en": "Cover type"
+          },
+          "choices": [
+            {
+              "value": "2mm",
+              "label": {
+                "fa": "جلد سخت ۲ میلی‌متر",
+                "en": "2 mm hard cover"
+              }
+            },
+            {
+              "value": "3mm",
+              "label": {
+                "fa": "جلد سخت ۳ میلی‌متر",
+                "en": "3 mm hard cover"
+              }
+            }
+          ]
+        }
+      ],
+      "fixed_fact": {
+        "label": {
+          "fa": "127 GSM",
+          "en": "127 GSM"
+        },
+        "value": {
+          "fa": "گرماژ ثابت کاغذ · با تعداد برگ متفاوت است",
+          "en": "Fixed paper weight · not the sheet count"
+        }
+      },
+      "option_combinations": [
+        {
+          "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-1",
+          "selections": {
+            "size": "A4",
+            "sheets": "50",
+            "cover": "3mm"
+          }
+        },
+        {
+          "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-2",
+          "selections": {
+            "size": "A4",
+            "sheets": "100",
+            "cover": "2mm"
+          }
+        },
+        {
+          "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-3",
+          "selections": {
+            "size": "A5",
+            "sheets": "50",
+            "cover": "2mm"
+          }
+        },
+        {
+          "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-4",
+          "selections": {
+            "size": "A5",
+            "sheets": "50",
+            "cover": "3mm"
+          }
+        },
+        {
+          "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-5",
+          "selections": {
+            "size": "A5",
+            "sheets": "100",
+            "cover": "2mm"
+          }
+        },
+        {
+          "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-6",
+          "selections": {
+            "size": "A5",
+            "sheets": "100",
+            "cover": "3mm"
+          }
+        },
+        {
+          "code": "TEST-REF-CATS-SKETCHBOOK-127GSM-7",
+          "selections": {
+            "size": "A6",
+            "sheets": "50",
+            "cover": "2mm"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "slug": "notebook-ghosts",
+    "expected_document": {
+      "intro": {
+        "fa": "دفتر خط‌دار از کالکشن روح.",
+        "en": "Ruled notebook from the Ghosts collection."
+      },
+      "about": {
+        "fa": "جایی برای ثبت ایده‌ها و همراه‌داشتن دنیای تصویری محبوبتان. این متن و گزینه‌ها نمونه طراحی‌اند؛ مشخصات نهایی از داده تأییدشده برند جایگزین می‌شوند.",
+        "en": "A place to keep your ideas and your favorite visual world close. This copy and these options are design samples; approved brand specifications will replace them."
+      },
+      "kind": "book",
+      "color": "lilac",
+      "gallery": [
+        {
+          "label": {
+            "fa": "جلد جلو",
+            "en": "Front cover"
+          },
+          "view": "front"
+        },
+        {
+          "label": {
+            "fa": "پشت دفتر",
+            "en": "Back cover"
+          },
+          "view": "back"
+        },
+        {
+          "label": {
+            "fa": "داخل دفتر",
+            "en": "Inside notebook"
+          },
+          "view": "inside"
+        },
+        {
+          "label": {
+            "fa": "کاغذ و صحافی",
+            "en": "Paper & binding"
+          },
+          "view": "detail"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "روح",
+            "en": "Ghosts"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "دفتر خط‌دار",
+            "en": "Ruled notebook"
+          }
+        },
+        {
+          "label": {
+            "fa": "ابعاد نهایی",
+            "en": "Final dimensions"
+          },
+          "value": {
+            "fa": "در انتظار داده تأییدشده برند",
+            "en": "Awaiting approved brand data"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-DESIGN-GHOSTS-NOTEBOOK": {
+          "fa": "دفتر خط‌دار",
+          "en": "Ruled notebook"
+        }
+      }
+    },
+    "document": {
+      "intro": {
+        "fa": "دفتر خط‌دار از کالکشن روح.",
+        "en": "Ruled notebook from the Ghosts collection."
+      },
+      "about": {
+        "fa": "جایی برای ثبت ایده‌ها و همراه‌داشتن دنیای تصویری محبوبتان. این متن و گزینه‌ها نمونه طراحی‌اند؛ مشخصات نهایی از داده تأییدشده برند جایگزین می‌شوند.",
+        "en": "A place to keep your ideas and your favorite visual world close. This copy and these options are design samples; approved brand specifications will replace them."
+      },
+      "kind": "book",
+      "color": "lilac",
+      "gallery": [
+        {
+          "label": {
+            "fa": "جلد جلو",
+            "en": "Front cover"
+          },
+          "view": "front"
+        },
+        {
+          "label": {
+            "fa": "پشت دفتر",
+            "en": "Back cover"
+          },
+          "view": "back"
+        },
+        {
+          "label": {
+            "fa": "داخل دفتر",
+            "en": "Inside notebook"
+          },
+          "view": "inside"
+        },
+        {
+          "label": {
+            "fa": "کاغذ و صحافی",
+            "en": "Paper & binding"
+          },
+          "view": "detail"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "روح",
+            "en": "Ghosts"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "دفتر خط‌دار",
+            "en": "Ruled notebook"
+          }
+        },
+        {
+          "label": {
+            "fa": "ابعاد نهایی",
+            "en": "Final dimensions"
+          },
+          "value": {
+            "fa": "در انتظار داده تأییدشده برند",
+            "en": "Awaiting approved brand data"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-DESIGN-GHOSTS-NOTEBOOK": {
+          "fa": "دفتر خط‌دار",
+          "en": "Ruled notebook"
+        },
+        "TEST-REF-NOTEBOOK-GHOSTS-1": {
+          "fa": "A5",
+          "en": "A5"
+        },
+        "TEST-REF-NOTEBOOK-GHOSTS-2": {
+          "fa": "A6",
+          "en": "A6"
+        }
+      },
+      "option_groups": [
+        {
+          "id": "size",
+          "label": {
+            "fa": "سایز دفتر",
+            "en": "Notebook size"
+          },
+          "choices": [
+            {
+              "value": "A5",
+              "label": {
+                "fa": "A5",
+                "en": "A5"
+              },
+              "caption": {
+                "fa": "۱۴۸ × ۲۱۰ میلی‌متر",
+                "en": "148 × 210 mm"
+              }
+            },
+            {
+              "value": "A6",
+              "label": {
+                "fa": "A6",
+                "en": "A6"
+              },
+              "caption": {
+                "fa": "۱۰۵ × ۱۴۸ میلی‌متر",
+                "en": "105 × 148 mm"
+              }
+            }
+          ]
+        }
+      ],
+      "option_combinations": [
+        {
+          "code": "TEST-REF-NOTEBOOK-GHOSTS-1",
+          "selections": {
+            "size": "A5"
+          }
+        },
+        {
+          "code": "TEST-REF-NOTEBOOK-GHOSTS-2",
+          "selections": {
+            "size": "A6"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "slug": "cat-ruled",
+    "expected_document": null,
+    "document": {
+      "intro": {
+        "fa": "دفتر خط‌دار از کالکشن گربه؛ نمونه مرجع طراحی.",
+        "en": "Notebook from the Cats collection; design reference test data."
+      },
+      "about": {
+        "fa": "جایی برای ثبت ایده‌ها و همراه‌داشتن دنیای تصویری محبوبتان. این متن و گزینه‌ها نمونه طراحی‌اند؛ مشخصات نهایی از داده تأییدشده برند جایگزین می‌شوند.",
+        "en": "A place to keep your ideas and your favorite visual world close. This copy and these options are design samples; approved brand specifications will replace them."
+      },
+      "kind": "book",
+      "color": "sage",
+      "gallery": [
+        {
+          "label": {
+            "fa": "جلد جلو",
+            "en": "Front cover"
+          },
+          "view": "front"
+        },
+        {
+          "label": {
+            "fa": "پشت دفتر",
+            "en": "Back cover"
+          },
+          "view": "back"
+        },
+        {
+          "label": {
+            "fa": "داخل دفتر",
+            "en": "Inside notebook"
+          },
+          "view": "inside"
+        },
+        {
+          "label": {
+            "fa": "کاغذ و صحافی",
+            "en": "Paper & binding"
+          },
+          "view": "detail"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "گربه",
+            "en": "Cats"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "دفتر خط‌دار",
+            "en": "Ruled notebook"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-REF-CAT-RULED-1": {
+          "fa": "A5",
+          "en": "A5"
+        },
+        "TEST-REF-CAT-RULED-2": {
+          "fa": "A6",
+          "en": "A6"
+        }
+      },
+      "option_groups": [
+        {
+          "id": "size",
+          "label": {
+            "fa": "سایز دفتر",
+            "en": "Notebook size"
+          },
+          "choices": [
+            {
+              "value": "A5",
+              "label": {
+                "fa": "A5",
+                "en": "A5"
+              },
+              "caption": {
+                "fa": "۱۴۸ × ۲۱۰ میلی‌متر",
+                "en": "148 × 210 mm"
+              }
+            },
+            {
+              "value": "A6",
+              "label": {
+                "fa": "A6",
+                "en": "A6"
+              },
+              "caption": {
+                "fa": "۱۰۵ × ۱۴۸ میلی‌متر",
+                "en": "105 × 148 mm"
+              }
+            }
+          ]
+        }
+      ],
+      "option_combinations": [
+        {
+          "code": "TEST-REF-CAT-RULED-1",
+          "selections": {
+            "size": "A5"
+          }
+        },
+        {
+          "code": "TEST-REF-CAT-RULED-2",
+          "selections": {
+            "size": "A6"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "slug": "cat-ruled-hard",
+    "expected_document": null,
+    "document": {
+      "intro": {
+        "fa": "دفتر خط‌دار جلد سخت از کالکشن گربه؛ نمونه مرجع طراحی.",
+        "en": "Notebook from the Cats collection; design reference test data."
+      },
+      "about": {
+        "fa": "جایی برای ثبت ایده‌ها و همراه‌داشتن دنیای تصویری محبوبتان. این متن و گزینه‌ها نمونه طراحی‌اند؛ مشخصات نهایی از داده تأییدشده برند جایگزین می‌شوند.",
+        "en": "A place to keep your ideas and your favorite visual world close. This copy and these options are design samples; approved brand specifications will replace them."
+      },
+      "kind": "book",
+      "color": "sage",
+      "gallery": [
+        {
+          "label": {
+            "fa": "جلد جلو",
+            "en": "Front cover"
+          },
+          "view": "front"
+        },
+        {
+          "label": {
+            "fa": "پشت دفتر",
+            "en": "Back cover"
+          },
+          "view": "back"
+        },
+        {
+          "label": {
+            "fa": "داخل دفتر",
+            "en": "Inside notebook"
+          },
+          "view": "inside"
+        },
+        {
+          "label": {
+            "fa": "کاغذ و صحافی",
+            "en": "Paper & binding"
+          },
+          "view": "detail"
+        }
+      ],
+      "specifications": [
+        {
+          "label": {
+            "fa": "کالکشن",
+            "en": "Collection"
+          },
+          "value": {
+            "fa": "گربه",
+            "en": "Cats"
+          }
+        },
+        {
+          "label": {
+            "fa": "نوع محصول",
+            "en": "Product type"
+          },
+          "value": {
+            "fa": "دفتر خط‌دار جلد سخت",
+            "en": "Hardcover notebook"
+          }
+        }
+      ],
+      "delivery": {
+        "fa": "هزینه و روش ارسال پس از انتخاب آدرس مشخص می‌شوند. شرایط مرجوعی این محصول پس از دریافت سیاست تأییدشده برند ارائه خواهد شد.",
+        "en": "Shipping options and cost are shown after you choose an address. Product-specific returns will be provided once the approved brand policy is available."
+      },
+      "option_labels": {
+        "TEST-REF-CAT-RULED-HARD-1": {
+          "fa": "A5",
+          "en": "A5"
+        }
+      },
+      "option_groups": [
+        {
+          "id": "size",
+          "label": {
+            "fa": "سایز دفتر",
+            "en": "Notebook size"
+          },
+          "choices": [
+            {
+              "value": "A5",
+              "label": {
+                "fa": "A5",
+                "en": "A5"
+              },
+              "caption": {
+                "fa": "۱۴۸ × ۲۱۰ میلی‌متر",
+                "en": "148 × 210 mm"
+              }
+            }
+          ]
+        }
+      ],
+      "option_combinations": [
+        {
+          "code": "TEST-REF-CAT-RULED-HARD-1",
+          "selections": {
+            "size": "A5"
+          }
+        }
+      ]
+    }
+  }
+]

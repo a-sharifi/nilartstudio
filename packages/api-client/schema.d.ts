@@ -1100,6 +1100,22 @@ export interface components {
             version: number;
             price: components["schemas"]["ExplicitPrice"] | null;
         };
+        /** ProductChoice */
+        ProductChoice: {
+            /** Value */
+            value: string;
+            label: components["schemas"]["LocalizedCopy"];
+            caption?: components["schemas"]["LocalizedCopy"] | null;
+        };
+        /** ProductCombination */
+        ProductCombination: {
+            /** Code */
+            code: string;
+            /** Selections */
+            selections: {
+                [key: string]: string;
+            };
+        };
         /** ProductDetailOutput */
         ProductDetailOutput: {
             /**
@@ -1127,6 +1143,15 @@ export interface components {
         ProductFact: {
             label: components["schemas"]["LocalizedCopy"];
             value: components["schemas"]["LocalizedCopy"];
+        };
+        /** ProductOptionFamily */
+        ProductOptionFamily: {
+            /** Id */
+            id: string;
+            label: components["schemas"]["LocalizedCopy"];
+            /** Choices */
+            choices: components["schemas"]["ProductChoice"][];
+            helper?: components["schemas"]["LocalizedCopy"] | null;
         };
         /** ProductOutput */
         ProductOutput: {
@@ -1184,6 +1209,11 @@ export interface components {
                 [key: string]: components["schemas"]["LocalizedCopy"];
             };
             delivery: components["schemas"]["LocalizedCopy"];
+            /** Option Groups */
+            option_groups?: components["schemas"]["ProductOptionFamily"][];
+            /** Option Combinations */
+            option_combinations?: components["schemas"]["ProductCombination"][];
+            fixed_fact?: components["schemas"]["ProductFact"] | null;
         };
         /** ProductView */
         ProductView: {

@@ -1,5 +1,5 @@
 import Mockup from "./Mockup";
-import { ReferenceProductImage } from "./ReferenceMedia";
+import { ReferenceProductImage, ReferenceBundleImage } from "./ReferenceMedia";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { catalogBundles, catalogProducts, itemOptions } from "./catalog"
 import ProductCard from "./ProductCard"
@@ -1024,19 +1024,22 @@ function BagIcon() {
 }
 
 // Product detail uses the original gallery and layout with published database content.
-export function PublishedProductDetail({ catalog, language, collections, onNavigate, renderDialog = () => null, relatedProducts = [] }: {
+export function PublishedProductDetail({ catalog, language, collections, onNavigate, renderDialog = () => null, relatedProducts = [], relatedBundles = [] }: {
   catalog: import("../features/catalog/product-detail").ProductDetail;
   language: 0 | 1; collections: import("./data").Collection[];
   onNavigate: (name: string, route: string) => void;
   renderDialog?: ProductDialog;
   relatedProducts?: import("./catalog").CatalogProduct[];
+  relatedBundles?: import("../features/catalog/bundle-catalog").PublishedBundle[];
 }) {
   const t = (fa: string, en: string) => language === 0 ? fa : en;
   const local = (copy: {fa:string;en:string}) => language === 0 ? copy.fa : copy.en;
   const [selected,setSelected] = useState("");
   const [shareMessage,setShareMessage] = useState("");
+  const [optionSelection,setOptionSelection] = useState<Record<string,string>>({});
+  const [guideOpen,setGuideOpen] = useState(false);
   const product = catalog.product;
-  const sku = catalog.skus.find(row=>row.id === selected);
+
   const root = `/${language === 0 ? "fa" : "en"}`;
   const collectionRoute = (slug = "") => `/collections${slug ? `/${encodeURIComponent(slug)}` : ""}?language=${language === 0 ? "fa" : "en"}`;
   const go = (event: React.MouseEvent<HTMLAnchorElement>, name: string, route: string) => {
@@ -1047,6 +1050,18 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
   if (catalog.status !== "normal" || !product) return <div className="container product-detail-page"><section className="collections-state" role={catalog.status === "error" ? "alert" : undefined}><h1>{catalog.status === "not-found" ? t("این محصول پیدا نشد.","Product not found.") : t("دریافت محصول ممکن نشد.","Unable to load product.")}</h1>{catalog.status === "error" && <button className="button secondary" onClick={catalog.retry}>{t("دوباره تلاش کنید","Try again")}</button>}<a href={`${root}/shop`} className="button primary" onClick={e=>go(e,t("فروشگاه","Shop"),`${root}/shop`)}>{t("مشاهده فروشگاه","Browse shop")}</a></section></div>;
   const name = t(product.title_fa,product.title_en);
   const content = product.presentation;
+  const families=content?.option_groups || [];
+  const combinations=(content?.option_combinations || []).filter(combination=>catalog.skus.some(sku=>sku.code===combination.code));
+  const match=(values:Record<string,string>)=>combinations.filter(combination=>Object.entries(values).every(([key,value])=>!value || combination.selections[key]===value));
+  const complete=families.length>0 && families.every(group=>optionSelection[group.id]);
+  const combination=complete?match(optionSelection)[0]:undefined;
+  const sku=catalog.skus.find(row=>families.length?row.code===combination?.code:row.id===selected);
+  const chooseOption=(key:string,value:string)=>{
+    const next:Record<string,string>={[key]:value};
+    for(const group of families) if(group.id!==key && optionSelection[group.id] && match({...next,[group.id]:optionSelection[group.id]}).length) next[group.id]=optionSelection[group.id];
+    setOptionSelection(next);
+  };
+  const selectedLabels=families.map(group=>group.choices.find(choice=>choice.value===optionSelection[group.id])).filter(choice=>!!choice).map(choice=>local(choice!.label)).join(" · ");
   const memberships = collections.filter(row=>product.collection_ids.includes(row.id));
   const related = relatedProducts.filter(row=>row.slug !== product.slug && memberships.some(collection=>row.collections.includes(collection.slug))).slice(0,4);
   const amount = sku?.price?.amount;
@@ -1074,16 +1089,21 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
           <button className="icon-button" onClick={share} aria-label={t("اشتراک‌گذاری لینک","Share product link")}><ShareIcon/></button>
         </div></div>
         <h1>{name}</h1><p className="product-intro">{content ? local(content.intro) : t(product.description_fa,product.description_en)}</p>
+        {content?.fixed_fact && <div className="product-fixed-fact"><span dir="ltr">{local(content.fixed_fact.label)}</span><span>{local(content.fixed_fact.value)}</span></div>}
         {shareMessage && <p className="product-feedback" role="status">{shareMessage}</p>}
-        <section className="product-option-groups" aria-labelledby="published-product-options"><h2 id="published-product-options" className="sr-only">{t("گزینه‌های منتشرشده","Published options")}</h2>{catalog.skus.length ? <ProductOptionGroup id="published-sku" label={t("گزینه محصول","Product option")} selected={selected} choices={catalog.skus.map(row=>({value:row.id,name:optionLabel(row.code)}))} onChange={setSelected} language={language}/> : <p className="product-stock-state">{t("هنوز گزینه‌ای منتشر نشده است.","No published options yet.")}</p>}</section>
-        <div className="selection-summary" aria-live="polite">{sku ? optionLabel(sku.code) : t("گزینه محصول را انتخاب کنید.","Choose a product option.")}</div>
+        <section className="product-option-groups" aria-labelledby="published-product-options"><h2 id="published-product-options" className="sr-only">{t("گزینه‌های منتشرشده","Published options")}</h2>{families.length ? families.map((group,index)=><ProductOptionGroup key={group.id} id={group.id} label={local(group.label)} selected={optionSelection[group.id] || ""} language={language} onChange={value=>chooseOption(group.id,value)}
+          choices={group.choices.map(choice=>({value:choice.value,name:local(choice.label),caption:choice.caption?local(choice.caption):undefined,status:match({...Object.fromEntries(families.slice(0,index).map(previous=>[previous.id,optionSelection[previous.id] || ""])),[group.id]:choice.value}).length?"":"not-offered"}))}
+          helper={group.helper?local(group.helper):undefined} guide={group.id==="size"?<button type="button" className="option-guide-link" onClick={()=>setGuideOpen(true)}>{t("راهنمای سایز","Size guide")}</button>:undefined}/>) : catalog.skus.length ? <ProductOptionGroup id="published-sku" label={t("گزینه محصول","Product option")} selected={selected} choices={catalog.skus.map(row=>({value:row.id,name:optionLabel(row.code)}))} onChange={setSelected} language={language}/> : <p className="product-stock-state">{t("هنوز گزینه‌ای منتشر نشده است.","No published options yet.")}</p>}</section>
+        <div className="selection-summary" aria-live="polite">{families.length ? (complete?selectedLabels:(families.length===3?t("سایز، تعداد برگ و جلد را انتخاب کنید.","Choose a size, sheet count and cover."):t("سایز دفتر را انتخاب کنید.","Choose a notebook size."))) : sku ? optionLabel(sku.code) : t("گزینه محصول را انتخاب کنید.","Choose a product option.")}</div>
         <div className="quantity-section"><label htmlFor="published-product-quantity">{t("تعداد محصول","Quantity")}</label><div className="quantity-stepper"><button disabled aria-label={t("کم‌کردن تعداد","Decrease quantity")}>−</button><input id="published-product-quantity" value={language === 0 ? "۱" : "1"} disabled readOnly/><button disabled aria-label={t("افزایش تعداد","Increase quantity")}>+</button></div><p>{t("موجودی تأیید نشده","Stock unconfirmed")}</p></div>
         <div className="product-price-summary" role="status"><div className="unit-price"><span>{t("قیمت هر محصول","Unit price")}</span><strong>{price}</strong></div></div>
         <button className="button primary product-add-button" disabled><BagIcon/>{t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}</button><p className="product-reservation-note">{t("نمایش گزینه و قیمت، موجودی یا امکان خرید را تأیید نمی‌کند.","An option and price do not confirm stock or purchase eligibility.")}</p>
       </div>
     </section>
-    <section className="product-information" aria-labelledby="published-product-about"><div><span className="eyebrow">A LITTLE SPACE FOR YOUR IDEAS</span><h2 id="published-product-about">{t("درباره محصول","About this product")}</h2><p>{content ? local(content.about) : t(product.description_fa,product.description_en)}</p></div><div className="product-specifications"><h2>{t("مشخصات محصول","Product specifications")}</h2><dl>{(content?.specifications || []).map((fact,index)=><div key={index}><dt>{local(fact.label)}</dt><dd dir="auto">{local(fact.value)}</dd></div>)}<div><dt>{t("گزینه انتخاب‌شده","Selected option")}</dt><dd dir="auto">{sku ? optionLabel(sku.code) : t("انتخاب نشده","Not selected")}</dd></div></dl><small>{t("مشخصات نهایی پس از تأیید برند ارائه می‌شود.","Final specifications await brand approval.")}</small></div></section>
+    <section className="product-information" aria-labelledby="published-product-about"><div><span className="eyebrow">A LITTLE SPACE FOR YOUR IDEAS</span><h2 id="published-product-about">{families.length?t("درباره این دفتر","About this notebook"):t("درباره محصول","About this product")}</h2><p>{content ? local(content.about) : t(product.description_fa,product.description_en)}</p>{families.length>0&&<button className="text-link guide-open-button" onClick={()=>setGuideOpen(true)}>{t("راهنمای انتخاب سایز و برگ","Size & sheet-count guide")} ↗</button>}</div><div className="product-specifications"><h2>{families.length?t("مشخصات دفتر","Notebook specifications"):t("مشخصات محصول","Product specifications")}</h2><dl>{(content?.specifications || []).map((fact,index)=><div key={index}><dt>{local(fact.label)}</dt><dd dir="auto">{local(fact.value)}</dd></div>)}{families.map(group=><div key={group.id}><dt>{local(group.label)}</dt><dd>{group.choices.find(choice=>choice.value===optionSelection[group.id]) ? local(group.choices.find(choice=>choice.value===optionSelection[group.id])!.label) : t("انتخاب نشده","Not selected")}</dd></div>)}<div><dt>{t("گزینه انتخاب‌شده","Selected option")}</dt><dd dir="auto">{sku ? optionLabel(sku.code) : t("انتخاب نشده","Not selected")}</dd></div></dl><small>{t("مشخصات نهایی پس از تأیید برند ارائه می‌شود.","Final specifications await brand approval.")}</small></div></section>
     <section className="product-delivery"><h2>{t("ارسال و شرایط خرید","Delivery and purchase conditions")}</h2><p>{content ? local(content.delivery) : t("هزینه و روش ارسال و شرایط مرجوعی در انتظار تأیید است.","Shipping and return conditions await confirmation.")}</p><a className="text-link" href={`${root}/returns`} onClick={e=>go(e,t("شرایط لغو و مرجوعی","Cancellation and return policy"),`${root}/returns`)}>{t("شرایط لغو و مرجوعی","Cancellation and return policy")} ↗</a></section>
+    {relatedBundles.some(bundle=>bundle.components.some(part=>part.product_slug===product.slug))&&<section className="product-related"><h2>{t("این دفتر را در یک پکیج ببین","Explore this notebook in a bundle")}</h2><div className="product-grid">{relatedBundles.filter(bundle=>bundle.components.some(part=>part.product_slug===product.slug)).map(bundle=><BundleResultCard live key={bundle.id} name={t(bundle.title_fa,bundle.title_en)} route={`${root}/bundles/${bundle.slug}`} collection={memberships[0]?.name[language] || ""} options="" language={language} media={<ReferenceBundleImage slug={bundle.slug} language={language}/>} arrow={<span aria-hidden="true">↗</span>} heart={null} onNavigate={onNavigate} bundleSummary={t(bundle.description_fa,bundle.description_en)} priceUnavailableLabel={t("قیمت در دسترس نیست","Price unavailable")} availabilityLabel={t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}/>)}</div></section>}
     {related.length > 0 && <section className="product-related"><div className="product-related-heading"><h2>{t("از همین کالکشن","More from this collection")}</h2><a className="text-link" href={collectionRoute(memberships[0].slug)} onClick={e=>go(e,memberships[0].name[language],collectionRoute(memberships[0].slug))}>{t("مشاهده کالکشن","Explore collection")} ↗</a></div><div className="product-grid">{related.map(row=><ProductCard live key={row.id} name={row.name[language]} route={`${root}/products/${row.slug}`} collection={memberships.find(collection=>row.collections.includes(collection.slug))?.name[language] || ""} options="" language={language} media={<ReferenceProductImage slug={row.slug} language={language}/>} arrow={<span aria-hidden="true">↗</span>} heart={null} onNavigate={onNavigate} priceUnavailableLabel={t("قیمت در دسترس نیست","Price unavailable")} availabilityLabel={t("اطلاعات خرید تأیید نشده","Purchase details unconfirmed")}/>)}</div></section>}
+    {renderDialog(guideOpen,()=>setGuideOpen(false),t("راهنمای انتخاب دفتر","Notebook selection guide"),<div className="notebook-guide"><div className="size-comparison">{families.find(group=>group.id==="size")?.choices.map(choice=><div key={choice.value}><div className={`guide-size guide-${choice.value}`}/><strong dir="ltr">{local(choice.label)}</strong>{choice.caption&&<small>{local(choice.caption)}</small>}</div>)}</div><h3>{t("تعداد دفتر مستقل است","Notebook quantity is independent")}</h3><p>{t("گزینه‌ها نمونه‌های مرجع طراحی‌اند؛ تعداد برگ داخل هر دفتر با تعداد دفتر خریداری‌شده متفاوت است.","These options are design reference samples. Sheets inside a notebook differ from the quantity of notebooks.")}</p></div>,"guide")}
   </div>;
 }

@@ -103,3 +103,22 @@ all inserts share one transaction. Titles match the pinned reference. Bilingual
 descriptions identify test data explicitly. No prototype prices, available/sold
 states, artist, dimensions, frames, assets or authenticity claims are imported.
 Local total: nine published test descriptions; production startup remains unseeded.
+
+### Reference notebook option families
+
+After product detail and bundle-set fixtures, explicitly upgrade the four local
+notebook test presentations and add twelve unpriced test variant SKUs:
+
+```sh
+docker compose --env-file .env -f infra/docker/compose.yaml cp Backend/fixtures/design-notebook-options.json api:/tmp/nilart-design-notebook-options.json
+docker compose --env-file .env -f infra/docker/compose.yaml exec -T api python -m nilart.bootstrap.design_notebook_options --local-test-data --fixture /tmp/nilart-design-notebook-options.json
+```
+
+The Cats sketchbook gets the seven explicit size/sheet/cover combinations from
+`design-reference/src/catalog.ts`, its 127 GSM sample fact and guide captions.
+Other notebook profiles get only their explicit reference sizes, with no inferred
+sheet counts/covers. Existing generic bundle SKUs are preserved. All additions
+are test specifications, never approved real stock or offers. Stored baseline
+presentations must exactly match the original fixture; modified profiles or
+existing variant codes reject the whole import. No automatic overwrite/reseed.
+Local totals become twenty unpriced SKUs and six product presentations.

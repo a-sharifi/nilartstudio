@@ -975,6 +975,35 @@ sort selection, mobile apply/Escape and category/shop regressions. Typecheck/lin
 and production Docker build pass; desktop/mobile screenshots reviewed and eight
 services healthy. Backend/data unchanged; remote CI unverified.
 
+## Restore notebook reference option families — 2026-10-13
+
+The previous live notebook detail still showed one generic SKU selector; sharing
+its radio renderer alone did not reproduce the reference notebook controls.
+Published presentation now supplies ordered arbitrary option families, choice
+labels/captions/helpers, explicit SKU-code combinations and an optional fixed fact.
+The native ProductOptionGroup renders size/sheets/cover for the Cats sketchbook;
+selection retains compatible choices and disables combinations not offered. Exact
+published SKU resolution drives price display, without guessing stock. Notebook
+size guide, about guide action, dynamic specifications and actual related bundle
+cards use the native reference components/classes. All 42 reference CSS files remain
+byte-identical. Other products retain the generic published-SKU path.
+
+The guarded local importer upgrades original fixture profiles only, adds twelve
+unpriced reference variant SKUs, and creates profiles for the ruled/hardcover Cats
+notebooks. Seven Cats sketchbook combinations come directly from the reference;
+other three notebooks get only explicit reference size choices. Existing generic
+bundle SKUs and their quantities remain intact. Local totals: eight products,
+twenty unpriced SKUs, six presentations, three bundles and nine test artworks.
+No migration; head remains 0016. Private draft option mappings remain separate.
+
+Validation: 259 backend tests with isolated PostgreSQL/Redis, 91 frontend tests,
+and 12 browser cases pass. Coverage includes guard/rollback, duplicate/foreign/
+incomplete combinations, actual DB family selectors, incompatibility, guide,
+SKU resolution, related bundles, Persian mobile and existing product/home/bundle
+regressions. Backend lint/mypy, frontend typecheck/lint, OpenAPI/client generation
+and Docker build pass; desktop/mobile screenshots reviewed and eight services
+healthy. No real prices/stock/purchases created; remote CI unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.

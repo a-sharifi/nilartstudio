@@ -375,3 +375,15 @@ states and Persian mobile without overflow. Desktop/mobile screenshots were
 reviewed. Backend/frontend lint, mypy, frontend typecheck, generated OpenAPI/client
 and production Docker build pass. All eight local services are healthy; all 42
 reference CSS files remain byte-identical. Remote CI has not been verified.
+
+## Published presentation option families — 2026-10-13
+
+Presentation JSON optionally contains ordered option_groups with bilingual choice
+labels/captions/helper, explicit option_combinations keyed by published SKU code,
+and fixed_fact. Validation rejects duplicate family/value/code/combination identity,
+foreign selections and incomplete combinations. This read presentation remains
+separate from private draft option authoring/mapping. No migration or publication
+endpoint is introduced. The local fixture is explicitly opt-in and adds no prices,
+stock or purchasing capability; UI resolves only combinations with returned public
+SKUs. Product list contract is unchanged. OpenAPI/client types include the optional
+presentation fields. See fixtures/README.md for guarded test-data import.

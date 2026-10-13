@@ -36,7 +36,7 @@ test("notebook detail retains reference thumbnail and keyboard navigation", asyn
   await expect(page.locator("dialog[open] .gallery-view-inside")).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.locator(".product-specifications")).toContainText("Cats");
-  await expect(page.locator(".product-related .product-card")).toHaveCount(4);
+  await expect(page.locator(".product-related .product-card")).toHaveCount(5);
 });
 
 test("published options use the reference group renderer and real collection links", async ({ page }) => {
@@ -60,4 +60,37 @@ test("published options use the reference group renderer and real collection lin
   await expect(page.locator(".option-required")).toHaveText("انتخاب شد");
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
   await page.screenshot({path:"/tmp/nilart-shared-product-options-mobile.png",fullPage:true});
+});
+
+test("Cats notebook uses reference size, sheets and cover families backed by DB variants",async({page})=>{
+ await page.goto("/en/products/cats-sketchbook-127gsm");
+ await expect(page.locator(".product-option-group")).toHaveCount(3);
+ await expect(page.locator(".product-fixed-fact")).toContainText("127 GSM");
+ await page.locator(".option-size").getByRole("radio",{name:/^A4/}).check();
+ await page.locator(".option-sheets").getByRole("radio",{name:/^50 sheets/}).check();
+ await expect(page.locator(".option-cover").getByRole("radio",{name:/^2 mm/})).toBeDisabled();
+ await page.locator(".option-cover").getByRole("radio",{name:/^3 mm/}).check();
+ await expect(page.locator(".selection-summary")).toHaveText("A4 · 50 sheets · 3 mm hard cover");
+ await expect(page.locator(".product-specifications")).toContainText("127 gsm — design sample");
+ await expect(page.locator(".product-price-summary")).toContainText("Price unavailable");
+ await expect(page.locator(".product-add-button")).toBeDisabled();
+ await page.getByRole("button",{name:"Size guide",exact:true}).click();
+ await expect(page.locator("dialog[open] .size-comparison > div")).toHaveCount(3);
+ await page.keyboard.press("Escape");
+ await page.screenshot({path:"/tmp/nilart-notebook-real-options-desktop.png",fullPage:true});
+ await page.setViewportSize({width:390,height:844});
+ await page.goto("/fa/products/cats-sketchbook-127gsm");
+ await expect(page.locator(".product-option-group")).toHaveCount(3);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+ await page.screenshot({path:"/tmp/nilart-notebook-real-options-mobile.png",fullPage:true});
+});
+
+test("other reference notebooks have their explicit published size choices",async({page})=>{
+ for(const [slug,count] of [["notebook-ghosts",2],["cat-ruled",2],["cat-ruled-hard",1]] as const){
+  await page.goto(`/en/products/${slug}`);
+  await expect(page.locator(".option-size").getByRole("radio")).toHaveCount(count);
+  await expect(page.locator(".option-sheets")).toHaveCount(0);
+  await page.locator(".option-size").getByRole("radio").first().check();
+  await expect(page.locator(".selection-summary")).toHaveText("A5");
+ }
 });

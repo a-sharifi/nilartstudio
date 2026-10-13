@@ -495,3 +495,10 @@
 - Dropdown جدید با حالت searchable و غیرsearchable، keyboard، selected/checkmark، disabled، empty state، normalization فارسی و hidden input اختیاری ساخته شد؛ متن دلخواه مقدار انتخاب نمی‌شود. autocomplete پیش‌فرض false و از prop فعال/غیرفعال می‌شود.
 - فیلتر کالکشن فروشگاه searchable و sort همان کامپوننت بدون autocomplete است؛ query و draft/apply موبایل محفوظ است. Escape اول dropdown را می‌بندد. CSS جدید جداست و هر ۴۲ stylesheet مرجع بدون تغییر مانده؛ راهنمای استفاده کنار کامپوننت ثبت شد.
 - ۹۱ تست frontend و هفت مورد مرورگر، lint/typecheck و build Docker موفق؛ تصویر desktop/mobile بررسی و هشت سرویس سالم است. backend/DB تغییر نکرد و CI راه دور تأییدنشده است.
+
+## اصلاح واقعی گزینه‌های دفتر مطابق مرجع — ۲۰۲۶-۱۰-۱۳
+
+- جزئیات دفتر قبلاً فقط یک selector عمومی SKU داشت؛ shared renderer به‌تنهایی گروه‌های مرجع را نمی‌ساخت. presentation حالا option family مرتب با label/caption/helper، combination صریح SKU و fixed fact دارد؛ duplicate/foreign/incomplete رد می‌شود و از private draft مستقل است.
+- Cats sketchbook سایز/برگ/جلد مرجع، caption ابعاد و صفحات، helper برگ، 127 GSM نمونه، guide، مشخصات پویا و لینک پکیج واقعی دارد. انتخاب سازگار حفظ و ترکیب ارائه‌نشده غیرفعال می‌شود؛ SKU واقعی فقط پس از انتخاب کامل resolve می‌شود. سه دفتر دیگر فقط سایزهای صریح مرجع دارند؛ بدون حدس برگ/جلد.
+- importer محافظت‌شده فقط baseline fixture اصلی را ارتقا می‌دهد؛ دوازده SKU تست بدون قیمت اضافه و دو presentation دفتر Cats ایجاد شد. generic SKU پکیج‌ها محفوظ است؛ اکنون بیست SKU بدون قیمت و شش presentation در DB محلی وجود دارد. migration جدید ندارد و head برابر 0016 است.
+- ۲۵۹ تست backend با PostgreSQL/Redis مستقل، ۹۱ تست frontend و ۱۲ مورد مرورگر موفق‌اند؛ rollback/guard، ترکیب نامعتبر، انتخاب واقعی DB، guide، related bundles و فارسی mobile پوشش دارند. lint/typecheck/mypy، OpenAPI/client و Docker build موفق؛ تصاویر desktop/mobile بررسی و هشت سرویس سالم است. هر ۴۲ CSS مرجع بدون تغییر؛ CI راه دور تأییدنشده است.

@@ -2991,6 +2991,62 @@
         ],
         "title": "PriceUpdate"
       },
+      "ProductChoice": {
+        "properties": {
+          "value": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Value"
+          },
+          "label": {
+            "$ref": "#/components/schemas/LocalizedCopy"
+          },
+          "caption": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalizedCopy"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "value",
+          "label"
+        ],
+        "title": "ProductChoice"
+      },
+      "ProductCombination": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Code"
+          },
+          "selections": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "maxProperties": 20,
+            "minProperties": 1,
+            "title": "Selections"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "selections"
+        ],
+        "title": "ProductCombination"
+      },
       "ProductDetailOutput": {
         "properties": {
           "id": {
@@ -3074,6 +3130,46 @@
           "value"
         ],
         "title": "ProductFact"
+      },
+      "ProductOptionFamily": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Id"
+          },
+          "label": {
+            "$ref": "#/components/schemas/LocalizedCopy"
+          },
+          "choices": {
+            "items": {
+              "$ref": "#/components/schemas/ProductChoice"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Choices"
+          },
+          "helper": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocalizedCopy"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "choices"
+        ],
+        "title": "ProductOptionFamily"
       },
       "ProductOutput": {
         "properties": {
@@ -3218,6 +3314,32 @@
           },
           "delivery": {
             "$ref": "#/components/schemas/LocalizedCopy"
+          },
+          "option_groups": {
+            "items": {
+              "$ref": "#/components/schemas/ProductOptionFamily"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Option Groups"
+          },
+          "option_combinations": {
+            "items": {
+              "$ref": "#/components/schemas/ProductCombination"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "title": "Option Combinations"
+          },
+          "fixed_fact": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProductFact"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "additionalProperties": false,

@@ -6,6 +6,9 @@ const presentationSchema = z.object({
  intro:copy,about:copy,kind:z.enum(["book","bookmark","stickers"]),color:z.enum(["sage","lilac","sand","rose","blue"]),
  gallery:z.array(z.object({label:copy,view:z.enum(["front","back","inside","detail"])})).min(1).max(10),
  option_labels:z.record(z.string(),copy).optional(),
+ option_groups:z.array(z.object({id:z.string().min(1),label:copy,choices:z.array(z.object({value:z.string().min(1),label:copy,caption:copy.nullable().optional()})).min(1),helper:copy.nullable().optional()})).optional(),
+ option_combinations:z.array(z.object({code:z.string().min(1),selections:z.record(z.string(),z.string().min(1))})).optional(),
+ fixed_fact:z.object({label:copy,value:copy}).nullable().optional(),
  specifications:z.array(z.object({label:copy,value:copy})).max(20),delivery:copy,
 });
 export type ProductPresentation = z.infer<typeof presentationSchema>;

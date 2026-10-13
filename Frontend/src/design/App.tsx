@@ -437,7 +437,7 @@ export default function App() {
   const liveProduct = useProductDetail(!demoMode && isProduct, isProduct ? page.split("/").pop() : undefined)
   const liveBundleSlug = /^\/(?:fa\/|en\/)?bundles\/[^/]+$/.test(page) ? page.split("/").pop() : undefined
   const isHomePage = ["/", "/fa", "/en"].includes(page)
-  const bundleCatalog = useBundleCatalog(!demoMode && (isHomePage || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page)), liveBundleSlug)
+  const bundleCatalog = useBundleCatalog(!demoMode && (isHomePage || isProduct || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page)), liveBundleSlug)
   const isBundle = page.startsWith("/bundles/")
   const isCart = page === "/cart"
   const isCheckout = ["/checkout", "/checkout/address", "/checkout/delivery"].includes(page) || isPaymentRoute(page)
@@ -1676,7 +1676,7 @@ export default function App() {
             />
           </Suspense>
         ) : isProduct && !demoMode ? (
-          <PublishedProductDetail key={page} catalog={liveProduct} language={lang} collections={collections} relatedProducts={liveCatalog.data.products} onNavigate={navigate} renderDialog={(open, onClose, title, children, kind) => <Modal open={open} onClose={onClose} title={title} kind={kind}>{children}</Modal>} />
+          <PublishedProductDetail key={page} catalog={liveProduct} language={lang} collections={collections} relatedProducts={liveCatalog.data.products} relatedBundles={bundleCatalog.items} onNavigate={navigate} renderDialog={(open, onClose, title, children, kind) => <Modal open={open} onClose={onClose} title={title} kind={kind}>{children}</Modal>} />
         ) : isProduct ? (
           <Suspense
             fallback={
