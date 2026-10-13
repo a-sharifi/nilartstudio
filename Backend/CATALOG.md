@@ -391,3 +391,7 @@ presentation fields. See fixtures/README.md for guarded test-data import.
 ### Local reference test prices
 
 `nilart.bootstrap.design_test_prices --local-test-data --fixture fixtures/design-test-prices.json` explicitly prices ten existing TEST-REF notebook variants from the reference catalog (IRT). It requires local PostgreSQL and the reference test product marker, locks rows, preserves different existing prices, and runs in one transaction. Repeating the identical fixture is safe. These are sample prices, not approved retail prices or stock.
+
+## Explicit bundle presentations
+
+Migration 0020 stores optional published `catalog_bundle_presentations` separately from fixed bundle composition. `GET /api/v1/catalog/bundles/{slug}/presentation` supplies bilingual copy, collection context, sample marker, explicit fixed discount/currency, stacking information and allowed alternative SKU IDs per existing component. Alternatives are restricted to that component's published product SKUs; unpublished choices are filtered, invalid/empty configuration returns 404. No choices or discount are inferred when a presentation is missing. This is a read/presentation contract, not bundle publication, inventory, checkout or purchasing authorization. Existing bundle responses are unchanged. The guarded local importer is documented in fixtures/README.md.

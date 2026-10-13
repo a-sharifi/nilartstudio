@@ -11,7 +11,7 @@ test("bundle list and detail show real components without purchase claims", asyn
   await expect(page.locator(".bundle-detail-page")).toBeVisible();
   await expect(page.locator(".product-add-button")).toBeDisabled();
   await page.screenshot({path:"/tmp/nilart-bundle-reference-desktop.png",fullPage:true});
-  await expect(page.getByText("Purchase details unconfirmed")).toBeVisible();
+  await expect(page.getByRole("button", {name:"Add bundle to cart — purchasing unavailable"})).toBeDisabled();
 });
 
 test("footer routes render their supplied reference layouts", async ({ page }) => {

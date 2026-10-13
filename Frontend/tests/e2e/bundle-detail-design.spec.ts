@@ -1,0 +1,31 @@
+import {test,expect} from "@playwright/test"
+for(const language of ["en","fa"]){
+ test(`reference bundle options, summary and gallery work in ${language}`,async({page})=>{
+  const en=language==="en"
+  await page.setViewportSize(en?{width:1440,height:1000}:{width:390,height:844})
+  await page.goto(`/${language}/bundles/cats-bundle`)
+  await expect(page.locator(".bundle-component-card")).toHaveCount(3)
+  const notebook=page.locator(".bundle-component-card").first()
+  await expect(notebook.locator(".product-option-group")).toHaveCount(3)
+  await notebook.getByRole("radio",{name:/^A5/}).check()
+  await notebook.getByRole("radio",{name:en?/^50 sheets/:/^۵۰ برگ/}).check()
+  await notebook.getByRole("radio",{name:en?/^2 mm hard cover/:/^جلد سخت ۲ میلی‌متر/}).check()
+  await expect(page.locator(".bundle-unit-price")).toContainText(en?"255,000":"۲۵۵٬۰۰۰")
+  await page.getByRole("button",{name:en?"Increase bundle quantity":"افزایش تعداد پکیج"}).click()
+  await expect(page.locator(".selection-total")).toContainText(en?"510,000":"۵۱۰٬۰۰۰")
+  await expect(page.locator("#bundle-quantity-help")).toContainText(en?"4 Sticker":"۴ استیکر")
+  await expect(page.locator(".product-add-button")).toBeDisabled()
+  await notebook.getByRole("button",{name:en?"Size guide":"راهنمای سایز"}).click()
+  await expect(page.locator("dialog[open] .size-comparison")).toBeVisible()
+  await page.keyboard.press("Escape")
+  await page.getByRole("button",{name:en?"Two stickers":"دو استیکر",exact:true}).click()
+  await page.getByRole("button",{name:en?"Enlarge image: Two stickers":"بزرگ‌نمایی تصویر: دو استیکر"}).click()
+  await expect(page.locator("dialog[open] .bundle-sticker-pair")).toBeVisible()
+  await page.keyboard.press("Escape")
+  await expect(page.getByRole("button",{name:en?"Enlarge image: Two stickers":"بزرگ‌نمایی تصویر: دو استیکر"})).toBeFocused()
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true)
+  await page.locator("h1").click()
+  await page.screenshot({path:`/tmp/nilart-bundle-aligned-${language}.png`,fullPage:true})
+  if(en)await page.screenshot({path:"/tmp/nilart-bundle-aligned-preview.png"})
+ })
+}

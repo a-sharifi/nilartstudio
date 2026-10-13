@@ -74,16 +74,16 @@ export default function ProductOptions({
 }
 
 // The reference option renderer is shared by prototype families and published SKUs.
-export function ProductOptionGroup({id,label,selected,choices,onChange,language,disabled=false,guide,helper,bundle=false}: {
+export function ProductOptionGroup({id,label,selected,choices,onChange,language,disabled=false,guide,helper,bundle=false,namePrefix="product"}: {
  id:string;label:string;selected:string;choices:{value:string;name:string;caption?:string;status?:string}[];
- onChange:(value:string)=>void;language:0|1;disabled?:boolean;guide?:ReactNode;helper?:string;bundle?:boolean;
+ onChange:(value:string)=>void;language:0|1;disabled?:boolean;guide?:ReactNode;helper?:string;bundle?:boolean;namePrefix?:string;
 }) {
  const t=(fa:string,en:string)=>language===0?fa:en
  return <fieldset disabled={disabled} className={`product-option-group option-${id}`}>
   <legend>{label}<span className="option-required">{selected?t("انتخاب شد","Selected"):t("انتخاب کنید","Choose an option")}</span></legend>
   {guide}
   <div className="product-radio-grid">{choices.map(choice=><label key={choice.value} className={`product-radio ${selected===choice.value?"selected":""} ${choice.status || ""}`}>
-   <input type="radio" name={`product-${id}`} value={choice.value} checked={selected===choice.value} disabled={choice.status==="not-offered"} onChange={()=>onChange(choice.value)}/>
+   <input type="radio" name={`${namePrefix}-${id}`} value={choice.value} checked={selected===choice.value} disabled={choice.status==="not-offered"} onChange={()=>onChange(choice.value)}/>
    <span className="radio-title"><span dir={id==="size"?"ltr":undefined}>{choice.name}</span>{selected===choice.value&&<span className="radio-check" aria-hidden="true">✓</span>}</span>
    {choice.caption&&<small>{choice.caption}</small>}
    {choice.status==="not-offered"&&<small className="option-status">{t(bundle?"این گزینه در این پکیج ارائه نمی‌شود.":"این ترکیب ارائه نمی‌شود.",bundle?"This option isn't offered in this bundle.":"This combination isn't offered.")}</small>}

@@ -191,6 +191,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/catalog/bundles/{slug}/presentation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Bundle Presentation */
+        get: operations["bundle_presentation_api_v1_catalog_bundles__slug__presentation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/account/commissions": {
         parameters: {
             query?: never;
@@ -956,6 +973,16 @@ export interface components {
             /** Next Before Version */
             next_before_version: number | null;
         };
+        /** BundleDiscount */
+        BundleDiscount: {
+            /** Amount */
+            amount: string;
+            /**
+             * Currency
+             * @enum {string}
+             */
+            currency: "IRT" | "IRR";
+        };
         /** BundleOutput */
         BundleOutput: {
             /**
@@ -986,6 +1013,24 @@ export interface components {
             page: number;
             /** Page Size */
             page_size: number;
+        };
+        /** BundlePresentation */
+        BundlePresentation: {
+            intro: components["schemas"]["Copy"];
+            contents: components["schemas"]["Copy"];
+            /** Collection Slug */
+            collection_slug: string;
+            collection_title: components["schemas"]["Copy"];
+            /**
+             * Sample
+             * @default false
+             */
+            sample: boolean;
+            discount?: components["schemas"]["BundleDiscount"] | null;
+            /** Allow Discount Stacking */
+            allow_discount_stacking?: boolean | null;
+            /** Component Choices */
+            component_choices: components["schemas"]["ComponentChoices"][];
         };
         /** CatalogDetail */
         CatalogDetail: {
@@ -1140,6 +1185,16 @@ export interface components {
             /** Password */
             password: string;
         };
+        /** ComponentChoices */
+        ComponentChoices: {
+            /**
+             * Component Sku Id
+             * Format: uuid
+             */
+            component_sku_id: string;
+            /** Allowed Sku Ids */
+            allowed_sku_ids: string[];
+        };
         /** ComponentOutput */
         ComponentOutput: {
             /** Product Slug */
@@ -1157,6 +1212,13 @@ export interface components {
             title_fa: string;
             /** Title En */
             title_en: string;
+        };
+        /** Copy */
+        Copy: {
+            /** Fa */
+            fa: string;
+            /** En */
+            en: string;
         };
         /** CsrfOutput */
         CsrfOutput: {
@@ -2223,6 +2285,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BundleOutput"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    bundle_presentation_api_v1_catalog_bundles__slug__presentation_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BundlePresentation"];
                 };
             };
             /** @description Validation Error */

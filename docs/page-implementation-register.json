@@ -105,8 +105,16 @@
       "reference_component": "BundleDetailPage.tsx",
       "extension_pattern": null,
       "read_permission": "public",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/catalog/bundles/{slug}",
+        "/api/v1/catalog/bundles/{slug}/presentation",
+        "/api/v1/catalog/products/{slug}/skus"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_bundle_presentations.py",
+        "Frontend/tests/e2e/bundle-detail-design.spec.ts",
+        "Reference CSS unchanged; English desktop/Persian mobile layout, options, guide and gallery verified. Purchasing/stock remain unavailable."
+      ]
     },
     {
       "id": "PUB-09",

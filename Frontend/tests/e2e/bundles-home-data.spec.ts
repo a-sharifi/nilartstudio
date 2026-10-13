@@ -27,7 +27,8 @@ test("three database bundles keep reference galleries, exact components and prod
  await expect(page.locator(".bundle-card")).toHaveCount(3);
  await page.getByRole("link",{name:"Cats everyday bundle",exact:true}).click();
  await expect(page.locator(".gallery-thumbnails button")).toHaveCount(4);
- await expect(page.locator(".bundle-component-thumb .mockup")).toHaveCount(3);
+ await expect(page.locator(".bundle-component-thumb .mockup")).toHaveCount(2);
+ await expect(page.locator(".bundle-component-thumb .bundle-sticker-pair")).toHaveCount(1);
  await expect(page.locator(".bundle-component-card")).toHaveCount(3);
  await expect(page.locator(".bundle-component-card").filter({hasText:"Sticker — Cats"})).toContainText("2 per bundle");
  await page.getByRole("button",{name:"Two stickers",exact:true}).click();
@@ -38,10 +39,10 @@ test("three database bundles keep reference galleries, exact components and prod
  await expect(page.locator(".quantity-stepper input")).toBeDisabled();
  await expect(page.locator(".product-add-button")).toBeDisabled();
  await expect(page.locator(".bundle-detail-info")).toBeVisible();
- await expect(page.locator(".product-related .product-card")).toHaveCount(3);
+ await expect(page.locator(".product-related .product-card")).toHaveCount(4);
  await page.locator("h1").click();
  await page.screenshot({path:"/tmp/nilart-bundle-detail-complete-desktop.png",fullPage:true});
- await page.locator(".bundle-component-card").getByRole("link",{name:"Ruled notebook — Cats",exact:true}).click();
+ await page.locator(".bundle-component-card").filter({hasText:"Ruled notebook — Cats"}).getByRole("link",{name:"Standalone product"}).click();
  await expect(page).toHaveURL(/\/en\/products\/cat-ruled$/);
  await expect(page.locator("h1")).toHaveText("Ruled notebook — Cats");
  await page.setViewportSize({width:390,height:844});

@@ -21,6 +21,7 @@ export type ProductCardProps = {
   cta?: string
   availabilityLabel?: string
   from?: boolean
+  priceNote?: string
   priceUnavailableLabel?: string
   favoriteLabel?: string
   optionsDirection?: "ltr" | "auto"
@@ -48,6 +49,7 @@ export default function ProductCard(props: ProductCardProps) {
     availabilityLabel,
     from = true,
     priceUnavailableLabel,
+    priceNote,
     favoriteLabel,
     optionsDirection = "ltr",
   } = props
@@ -129,8 +131,8 @@ export default function ProductCard(props: ProductCardProps) {
             {t("تومان", "toman")}
           </small>
         ) : null}
-        {!live && <small className="demo-price">
-          {t("داده نمایشی؛ قیمت و موجودی نمونه", "Demo price & availability")}
+        {(priceNote || !live) && <small className="demo-price">
+          {priceNote || t("داده نمایشی؛ قیمت و موجودی نمونه", "Demo price & availability")}
         </small>}
         <a {...linkProps} className="product-cta">
           {cta ||

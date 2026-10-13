@@ -2,9 +2,11 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from pydantic import BaseModel
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from nilart.contexts.catalog.application.artworks import ReadPublicDescriptions
+from nilart.contexts.catalog.domain.bundle_presentation import BundlePresentation
 from nilart.contexts.catalog.infrastructure.bundles import SqlBundleRepository
 from nilart.shared.database import session_dependency
 
@@ -38,14 +40,58 @@ class BundlePage(BaseModel):
 
 
 @router.get("", response_model=BundlePage)
-def bundles(page: int = Query(default=1, ge=1, le=2147483647), page_size: int = Query(default=24, ge=1, le=100),
-            db: Session = Depends(session_dependency)):
+def bundles(
+    page: int = Query(default=1, ge=1, le=2147483647),
+    page_size: int = Query(default=24, ge=1, le=100),
+    db: Session = Depends(session_dependency),
+):
     return ReadPublicDescriptions(SqlBundleRepository(db)).page(page, page_size)
 
 
 @router.get("/{slug}", response_model=BundleOutput)
-def bundle(slug: str = Path(min_length=1, max_length=160), db: Session = Depends(session_dependency)):
+def bundle(
+    slug: str = Path(min_length=1, max_length=160), db: Session = Depends(session_dependency)
+):
     result = ReadPublicDescriptions(SqlBundleRepository(db)).detail(slug)
     if result is None:
         raise HTTPException(status_code=404, detail="Bundle not found")
     return result
+
+
+@router.get("/{slug}/presentation", response_model=BundlePresentation)
+def bundle_presentation(
+    slug: str = Path(min_length=1, max_length=160), db: Session = Depends(session_dependency)
+):
+    repository = SqlBundleRepository(db)
+    bundle = repository.detail(slug)
+    if bundle is None:
+        raise HTTPException(status_code=404, detail="Bundle not found")
+    row = db.execute(
+        text(
+            "SELECT document FROM catalog_bundle_presentations WHERE bundle_id=:id AND published=true"
+        ),
+        {"id": bundle["id"]},
+    ).scalar_one_or_none()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Bundle presentation unavailable")
+    document = BundlePresentation.model_validate(row)
+    components = {str(part["sku_id"]): part for part in bundle["components"]}
+    for choices in document.component_choices:
+        component = components.get(str(choices.component_sku_id))
+        if component is None:
+            raise HTTPException(status_code=404, detail="Bundle presentation unavailable")
+        # Authoring permits alternatives only within the component's product.
+        allowed = (
+            db.execute(
+                text(
+                    "SELECT s.id FROM catalog_skus s JOIN catalog_skus base ON base.product_id=s.product_id WHERE base.id=:base AND s.id=ANY(:ids) AND s.published=true"
+                ),
+                {"base": choices.component_sku_id, "ids": choices.allowed_sku_ids},
+            )
+            .scalars()
+            .all()
+        )
+        choices.allowed_sku_ids = [id for id in choices.allowed_sku_ids if id in allowed]
+        if not choices.allowed_sku_ids:
+            raise HTTPException(status_code=404, detail="Bundle presentation unavailable")
+    return document

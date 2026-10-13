@@ -590,6 +590,50 @@
         }
       }
     },
+    "/api/v1/catalog/bundles/{slug}/presentation": {
+      "get": {
+        "tags": [
+          "bundles"
+        ],
+        "summary": "Bundle Presentation",
+        "operationId": "bundle_presentation_api_v1_catalog_bundles__slug__presentation_get",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "title": "Slug"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BundlePresentation"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/account/commissions": {
       "post": {
         "tags": [
@@ -2853,6 +2897,30 @@
         ],
         "title": "AuditPage"
       },
+      "BundleDiscount": {
+        "properties": {
+          "amount": {
+            "type": "string",
+            "pattern": "^(?:0|[1-9]\\d{0,17})(?:\\.\\d{1,6})?$",
+            "title": "Amount"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "IRT",
+              "IRR"
+            ],
+            "title": "Currency"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "title": "BundleDiscount"
+      },
       "BundleOutput": {
         "properties": {
           "id": {
@@ -2930,6 +2998,69 @@
           "page_size"
         ],
         "title": "BundlePage"
+      },
+      "BundlePresentation": {
+        "properties": {
+          "intro": {
+            "$ref": "#/components/schemas/Copy"
+          },
+          "contents": {
+            "$ref": "#/components/schemas/Copy"
+          },
+          "collection_slug": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Collection Slug"
+          },
+          "collection_title": {
+            "$ref": "#/components/schemas/Copy"
+          },
+          "sample": {
+            "type": "boolean",
+            "title": "Sample",
+            "default": false
+          },
+          "discount": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BundleDiscount"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "allow_discount_stacking": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allow Discount Stacking"
+          },
+          "component_choices": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentChoices"
+            },
+            "type": "array",
+            "maxItems": 50,
+            "title": "Component Choices"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "intro",
+          "contents",
+          "collection_slug",
+          "collection_title",
+          "component_choices"
+        ],
+        "title": "BundlePresentation"
       },
       "CatalogDetail": {
         "properties": {
@@ -3253,6 +3384,32 @@
         ],
         "title": "CompletePassword"
       },
+      "ComponentChoices": {
+        "properties": {
+          "component_sku_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Component Sku Id"
+          },
+          "allowed_sku_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Allowed Sku Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "component_sku_id",
+          "allowed_sku_ids"
+        ],
+        "title": "ComponentChoices"
+      },
       "ComponentOutput": {
         "properties": {
           "product_slug": {
@@ -3297,6 +3454,29 @@
           "title_en"
         ],
         "title": "ComponentOutput"
+      },
+      "Copy": {
+        "properties": {
+          "fa": {
+            "type": "string",
+            "maxLength": 3000,
+            "minLength": 1,
+            "title": "Fa"
+          },
+          "en": {
+            "type": "string",
+            "maxLength": 3000,
+            "minLength": 1,
+            "title": "En"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "fa",
+          "en"
+        ],
+        "title": "Copy"
       },
       "CsrfOutput": {
         "properties": {

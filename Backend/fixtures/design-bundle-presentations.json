@@ -1,0 +1,100 @@
+[
+  {
+    "slug": "cats-bundle",
+    "document": {
+      "intro": {
+        "fa": "چند محصول هماهنگ از کالکشن گربه، در یک مجموعه. گزینه دفترت را انتخاب کن و همه اجزا را با تخفیف پکیج بخر.",
+        "en": "Matching products from the Cats collection, together in one set. Choose your notebook options and buy the complete bundle at its bundle price."
+      },
+      "contents": {
+        "fa": "۱ دفتر، ۲ استیکر از یک طرح و ۱ نشانک. هیچ وسیله دیگری جزء پکیج نیست.",
+        "en": "1 notebook, 2 stickers of the same design and 1 bookmark. No other objects are included."
+      },
+      "collection_slug": "gorbe",
+      "collection_title": {
+        "fa": "گربه",
+        "en": "Cats"
+      },
+      "discount": {
+        "amount": "30000",
+        "currency": "IRT"
+      },
+      "allow_discount_stacking": false
+    },
+    "choices": [
+      {
+        "base_code": "TEST-DESIGN-CATS-BOOK",
+        "allowed_codes": [
+          "TEST-REF-CATS-SKETCHBOOK-127GSM-1",
+          "TEST-REF-CATS-SKETCHBOOK-127GSM-3",
+          "TEST-REF-CATS-SKETCHBOOK-127GSM-4",
+          "TEST-REF-CATS-SKETCHBOOK-127GSM-6",
+          "TEST-REF-CATS-SKETCHBOOK-127GSM-7"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "cat-everyday-set",
+    "document": {
+      "intro": {
+        "fa": "یک دفتر + دو استیکر + یک نشانک",
+        "en": "1 notebook + 2 stickers + 1 bookmark"
+      },
+      "contents": {
+        "fa": "۱ دفتر، ۲ استیکر از یک طرح و ۱ نشانک. هیچ وسیله دیگری جزء پکیج نیست.",
+        "en": "1 notebook, 2 stickers of the same design and 1 bookmark. No other objects are included."
+      },
+      "collection_slug": "gorbe",
+      "collection_title": {
+        "fa": "گربه",
+        "en": "Cats"
+      },
+      "discount": {
+        "amount": "25000",
+        "currency": "IRT"
+      },
+      "allow_discount_stacking": false
+    },
+    "choices": [
+      {
+        "base_code": "TEST-DESIGN-CATS-RULED",
+        "allowed_codes": [
+          "TEST-REF-CAT-RULED-1",
+          "TEST-REF-CAT-RULED-2"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "cat-keepsake-set",
+    "document": {
+      "intro": {
+        "fa": "یک دفتر جلد سخت + دو استیکر + یک نشانک",
+        "en": "1 hardcover notebook + 2 stickers + 1 bookmark"
+      },
+      "contents": {
+        "fa": "۱ دفتر، ۲ استیکر از یک طرح و ۱ نشانک. هیچ وسیله دیگری جزء پکیج نیست.",
+        "en": "1 notebook, 2 stickers of the same design and 1 bookmark. No other objects are included."
+      },
+      "collection_slug": "gorbe",
+      "collection_title": {
+        "fa": "گربه",
+        "en": "Cats"
+      },
+      "discount": {
+        "amount": "30000",
+        "currency": "IRT"
+      },
+      "allow_discount_stacking": false
+    },
+    "choices": [
+      {
+        "base_code": "TEST-DESIGN-CATS-HARDCOVER",
+        "allowed_codes": [
+          "TEST-REF-CAT-RULED-HARD-1"
+        ]
+      }
+    ]
+  }
+]

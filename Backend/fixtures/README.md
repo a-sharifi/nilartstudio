@@ -124,3 +124,14 @@ existing variant codes reject the whole import. No automatic overwrite/reseed.
 Local totals become twenty unpriced SKUs and six product presentations.
 
 `design-test-prices.json` contains ten explicitly mapped notebook variant prices from design-reference/src/catalog.ts. No ghost notebook price, inventory, or real specifications are inferred. Import using the guarded design_test_prices module only against the local test catalog.
+
+### Reference bundle detail options and sample prices
+
+After migration 0020 and the notebook option/price imports, run the opt-in development importer:
+
+```sh
+docker compose --env-file .env -f infra/docker/compose.yaml cp Backend/fixtures/design-bundle-presentations.json api:/tmp/nilart-design-bundle-presentations.json
+docker compose --env-file .env -f infra/docker/compose.yaml exec -T api python -m nilart.bootstrap.design_bundle_presentations --local-test-data --fixture /tmp/nilart-design-bundle-presentations.json
+```
+
+This explicitly maps the reference Cats bundle's five permitted notebook variants, everyday/keepsake notebook choices, collection copy, fixed discounts (30000/25000/30000 toman), and shared sticker/bookmark sample prices (35000/30000 toman). It requires existing test-marked products/bundles, rejects other environments/remote database hosts and different existing prices or presentations, and commits atomically. An identical rerun is safe. No stock, reservation, cart, payment or order is created. The public presentation endpoint omits unpublished or foreign-product choices; the original public bundle list/detail contracts remain unchanged.
