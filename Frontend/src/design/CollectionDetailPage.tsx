@@ -219,17 +219,6 @@ export default function CollectionDetailPage({
       onFavorite(id)
     }
   }
-  const categoryChoices = (filters: Filters, onChange: (filters: Filters) => void, group: string) => (
-    <fieldset>
-      <legend>{t("دسته محصول", "Product category")}</legend>
-      {[{ id: "", name: [t("همه دسته‌ها", "All categories"), t("همه دسته‌ها", "All categories")] }, ...categories].map(category => (
-        <label className="filter-choice" key={category.id}>
-          <input type="radio" name={group} checked={filters.category === category.id} onChange={() => onChange({ ...filters, category: category.id })} />
-          {category.name[language]}
-        </label>
-      ))}
-    </fieldset>
-  )
   return (
     <div className="container collection-detail-page">
       <nav
@@ -394,8 +383,7 @@ export default function CollectionDetailPage({
                 {...choicesFor(state.filters)}
                 onClear={clear}
                 hasPrices={hasPrices}
-                hideCategory={!demo}
-                beforeCategory={!demo ? categoryChoices(state.filters, updateFilters, "live-category-desktop") : undefined}
+                categories={categories}
               />
             </aside>
             <div className="detail-results-area">
@@ -615,8 +603,7 @@ export default function CollectionDetailPage({
                   {...choicesFor(draft)}
                   draftOnly
                   hasPrices={hasPrices}
-                  hideCategory={!demo}
-                  beforeCategory={!demo ? categoryChoices(draft, setDraft, "live-category-mobile") : undefined}
+                  categories={categories}
                 />
               </div>
               <div className="filter-sheet-footer">

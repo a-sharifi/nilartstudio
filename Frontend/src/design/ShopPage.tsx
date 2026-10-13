@@ -9,7 +9,7 @@ import {
 import ProductCard from "./ProductCard"
 import BundleResultCard from "./BundleResultCard"
 import FilterPanel from "./FilterPanel"
-import { collectionName, collections as referenceCollections } from "./data"
+import { collectionName, demoCollections, demoCategories, collections as referenceCollections } from "./data"
 import { covers } from "./product"
 import {
   emptyShopFilters,
@@ -78,8 +78,8 @@ export default function ShopPage({
   arrow,
   heart,
 }: Props) {
-  const collections = liveCatalog?.collections ?? referenceCollections
-  const shopCategories = liveCatalog?.categories ?? referenceCategories
+  const collections = liveCatalog ? [...liveCatalog.collections].sort((a,b)=>(demoCollections.findIndex(c=>c.slug===a.slug)+1 || 999)-(demoCollections.findIndex(c=>c.slug===b.slug)+1 || 999)) : referenceCollections
+  const shopCategories = liveCatalog ? [...liveCatalog.categories].sort((a,b)=>(demoCategories.findIndex(c=>c.id===a.slug)+1 || 999)-(demoCategories.findIndex(c=>c.id===b.slug)+1 || 999)) : referenceCategories
   const normalizeShopFilters = (filters: ShopFilters, scope = "") => referenceNormalizeShopFilters(filters, scope, liveCatalog)
   const parseShopQuery = (search: string, scope = "") => referenceParseShopQuery(search, scope, liveCatalog)
   const shopFeatureChoices = (category: string) => referenceFeatureChoices(category, liveCatalog)
@@ -279,6 +279,7 @@ export default function ShopPage({
         : updateFilters(next)
     return (
       <FilterPanel
+        categories={shopCategories.map(category=>({...category,id:category.slug}))}
         filters={filters}
         onChange={(next) => change({ ...filters, ...next })}
         language={language}
@@ -501,7 +502,7 @@ export default function ShopPage({
                       <small>
                         {mode === "loading" || mode === "network"
                           ? t("دسته محصولات", "Product category")
-                          : `${number(shopResults(c.slug, { ...baseQuery, type: "products", filters: normalizeShopFilters({ ...emptyShopFilters }, c.slug) }, mode === "empty" ? "empty" : "normal").length)} ${t("محصول · Demo", "products · Demo")}`}
+                          : `${number(shopResults(c.slug, { ...baseQuery, type: "products", filters: normalizeShopFilters({ ...emptyShopFilters }, c.slug) }, mode === "empty" ? "empty" : "normal").length)} ${liveCatalog ? t("محصول", "products") : t("محصول · Demo", "products · Demo")}`}
                       </small>
                     </span>
                     {arrow}
@@ -570,8 +571,8 @@ export default function ShopPage({
                   </h2>
                   <small>
                     {t(
-                      "موجودی آماده · انتخاب SKU در جزئیات",
-                      "Ready stock · Select a SKU in product details",
+                      liveCatalog ? "انتخاب SKU در جزئیات" : "موجودی آماده · انتخاب SKU در جزئیات",
+                      liveCatalog ? "Select a SKU in product details" : "Ready stock · Select a SKU in product details",
                     )}
                   </small>
                 </div>
@@ -857,6 +858,7 @@ export default function ShopPage({
                         ) : (
                           <ProductCard
                             {...common}
+                            live={!!liveCatalog}
                             favorite={saved.includes(item.id)}
                             onFavorite={liveCatalog ? undefined : () => favorite(item.id)}
                             favoriteLabel={`${
@@ -917,7 +919,7 @@ export default function ShopPage({
                   </a>
                   <small>
                     {t("صفحه", "Page")} {number(current)} / {number(pages)} ·
-                    Demo
+                    {!liveCatalog && "Demo"}
                   </small>
                 </nav>
               )}

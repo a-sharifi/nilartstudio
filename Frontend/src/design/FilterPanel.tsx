@@ -1,9 +1,10 @@
 import { useEffect, useId, useState, type ReactNode } from "react"
 import { priceDigits, priceError } from "./shop"
-import { categories } from "./data"
+import { categories as defaultCategories } from "./data"
 import { emptyFilters, normalizeFilters, type Filters } from "./catalog"
 
 export default function FilterPanel({
+  categories = defaultCategories,
   filters,
   onChange,
   language,
@@ -17,6 +18,7 @@ export default function FilterPanel({
   afterAttributes,
   purchasableOnly = false,
 }: {
+  categories?: typeof defaultCategories
   filters: Filters
   onChange: (filters: Filters) => void
   language: 0 | 1

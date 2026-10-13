@@ -865,6 +865,23 @@ reviewed. Backend/frontend lint, mypy, frontend typecheck, generated OpenAPI/cli
 and production Docker build pass. All eight local services are healthy; all 42
 reference CSS files remain byte-identical. Remote CI has not been verified.
 
+## Reference category list and shared filters — 2026-10-13
+
+Shop category navigation and collection/category filters use the existing reference
+ShopPage and FilterPanel. FilterPanel accepts explicit published database categories;
+its markup, controls and styles are unchanged. This fixes missing category radios
+in the live shop and removes the duplicate live collection category fieldset.
+Category and collection choices follow the reference order; unknown categories
+remain supported. Scoped category pages keep their category fixed. Live product
+cards use the shared component's live mode, with no prototype labels or stock claims.
+
+Validation: 88 frontend tests, nine browser cases covering real database categories,
+filter selection/chips/clear, scoped routes, collection filtering, mobile temporary
+apply/cancel/focus, navigation and homepage regressions. Typecheck/lint and production
+Docker build pass. Desktop and Persian mobile screenshots reviewed; all 42 reference
+CSS files byte-identical and eight services healthy. Backend unchanged; remote CI
+unverified. No prices, inventory or purchase capability created.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.
