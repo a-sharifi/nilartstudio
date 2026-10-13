@@ -133,6 +133,9 @@ export default function ArtworkDetailPage({
   useEffect(() => {
     resetZoom()
   }, [view])
+  const metadata=work?.catalogRecord?.details
+  const surfaceLabel=metadata?.surface_fa&&metadata.surface_en?t(metadata.surface_fa,metadata.surface_en):live?unknown:t("بوم — نمونه","Canvas — demo")
+  const frameLabel=metadata?.frame_fa&&metadata.frame_en?t(metadata.frame_fa,metadata.frame_en):live?unknown:frame?t("با قاب چوبی — نمونه","Wood frame — demo"):t("بدون قاب — نمونه","Unframed — demo")
   const medium =
     work?.medium === "colored-pencil" ? t("مدادرنگی","Colored pencil") : live && !work?.medium ? unknown : work?.medium === "oil"
       ? t("رنگ روغن", "Oil painting")
@@ -489,7 +492,7 @@ export default function ArtworkDetailPage({
             </div>
             <div>
               <dt>{t("سطح اجرا", "Surface")}</dt>
-              <dd>{live ? unknown : t("بوم — نمونه", "Canvas — demo")}</dd>
+              <dd>{surfaceLabel}</dd>
             </div>
             <div>
               <dt>{t("ابعاد اثر", "Artwork dimensions")}</dt>
@@ -506,9 +509,7 @@ export default function ArtworkDetailPage({
             <div>
               <dt>{t("قاب", "Frame")}</dt>
               <dd>
-                {live ? unknown : frame
-                  ? t("با قاب چوبی — نمونه", "Wood frame — demo")
-                  : t("بدون قاب — نمونه", "Unframed — demo")}
+                {frameLabel}
               </dd>
             </div>
           </dl>
@@ -765,7 +766,7 @@ export default function ArtworkDetailPage({
             <div>
               <dt>{t("تکنیک و سطح", "Medium & surface")}</dt>
               <dd>
-                {medium} · {live ? unknown : t("بوم — نمونه", "Canvas — demo")}
+                {medium} · {surfaceLabel}
               </dd>
             </div>
             <div>
@@ -780,9 +781,7 @@ export default function ArtworkDetailPage({
             <div>
               <dt>{t("اقلام همراه", "Included items")}</dt>
               <dd>
-                {live ? unknown : frame
-                  ? t("اثر و قاب چوبی — نمونه", "Artwork and wood frame — demo")
-                  : t("اثر بدون قاب — نمونه", "Unframed artwork — demo")}
+                {metadata?.frame_fa&&metadata.frame_en?frameLabel:live?unknown:frame?t("اثر و قاب چوبی — نمونه","Artwork and wood frame — demo"):t("اثر بدون قاب — نمونه","Unframed artwork — demo")}
               </dd>
             </div>
           </dl>

@@ -592,3 +592,10 @@ Migration 0022 adds `catalog_artwork_details`; its existing 0021 catalog schema 
 Reference gallery/detail layouts and CSS are preserved. Cards and details share artist, price, technique, dimensions and sample images; available, price, artist-search and colored-pencil filters use persisted data. Purchasing remains disabled until its business workflow exists.
 
 Verification: 108 frontend tests, frontend types/lint, 12 artwork browser checks across final runs, focused PostgreSQL migration/import/rollback/idempotency/unpublication tests, focused backend lint/types, API/client generation, Docker API/web builds and eight healthy services. Full workspace backend run: 287 passed, 25 skipped (reported separately from focused PostgreSQL evidence). Unrelated panel implementation remains outside this commit. Remote CI is reported separately.
+
+
+## Artwork surface and frame samples — 2026-10-13
+
+All nine local artwork detail documents now include bilingual surface (300 gsm drawing paper — sample) and frame (unframed — sample) labels. Key specs and the expanded specification table read the same persisted values. Optional fields preserve unknown states for legacy documents. The guarded importer may fill only missing surface/frame fields when every previously saved value matches; different existing values remain protected. No migration, price or inventory change. OpenAPI/client types updated.
+
+Verification: 113 frontend tests, frontend types/lint, 2 isolated PostgreSQL tests covering upgrade rollback/idempotency/conflict protection, focused backend lint, Docker API/web builds and browser checks across all nine Persian detail pages plus English passed. Shared reference CSS unchanged. Remote CI reported separately.

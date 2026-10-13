@@ -13,7 +13,11 @@
     "image_url": "/sample-artworks/quiet-morning.jpg",
     "image_credit": "Vincent van Gogh — Wheat Field with Cypresses; The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436535",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   },
   {
     "slug": "earth-memory",
@@ -29,7 +33,11 @@
     "image_url": "/sample-artworks/earth-memory.jpg",
     "image_credit": "Vincent van Gogh — Roses; The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436534",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   },
   {
     "slug": "blue-distance",
@@ -45,7 +53,11 @@
     "image_url": "/sample-artworks/blue-distance.jpg",
     "image_credit": "Vincent van Gogh — Shoes; The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436533",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   },
   {
     "slug": "olive-light",
@@ -61,7 +73,11 @@
     "image_url": "/sample-artworks/olive-light.jpg",
     "image_credit": "Vincent van Gogh — Self-Portrait with a Straw Hat (obverse: The Potato Peeler); The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436532",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   },
   {
     "slug": "afternoon",
@@ -77,7 +93,11 @@
     "image_url": "/sample-artworks/afternoon.jpg",
     "image_credit": "Vincent van Gogh — L'Arlésienne: Madame Joseph-Michel Ginoux (Marie Julien, 1848–1911); The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436529",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   },
   {
     "slug": "sun-warmth",
@@ -93,7 +113,11 @@
     "image_url": "/sample-artworks/sun-warmth.jpg",
     "image_credit": "Vincent van Gogh — Irises; The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436528",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   },
   {
     "slug": "green-horizon",
@@ -109,7 +133,11 @@
     "image_url": "/sample-artworks/green-horizon.jpg",
     "image_credit": "Vincent van Gogh — Sunflowers; The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436524",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   },
   {
     "slug": "terracotta",
@@ -125,7 +153,11 @@
     "image_url": "/sample-artworks/terracotta.jpg",
     "image_credit": "Vincent van Gogh — First Steps, after Millet; The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436526",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   },
   {
     "slug": "last-light",
@@ -141,6 +173,10 @@
     "image_url": "/sample-artworks/last-light.jpg",
     "image_credit": "Vincent van Gogh — The Flowering Orchard; The Metropolitan Museum of Art (CC0 sample)",
     "image_source": "https://www.metmuseum.org/art/collection/search/436527",
-    "sample": true
+    "sample": true,
+    "surface_fa": "کاغذ طراحی ۳۰۰ گرم — نمونه",
+    "surface_en": "300 gsm drawing paper — sample",
+    "frame_fa": "بدون قاب — نمونه",
+    "frame_en": "Unframed — sample"
   }
 ]

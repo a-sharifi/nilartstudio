@@ -45,6 +45,13 @@ def test_details_import_is_atomic_idempotent_and_publication_safe(flow):
         seed_artwork_details(db, [entry])
         raise RuntimeError("rollback")
     assert db.scalar(text("SELECT count(*) FROM catalog_artwork_details")) == 0
+    legacy = {key: value for key, value in entry.items() if key not in {"surface_fa", "surface_en", "frame_fa", "frame_en"}}
+    seed_artwork_details(db, [legacy])
+    db.commit()
+    with pytest.raises(RuntimeError), db.begin_nested():
+        seed_artwork_details(db, [entry])
+        raise RuntimeError("rollback upgrade")
+    assert db.scalar(text("SELECT document FROM catalog_artwork_details"))["surface_fa"] is None
     seed_artwork_details(db, [entry])
     db.commit()
     seed_artwork_details(db, [entry])
@@ -52,6 +59,10 @@ def test_details_import_is_atomic_idempotent_and_publication_safe(flow):
     with pytest.raises(ValueError, match="Never overwrite"):
         seed_artwork_details(db, [{**entry, "stock": 2}])
     details = client.get(f"/api/v1/catalog/artworks/{entry['slug']}").json()["details"]
+    assert details["surface_fa"] == "کاغذ طراحی ۳۰۰ گرم — نمونه"
+    assert details["frame_fa"] == "بدون قاب — نمونه"
+    with pytest.raises(ValueError, match="Never overwrite"):
+        seed_artwork_details(db, [{**entry, "surface_fa": "Different"}])
     assert details["stock"] == 1 and details["price_amount"] == entry["price_amount"]
     db.execute(text("UPDATE catalog_artworks SET published=false"))
     db.commit()

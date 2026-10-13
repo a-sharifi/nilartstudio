@@ -17,4 +17,8 @@ class ArtworkDetails(BaseModel):
     image_url: str = Field(pattern=r"^/sample-artworks/[a-z0-9-]+\.jpg$")
     image_credit: str = Field(min_length=1, max_length=1000)
     image_source: str = Field(pattern=r"^https://www\.metmuseum\.org/art/collection/search/\d+$")
+    surface_fa: str | None = Field(default=None, min_length=1, max_length=200)
+    surface_en: str | None = Field(default=None, min_length=1, max_length=200)
+    frame_fa: str | None = Field(default=None, min_length=1, max_length=200)
+    frame_en: str | None = Field(default=None, min_length=1, max_length=200)
     sample: Literal[True]

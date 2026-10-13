@@ -972,6 +972,14 @@ export interface components {
             image_credit: string;
             /** Image Source */
             image_source: string;
+            /** Surface Fa */
+            surface_fa?: string | null;
+            /** Surface En */
+            surface_en?: string | null;
+            /** Frame Fa */
+            frame_fa?: string | null;
+            /** Frame En */
+            frame_en?: string | null;
             /**
              * Sample
              * @constant

@@ -25,11 +25,15 @@ def seed_artwork_details(db, entries):
             raise ValueError("Expected local test artwork")
         existing = db.scalar(text("SELECT document FROM catalog_artwork_details WHERE artwork_id=:id"), {"id": artwork["id"]})
         if existing is not None and existing != document:
-            raise ValueError("Never overwrite different artwork details")
-        if existing is None:
+            additions = {"surface_fa", "surface_en", "frame_fa", "frame_en"}
+            old_base = {key: value for key, value in existing.items() if key not in additions}
+            new_base = {key: value for key, value in document.items() if key not in additions}
+            if old_base != new_base or any(existing.get(key) is not None and existing[key] != document[key] for key in additions):
+                raise ValueError("Never overwrite different artwork details")
+        if existing != document:
             staged.append((artwork["id"], document))
     for artwork_id, document in staged:
-        db.execute(text("INSERT INTO catalog_artwork_details (artwork_id,document) VALUES (:id,CAST(:document AS jsonb))"), {"id": artwork_id, "document": json.dumps(document)})
+        db.execute(text("INSERT INTO catalog_artwork_details (artwork_id,document) VALUES (:id,CAST(:document AS jsonb)) ON CONFLICT (artwork_id) DO UPDATE SET document=EXCLUDED.document"), {"id": artwork_id, "document": json.dumps(document)})
     db.flush()
 
 

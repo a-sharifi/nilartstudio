@@ -2877,6 +2877,58 @@
             "pattern": "^https://www\\.metmuseum\\.org/art/collection/search/\\d+$",
             "title": "Image Source"
           },
+          "surface_fa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Surface Fa"
+          },
+          "surface_en": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Surface En"
+          },
+          "frame_fa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frame Fa"
+          },
+          "frame_en": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frame En"
+          },
           "sample": {
             "type": "boolean",
             "const": true,

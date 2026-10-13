@@ -37,3 +37,18 @@ test("database artwork samples have price, stock, artist, specifications and dow
  await expect(page.locator("article.art-card")).toHaveCount(6)
  await expect(page.locator(".art-artist").first()).toHaveText("Niloufar Moradi")
 })
+
+test("all artwork details display persisted surface and frame labels",async({page,request})=>{
+ const data=await (await request.get("/api/v1/catalog/artworks?page_size=100")).json()
+ for(const work of data.items){
+  expect(work.details.surface_fa).toBe("کاغذ طراحی ۳۰۰ گرم — نمونه")
+  expect(work.details.frame_fa).toBe("بدون قاب — نمونه")
+  await page.goto(`/fa/artworks/${work.slug}`)
+  await expect(page.locator(".ad-key-specs > div").nth(1).locator("dd")).toHaveText(work.details.surface_fa)
+  await expect(page.locator(".ad-key-specs > div").nth(3).locator("dd")).toHaveText(work.details.frame_fa)
+  await expect(page.locator(".ad-spec-table")).toContainText(work.details.surface_fa)
+ }
+ await page.goto("/en/artworks/afternoon")
+ await expect(page.locator(".ad-key-specs")).toContainText("300 gsm drawing paper — sample")
+ await expect(page.locator(".ad-key-specs")).toContainText("Unframed — sample")
+})

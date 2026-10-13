@@ -2,7 +2,7 @@ import {z} from "zod"
 import { useEffect, useState } from "react"
 import type { GalleryWork } from "../../design/ArtworksPage"
 
-const artworkDetails=z.object({artist_fa:z.string(),artist_en:z.string(),medium:z.enum(["colored-pencil","oil","acrylic"]),style:z.enum(["landscape","abstract"]),width_cm:z.number().int().positive(),height_cm:z.number().int().positive(),price_amount:z.string().regex(/^(?:0|[1-9]\d{0,11})(?:\.\d{1,2})?$/),currency:z.enum(["IRT","IRR"]),stock:z.number().int().nonnegative(),image_url:z.string().regex(/^\/sample-artworks\/[a-z0-9-]+\.jpg$/),image_credit:z.string(),image_source:z.string(),sample:z.literal(true)})
+const artworkDetails=z.object({artist_fa:z.string(),artist_en:z.string(),medium:z.enum(["colored-pencil","oil","acrylic"]),style:z.enum(["landscape","abstract"]),width_cm:z.number().int().positive(),height_cm:z.number().int().positive(),price_amount:z.string().regex(/^(?:0|[1-9]\d{0,11})(?:\.\d{1,2})?$/),currency:z.enum(["IRT","IRR"]),stock:z.number().int().nonnegative(),image_url:z.string().regex(/^\/sample-artworks\/[a-z0-9-]+\.jpg$/),image_credit:z.string(),image_source:z.string(),surface_fa:z.string().nullable().optional(),surface_en:z.string().nullable().optional(),frame_fa:z.string().nullable().optional(),frame_en:z.string().nullable().optional(),sample:z.literal(true)})
 export type ArtworkRecord = {
   id: string
   slug: string
