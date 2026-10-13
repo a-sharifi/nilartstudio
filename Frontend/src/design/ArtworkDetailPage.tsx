@@ -350,10 +350,11 @@ export default function ArtworkDetailPage({
     <div className="container ad-page">
       <nav className="art-breadcrumb" aria-label={t("مسیر صفحه", "Breadcrumb")}>
         <a
-          href="/"
+          href={language === 0 ? "/fa" : "/en"}
           onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
             e.preventDefault()
-            onNavigate(t("خانه", "Home"), "/")
+            onNavigate(t("خانه", "Home"), language === 0 ? "/fa" : "/en")
           }}
         >
           {t("خانه", "Home")}
@@ -362,6 +363,7 @@ export default function ArtworkDetailPage({
         <a
           href={`${prefix}/artworks`}
           onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
             e.preventDefault()
             onBack()
           }}
@@ -369,7 +371,7 @@ export default function ArtworkDetailPage({
           {t("نقاشی‌ها", "Artworks")}
         </a>
         <span>/</span>
-        <span>{work.title[language]}</span>
+        <span aria-current="page">{work.title[language]}</span>
       </nav>
       <div className="ad-layout">
         <section
@@ -529,7 +531,7 @@ export default function ArtworkDetailPage({
                 status === "available" ? "available" : ""
               }`}
             >
-              {mode === "checking"
+              {live ? t("موجودی تأیید نشده", "Availability unconfirmed") : mode === "checking"
                 ? t(
                     "اطلاعات خرید در حال بررسی است.",
                     "Purchase information is being checked.",

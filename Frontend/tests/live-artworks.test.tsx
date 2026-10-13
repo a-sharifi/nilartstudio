@@ -43,6 +43,7 @@ test("native detail keeps its gallery, specifications and disabled purchasing wi
   expect(container.querySelector(".ad-layout")).toBeTruthy()
   expect(container.querySelector(".ad-summary")?.textContent).toBe("Description")
   expect(container.querySelector(".ad-spec-table")).toBeTruthy()
+  expect(screen.getByText("Availability unconfirmed")).toBeTruthy()
   expect(screen.getByRole("button", { name: "Add to cart" }).hasAttribute("disabled")).toBe(true)
   expect(screen.getByRole("button", { name: /Save to favorites/ }).hasAttribute("disabled")).toBe(true)
   expect(container.querySelector(".demo-painting")).toBeNull()

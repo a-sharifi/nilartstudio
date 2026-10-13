@@ -477,3 +477,9 @@
 - ArtworksPage و ArtGalleryCard اصلی، search، filter panel/sheet، pagination و loading/error/empty مرجع حفظ شدند؛ CSS یا renderer جایگزین اضافه نشد. موجودی ناشناخته در کارت زنده صریح نمایش داده می‌شود. close/Escape/Apply sheet فوکوس را برمی‌گرداند و cancel انتخاب موقت را ثبت نمی‌کند.
 - ۸۸ تست frontend و ۹ مورد مرورگر، lint/typecheck و build Docker موفق‌اند. کارت DB، pagination شش‌تایی، جست‌وجوی description، detail/back/reload، فارسی mobile، cancel/apply/focus و retry/empty پوشش دارند. تصاویر desktop/mobile بررسی شدند؛ هر ۴۲ CSS مرجع بدون تغییر و هشت سرویس سالم است.
 - داده یا پیشنهاد اثر وارد DB نشد؛ fixture مرورگر مستقل است و فهرست محلی خالی می‌ماند. هنرمند/تصویر/ابعاد/قیمت/موجودی استنتاج نشد؛ backend تغییر نکرد و CI راه دور تأییدنشده است.
+
+## بررسی جزئیات اثر با کامپوننت مرجع — ۲۰۲۶-۱۰-۱۳
+
+- ArtworkDetailPage و stylesheet اصلی مرجع، gallery، purchase panel، key specs، section nav، about، spec table و shipping حفظ شدند؛ renderer جدید اضافه نشد. موجودی ناشناخته صریح شد؛ home breadcrumb زبان را حفظ می‌کند، modified click عادی است و صفحه جاری مشخص شد.
+- ۸۸ تست frontend و ۹ مورد مرورگر، lint/typecheck و build Docker موفق‌اند. sections، متن API، داده ناشناخته، خرید/zoom غیرفعال، skeleton بارگذاری، retry/404 و فارسی mobile بدون overflow پوشش دارند؛ تصاویر desktop/mobile بررسی شدند. هر ۴۲ CSS مرجع بدون تغییر و هشت سرویس سالم است.
+- backend/DB تغییر نکرد؛ تصاویر/قاب/هنرمند/مشخصات/قیمت یا موجودی ساختگی اضافه نشد. CI راه دور تأییدنشده است.

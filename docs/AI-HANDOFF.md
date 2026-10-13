@@ -919,6 +919,23 @@ mobile screenshots reviewed; typecheck/lint and production Docker build pass.
 All 42 reference CSS files remain byte-identical and eight services healthy.
 Backend/database unchanged; remote CI unverified.
 
+## Reference artwork detail verification — 2026-10-13
+
+Published artwork details use the original ArtworkDetailPage and artwork-detail.css,
+with its gallery, purchase panel, key specifications, section navigation, about,
+specification table and shipping sections. There is no alternate detail renderer.
+Unknown live availability is explicitly labeled; breadcrumb home preserves the
+language, modified clicks work normally, and the current page is identified.
+Missing media keeps the original reference fallback and disables enlargement;
+prototype frames, artist, dimensions, prices and buying are not fabricated.
+
+Validation: 88 frontend tests and nine browser cases pass, covering reference
+sections, actual API copy, unknown metadata/availability, disabled purchasing and
+zoom, loading skeleton, distinct retry/404, list/detail/back/search and Persian
+mobile without overflow. Desktop/mobile screenshots reviewed. Typecheck/lint and
+production Docker build pass; all 42 reference CSS files byte-identical and eight
+services healthy. Backend/database unchanged; remote CI unverified.
+
 ## Recommended continuation
 
 1. Keep the local stack healthy using the explicit development storage option above; verify remote CI and extend the PostgreSQL restore drill to approved off-host retention and recovery of other services.
