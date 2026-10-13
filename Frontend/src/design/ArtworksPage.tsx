@@ -153,7 +153,7 @@ function readState() {
     available: p.get("available") === "1",
     min: digits(p.get("min") || ""),
     max: digits(p.get("max") || ""),
-    medium: ["oil", "acrylic"].includes(p.get("medium") || "")
+    medium: ["oil", "acrylic", "colored-pencil"].includes(p.get("medium") || "")
       ? p.get("medium")!
       : "",
     style: ["abstract", "landscape"].includes(p.get("style") || "")
@@ -394,7 +394,7 @@ export default function ArtworksPage({
     else dialog.current?.close()
   }, [sheet])
   const mediumName = (v: string) =>
-    v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
+    v === "colored-pencil" ? t("مدادرنگی", "Colored pencil") : v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
   const styleName = (v: string) =>
     v === "abstract" ? t("انتزاعی", "Abstract") : t("منظره", "Landscape")
   const orientationName = (v: string) =>
@@ -414,7 +414,7 @@ export default function ArtworksPage({
     (w) =>
       (!state.query ||
         normalize(
-          `${w.title[language]} ${w.catalogRecord ? w.catalogRecord.description_fa + " " + w.catalogRecord.description_en : t("هنرمند نمونه", "Demo artist")}`,
+          `${w.title[language]} ${w.catalogRecord?.details ? w.catalogRecord.details.artist_fa+" "+w.catalogRecord.details.artist_en : w.catalogRecord ? w.catalogRecord.description_fa + " " + w.catalogRecord.description_en : t("هنرمند نمونه", "Demo artist")}`,
         ).includes(normalize(state.query))) &&
       (!f.available || w.status === "available") &&
       (!f.medium || w.medium === f.medium) &&
@@ -496,7 +496,7 @@ export default function ArtworksPage({
                 : t("جهت اثر", "Orientation")}
           </legend>
           {(key === "medium"
-            ? ["oil", "acrylic"]
+            ? ["oil", "acrylic", "colored-pencil"]
             : key === "style"
               ? ["landscape", "abstract"]
               : ["portrait", "landscape", "square"]
@@ -971,7 +971,7 @@ export function ArtGalleryCard({
     n === null ? "—" : n.toLocaleString(language === 0 ? "fa-IR" : "en-US")
   const prefix = language === 0 ? "/fa" : "/en"
   const mediumName = (v: string) =>
-    !v ? t("تکنیک اعلام نشده", "Medium not provided") : v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
+    !v ? t("تکنیک اعلام نشده", "Medium not provided") : v === "colored-pencil" ? t("مدادرنگی", "Colored pencil") : v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
   const routeLink = (label: string, route: string) => (
     <a
       className="text-link"
@@ -999,9 +999,9 @@ export function ArtGalleryCard({
             onNavigate(work.title[language], `${prefix}/artworks/${work.id}`)
           }}
         >
-          {imageError ? <div className="art-image-fallback"><Symbol name="image" />{t("تصویر در دسترس نیست", "Image unavailable")}</div> : <DemoPainting work={work} />}
+          {work.catalogRecord?.details ? <SampleArtworkImage work={work} /> : imageError ? <div className="art-image-fallback"><Symbol name="image" />{t("تصویر در دسترس نیست", "Image unavailable")}</div> : <DemoPainting work={work} />}
         </a>
-        <span className="art-original">{work.catalogRecord ? t("نقاشی", "Artwork") : <>{t("اثر اصل", "Original")} · Demo</>}</span>
+        <span className="art-original">{work.catalogRecord?.details?.sample ? t("تصویر نمونه", "Sample image") : work.catalogRecord ? t("نقاشی", "Artwork") : <>{t("اثر اصل", "Original")} · Demo</>}</span>
         {showFavorite && <button
           className={`art-favorite icon-button ${saved ? "saved" : ""}`}
           aria-pressed={saved}
@@ -1018,7 +1018,7 @@ export function ArtGalleryCard({
       <div className="art-card-info">
         <div className="art-card-status">
           <span className={work.status}>
-            {work.catalogRecord ? t("موجودی تأیید نشده", "Availability unconfirmed") : work.status === "available"
+            {work.catalogRecord && !work.catalogRecord.details ? t("موجودی تأیید نشده", "Availability unconfirmed") : work.status === "available"
               ? t("موجود", "Available")
               : work.status === "sold"
                 ? t("فروخته‌شده", "Sold")
@@ -1027,7 +1027,7 @@ export function ArtGalleryCard({
           {work.unique && <small>{t("تک‌نسخه", "One-of-a-kind")}</small>}
         </div>
         <h2>{work.title[language]}</h2>
-        <p className="art-artist">{work.catalogRecord ? t("هنرمند اعلام نشده", "Artist not provided") : t("هنرمند نمونه", "Demo artist")}</p>
+        <p className="art-artist">{work.catalogRecord?.details ? t(work.catalogRecord.details.artist_fa,work.catalogRecord.details.artist_en) : work.catalogRecord ? t("هنرمند اعلام نشده", "Artist not provided") : t("هنرمند نمونه", "Demo artist")}</p>
         <p className="art-specs">
           {mediumName(work.medium)} ·{" "}
           <span dir="ltr">
@@ -1053,4 +1053,13 @@ export function ArtGalleryCard({
       </div>
     </article>
   )
+}
+
+export function SampleArtworkImage({work}:{work:GalleryWork}){
+ const [failed,setFailed]=useState("")
+ const details=work.catalogRecord?.details
+ if(!details||failed===details.image_url)return <div className="art-image-fallback"><Symbol name="image"/>تصویر در دسترس نیست / Image unavailable</div>
+ // Downloaded local sample media keeps the reference painting container and geometry.
+ // eslint-disable-next-line @next/next/no-img-element
+ return <img className="demo-painting" src={details.image_url} alt={work.title.join(" / ")} title={details.image_credit} style={{width:"100%",height:"100%",objectFit:"contain"}} onError={()=>setFailed(details.image_url)}/>
 }

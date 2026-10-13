@@ -8,6 +8,15 @@ from sqlalchemy import text
 from test_identity_otp_postgres import flow as flow
 
 
+def artwork_details_migration(connection):
+    spec = importlib.util.spec_from_file_location("art_details_migration", Path(__file__).resolve().parents[1] / "migrations/versions/0022_artwork_details.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    with Operations.context(MigrationContext.configure(connection)):
+        module.upgrade()
+    return module
+
+
 def test_published_artworks_pagination_details_and_migration(flow):
     client, db, _ = flow
     spec = importlib.util.spec_from_file_location("art_migration", Path(__file__).resolve().parents[1] / "migrations/versions/0010_artworks.py")
@@ -15,6 +24,7 @@ def test_published_artworks_pagination_details_and_migration(flow):
     spec.loader.exec_module(module)
     with Operations.context(MigrationContext.configure(db.connection())):
         module.upgrade()
+    detail_module = artwork_details_migration(db.connection())
     for slug, published in [("a", True), ("b", True), ("draft", False)]:
         db.execute(text("INSERT INTO catalog_artworks (id,slug,title_fa,title_en,published) VALUES (:id,:slug,'نقاشی','Art',:published)"), {"id": uuid4(), "slug": slug, "published": published})
     db.commit()
@@ -28,4 +38,5 @@ def test_published_artworks_pagination_details_and_migration(flow):
     assert client.get("/api/v1/catalog/artworks?page_size=101").status_code == 422
     assert client.get("/api/v1/catalog/artworks?page=0").status_code == 422
     with Operations.context(MigrationContext.configure(db.connection())):
+        detail_module.downgrade()
         module.downgrade()

@@ -77,3 +77,15 @@ test("presentation mapping ignores uncontracted commercial and specification fie
   expect(item).toMatchObject({ id: "real", width: null, height: null, price: null, medium: "", status: "unavailable", unique: false })
   expect(() => mapArtwork({ ...record, slug: "" })).toThrow()
 })
+
+test("persisted sample metadata supplies stock, price and specifications without guessing missing fields",()=>{
+ const details={artist_fa:"نیلوفر مرادی",artist_en:"Niloufar Moradi",medium:"colored-pencil",style:"landscape",width_cm:30,height_cm:40,price_amount:"3900000",currency:"IRT",stock:1,image_url:"/sample-artworks/afternoon.jpg",image_credit:"Museum sample",image_source:"https://www.metmuseum.org/art/collection/search/436535",sample:true}
+ const work=mapArtwork({...record,details})
+ expect(work.status).toBe("available")
+ expect(work.price).toBe(3900000)
+ expect(work.medium).toBe("colored-pencil")
+ expect(work.width).toBe(30)
+ expect(mapArtwork({...record,details:{...details,stock:0}}).status).toBe("unavailable")
+ expect(()=>mapArtwork({...record,details:{...details,stock:-1}})).toThrow()
+ expect(()=>mapArtwork({...record,details:{...details,image_url:"https://foreign.example/image.jpg"}})).toThrow()
+})

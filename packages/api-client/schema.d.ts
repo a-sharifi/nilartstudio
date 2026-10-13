@@ -937,6 +937,47 @@ export interface components {
             /** Next Cursor */
             next_cursor: string | null;
         };
+        /** ArtworkDetails */
+        ArtworkDetails: {
+            /** Artist Fa */
+            artist_fa: string;
+            /** Artist En */
+            artist_en: string;
+            /**
+             * Medium
+             * @enum {string}
+             */
+            medium: "colored-pencil" | "oil" | "acrylic";
+            /**
+             * Style
+             * @enum {string}
+             */
+            style: "landscape" | "abstract";
+            /** Width Cm */
+            width_cm: number;
+            /** Height Cm */
+            height_cm: number;
+            /** Price Amount */
+            price_amount: string;
+            /**
+             * Currency
+             * @enum {string}
+             */
+            currency: "IRT" | "IRR";
+            /** Stock */
+            stock: number;
+            /** Image Url */
+            image_url: string;
+            /** Image Credit */
+            image_credit: string;
+            /** Image Source */
+            image_source: string;
+            /**
+             * Sample
+             * @constant
+             */
+            sample: true;
+        };
         /** ArtworkOutput */
         ArtworkOutput: {
             /**
@@ -954,6 +995,7 @@ export interface components {
             description_fa: string;
             /** Description En */
             description_en: string;
+            details?: components["schemas"]["ArtworkDetails"] | null;
         };
         /** ArtworkPage */
         ArtworkPage: {

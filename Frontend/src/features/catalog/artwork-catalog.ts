@@ -1,6 +1,8 @@
+import {z} from "zod"
 import { useEffect, useState } from "react"
 import type { GalleryWork } from "../../design/ArtworksPage"
 
+const artworkDetails=z.object({artist_fa:z.string(),artist_en:z.string(),medium:z.enum(["colored-pencil","oil","acrylic"]),style:z.enum(["landscape","abstract"]),width_cm:z.number().int().positive(),height_cm:z.number().int().positive(),price_amount:z.string().regex(/^(?:0|[1-9]\d{0,11})(?:\.\d{1,2})?$/),currency:z.enum(["IRT","IRR"]),stock:z.number().int().nonnegative(),image_url:z.string().regex(/^\/sample-artworks\/[a-z0-9-]+\.jpg$/),image_credit:z.string(),image_source:z.string(),sample:z.literal(true)})
 export type ArtworkRecord = {
   id: string
   slug: string
@@ -8,6 +10,7 @@ export type ArtworkRecord = {
   title_en: string
   description_fa: string
   description_en: string
+  details?:z.infer<typeof artworkDetails>|null
 }
 export type ArtworkCatalog = { items: GalleryWork[]; status: "loading" | "normal" | "error" | "not-found"; retry: () => void }
 
@@ -18,11 +21,12 @@ export function mapArtwork(value: unknown): GalleryWork {
     if (typeof row[key] !== "string") throw new Error("Invalid artwork")
   }
   if (!row.id || !row.slug) throw new Error("Invalid artwork identity")
-  const record = row as ArtworkRecord
+  const details=row.details==null?null:artworkDetails.parse(row.details)
+  const record = {...row,details} as ArtworkRecord
   return {
     id: record.slug, title: [record.title_fa, record.title_en], catalogRecord: record,
-    medium: "", style: "", width: null, height: null, price: null,
-    status: "unavailable", unique: false, palette: 0,
+    medium: details?.medium??"", style: details?.style??"", width: details?.width_cm??null, height: details?.height_cm??null, price: details?Number(details.price_amount)/(details.currency==="IRR"?10:1):null,
+    status: details&&details.stock>0?"available":"unavailable", unique: false, palette: 0,
   }
 }
 

@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from nilart.contexts.catalog.application.artworks import ReadArtworks
+from nilart.contexts.catalog.domain.artwork_details import ArtworkDetails
 from nilart.contexts.catalog.infrastructure.artworks import SqlArtworkRepository
 from nilart.shared.database import session_dependency
 
@@ -18,6 +19,7 @@ class ArtworkOutput(BaseModel):
     title_en: str
     description_fa: str
     description_en: str
+    details: ArtworkDetails | None = None
 
 
 class ArtworkPage(BaseModel):

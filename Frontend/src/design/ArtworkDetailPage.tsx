@@ -1,6 +1,6 @@
 import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type CSSProperties } from "react"
-import { ArtGalleryCard, DemoPainting, Symbol, works, type GalleryWork } from "./ArtworksPage"
+import { ArtGalleryCard, SampleArtworkImage, DemoPainting, Symbol, works, type GalleryWork } from "./ArtworksPage"
 import type { ArtCartLine } from "./cart"
 import "./artwork-detail.css"
 
@@ -75,7 +75,7 @@ export default function ArtworkDetailPage({
   const source: GalleryWork[] = catalog?.items ?? works
   const work = source.find((w) => w.id === slug)
   const [previewMode, setMode] = useState<Mode>("normal")
-  const mode: Mode = catalog ? catalog.status === "normal" ? "image-error" : catalog.status : previewMode
+  const mode: Mode = catalog ? catalog.status === "normal" ? work?.catalogRecord?.details ? "normal" : "image-error" : catalog.status : previewMode
   const live = !!catalog
   const unknown = t("اعلام نشده", "Not provided")
   const [view, setView] = useState<View>("full")
@@ -134,7 +134,7 @@ export default function ArtworkDetailPage({
     resetZoom()
   }, [view])
   const medium =
-    live ? unknown : work?.medium === "oil"
+    work?.medium === "colored-pencil" ? t("مدادرنگی","Colored pencil") : live && !work?.medium ? unknown : work?.medium === "oil"
       ? t("رنگ روغن", "Oil painting")
       : t("اکریلیک", "Acrylic")
   const price =
@@ -264,7 +264,7 @@ export default function ArtworkDetailPage({
       } ${extra}`}
       style={w.width !== null && w.height !== null ? { "--art-ratio": `${w.width} / ${w.height}` } as CSSProperties : undefined}
     >
-      {w.catalogRecord ? <Symbol name="image" /> : <DemoPainting work={w} />}
+      {w.catalogRecord?.details ? <SampleArtworkImage work={w}/> : w.catalogRecord ? <Symbol name="image" /> : <DemoPainting work={w} />}
     </div>
   )
   const prototype = live ? null : (
@@ -447,7 +447,7 @@ export default function ArtworkDetailPage({
             ))}
           </div>
           <p className="ad-gallery-note">
-            {live ? t("تصویر تأییدشده اثر ارائه نشده است.", "No approved artwork image has been provided.") : view === "frame"
+            {work.catalogRecord?.details ? `${t("تصویر نمونه؛ ","Sample image; ")}${work.catalogRecord.details.image_credit}` : live ? t("تصویر تأییدشده اثر ارائه نشده است.", "No approved artwork image has been provided.") : view === "frame"
               ? t(
                   "نمای قاب شبیه‌سازی‌شده است؛ مقیاس و رنگ تقریبی‌اند.",
                   "Simulated frame view; scale and color are approximate.",
@@ -470,7 +470,7 @@ export default function ArtworkDetailPage({
             )}
           </div>
           <h1 id="ad-title">{work.title[language]}</h1>
-          <p className="ad-byline">{live ? t("هنرمند اعلام نشده", "Artist not provided") : t("اثر هنرمند نمونه", "By Demo artist")}</p>
+          <p className="ad-byline">{work.catalogRecord?.details ? t(work.catalogRecord.details.artist_fa,work.catalogRecord.details.artist_en) : live ? t("هنرمند اعلام نشده", "Artist not provided") : t("اثر هنرمند نمونه", "By Demo artist")}</p>
           <p className="ad-summary">
             {work.catalogRecord ? work.catalogRecord[language === 0 ? "description_fa" : "description_en"] : work.style === "landscape"
               ? t(
@@ -532,7 +532,7 @@ export default function ArtworkDetailPage({
                 status === "available" ? "available" : ""
               }`}
             >
-              {live ? t("موجودی تأیید نشده", "Availability unconfirmed") : mode === "checking"
+              {live && !work.catalogRecord?.details ? t("موجودی تأیید نشده", "Availability unconfirmed") : mode === "checking"
                 ? t(
                     "اطلاعات خرید در حال بررسی است.",
                     "Purchase information is being checked.",
@@ -739,7 +739,7 @@ export default function ArtworkDetailPage({
           <div className="ad-artist-note">
             <span className="ad-monogram">N.</span>
             <div>
-              <strong>{live ? unknown : t("هنرمند نمونه", "Demo artist")}</strong>
+              <strong>{work.catalogRecord?.details ? t(work.catalogRecord.details.artist_fa,work.catalogRecord.details.artist_en) : live ? unknown : t("هنرمند نمونه", "Demo artist")}</strong>
               <p>
                 {t(
                   "پروفایل واقعی و زندگی‌نامه تأییدشده ارائه نشده است.",

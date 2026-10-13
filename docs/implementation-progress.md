@@ -581,3 +581,14 @@ Applied explicit local test prices to Ghosts notebook variants (145000 IRT), Cow
 Removed unconfirmed-purchase badges from homepage/shop browsing cards without claiming stock availability. Bundle cards now quote the cheapest authored allowed component options, multiply component quantities and apply the saved discount using exact decimal arithmetic. Missing data retains an unavailable price. Homepage Cats/everyday totals are 195000/180000 IRT. Reference CSS remains unchanged.
 
 Local checks: 107 frontend tests, 7 browser checks, 2 focused backend importer tests, frontend types/lint and focused backend lint passed. Web Docker build passed; all eight services healthy. Unrelated ongoing panel work remains outside this commit. Remote CI is reported separately.
+
+
+## Database-backed artwork samples — 2026-10-13
+
+Nine existing test artworks now have persisted optional details: user-selected Niloufar Moradi / نیلوفر مرادی, colored-pencil technique, explicit varied sample dimensions, positive IRT prices and one sample unit each. Eight prices follow the reference; the unpriced afternoon placeholder receives an explicit 3900000 IRT local test price. Downloaded nine CC0 museum JPEGs to `Frontend/public/sample-artworks`; credits retain the real source artists and URLs and visibly identify sample imagery. These images are not claimed as works by Niloufar Moradi.
+
+Migration 0022 adds `catalog_artwork_details`; its existing 0021 catalog schema prerequisite is included so the delivered migration chain is self-contained. No admin authoring routes are included in this slice. Existing artwork records without details keep unknown states. The optional details contract is generated into OpenAPI/client types. Sample stock is presentation data, not authoritative inventory or checkout permission. The guarded development-only importer requires original test notices, rejects conflicting details, commits atomically, and permits identical reruns.
+
+Reference gallery/detail layouts and CSS are preserved. Cards and details share artist, price, technique, dimensions and sample images; available, price, artist-search and colored-pencil filters use persisted data. Purchasing remains disabled until its business workflow exists.
+
+Verification: 108 frontend tests, frontend types/lint, 12 artwork browser checks across final runs, focused PostgreSQL migration/import/rollback/idempotency/unpublication tests, focused backend lint/types, API/client generation, Docker API/web builds and eight healthy services. Full workspace backend run: 287 passed, 25 skipped (reported separately from focused PostgreSQL evidence). Unrelated panel implementation remains outside this commit. Remote CI is reported separately.

@@ -2799,6 +2799,109 @@
         ],
         "title": "AccountPage"
       },
+      "ArtworkDetails": {
+        "properties": {
+          "artist_fa": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Artist Fa"
+          },
+          "artist_en": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Artist En"
+          },
+          "medium": {
+            "type": "string",
+            "enum": [
+              "colored-pencil",
+              "oil",
+              "acrylic"
+            ],
+            "title": "Medium"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "landscape",
+              "abstract"
+            ],
+            "title": "Style"
+          },
+          "width_cm": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Width Cm"
+          },
+          "height_cm": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Height Cm"
+          },
+          "price_amount": {
+            "type": "string",
+            "pattern": "^(?:0|[1-9]\\d{0,11})(?:\\.\\d{1,2})?$",
+            "title": "Price Amount"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "IRT",
+              "IRR"
+            ],
+            "title": "Currency"
+          },
+          "stock": {
+            "type": "integer",
+            "maximum": 100000.0,
+            "minimum": 0.0,
+            "title": "Stock"
+          },
+          "image_url": {
+            "type": "string",
+            "pattern": "^/sample-artworks/[a-z0-9-]+\\.jpg$",
+            "title": "Image Url"
+          },
+          "image_credit": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1,
+            "title": "Image Credit"
+          },
+          "image_source": {
+            "type": "string",
+            "pattern": "^https://www\\.metmuseum\\.org/art/collection/search/\\d+$",
+            "title": "Image Source"
+          },
+          "sample": {
+            "type": "boolean",
+            "const": true,
+            "title": "Sample"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "artist_fa",
+          "artist_en",
+          "medium",
+          "style",
+          "width_cm",
+          "height_cm",
+          "price_amount",
+          "currency",
+          "stock",
+          "image_url",
+          "image_credit",
+          "image_source",
+          "sample"
+        ],
+        "title": "ArtworkDetails"
+      },
       "ArtworkOutput": {
         "properties": {
           "id": {
@@ -2825,6 +2928,16 @@
           "description_en": {
             "type": "string",
             "title": "Description En"
+          },
+          "details": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ArtworkDetails"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",

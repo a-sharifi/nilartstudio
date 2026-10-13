@@ -139,3 +139,7 @@ This explicitly maps the reference Cats bundle's five permitted notebook variant
 ### Remaining homepage sample prices
 
 The guarded `design_test_prices` importer also accepts TEST-DESIGN codes for explicitly test-marked products. Ghosts notebook variants use the reference homepage 145000 toman, Cows stickers 45000 toman. Love bookmark uses the reference bookmark sample price 30000 toman for local testing (its homepage reference has a zero/unavailable placeholder). These are sample prices, not approved production offers; no stock is created. Repeating an identical import is safe, while different existing prices still reject the transaction.
+
+### Artwork sample details
+
+After migration 0022, copy `design-artwork-details.json` into the local API service and run `python -m nilart.bootstrap.design_artwork_details --local-test-data --fixture /tmp/nilart-artwork-details.json`. This adds optional details to the original nine test-marked artwork records. Identical reruns are safe; conflicting data rejects the whole transaction. Production mode and remote databases are rejected. Prices, dimensions and one-unit availability are local samples, not sellable ledger stock. Images are downloaded CC0 museum placeholders, with credits in `Frontend/public/sample-artworks/CREDITS.md` and in database details.

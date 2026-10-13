@@ -395,3 +395,14 @@ presentation fields. See fixtures/README.md for guarded test-data import.
 ## Explicit bundle presentations
 
 Migration 0020 stores optional published `catalog_bundle_presentations` separately from fixed bundle composition. `GET /api/v1/catalog/bundles/{slug}/presentation` supplies bilingual copy, collection context, sample marker, explicit fixed discount/currency, stacking information and allowed alternative SKU IDs per existing component. Alternatives are restricted to that component's published product SKUs; unpublished choices are filtered, invalid/empty configuration returns 404. No choices or discount are inferred when a presentation is missing. This is a read/presentation contract, not bundle publication, inventory, checkout or purchasing authorization. Existing bundle responses are unchanged. The guarded local importer is documented in fixtures/README.md.
+
+
+## Database-backed artwork samples — 2026-10-13
+
+Nine existing test artworks now have persisted optional details: user-selected Niloufar Moradi / نیلوفر مرادی, colored-pencil technique, explicit varied sample dimensions, positive IRT prices and one sample unit each. Eight prices follow the reference; the unpriced afternoon placeholder receives an explicit 3900000 IRT local test price. Downloaded nine CC0 museum JPEGs to `Frontend/public/sample-artworks`; credits retain the real source artists and URLs and visibly identify sample imagery. These images are not claimed as works by Niloufar Moradi.
+
+Migration 0022 adds `catalog_artwork_details`; its existing 0021 catalog schema prerequisite is included so the delivered migration chain is self-contained. No admin authoring routes are included in this slice. Existing artwork records without details keep unknown states. The optional details contract is generated into OpenAPI/client types. Sample stock is presentation data, not authoritative inventory or checkout permission. The guarded development-only importer requires original test notices, rejects conflicting details, commits atomically, and permits identical reruns.
+
+Reference gallery/detail layouts and CSS are preserved. Cards and details share artist, price, technique, dimensions and sample images; available, price, artist-search and colored-pencil filters use persisted data. Purchasing remains disabled until its business workflow exists.
+
+Verification: 108 frontend tests, frontend types/lint, 12 artwork browser checks across final runs, focused PostgreSQL migration/import/rollback/idempotency/unpublication tests, focused backend lint/types, API/client generation, Docker API/web builds and eight healthy services. Full workspace backend run: 287 passed, 25 skipped (reported separately from focused PostgreSQL evidence). Unrelated panel implementation remains outside this commit. Remote CI is reported separately.

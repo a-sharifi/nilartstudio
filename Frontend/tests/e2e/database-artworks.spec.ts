@@ -14,7 +14,7 @@ test("reference artworks come from PostgreSQL into gallery, detail and homepage"
  await page.getByRole("link",{name:"View artwork",exact:true}).click();
  await expect(page.locator("h1")).toHaveText("Quiet morning");
  await expect(page.locator(".ad-summary")).toContainText("Test artwork from the design reference");
- await expect(page.locator(".ad-stock")).toHaveText("Availability unconfirmed");
+ await expect(page.locator(".ad-stock")).toHaveText("Available — demo");
  await expect(page.getByRole("button",{name:"Add to cart",exact:true})).toBeDisabled();
  await page.goto("/en");
  await expect(page.locator(".artwork-copy h3")).toHaveText(catalog.items[0].title_en);
