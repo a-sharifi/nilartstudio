@@ -1,7 +1,6 @@
 import FavoriteButton from "../features/customer/FavoriteButton";
 import TestProductCart from "../components/ui/TestProductCart";
-import Mockup from "./Mockup";
-import { ReferenceProductImage, ReferenceBundleImage } from "./ReferenceMedia";
+import { ReferenceProductImage, ReferenceBundleImage, hasStationeryPhoto } from "./ReferenceMedia";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { catalogBundles, catalogProducts, itemOptions } from "./catalog"
 import ProductCard from "./ProductCard"
@@ -1069,9 +1068,9 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
   const amount = sku?.price?.amount.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1");
   const exactPrice = amount ? (language === 0 ? amount.replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[Number(d)]) : amount) : "";
   const price = sku?.price ? `${exactPrice} ${sku.price.currency === "IRT" ? t("تومان","toman") : t("ریال","rial")}` : t("قیمت در دسترس نیست","Price unavailable");
-  const media = content ? <Mockup color={content.color} kind={content.kind} /> : <ReferenceProductImage slug={product.slug} language={language} />;
+  const media = <ReferenceProductImage slug={product.slug} language={language} />;
   const optionLabel = (code:string) => content?.option_labels?.[code] ? local(content.option_labels[code]) : code;
-  const images = content?.gallery.map(image=>({label:[image.label.fa,image.label.en] as [string,string],view:image.view})) || [{label:["نمای روبرو","Front view"] as [string,string],view:"front"}];
+  const images = content?.gallery.map(image=>({label:hasStationeryPhoto(product.slug)?["عکس نمونه "+(content.gallery.indexOf(image)+1),"Sample photo "+(content.gallery.indexOf(image)+1)] as [string,string]:[image.label.fa,image.label.en] as [string,string],view:image.view})) || [{label:["نمای روبرو","Front view"] as [string,string],view:"front"}];
   const share = async () => {
     try { await navigator.clipboard.writeText(window.location.href); setShareMessage(t("لینک محصول کپی شد.","Product link copied.")); }
     catch { setShareMessage(t("کپی لینک ممکن نشد؛ لینک را از نوار آدرس کپی کنید.","Unable to copy; copy the link from the address bar.")); }
@@ -1084,7 +1083,7 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
       <span aria-current="page">{name}</span>
     </nav>
     <section className="product-main-layout">
-      <ProductGallery key={product.id} language={language} media={media} images={images} productName={name} renderDialog={renderDialog} renderView={content?.kind !== "book" ? ()=>media : undefined} />
+      <ProductGallery key={product.id} language={language} media={media} images={images} productName={name} renderDialog={renderDialog} renderView={hasStationeryPhoto(product.slug)?index=><ReferenceProductImage slug={product.slug} language={language} view={index}/>:content?.kind !== "book" ? ()=>media : undefined} />
       <div className="product-purchase-panel">
         <div className="product-intro-top">{memberships.length ? memberships.map(row=><a key={row.id} className="eyebrow" href={collectionRoute(row.slug)} onClick={e=>go(e,row.name[language],collectionRoute(row.slug))}>{row.name[language]}</a>) : <span className="eyebrow">NILART STUDIO</span>}<div>
           <FavoriteButton kind="product" id={product.id} language={language}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></FavoriteButton>

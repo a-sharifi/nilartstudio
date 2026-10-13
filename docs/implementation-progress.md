@@ -606,3 +606,12 @@ Verification: 113 frontend tests, frontend types/lint, 2 isolated PostgreSQL tes
 All nine local sample artwork documents now offer an optional wood frame with the reference 650000 IRT surcharge. Bilingual framed labels and explicit frame-price amounts are persisted; missing options remain unavailable on other records. Selection updates the reference frame preview, key/expanded specs and displayed total, retaining the same artwork stock. Unframed restores the base amount. Sample purchases remain disabled. The guarded importer only fills missing frame metadata while protecting existing different values. OpenAPI/client types updated.
 
 Local checks: 114 frontend tests, frontend lint/types, 2 PostgreSQL importer tests, focused backend lint, API/web Docker builds, eight healthy services, and browser checks for both selection directions across all nine artworks passed. Remote CI is reported separately.
+
+
+## Notebook and bundle photography — 2026-10-13
+
+Downloaded four licensed Pexels notebook/stationery photographs and stored optimized JPEGs locally under `Frontend/public/sample-stationery` (about 510 KB combined). Source/photographer credits and the Pexels license are in CREDITS.md. Explicit associations cover the four local notebook slugs and three local bundle slugs. Images appear in home/shop/collection cards and detail galleries; notebook gallery captions identify sample photos rather than claiming exact front/back product views. Stock photos are visibly labeled as samples, not actual NilArt product photos or exact bundle compositions. Unknown products retain missing-media handling. Original sticker/bookmark illustrations and bundle component views remain.
+
+The shared reference media components and layouts are retained; presentation CSS is additive and approved reference CSS is unchanged. No database, price, stock, API or purchasing changes.
+
+Local checks: 122 frontend tests, frontend lint/type check, five browser checks across notebook/bundle routes and mobile rendering, web Docker build and service health passed. Remote CI is reported separately.

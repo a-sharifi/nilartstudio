@@ -27,7 +27,7 @@ test("three database bundles keep reference galleries, exact components and prod
  await expect(page.locator(".bundle-card")).toHaveCount(3);
  await page.getByRole("link",{name:"Cats everyday bundle",exact:true}).click();
  await expect(page.locator(".gallery-thumbnails button")).toHaveCount(4);
- await expect(page.locator(".bundle-component-thumb .mockup")).toHaveCount(2);
+ await expect(page.locator(".bundle-component-thumb .mockup")).toHaveCount(1);
  await expect(page.locator(".bundle-component-thumb .bundle-sticker-pair")).toHaveCount(1);
  await expect(page.locator(".bundle-component-card")).toHaveCount(3);
  await expect(page.locator(".bundle-component-card").filter({hasText:"Sticker — Cats"})).toContainText("2 per bundle");
