@@ -66,7 +66,7 @@ export default function DesignRuntime() {
     return <PanelAccessBoundary permission={artist?"commissions.work_assigned":["catalog.manage","identity.manage","inventory.manage","finance.read","orders.read_all","commissions.manage"]} path={pathname}><main className="ad-session"><h1>{en?"This workflow is not connected yet":"این بخش هنوز به سرویس متصل نشده است"}</h1><p>{en?"Its reference design is preserved; live business actions will open after their backend is implemented.":"طراحی مرجع حفظ شده است؛ پس از تکمیل سرویس، اقدامات این بخش فعال می‌شوند."}</p><a className="button secondary" href={en?"/en":"/fa"}>{en?"Back to shop":"بازگشت به فروشگاه"}</a></main></PanelAccessBoundary>;
   }
   // Explicit connected-route allowlist; newly imported routes are not accidentally live.
-  const connected = isStaticInfoPage(pathname)
+  const connected = /^\/(?:fa\/|en\/)?cart\/?$/.test(pathname) || isStaticInfoPage(pathname)
     || /^\/(?:fa\/|en\/)?products\/[^/]+\/?$/.test(pathname)
     || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?\/?$/.test(pathname)
     || /^\/(?:fa\/|en\/)?commissions(?:\/new)?\/?$/.test(pathname)

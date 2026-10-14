@@ -36,7 +36,7 @@ def normalize_phone(value: str) -> str:
 
 def validate_password(value: str) -> None:
     # Long passphrases are welcome; do not trim or impose arbitrary symbol rules.
-    if not 12 <= len(value) <= 128 or len(value.encode("utf-8")) > 512:
+    if not 8 <= len(value) <= 128 or len(value.encode("utf-8")) > 512:
         raise IdentityError("invalid_password_length")
     if value.isspace():
         raise IdentityError("invalid_password")

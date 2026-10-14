@@ -2634,6 +2634,89 @@
           }
         }
       }
+    },
+    "/api/v1/basket": {
+      "get": {
+        "tags": [
+          "basket"
+        ],
+        "summary": "Read",
+        "operationId": "read_api_v1_basket_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasketOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/basket/bootstrap": {
+      "post": {
+        "tags": [
+          "basket"
+        ],
+        "summary": "Bootstrap",
+        "operationId": "bootstrap_api_v1_basket_bootstrap_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasketOutput"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/basket/commands": {
+      "post": {
+        "tags": [
+          "basket"
+        ],
+        "summary": "Command",
+        "operationId": "command_api_v1_basket_commands_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BasketCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BasketOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3587,7 +3670,7 @@
           "password": {
             "type": "string",
             "maxLength": 128,
-            "minLength": 12,
+            "minLength": 8,
             "title": "Password"
           }
         },
@@ -4265,7 +4348,7 @@
           "new_password": {
             "type": "string",
             "maxLength": 128,
-            "minLength": 12,
+            "minLength": 8,
             "title": "New Password"
           }
         },
@@ -5531,6 +5614,476 @@
           "current"
         ],
         "title": "SessionOutput"
+      },
+      "BasketCommand": {
+        "properties": {
+          "command_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Command Id"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Version"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "add",
+              "quantity",
+              "remove",
+              "accept",
+              "clear",
+              "merge",
+              "replace"
+            ],
+            "title": "Action"
+          },
+          "item": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BasketItem"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "line_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{32}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line Id"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 99.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "expected_unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?:0|[1-9]\\d{0,35})(?:\\.\\d{1,7})?$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Unit"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "command_id",
+          "version",
+          "action"
+        ],
+        "title": "BasketCommand"
+      },
+      "BasketItem": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "product",
+              "bundle",
+              "artwork"
+            ],
+            "title": "Kind"
+          },
+          "item_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Item Id"
+          },
+          "choices": {
+            "additionalProperties": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "propertyNames": {
+              "format": "uuid"
+            },
+            "type": "object",
+            "maxProperties": 30,
+            "title": "Choices"
+          },
+          "framed": {
+            "type": "boolean",
+            "title": "Framed",
+            "default": false
+          },
+          "quantity": {
+            "type": "integer",
+            "maximum": 99.0,
+            "minimum": 1.0,
+            "title": "Quantity",
+            "default": 1
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "item_id"
+        ],
+        "title": "BasketItem"
+      },
+      "BasketLineOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "item": {
+            "$ref": "#/components/schemas/BasketItem"
+          },
+          "accepted_unit": {
+            "type": "string",
+            "title": "Accepted Unit"
+          },
+          "quote": {
+            "$ref": "#/components/schemas/BasketQuote"
+          },
+          "issue": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "price",
+                  "unavailable"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issue"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "item",
+          "accepted_unit",
+          "quote"
+        ],
+        "title": "BasketLineOutput"
+      },
+      "BasketOutput": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "owner": {
+            "type": "string",
+            "enum": [
+              "guest",
+              "account"
+            ],
+            "title": "Owner"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/BasketLineOutput"
+            },
+            "type": "array",
+            "title": "Lines"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/BasketTotals"
+          },
+          "csrf_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csrf Token"
+          },
+          "guest_available": {
+            "type": "boolean",
+            "title": "Guest Available",
+            "default": false
+          },
+          "checkout_enabled": {
+            "type": "boolean",
+            "const": false,
+            "title": "Checkout Enabled",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "owner",
+          "lines",
+          "totals"
+        ],
+        "title": "BasketOutput"
+      },
+      "BasketPart": {
+        "properties": {
+          "sku_id": {
+            "type": "string",
+            "title": "Sku Id"
+          },
+          "quantity": {
+            "type": "integer",
+            "title": "Quantity"
+          },
+          "name": {
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Name"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sku_id",
+          "quantity",
+          "name",
+          "unit",
+          "slug"
+        ],
+        "title": "BasketPart"
+      },
+      "BasketQuote": {
+        "properties": {
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name": {
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Name"
+          },
+          "selection": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Selection"
+          },
+          "options": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Options",
+            "default": []
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "base": {
+            "type": "string",
+            "title": "Base"
+          },
+          "saving": {
+            "type": "string",
+            "title": "Saving"
+          },
+          "parts": {
+            "items": {
+              "$ref": "#/components/schemas/BasketPart"
+            },
+            "type": "array",
+            "title": "Parts"
+          },
+          "media": {
+            "type": "string",
+            "enum": [
+              "product",
+              "bundle",
+              "artwork"
+            ],
+            "title": "Media"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image"
+          },
+          "artist": {
+            "anyOf": [
+              {
+                "prefixItems": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artist"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "frame": {
+            "anyOf": [
+              {
+                "prefixItems": [
+                  {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frame"
+          }
+        },
+        "type": "object",
+        "required": [
+          "slug",
+          "name",
+          "selection",
+          "unit",
+          "base",
+          "saving",
+          "parts",
+          "media"
+        ],
+        "title": "BasketQuote"
+      },
+      "BasketTotals": {
+        "properties": {
+          "base": {
+            "type": "string",
+            "title": "Base"
+          },
+          "discount": {
+            "type": "string",
+            "title": "Discount"
+          },
+          "total": {
+            "type": "string",
+            "title": "Total"
+          },
+          "currency": {
+            "type": "string",
+            "const": "IRT",
+            "title": "Currency"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "base",
+          "discount",
+          "total",
+          "currency",
+          "count"
+        ],
+        "title": "BasketTotals"
       }
     }
   }

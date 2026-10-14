@@ -1,3 +1,4 @@
+from nilart.contexts.basket.router import router as basket_router
 import logging
 from uuid import uuid4
 
@@ -108,3 +109,5 @@ def ready():
         engine.dispose()
         cache.close()
     return {"status": "ready"}
+
+app.include_router(basket_router)

@@ -87,7 +87,7 @@ export default function SecurityPage({
     timers = useRef(new Set<ReturnType<typeof setTimeout>>())
   const [liveSnapshot,setLiveSnapshot]=useState<Awaited<ReturnType<NonNullable<typeof liveApi>["load"]>>|null>(null)
   const liveGeneration=useRef(0)
-  const fixture = liveApi ? liveSnapshot || {...securityFixture("denied"),owner:"",minimum:12,sessions:[],maskedPhone:"",phoneVerified:false,passwordEnabled:false,otpEnabled:false,canChange:false,canManageSessions:false} : securityFixture(mode)
+  const fixture = liveApi ? liveSnapshot || {...securityFixture("denied"),owner:"",minimum:8,sessions:[],maskedPhone:"",phoneVerified:false,passwordEnabled:false,otpEnabled:false,canChange:false,canManageSessions:false} : securityFixture(mode)
   const canRevoke=(session:typeof fixture.sessions[number])=>liveApi?!!liveSnapshot&&!session.current:canRevokeSession(session,fixture.owner,fixture.canManageSessions)
   useEffect(()=>{
     if(!liveApi)return
@@ -198,7 +198,7 @@ export default function SecurityPage({
         "تکرار رمز جدید را وارد کنید.",
         "Confirm your new password.",
       ),
-      rules: (liveApi?t("رمز باید بین ۱۲ تا ۱۲۸ نویسه باشد.","Password must contain 12–128 characters."):t(
+      rules: (liveApi?t("رمز باید بین ۸ تا ۱۲۸ نویسه باشد.","Password must contain 8–128 characters."):t(
         "شرایط رمز جدید را مطابق قرارداد نمونه رعایت کنید.",
         "Meet the new password requirements in the fixture contract.",
       )),
@@ -740,7 +740,7 @@ export default function SecurityPage({
                         />
                         {t(
                           `حداقل ${fixture.minimum} نویسه طبق قرارداد نمونه`,
-                          liveApi?`12–128 characters`:`At least ${fixture.minimum} characters under the fixture contract`,
+                          liveApi?`8–128 characters`:`At least ${fixture.minimum} characters under the fixture contract`,
                         )}
                         <span>
                           {draft.next.length >= fixture.minimum
@@ -749,7 +749,7 @@ export default function SecurityPage({
                         </span>
                       </p>
                       <small>
-                        {(liveApi?t("رمز باید بین ۱۲ تا ۱۲۸ نویسه و حداکثر ۵۱۲ بایت باشد. فاصله‌های رمز تغییر داده نمی‌شوند.","Password must contain 12–128 characters and at most 512 bytes. Password spaces are preserved."):t(
+                        {(liveApi?t("رمز باید بین ۸ تا ۱۲۸ نویسه و حداکثر ۵۱۲ بایت باشد. فاصله‌های رمز تغییر داده نمی‌شوند.","Password must contain 8–128 characters and at most 512 bytes. Password spaces are preserved."):t(
                           "قواعد از تنظیمات Demo احراز هویت موجود بازاستفاده شده‌اند؛ الزام استفاده‌نکردن از رمز قبلی یا قواعد اضافه فرض نشده است.",
                           "Rules reuse the existing authentication Demo configuration; no reuse prohibition or extra requirements are assumed.",
                         ))}

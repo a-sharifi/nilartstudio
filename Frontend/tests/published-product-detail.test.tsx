@@ -13,11 +13,11 @@ test("SKU mapping rejects foreign owners, duplicate codes and imprecise money",(
  expect(mapPublishedSKUs([option],"p")[0].price?.amount).toBe(option.price.amount);
  for (const rows of [[{...option,product_id:"other"}],[option,option],[{...option,price:{amount:1,currency:"IRT"}}],[{...option,price:{amount:"-1",currency:"IRT"}}],[{...option,price:{amount:"1.1234567",currency:"IRT"}}],[{...option,price:{amount:"1",currency:"USD"}}]]) expect(()=>mapPublishedSKUs(rows,"p")).toThrow();
 });
-test("native product detail displays exact published price but never permits purchase",()=>{
+test("native product detail displays exact prices and allows saving to the basket",()=>{
  render(<PublishedProductDetail catalog={{product,skus:[option],status:"normal",retry:()=>{}}} language={1} collections={[]} onNavigate={()=>{}}/>);
  fireEvent.click(screen.getByRole("radio",{name:"SKU-EXACT"}));
  expect(screen.getByText(option.price.amount+" toman")).toBeTruthy();
- expect((screen.getByRole("button",{name:"Add to test basket"}) as HTMLButtonElement).disabled).toBe(true);
+ expect((screen.getByRole("button",{name:"Add to basket"}) as HTMLButtonElement).disabled).toBe(false);
  expect(screen.queryByText("Cats")).toBeNull();
 });
 test("products without SKUs remain visible with unknown prices",()=>{

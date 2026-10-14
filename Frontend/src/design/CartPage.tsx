@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react"
+import {basketMoney,type ExactPrices} from "../features/basket/money"
 import CartRow from "./CartRow"
 import {
   cartTotals,
@@ -10,6 +11,8 @@ import {
 } from "./cart"
 
 interface Props {
+  live?: {rows:EvaluatedLine[];busy:boolean;media:(row:EvaluatedLine)=>ReactNode;totals:{base:string;discount:string;total:string};details:(row:EvaluatedLine)=>{options?:string;exact:ExactPrices}}
+
   snapshot: CartSnapshot
   mode: string
   language: 0 | 1
@@ -28,6 +31,7 @@ interface Props {
   arrow: ReactNode
 }
 export default function CartPage({
+  live,
   snapshot,
   mode,
   language,
@@ -70,17 +74,17 @@ export default function CartPage({
   useEffect(() => {
     if (undoItem) undoRef.current?.focus({ preventScroll: true })
   }, [undoItem])
-  const rows = evaluateCart(snapshot, mode)
+  const rows = live?.rows ?? evaluateCart(snapshot, mode)
   const stacking = mode === "stacking"
-  const coupon = evaluateCoupon(rows, couponCode, stacking)
+  const coupon = evaluateCoupon(rows, live?"":couponCode, stacking)
   const totals = cartTotals(rows, coupon)
   const ready = rows.filter((row) => !row.issue)
   const attention = rows.filter((row) => row.issue && row.issue !== "pending")
   const awaiting = rows.filter((row) => row.issue === "pending")
   const offline = mode === "offline"
-  const updating = Object.values(pending).some(Boolean)
+  const updating = !!live?.busy || Object.values(pending).some(Boolean)
   const canCheckout =
-    totals.readyCount > 0 &&
+    !live && totals.readyCount > 0 &&
     !offline &&
     !updating &&
     !couponChecking &&
@@ -130,6 +134,7 @@ export default function CartPage({
     }
   }, [mode])
   const updateQuantity = (id: string, quantity: number) => {
+    if(live){if(!live.busy)onQuantity(id,quantity);return}
     if (offline || timers.current.has(id)) return
     setPending((previous) => ({ ...previous, [id]: true }))
     setErrors((previous) => ({ ...previous, [id]: "" }))
@@ -151,6 +156,7 @@ export default function CartPage({
   }
   const applyCode = (event: React.FormEvent) => {
     event.preventDefault()
+    if(live)return
     if (couponBusyRef.current || offline || updating) return
     couponBusyRef.current = true
     setCouponChecking(true)
@@ -259,10 +265,14 @@ export default function CartPage({
       language={language}
       coupon={coupon}
       stacking={stacking}
-      busy={!!pending[row.line.id]}
+      live={!!live}
+      media={live?.media(row)}
+      exact={live?.details(row).exact}
+      optionsSummary={live?.details(row).options}
+      busy={!!live?.busy || !!pending[row.line.id]}
       error={errors[row.line.id]}
       expanded={mode === "expanded" || mode === "bundle-unavailable"}
-      offline={offline || checking}
+      offline={offline || checking || !!live?.busy}
       onQuantity={updateQuantity}
       onRemove={onRemove}
       onEdit={onEdit}
@@ -294,17 +304,14 @@ export default function CartPage({
             <p>
               {number(rows.length)} {t("قلم در سبد", "cart lines")}{" "}
               <span>·</span> {number(totals.readyCount)}{" "}
-              {t("آماده پرداخت", "ready to check out")}
+              {live?t("دارای قیمت", "priced"):t("آماده پرداخت", "ready to check out")}
             </p>
           )}
         </div>
         {link(t("ادامه خرید", "Continue shopping"), "/shop")}
       </div>
       <p className="cart-demo-disclaimer">
-        {t(
-          "سبد نمایشی نیل‌آرت — بدون اتصال به پرداخت، سرور یا رزرو واقعی.",
-          "NilArt demo cart — no payment, backend or real stock reservation.",
-        )}
+        {live?t("سبد خرید ذخیره می‌شود. موجودی رزرو نمی‌شود و پرداخت هنوز فعال نیست.","Your basket is saved. Stock is not reserved and payment is not available yet."):t("سبد نمایشی نیل‌آرت — بدون اتصال به پرداخت، سرور یا رزرو واقعی.","NilArt demo cart — no payment, backend or real stock reservation.")}
       </p>
       {mode === "loading" ? (
         <div className="cart-layout" aria-busy="true">
@@ -355,12 +362,12 @@ export default function CartPage({
               "button secondary",
             )}
           </div>
-          <button className="cart-load-demo" onClick={onDemo}>
+          {!live&&(<button className="cart-load-demo" onClick={onDemo}>
             {t(
               "مشاهده نمونه سبد مختلط — داده نمایشی",
               "Preview a mixed cart — demo data",
             )}
-          </button>
+          </button>)}
         </section>
       ) : (
         <>
@@ -389,7 +396,7 @@ export default function CartPage({
               {ready.length > 0 && (
                 <section className="cart-group">
                   <div className="cart-group-heading">
-                    <h2>{t("اقلام آماده پرداخت", "Ready to check out")}</h2>
+                    <h2>{live?t("اقلام دارای قیمت", "Priced items"):t("اقلام آماده پرداخت", "Ready to check out")}</h2>
                     <span>
                       {number(ready.length)} {t("قلم", "items")}
                     </span>
@@ -455,8 +462,8 @@ export default function CartPage({
                       }}
                       onFocus={() => setEditingCode(true)}
                       onBlur={() => setEditingCode(false)}
-                      placeholder="NILART10"
-                      disabled={offline || couponChecking}
+                      placeholder={live?t("کد تخفیف","Discount code"):"NILART10"}
+                      disabled={!!live || offline || couponChecking}
                       aria-invalid={!!couponError || !!coupon.error}
                       aria-describedby={
                         couponError || coupon.error
@@ -467,7 +474,7 @@ export default function CartPage({
                     <button
                       className="button secondary"
                       type="submit"
-                      disabled={offline || couponChecking || updating}
+                      disabled={!!live || offline || couponChecking || updating}
                       aria-busy={couponChecking}
                     >
                       {couponChecking
@@ -477,10 +484,7 @@ export default function CartPage({
                   </div>
                 </form>
                 <p id="cart-code-demo" className="coupon-demo-note">
-                  {t(
-                    "کد نمونه NILART10 فقط برای تست رابط است.",
-                    "NILART10 is a demo code for testing this interface.",
-                  )}
+                  {live?t("کدهای تخفیف هنوز فعال نشده‌اند.","Discount codes are not available yet."):t("کد نمونه NILART10 فقط برای تست رابط است.","NILART10 is a demo code for testing this interface.")}
                 </p>
                 <p className="coupon-demo-note">
                   {t(
@@ -545,12 +549,12 @@ export default function CartPage({
                         "Items subtotal before discounts",
                       )}
                     </span>
-                    <strong>{updating ? "…" : money(totals.base)}</strong>
+                    <strong>{updating ? "…" : live?basketMoney(live.totals.base,language):money(totals.base)}</strong>
                   </div>
                   <div>
                     <span>{t("تخفیف پکیج", "Bundle discount")}</span>
                     <strong className="cart-discount">
-                      {updating ? "…" : `− ${money(totals.bundleDiscount)}`}
+                      {updating ? "…" : `− ${live?basketMoney(live.totals.discount,language):money(totals.bundleDiscount)}`}
                     </strong>
                   </div>
                   <div>
@@ -561,11 +565,11 @@ export default function CartPage({
                   </div>
                 </div>
                 <div className="cart-summary-total" aria-live="polite">
-                  <span>{t("جمع اقلام آماده", "Ready items total")}</span>
+                  <span>{live?t("جمع سبد خرید","Basket total"):t("جمع اقلام آماده", "Ready items total")}</span>
                   <strong>
                     {updating
                       ? t("در حال به‌روزرسانی…", "Updating…")
-                      : money(totals.total)}
+                      : live?basketMoney(live.totals.total,language):money(totals.total)}
                   </strong>
                 </div>
                 <dl className="cart-checkout-costs">
@@ -577,10 +581,7 @@ export default function CartPage({
                   </div>
                 </dl>
                 <p className="cart-not-final-note">
-                  {t(
-                    "این مبلغ بدون هزینه نامشخص ارسال است؛ مبلغ نهایی پرداخت نیست. در این نمونه تنظیم مالیات فعالی ارائه نشده است.",
-                    "This excludes unknown shipping costs, so it isn't the final payment amount. No active tax configuration was supplied for this demo.",
-                  )}
+                  {live?t("این مبلغ شامل هزینه ارسال نیست و مبلغ نهایی پرداخت نیست.","This excludes shipping and is not the final payment amount."):t("این مبلغ بدون هزینه نامشخص ارسال است؛ مبلغ نهایی پرداخت نیست. در این نمونه تنظیم مالیات فعالی ارائه نشده است.","This excludes unknown shipping costs, so it isn't the final payment amount. No active tax configuration was supplied for this demo.")}
                 </p>
                 {totals.excludedCount > 0 && (
                   <p className="cart-excluded-count">
@@ -597,7 +598,7 @@ export default function CartPage({
                   onClick={checkout}
                   aria-busy={checking}
                 >
-                  {cta}
+                  {live?t("پرداخت هنوز فعال نیست","Payment not available yet"):cta}
                   {arrow}
                 </button>
                 {checkoutMessage && (
@@ -648,7 +649,7 @@ export default function CartPage({
                     "Ready items · excl. shipping",
                   )}
                 </small>
-                <strong>{updating ? "…" : money(totals.total)}</strong>
+                <strong>{updating ? "…" : live?basketMoney(live.totals.total,language):money(totals.total)}</strong>
               </div>
               <button
                 className="button primary"

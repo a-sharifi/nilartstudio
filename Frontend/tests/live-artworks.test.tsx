@@ -44,7 +44,7 @@ test("native detail keeps its gallery, specifications and disabled purchasing wi
   expect(container.querySelector(".ad-summary")?.textContent).toBe("Description")
   expect(container.querySelector(".ad-spec-table")).toBeTruthy()
   expect(screen.getByText("Availability unconfirmed")).toBeTruthy()
-  expect(screen.getByRole("button", { name: "Add to cart" }).hasAttribute("disabled")).toBe(true)
+  expect(screen.getByRole("button", { name: "Add to basket" }).hasAttribute("disabled")).toBe(true)
   expect(screen.getByRole("button", { name: /Save to favorites/ }).hasAttribute("disabled")).toBe(true)
   expect(container.querySelector(".demo-painting")).toBeNull()
   expect(container.querySelector(".ad-frame-options")).toBeNull()
@@ -52,13 +52,14 @@ test("native detail keeps its gallery, specifications and disabled purchasing wi
 })
 
 test("missing published detail and request failure use distinct native states and retry", async () => {
-  const fetch = vi.fn().mockResolvedValueOnce({ ok: false, status: 500 }).mockResolvedValueOnce({ ok: false, status: 404 })
+  const artFetch = vi.fn().mockResolvedValueOnce({ ok: false, status: 500 }).mockResolvedValueOnce({ ok: false, status: 404 })
+  const fetch = vi.fn((url:string)=>String(url).includes("/basket")?Promise.resolve({ok:false,status:503,json:async()=>({})}):artFetch())
   vi.stubGlobal("fetch", fetch)
   render(<Detail slug="missing" />)
   expect(await screen.findByRole("heading", { name: "Unable to load the artwork." })).toBeTruthy()
   fireEvent.click(screen.getByRole("button", { name: "Try again" }))
   expect(await screen.findByRole("heading", { name: "Artwork not found" })).toBeTruthy()
-  expect(fetch).toHaveBeenCalledTimes(2)
+  expect(artFetch).toHaveBeenCalledTimes(2)
 })
 
 test("unpublished empty gallery and malformed response do not fall back to fixtures", async () => {

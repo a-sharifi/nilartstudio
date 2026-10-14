@@ -27,6 +27,7 @@ export const allowedNotebookSKUs = notebook.skus.filter((sku) =>
   notebookComponent.allowedSkus?.includes(sku.id),
 )
 export interface BundlePart {
+  name?:Localized
   productId: string
   skuId: string
   quantity: number

@@ -40,7 +40,7 @@ interface ArtShoppingLine {
   data: ArtCartLine
 }
 export type ShoppingLine = ProductShoppingLine | BundleShoppingLine | ArtShoppingLine
-export type CartIssue = "pending" | "expired" | "deleted" | "out-of-stock" | "quantity" | "shared-stock" | "price"
+export type CartIssue = "pending" | "expired" | "deleted" | "out-of-stock" | "quantity" | "shared-stock" | "price" | "unavailable"
 export interface EvaluatedLine {
   line: ShoppingLine
   name: Localized

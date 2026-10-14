@@ -17,7 +17,7 @@ test("reference bundle detail displays explicit contents and blocks purchases", 
   expect(screen.getByRole("heading", {name:"Test set"})).toBeTruthy();
   expect(screen.getByText("SKU-1")).toBeTruthy();
   expect(screen.getByText("2 per bundle")).toBeTruthy();
-  expect((screen.getByRole("button", {name:"Add bundle to cart — purchasing unavailable"}) as HTMLButtonElement).disabled).toBe(true);
+  expect((screen.getByRole("button", {name:"Add bundle to basket"}) as HTMLButtonElement).disabled).toBe(true);
   expect(screen.queryByText("Cats collection")).toBeNull();
   expect(screen.queryByText("Choose notebook options")).toBeNull();
 });

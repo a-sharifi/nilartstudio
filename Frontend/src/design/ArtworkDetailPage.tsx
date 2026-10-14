@@ -1,3 +1,6 @@
+import {useBasket} from "../features/basket/store"
+import {addAmounts,tomanAmount} from "../features/basket/money"
+import AddToBasket from "../features/basket/AddToBasket"
 import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState, type CSSProperties } from "react"
 import { ArtGalleryCard, SampleArtworkImage, DemoPainting, Symbol, works, type GalleryWork } from "./ArtworksPage"
@@ -80,6 +83,12 @@ export default function ArtworkDetailPage({
   const unknown = t("اعلام نشده", "Not provided")
   const [view, setView] = useState<View>("full")
   const [frame, setFrame] = useState(false)
+  const savedBasket=useBasket(live);
+  const [editingId,setEditingId]=useState("");
+  const prefilled=useRef("");
+  const editingRow=savedBasket.data.lines.find(row=>row.id===editingId&&row.item.kind==="artwork"&&row.quote.slug===slug);
+  useEffect(()=>setEditingId(new URLSearchParams(window.location.search).get("basketLine")||""),[slug]);
+  useEffect(()=>{if(editingRow&&prefilled.current!==editingId){setFrame(editingRow.item.framed);prefilled.current=editingId}},[editingRow,editingId]);
   const [lightbox, setLightbox] = useState(false)
   const [zoom, setZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })
@@ -625,7 +634,7 @@ export default function ArtworkDetailPage({
             </div>
           )}
           <div className="ad-buy-actions">
-            {inCart ? (
+            {live&&work.catalogRecord ? <AddToBasket item={{kind:"artwork",item_id:work.catalogRecord.id,framed:frame}} language={language} expectedUnit={metadata?tomanAmount(addAmounts(metadata.price_amount,frame?metadata.frame_price_amount||"0":"0"),metadata.currency):undefined} disabled={!metadata||status!=="available"||price===null||!!editingId&&!editingRow} lineId={editingId||undefined} onSaved={editingId?()=>onNavigate(t("سبد خرید","Basket"),`${prefix}/cart`):undefined}/> : inCart ? (
               link(
                 t(
                   "این اثر در سبد شماست · مشاهده سبد",

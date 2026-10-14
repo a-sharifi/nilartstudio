@@ -1,3 +1,6 @@
+import {useBasket} from "../features/basket/store"
+import {fromMicroUnits,tomanAmount} from "../features/basket/money"
+import AddToBasket from "../features/basket/AddToBasket";
 import { ReferenceBundleImage, ReferenceProductImage } from "./ReferenceMedia";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { catalogProducts } from "./catalog"
@@ -1126,6 +1129,11 @@ export function PublishedBundleDetail({ bundle, language, onNavigate, renderDial
  const name=t(bundle.title_fa,bundle.title_en),detail=useBundleDetail(bundle),document=detail.presentation
  const [shareMessage,setShareMessage]=useState(""),[quantity,setQuantity]=useState("1"),[guide,setGuide]=useState(false)
  const [selections,setSelections]=useState<Record<string,Record<string,string>>>({})
+ const savedBasket=useBasket(),[editingId,setEditingId]=useState("");
+ const prefilled=useRef("");
+ const editingRow=savedBasket.data.lines.find(row=>row.id===editingId&&row.item.kind==="bundle"&&row.item.item_id===bundle.id);
+ useEffect(()=>setEditingId(new URLSearchParams(window.location.search).get("basketLine")||""),[bundle.id]);
+ useEffect(()=>{if(editingRow&&detail.status==="normal"&&prefilled.current!==editingId){const next:Record<string,Record<string,string>>={};for(const [base,id] of Object.entries(editingRow.item.choices)){for(const product of Object.values(detail.products)){const sku=product.skus.find(row=>row.id===id);const combination=product.product.presentation?.option_combinations?.find(row=>row.code===sku?.code);if(combination)next[base]=combination.selections}}setSelections(next);setQuantity(String(editingRow.item.quantity));prefilled.current=editingId}},[editingRow,editingId,detail.products,detail.status]);
  const known=["cats-bundle","cat-everyday-set","cat-keepsake-set"].includes(bundle.slug)
  const order=["cats-sketchbook-127gsm","cat-ruled","cat-ruled-hard","cat-stickers","cat-bookmark"]
  const rank=(slug?:string|null)=>{const index=order.indexOf(slug??"");return index<0?order.length:index}
@@ -1213,7 +1221,7 @@ export function PublishedBundleDetail({ bundle, language, onNavigate, renderDial
       <small className="demo-price">{document?.sample?t("قیمت و تخفیف فقط داده آزمایشی‌اند.","Price and saving are test data only."):!quote?t("قیمت این انتخاب در دسترس نیست.","Selection price unavailable."):""}</small>
      </div>
      {document?.allow_discount_stacking===false&&<p className="bundle-stacking-note">{t("تخفیف این پکیج با کد تخفیف دیگر جمع نمی‌شود. این محدودیت فقط مربوط به پکیج است، نه محصولات مستقل سبد.","This bundle discount can't be combined with another discount code. This restriction applies to the bundle, not standalone products in your cart.")}</p>}
-     <button className="button primary product-add-button" disabled>{t("افزودن پکیج به سبد — خرید فعال نیست","Add bundle to cart — purchasing unavailable")}<BagIcon/></button><p className="product-reservation-note">{t("انتخاب‌ها پیش‌نمایش‌اند؛ موجودی هیچ جزء رزرو نمی‌شود.","Selections are a preview; no component stock is reserved.")}</p>
+     <AddToBasket item={{kind:"bundle",item_id:bundle.id,quantity:qty,choices:Object.fromEntries(components.map((part,index)=>[part.sku_id,parts[index].sku?.id||""]))}} language={language} expectedUnit={quote?tomanAmount(fromMicroUnits(quote.price),quote.currency):undefined} disabled={!selected||!quote||qty>99||!!editingId&&!editingRow} lineId={editingId||undefined} onSaved={editingId?()=>onNavigate(t("سبد خرید","Basket"),`${root}/cart`):undefined} label={editingId?t("ذخیره انتخاب‌ها","Save selections"):t("افزودن پکیج به سبد","Add bundle to basket")}/><p className="product-reservation-note">{t("انتخاب‌ها پیش‌نمایش‌اند؛ موجودی هیچ جزء رزرو نمی‌شود.","Selections are a preview; no component stock is reserved.")}</p>
     </BundlePurchaseSummary>
    </div>
   </section>

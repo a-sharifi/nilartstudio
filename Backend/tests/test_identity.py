@@ -87,3 +87,9 @@ def test_production_origin_rejected(origin):
 
 def test_production_https_origin_allowed():
     assert Settings(environment="production", public_origin="https://shop.example").public_origin == "https://shop.example"
+
+
+def test_eight_character_password_boundary():
+    validate_password("12345678")
+    with pytest.raises(IdentityError):
+        validate_password("1234567")

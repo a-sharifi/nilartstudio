@@ -406,3 +406,10 @@ Migration 0022 adds `catalog_artwork_details`; its existing 0021 catalog schema 
 Reference gallery/detail layouts and CSS are preserved. Cards and details share artist, price, technique, dimensions and sample images; available, price, artist-search and colored-pencil filters use persisted data. Purchasing remains disabled until its business workflow exists.
 
 Verification: 108 frontend tests, frontend types/lint, 12 artwork browser checks across final runs, focused PostgreSQL migration/import/rollback/idempotency/unpublication tests, focused backend lint/types, API/client generation, Docker API/web builds and eight healthy services. Full workspace backend run: 287 passed, 25 skipped (reported separately from focused PostgreSQL evidence). Unrelated panel implementation remains outside this commit. Remote CI is reported separately.
+
+
+### Server basket — 2026-10-14
+
+PUB-09 now uses the reference CartPage/CartRow layout with persisted guest/account baskets. Products, explicit bundle selections and sample artworks with optional frames support quantities, edit, remove/undo, reload, explicit guest merge and exact decimal totals. Origin/CSRF/session checks, optimistic versions and command idempotency protect writes; changed prices require confirmation. No stock reservations, order creation, payment or discount-code service is claimed; checkout and coupon controls remain disabled. Migration 0027 follows the additive 0023–0026 schema prerequisites, included without their unfinished panel services.
+
+Verification: six isolated PostgreSQL tests (including concurrent updates), backend lint/types, 209 frontend tests, frontend types/lint, generated contracts, API/web Docker builds and desktop/mobile browser flows. Local services healthy. Remote CI is reported separately after push.

@@ -1,4 +1,5 @@
 import FavoriteButton from "../features/customer/FavoriteButton";
+import {useBasket} from "../features/basket/store"
 import TestProductCart from "../components/ui/TestProductCart";
 import { ReferenceProductImage, ReferenceBundleImage, hasStationeryPhoto } from "./ReferenceMedia";
 import { useEffect, useRef, useState, type ReactNode } from "react"
@@ -1040,6 +1041,12 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
   const [optionSelection,setOptionSelection] = useState<Record<string,string>>({});
   const [guideOpen,setGuideOpen] = useState(false);
   const product = catalog.product;
+  const savedBasket=useBasket();
+  const [editingId,setEditingId]=useState("");
+  const prefilled=useRef("");
+  const editingRow=savedBasket.data.lines.find(row=>row.id===editingId&&row.item.kind==="product"&&row.quote.slug===product?.slug);
+  useEffect(()=>setEditingId(new URLSearchParams(window.location.search).get("basketLine")||""),[product?.id]);
+  useEffect(()=>{if(editingRow&&prefilled.current!==editingId){setSelected(editingRow.item.item_id);setOptionSelection(editingRow.quote.selection);prefilled.current=editingId}},[editingRow,editingId]);
 
   const root = `/${language === 0 ? "fa" : "en"}`;
   const collectionRoute = (slug = "") => `/collections${slug ? `/${encodeURIComponent(slug)}` : ""}?language=${language === 0 ? "fa" : "en"}`;
@@ -1097,7 +1104,7 @@ export function PublishedProductDetail({ catalog, language, collections, onNavig
           helper={group.helper?local(group.helper):undefined} guide={group.id==="size"?<button type="button" className="option-guide-link" onClick={()=>setGuideOpen(true)}>{t("راهنمای سایز","Size guide")}</button>:undefined}/>) : catalog.skus.length ? <ProductOptionGroup id="published-sku" label={t("گزینه محصول","Product option")} selected={selected} choices={catalog.skus.map(row=>({value:row.id,name:optionLabel(row.code)}))} onChange={setSelected} language={language}/> : <p className="product-stock-state">{t("هنوز گزینه‌ای منتشر نشده است.","No published options yet.")}</p>}</section>
         <div className="selection-summary" aria-live="polite">{families.length ? (complete?selectedLabels:(families.length===3?t("سایز، تعداد برگ و جلد را انتخاب کنید.","Choose a size, sheet count and cover."):t("سایز دفتر را انتخاب کنید.","Choose a notebook size."))) : sku ? optionLabel(sku.code) : t("گزینه محصول را انتخاب کنید.","Choose a product option.")}</div>
         <div className="product-price-summary" role="status"><div className="unit-price"><span>{t("قیمت هر محصول","Unit price")}</span><strong>{price}</strong></div></div>
-        <TestProductCart sku={sku} title={name} language={language}/>
+        <TestProductCart sku={sku} title={name} language={language} lineId={editingId||undefined} initialQuantity={editingRow?.item.quantity||1} editingMissing={!!editingId&&!editingRow} onSaved={editingId?()=>onNavigate(t("سبد خرید","Basket"),`${root}/cart`):undefined}/>
 
       </div>
     </section>

@@ -1,10 +1,16 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { catalogProducts } from "./catalog"
 import { covers } from "./product"
+import {basketMoney,differenceAmount,compareAmounts,type ExactPrices} from "../features/basket/money"
 import BundleStillLife from "./BundleStillLife"
 import type { EvaluatedLine, CouponResult } from "./cart"
 
 interface Props {
+  exact?:ExactPrices
+  optionsSummary?:string
+  live?:boolean
+  media?:ReactNode
+
   row: EvaluatedLine
   language: 0 | 1
   coupon: CouponResult
@@ -24,6 +30,10 @@ interface Props {
   hidePrivate?: boolean
 }
 export default function CartRow({
+  exact,
+  optionsSummary,
+  live=false,
+  media,
   row,
   language,
   coupon,
@@ -52,7 +62,7 @@ export default function CartRow({
           product.skus.some((sku) => sku.id === line.data.skuId),
         )
       : undefined
-  const canEdit =
+  const canEdit = live ||
     line.kind === "bundle" ||
     (line.kind === "product" &&
       !!line.data.selection.sheets &&
@@ -68,7 +78,7 @@ export default function CartRow({
       : line.kind === "commission"
         ? t("سفارش نقاشی", "Commission")
         : line.kind === "artwork"
-          ? t("اثر آماده", "Original artwork")
+          ? (live?t("اثر هنری", "Artwork"):t("اثر آماده", "Original artwork"))
           : t("محصول", "Product")
   const summary =
     line.kind === "product" || line.kind === "bundle"
@@ -114,7 +124,7 @@ export default function CartRow({
           aria-label={t("تصویر نمونه: ", "Sample image: ") + displayName}
         >
           <div aria-hidden="true">
-            {line.kind === "bundle" ? (
+            {media ?? (line.kind === "bundle" ? (
               <BundleStillLife renderMedia={renderMedia} />
             ) : isArt ? (
               <div className="cart-art-reference">
@@ -134,7 +144,7 @@ export default function CartRow({
               </div>
             ) : (
               renderMedia("sage", product?.kind || "book")
-            )}
+            ))}
           </div>
         </div>
         <div className="cart-row-title">
@@ -149,18 +159,18 @@ export default function CartRow({
             </p>
           ) : (
             <p className="cart-options">
-              {summary ||
+              {optionsSummary || summary ||
                 t("طرح و مشخصات ثابت", "Fixed design and specification")}
             </p>
           )}
-          {!isArt && <small>{t("کالکشن گربه", "Cats collection")}</small>}
+          {!live&&!isArt && <small>{t("کالکشن گربه", "Cats collection")}</small>}
           {isArt && (
             <span className={`cart-art-status ${row.issue ? "" : "confirmed"}`}>
               {row.issue === "pending"
                 ? t("در انتظار بررسی هنرمند", "Awaiting artist review")
                 : row.issue === "expired"
                   ? t("قیمت نیازمند تأیید دوباره", "Quote needs reconfirmation")
-                  : t("قیمت تأییدشده — نمونه", "Confirmed price — demo")}
+                  : live?t("قیمت ثبت‌شده","Saved price"):t("قیمت تأییدشده — نمونه", "Confirmed price — demo")}
             </span>
           )}
         </div>
@@ -192,7 +202,7 @@ export default function CartRow({
                   </div>
                   <div>
                     <h4>
-                      {item?.name[language] ||
+                      {part.name?.[language] || item?.name[language] ||
                         t("جزء ثبت‌شده", "Saved component")}
                     </h4>
                     <p>
@@ -237,7 +247,7 @@ export default function CartRow({
                   ? t("قیمت هر دفتر", "Price per notebook")
                   : t("قیمت واحد", "Unit price")}
             </span>
-            <strong>{money(row.acceptedPrice)}</strong>
+            <strong>{exact?basketMoney(exact.accepted,language):money(row.acceptedPrice)}</strong>
           </div>
           {readOnly ? (
             <div className="checkout-readonly-quantity">
@@ -270,7 +280,7 @@ export default function CartRow({
               disabled={
                 offline ||
                 row.issue === "deleted" ||
-                row.issue === "out-of-stock"
+                row.issue === "out-of-stock" || row.issue === "unavailable"
               }
               busy={busy}
               language={language}
@@ -282,7 +292,7 @@ export default function CartRow({
             {busy ? (
               <span className="skeleton cart-money-skeleton" />
             ) : (
-              <strong>{money(row.acceptedPrice * row.quantity)}</strong>
+              <strong>{exact?basketMoney(exact.accepted,language,row.quantity):money(row.acceptedPrice * row.quantity)}</strong>
             )}
           </div>
         </div>
@@ -297,7 +307,7 @@ export default function CartRow({
                 )
               : t("مبلغ تأییدشده", "Confirmed amount")}
           </span>
-          <strong>{money(row.acceptedPrice)}</strong>
+          <strong>{exact?basketMoney(exact.accepted,language):money(row.acceptedPrice)}</strong>
           <small>
             {t(
               line.kind === "artwork"
@@ -313,7 +323,7 @@ export default function CartRow({
       {line.kind === "bundle" && (
         <p className="cart-bundle-saving">
           {t("تخفیف پکیج این ردیف: ", "This line's bundle saving: ")}
-          {money(
+          {exact?basketMoney(exact.saving,language,row.quantity):money(
             Math.max(
               0,
               line.data.parts.reduce(
@@ -354,19 +364,17 @@ export default function CartRow({
               <div className="cart-price-comparison">
                 <span>
                   {t("قیمت قبلی", "Previous price")}
-                  <s>{money(row.acceptedPrice)}</s>
+                  <s>{exact?basketMoney(exact.accepted,language):money(row.acceptedPrice)}</s>
                 </span>
                 <span>
                   {t("قیمت جدید", "New price")}
-                  <strong>{money(row.currentPrice)}</strong>
+                  <strong>{exact?basketMoney(exact.current,language):money(row.currentPrice)}</strong>
                 </span>
               </div>
               <p>
                 {t("تغییر مبلغ ردیف: ", "Line amount change: ")}
-                {row.currentPrice >= row.acceptedPrice ? "+" : "−"}{" "}
-                {money(
-                  Math.abs(row.currentPrice - row.acceptedPrice) * row.quantity,
-                )}
+                {(exact?compareAmounts(exact.current,exact.accepted):row.currentPrice-row.acceptedPrice)>=0 ? "+" : "−"}{" "}
+                {exact?basketMoney(differenceAmount(exact.current,exact.accepted),language,row.quantity):money(Math.abs(row.currentPrice-row.acceptedPrice)*row.quantity)}
               </p>
               {line.kind === "bundle" && (
                 <p>
@@ -374,9 +382,9 @@ export default function CartRow({
                     "خرید جداگانه جدید: ",
                     "Updated separate-purchase total: ",
                   )}
-                  {money(row.basePrice)} ·{" "}
+                  {exact?basketMoney(exact.base,language):money(row.basePrice)} ·{" "}
                   {t("تخفیف پکیج: ", "Bundle discount: ")}
-                  {money(row.bundleSaving)}
+                  {exact?basketMoney(exact.saving,language):money(row.bundleSaving)}
                 </p>
               )}
               <button
@@ -387,7 +395,7 @@ export default function CartRow({
                 {t("تأیید قیمت جدید", "Accept updated price")}
               </button>
             </>
-          ) : row.issue === "pending" ? (
+          ) : row.issue === "unavailable" ? <p>{t("این قلم در حال حاضر در دسترس نیست؛ آن را حذف کنید یا گزینه دیگری انتخاب کنید.","This item is currently unavailable. Remove it or choose another option.")}</p> : row.issue === "pending" ? (
             <p>
               {t(
                 "این سفارش پس از بررسی هنرمند و تأیید قیمت، قابل پرداخت است.",
@@ -496,7 +504,7 @@ export default function CartRow({
             action(
               row.issue === "pending"
                 ? t("پیگیری درخواست", "View request")
-                : t("مشاهده جزئیات سفارش", "View commission details"),
+                : live&&line.kind==="artwork"?t("مشاهده اثر", "View artwork"):t("مشاهده جزئیات سفارش", "View commission details"),
               line.kind === "commission"
                 ? line.data.commissionAcceptance
                   ? `/${language === 0 ? "fa" : "en"}/commissions/new/quote`

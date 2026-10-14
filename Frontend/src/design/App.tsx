@@ -1,3 +1,5 @@
+import BasketPage from "../features/basket/BasketPage"
+import {useBasket} from "../features/basket/store"
 import SelectDropdown from "../components/ui/SelectDropdown";
 import PublishedBundleCard, { referenceBundleOrder } from "./PublishedBundleCard"
 import Mockup from "./Mockup"
@@ -440,7 +442,7 @@ export default function App() {
   const isHomePage = ["/", "/fa", "/en"].includes(page)
   const bundleCatalog = useBundleCatalog(!demoMode && (isHomePage || isProduct || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page)), liveBundleSlug)
   const isBundle = page.startsWith("/bundles/")
-  const isCart = page === "/cart"
+  const isCart = /^\/(?:fa\/|en\/)?cart\/?$/.test(page)
   const isCheckout = ["/checkout", "/checkout/address", "/checkout/delivery"].includes(page) || isPaymentRoute(page)
   const isBuyingGuide = /^\/(?:fa\/|en\/)?guides\/buying\/?$/.test(page)
   const isFAQ = /^\/(?:fa\/|en\/)?faq\/?$/.test(page)
@@ -458,7 +460,8 @@ export default function App() {
   const isPreferences = isPreferencesRoute(page)
   const isAssessment = isAssessmentRoute(page)
   const isQuote = isQuoteRoute(page)
-  const cartCount =
+  const savedBasket=useBasket(!demoMode)
+  const cartCount = !demoMode?savedBasket.data.totals.count:
     cart.reduce((total, line) => total + line.quantity, 0) +
     bundleCart.reduce((total, line) => total + line.quantity, 0) +
     artCart.length
@@ -1330,11 +1333,11 @@ export default function App() {
                 </button>
                 <button
                   className="icon-button cart-button"
-                  onClick={() => navigate(t("سبد خرید", "Cart"), "/cart")}
+                  onClick={() => navigate(t("سبد خرید", "Cart"), demoMode?"/cart":`/${lang===0?"fa":"en"}/cart`)}
                   aria-label={
                     t("سبد خرید، ", "Cart, ") +
                     cartCount.toLocaleString(lang === 0 ? "fa-IR" : "en-US") +
-                    t(" کالا (نمایشی)", " items (demo)")
+                    (demoMode?t(" کالا (نمایشی)", " items (demo)"):t(" کالا", " items"))
                   }
                 >
                   <Icon name="bag" />
@@ -1584,7 +1587,7 @@ export default function App() {
             renderMedia={(color, kind) => <Mockup color={color} kind={kind} />}
             arrow={<Icon name="arrow" size={18} />}
           />
-        ) : isCart ? (
+        ) : isCart&&!demoMode ? <BasketPage language={lang} onNavigate={navigate}/> : isCart ? (
           <Suspense
             fallback={
               <div className="container shopping-cart-page" aria-busy="true">

@@ -1,17 +1,16 @@
 import {expect,test} from "@playwright/test"
-test("database-priced notebook saves a local test basket and uses the supplied font",async({page})=>{
+test("database-priced notebook saves a server basket and uses the supplied font",async({page})=>{
  await page.goto("/en/products/cats-sketchbook-127gsm")
  await page.getByRole("radio",{name:/A4/}).click()
  await page.getByRole("radio",{name:/50/}).click()
  await page.getByRole("radio",{name:/3 mm|3mm/}).click()
- await expect(page.getByText("245000 toman",{exact:true})).toBeVisible()
  await page.getByRole("button",{name:"Increase quantity"}).click()
- await page.getByRole("button",{name:"Add to test basket"}).click()
- await expect(page.getByText("Added to the test basket.",{exact:true})).toBeVisible()
- const rows=await page.evaluate(()=>JSON.parse(localStorage.getItem("nilart-reference-test-cart-v1")||"[]"))
- expect(Number(rows[0].amount)).toBe(245000);expect(rows[0].quantity).toBe(2)
+ await page.getByRole("button",{name:"Add to basket",exact:true}).click()
+ await expect(page.getByRole("status").filter({hasText:"Added to your basket."})).toBeVisible()
+ await page.goto("/en/cart")
+ await expect(page.getByText("490,000 toman",{exact:true}).first()).toBeVisible()
  await page.reload()
- await expect(page.getByRole("region",{name:"Test basket"})).toContainText("2 × 245000.000000 IRT")
+ await expect(page.getByText("490,000 toman",{exact:true}).first()).toBeVisible()
  expect(await page.evaluate(()=>getComputedStyle(document.body).fontFamily)).toContain("Yekan Bakh")
  expect(await page.evaluate(()=>document.fonts.check('16px "Yekan Bakh"'))).toBeTruthy()
 })

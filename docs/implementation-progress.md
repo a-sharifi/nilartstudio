@@ -631,3 +631,12 @@ Added `NILART_DEV_MODE` and `NILART_FAKE_SMS` (both false in .env.example). Fake
 Verification pages display the server-provided sandbox code in Persian/English, remove it after success/expiry, and refresh it from a new request/resend. An already-open pre-change flow needs a new request/resend. OpenAPI/client contracts updated. No OTP verification bypass was added.
 
 Local verification: 8 backend tests including isolated PostgreSQL verification/gating and SMS failure, focused backend lint/types, 178 frontend tests, frontend lint/types, browser display/disabled-state regression, API/web Docker builds and eight healthy services passed. Remote CI reported separately.
+
+
+### Server basket — 2026-10-14
+
+PUB-09 now uses the reference CartPage/CartRow layout with persisted guest/account baskets. Products, explicit bundle selections and sample artworks with optional frames support quantities, edit, remove/undo, reload, explicit guest merge and exact decimal totals. Origin/CSRF/session checks, optimistic versions and command idempotency protect writes; changed prices require confirmation. No stock reservations, order creation, payment or discount-code service is claimed; checkout and coupon controls remain disabled. Migration 0027 follows the additive 0023–0026 schema prerequisites, included without their unfinished panel services.
+
+Verification: six isolated PostgreSQL tests (including concurrent updates), backend lint/types, 210 frontend tests, frontend types/lint, generated contracts, API/web Docker builds and desktop/mobile browser flows. Local services healthy. Remote CI is reported separately after push.
+
+Password policy: registration, recovery and account password changes now accept 8–128 characters. Backend boundary test accepts 8 and rejects 7; 26 identity tests passed.

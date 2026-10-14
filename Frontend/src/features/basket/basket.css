@@ -1,0 +1,2 @@
+.ad-buy-actions > .product-feedback { grid-column: 1 / -1; order: 3; }
+.cart-row-image .sample-catalog-photo > small { display: none; }
