@@ -1,3 +1,4 @@
+import {liveAuthApi} from "../features/identity/adapter"
 import BasketPage from "../features/basket/BasketPage"
 import {useBasket} from "../features/basket/store"
 import SelectDropdown from "../components/ui/SelectDropdown";
@@ -350,6 +351,22 @@ export default function App() {
     })
   }, [])
   const [signedIn, setSignedIn] = useState(false)
+  useEffect(() => {
+    if (demoMode) return
+    let active = true
+    const refresh = async () => {
+      const result = await liveAuthApi.checkSession()
+      if (active && (result === "confirm" || result === "signedOut")) setSignedIn(result === "confirm")
+    }
+    const unsubscribe = liveAuthApi.subscribe(event => {
+      if (event.type === "changed") setSignedIn(!event.signedOut)
+      else void refresh()
+    })
+    void refresh()
+    const focus = () => void refresh()
+    window.addEventListener("focus", focus)
+    return () => { active = false; unsubscribe(); window.removeEventListener("focus", focus) }
+  }, [demoMode])
   const [referenceDraft, setReferenceDraft] = useState<ReferenceDraft | null>(null)
   const [preferencesDraft, setPreferencesDraft] = useState<PreferencesDraft | null>(null)
   const [assessmentJob, setAssessmentJob] = useState<AssessmentJob | null>(null)
@@ -1319,14 +1336,14 @@ export default function App() {
                   {lang === 0 ? "EN" : "فا"}
                 </button>
                 <button
-                  className="icon-button desktop-only"
+                  className={`icon-button desktop-only${signedIn ? " account-signed-in" : ""}`}
                   onClick={() =>
                     navigate(
                       t("حساب من", "My account"),
-                      signedIn ? "/account" : "/login",
+                      demoMode ? (signedIn ? "/account" : "/login") : `/${lang === 0 ? "fa" : "en"}/${signedIn ? "account" : "auth/login"}`,
                     )
                   }
-                  aria-label={t("حساب من", "My account")}
+                  aria-label={signedIn ? t("حساب من — وارد شده‌اید", "My account — signed in") : t("ورود به حساب", "Sign in")}
                 >
                   <Icon name="user" />
                   {signedIn && <span className="account-dot" />}
@@ -2374,7 +2391,7 @@ export default function App() {
             onClick={() =>
               navigate(
                 t("حساب من", "My account"),
-                signedIn ? "/account" : "/login",
+                demoMode ? (signedIn ? "/account" : "/login") : `/${lang === 0 ? "fa" : "en"}/${signedIn ? "account" : "auth/login"}`,
               )
             }
           >

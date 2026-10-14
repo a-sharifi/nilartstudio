@@ -41,3 +41,18 @@ test("live collection tabs use Next query navigation without scroll resets", () 
   rerender(<App />)
   expect(screen.getByRole("tab", { name: "Products" }).getAttribute("aria-selected")).toBe("true")
 })
+
+test("storefront account control reflects verified login and logout", async () => {
+  const {liveAuthApi}=await import("../src/features/identity/adapter")
+  vi.spyOn(liveAuthApi,"checkSession").mockResolvedValue("confirm")
+  let listener: Parameters<typeof liveAuthApi.subscribe>[0] | undefined
+  vi.spyOn(liveAuthApi,"subscribe").mockImplementation(callback=>{listener=callback;return ()=>{}})
+  render(<App />)
+  const account=await screen.findByRole("button",{name:"My account — signed in"})
+  expect(account.classList.contains("account-signed-in")).toBe(true)
+  fireEvent.click(account)
+  expect(next.push).toHaveBeenCalledWith("/en/account")
+  const {act}=await import("@testing-library/react")
+  act(()=>listener?.({type:"changed",source:"authentication",signedOut:true}))
+  expect(screen.getByRole("button",{name:"Sign in"}).classList.contains("account-signed-in")).toBe(false)
+})

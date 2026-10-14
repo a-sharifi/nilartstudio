@@ -656,3 +656,7 @@ After verified live registration or recovery, navigate to the preserved return d
 
 ### Password login continuation — 2026-10-14
 Verified password login now opens the preserved return destination or localized account panel. Removed obsolete panel-unavailable copy. Three navigation regression tests and frontend type check passed.
+
+
+### Storefront account session indicator — 2026-10-14
+The header reads the verified session and subscribes to login/logout/revalidation events, instead of relying on the demo sign-in flag. Signed-in accounts show an accent circle and green indicator, accessible signed-in label, and localized account destination. Guest controls restore on logout. Routing and session-state regression checks passed.

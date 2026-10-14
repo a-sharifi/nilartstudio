@@ -9,3 +9,6 @@
 .live-auth .password-demo {
   display: none;
 }
+
+/* Reflect the verified session in the storefront account control. */
+.account-signed-in { color: var(--accent); background: #eee9e0; border: 1px solid var(--border); border-radius: 50%; }
