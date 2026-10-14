@@ -8,6 +8,7 @@
 @import './about.css';
 @import './contact.css';
 @import './terms.css';
+@import './privacy.css';
 
 :root {
   --collection-title-size: 40px; --collection-title-leading: 52px;

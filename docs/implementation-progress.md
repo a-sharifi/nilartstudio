@@ -644,3 +644,7 @@ Password policy: registration, recovery and account password changes now accept 
 
 ### OTP request retry recovery — 2026-10-14
 OTP throttling returns Retry-After from Redis limit expiry or the persisted 60-second resend cooldown. Registration/login/recovery request forms show the actual remaining seconds and unlock on expiry; missing metadata shows ordinary retry copy without a permanent disabled form. Verified: two frontend regression tests, 17 disposable Redis tests, frontend type/lint checks and API/web Docker builds.
+
+
+### Privacy reference layout — 2026-10-14
+Connected the omitted original privacy.css stylesheet. PrivacyPage.tsx, privacy.ts and privacy.css remain identical to design-reference; approved Yekan Bakh typography is retained.
