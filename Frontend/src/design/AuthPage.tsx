@@ -139,7 +139,7 @@ export default function AuthPage({ page, search, navigate, liveSignIn, liveApi }
       if (id !== operation.current) return "unknown" as const
       setVerifyFlow(flow); navigate(`${prefix}/auth/verify${suffix}`)
       return "accepted" as const
-    } catch (error) { return errorState(error) }
+    } catch (error) { if (errorState(error)==="limited") return {status:"limited" as const,retryAfterSeconds:(error as Error & {retryAfterSeconds?:number}).retryAfterSeconds}; return errorState(error) }
   } : undefined
   const liveVerify = liveApi ? async (code: string) => {
     if (!verifyFlow || verifyFlow.demo) return "invalidCode" as const

@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
+from math import ceil
 from typing import Literal
 from uuid import UUID
 
@@ -22,7 +23,7 @@ from nilart.contexts.identity.infrastructure.otp import (
     SmsUnavailable,
     SqlOtpRepository,
 )
-from nilart.contexts.identity.infrastructure.rate_limit import otp_attempt_allowed
+from nilart.contexts.identity.infrastructure.rate_limit import otp_attempt_allowed, otp_retry_after
 from nilart.contexts.identity.presentation.router import SessionOutput, failure, set_session_cookie
 from nilart.shared.database import session_dependency
 
@@ -94,7 +95,11 @@ def gate(request: Request, action: str, phone: str = ""):
     try:
         if not otp_attempt_allowed(settings.redis_url, action, phone,
                                    request.client.host if request.client else "unknown"):
-            return failure(request, "rate_limited", 429)
+            result = failure(request, "rate_limited", 429)
+            remaining = otp_retry_after(settings.redis_url, action, phone, request.client.host if request.client else "unknown")
+            if remaining is not None:
+                result.headers["Retry-After"] = str(remaining)
+            return result
     except Exception:
         return failure(request, "authentication_unavailable", 503)
     return None
@@ -116,7 +121,13 @@ def request_otp(body: OtpRequest, request: Request, response: Response,
         db.commit()
     except IdentityError as exc:
         db.rollback()
-        return failure(request, str(exc), 429)
+        result = failure(request, str(exc), 429)
+        if str(exc) == "rate_limited":
+            latest = service(db, sms).repository.latest_created(phone, body.purpose)
+            if latest:
+                remaining = max(1, ceil((latest + timedelta(seconds=60) - datetime.now(UTC)).total_seconds()))
+                result.headers["Retry-After"] = str(remaining)
+        return result
     except SmsUnavailable:
         db.rollback()
         return failure(request, "sms_unavailable", 503)

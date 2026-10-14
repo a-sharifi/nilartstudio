@@ -4,7 +4,7 @@ import type { LiveVerifyFlow } from "../../design/auth";
 
 export type Purpose = "login" | "register" | "recovery";
 export class IdentityApiError extends Error {
-  constructor(public code: string) { super(code); }
+  constructor(public code: string, public retryAfterSeconds?: number) { super(code); }
 }
 
 async function post(path: string, body: object): Promise<Record<string, unknown>> {
@@ -21,9 +21,10 @@ async function post(path: string, body: object): Promise<Record<string, unknown>
   if (!result || typeof result !== "object") throw new IdentityApiError("unknown");
   if (!response.ok) {
     const code = "code" in result ? result.code : "";
+    const retry = Number(response.headers.get("Retry-After"));
     throw new IdentityApiError(response.status === 429 ? "limited"
       : code === "sms_unavailable" || code === "authentication_unavailable" ? "service"
-      : response.status >= 500 ? "unknown" : "invalid");
+      : response.status >= 500 ? "unknown" : "invalid", Number.isFinite(retry) && retry > 0 ? retry : undefined);
   }
   return result as Record<string, unknown>;
 }

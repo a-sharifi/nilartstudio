@@ -48,3 +48,21 @@ def otp_attempt_allowed(redis_url: str, action: str, phone: str, address: str) -
         return allowed
     finally:
         cache.close()
+
+
+def otp_retry_after(redis_url: str, action: str, phone: str, address: str) -> int | None:
+    limits = {"request": (5, 30), "verify": (30, 60), "complete": (10, 30)}
+    phone_limit, address_limit = limits[action]
+    cache = Redis.from_url(redis_url, socket_connect_timeout=2, socket_timeout=2)
+    try:
+        remaining = []
+        for prefix, value, limit in [("address", address, address_limit), ("phone", phone, phone_limit)]:
+            if not value:
+                continue
+            key = f"auth:otp:{action}:{prefix}:" + token_digest(value)
+            count, ttl = cache.eval("return {tonumber(redis.call('GET',KEYS[1]) or '0'),redis.call('TTL',KEYS[1])}", 1, key)
+            if int(count) > limit and int(ttl) > 0:
+                remaining.append(int(ttl))
+        return max(remaining) if remaining else None
+    finally:
+        cache.close()

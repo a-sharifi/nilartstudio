@@ -19,7 +19,7 @@ export default function OtpRequestForm({ en, suffix, navigate, phone, setPhone, 
   onContext: (value: "initial" | "checkout" | "commission" | "account") => void
   purpose?: "login" | "register" | "recovery"
   onContinue: (flow: DemoVerifyFlow) => void
-  liveRequest?: (phone: string, purpose: "login" | "register" | "recovery") => Promise<"accepted" | "network" | "service" | "limited" | "unknown">
+  liveRequest?: (phone: string, purpose: "login" | "register" | "recovery") => Promise<"accepted" | "network" | "service" | "limited" | "unknown" | {status:"limited";retryAfterSeconds?:number}>
 }) {
   const t = (fa: string, english: string) => en ? english : fa
   const prefix = en ? "/en" : "/fa"
@@ -27,6 +27,9 @@ export default function OtpRequestForm({ en, suffix, navigate, phone, setPhone, 
   const recovering = purpose === "recovery"
   const verificationRoute = `${prefix}/auth/verify${suffix}`
   const [state, setState] = useState<State>("initial")
+  const [retryAt,setRetryAt]=useState<number|null>(null)
+  const [remaining,setRemaining]=useState(0)
+  useEffect(()=>{if(!retryAt)return;const tick=()=>{const seconds=Math.max(0,Math.ceil((retryAt-Date.now())/1000));setRemaining(seconds);if(!seconds){setRetryAt(null);setState(old=>old==="limited"?"initial":old)}};tick();const id=setInterval(tick,1000);return()=>clearInterval(id)},[retryAt])
   const [error, setError] = useState<"required" | "invalid" | "country" | null>(null)
   const [flowPhone, setFlowPhone] = useState<string | null>(null)
   const [demoAccepted, setDemoAccepted] = useState(false)
@@ -37,13 +40,13 @@ export default function OtpRequestForm({ en, suffix, navigate, phone, setPhone, 
   const busy = state === "requesting" || state === "checking"
   const fingerprint = `${country}:${normalizePhone(phone, phoneCountries.some((item) => item.id === country) ? country : "IR")}`
   const canContinue = !liveRequest && (state === "accepted" || state === "active") && flowPhone === fingerprint
-  const blocked = busy || state === "limited" || state === "unknown" || state === "service" || canContinue
+  const blocked = busy || (state === "limited" && !!retryAt) || state === "unknown" || state === "service" || canContinue
   const messages: Partial<Record<State, string>> = {
     accepted: recovering ? t("Demo: درخواست بازیابی در نمونه پذیرفته شد؛ پیامکی ارسال نشده، رمز تغییر نکرده و ورود انجام نشده است.", "Demo: recovery request accepted in this preview; no SMS was sent, no password changed and no sign-in occurred.") : registering ? t("Demo: درخواست تأیید ثبت‌نام پذیرفته شد؛ پیامکی ارسال نشده و حسابی ساخته نشده است.", "Demo: registration verification request accepted; no SMS was sent and no account was created.") : t("Demo: درخواست در نمونه پذیرفته شد؛ این به معنی تحویل پیامک یا ورود نیست.", "Demo: request accepted in this preview; this does not mean SMS delivery or sign-in."),
     active: recovering ? t("Demo: یک جریان بازیابی برای همین شماره قابل ادامه است.", "Demo: an active recovery flow for this number can be continued.") : registering ? t("Demo: یک جریان تأیید ثبت‌نام برای همین شماره قابل ادامه است.", "Demo: an active registration verification flow for this number can be continued.") : t("Demo: یک جریان تأیید ورود برای همین شماره قابل ادامه است.", "Demo: an active sign-in verification flow for this number can be continued."),
     network: recovering ? t("ثبت درخواست بازیابی ممکن نشد. اتصال را بررسی و دوباره تلاش کنید.", "Unable to request recovery. Check your connection and try again.") : registering ? t("ثبت درخواست ممکن نشد. اتصال را بررسی و دوباره تلاش کنید.", "Unable to submit the request. Check your connection and try again.") : t("ثبت درخواست کد ممکن نشد. اتصال را بررسی و دوباره تلاش کنید.", "Unable to request a code. Check your connection and try again."),
     service: recovering ? t("بازیابی رمز در حال حاضر در دسترس نیست.", "Password recovery is currently unavailable.") : registering ? t("ثبت‌نام در حال حاضر در دسترس نیست.", "Registration is currently unavailable.") : t("دریافت کد در حال حاضر در دسترس نیست.", "Code delivery is currently unavailable."),
-    limited: t("تعداد درخواست‌ها بیش از حد مجاز است. پس از زمان اعلام‌شده دوباره تلاش کنید.", "Too many requests. Try again after the indicated waiting period."),
+    limited: t("تعداد درخواست‌ها بیش از حد مجاز است. کمی بعد دوباره تلاش کنید.", "Too many requests. Please try again shortly."),
     unknown: registering || recovering ? t("نتیجه درخواست هنوز تأیید نشده است.", "The request result has not been confirmed yet.") : t("نتیجه درخواست هنوز مشخص نشده است.", "The request result has not been confirmed yet."),
     expired: t("نشست شما پایان یافته است. دوباره وارد شوید.", "Your session has expired. Sign in again."),
   }
@@ -63,7 +66,7 @@ export default function OtpRequestForm({ en, suffix, navigate, phone, setPhone, 
     lock.current = true
     setState("requesting")
     if (liveRequest) {
-      try { setState(await liveRequest(phone, purpose)) }
+      try { const result=await liveRequest(phone,purpose);if(typeof result==="object"){setRetryAt(result.retryAfterSeconds?Date.now()+result.retryAfterSeconds*1000:null);setState(result.status)}else setState(result) }
       catch { setState("network") }
       finally { lock.current = false }
       return
@@ -102,7 +105,7 @@ export default function OtpRequestForm({ en, suffix, navigate, phone, setPhone, 
     {!liveRequest && <div className="password-demo"><span>Demo</span>{t("سرویس ارسال کد متصل نیست؛ کشورها تنظیمات نمونه‌اند.", "Code delivery is not connected; countries are Demo settings.")}</div>}
     {state === "checking" ? <div className="auth-loading" role="status"><div className="auth-skeleton" /><p>{t("در حال بررسی وضعیت ورود…", "Checking sign-in status…")}</p></div> : <>
       {messages[state] && <div className="password-message" role={["active", "accepted", "expired"].includes(state) ? "status" : "alert"}><AuthIcon kind="notice" /><div><p>{messages[state]}</p>
-        {state === "limited" && <small>{t("زمان معتبر از سرویس دریافت نشده؛ شمارنده فرضی نداریم.", "No service-provided waiting period; no simulated countdown.")}</small>}
+        {state === "limited" && retryAt && <small role="status">{t(`ارسال دوباره کد تا ${remaining.toLocaleString("fa-IR")} ثانیه دیگر امکان‌پذیر است.`, `You can request another code in ${remaining} seconds.`)}</small>}
         {state === "unknown" && <small>{t("برای جلوگیری از ارسال تکراری، درخواست دوباره متوقف است. بازیابی وضعیت به سرویس نیاز دارد.", "Retry is paused to avoid duplicate requests. Recovering the flow requires the live service.")}</small>}
       </div></div>}
       <form noValidate onSubmit={submit} aria-busy={busy}>

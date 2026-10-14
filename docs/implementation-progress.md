@@ -640,3 +640,7 @@ PUB-09 now uses the reference CartPage/CartRow layout with persisted guest/accou
 Verification: six isolated PostgreSQL tests (including concurrent updates), backend lint/types, 210 frontend tests, frontend types/lint, generated contracts, API/web Docker builds and desktop/mobile browser flows. Local services healthy. Remote CI is reported separately after push.
 
 Password policy: registration, recovery and account password changes now accept 8–128 characters. Backend boundary test accepts 8 and rejects 7; 26 identity tests passed.
+
+
+### OTP request retry recovery — 2026-10-14
+OTP throttling returns Retry-After from Redis limit expiry or the persisted 60-second resend cooldown. Registration/login/recovery request forms show the actual remaining seconds and unlock on expiry; missing metadata shows ordinary retry copy without a permanent disabled form. Verified: two frontend regression tests, 17 disposable Redis tests, frontend type/lint checks and API/web Docker builds.

@@ -168,3 +168,14 @@ def test_sign_in_endpoints_fail_closed_on_real_redis_outage(isolated_redis, monk
             assert rejected.headers["cache-control"] == "no-store"
     finally:
         app.dependency_overrides.pop(session_dependency, None)
+
+
+def test_otp_retry_after_uses_existing_limit_expiry(isolated_redis):
+    from nilart.contexts.identity.infrastructure.rate_limit import otp_retry_after
+    url, cache, _ = isolated_redis
+    assert otp_retry_after(url, "request", "phone", "address") is None
+    for _ in range(6):
+        otp_attempt_allowed(url, "request", "phone", "address")
+    key = next(cache.scan_iter(match="auth:otp:request:phone:*"))
+    cache.expire(key, 17)
+    assert 0 < otp_retry_after(url, "request", "phone", "address") <= 17
