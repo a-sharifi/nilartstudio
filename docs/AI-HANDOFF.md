@@ -1132,3 +1132,10 @@ Downloaded four licensed Pexels notebook/stationery photographs and stored optim
 The shared reference media components and layouts are retained; presentation CSS is additive and approved reference CSS is unchanged. No database, price, stock, API or purchasing changes.
 
 Local checks: 122 frontend tests, frontend lint/type check, five browser checks across notebook/bundle routes and mobile rendering, web Docker build and service health passed. Remote CI is reported separately.
+
+
+## Authentication phone selector spacing — 2026-10-14
+
+Added scoped authentication phone layout styles so the shared country dropdown has its own fixed flex area and divider, while the national phone input takes only the remaining width. Nested dropdown inputs no longer compete with the phone input's width. Applies to registration/OTP and password phone groups; approved auth.css is unchanged.
+
+Frontend lint/types and web Docker build passed. Browser regression passed for Persian/English at 979, 390 and 320 pixel widths, including non-overlap, country-menu keyboard dismissal, retained phone input and no horizontal overflow. No backend or phone-validation changes. Remote CI reported separately.

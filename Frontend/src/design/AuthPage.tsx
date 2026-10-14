@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react"
 import "./auth.css"
+import "./auth-phone.css"
 import PasswordForm from "./PasswordForm"
 import OtpRequestForm from "./OtpRequestForm"
 import VerifyPage from "./VerifyPage"

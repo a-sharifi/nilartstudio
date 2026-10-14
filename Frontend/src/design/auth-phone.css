@@ -1,0 +1,7 @@
+/* Keep the shared dropdown's internal input separate from the phone flex item. */
+.password-phone > div { flex: 0 0 150px; min-width: 0; }
+.password-phone > input { flex: 1 1 0; width: 0; }
+.password-phone .nil-dropdown-control { border: 0; border-right: 1px solid var(--border); border-radius: var(--radius-control) 0 0 var(--radius-control); }
+.password-phone .nil-dropdown-control input { padding-inline: 10px; font-size: 12px; text-overflow: ellipsis; }
+.password-phone .nil-dropdown-control button { width: 28px; }
+@media (max-width: 480px) { .password-phone > div { flex-basis: 126px; } }
