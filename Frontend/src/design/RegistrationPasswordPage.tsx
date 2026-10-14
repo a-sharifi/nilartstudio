@@ -91,7 +91,14 @@ export default function RegistrationPasswordPage({ en, suffix, grant, setGrant, 
     if (next.password || next.confirm) { (next.password ? passwordRef : confirmRef).current?.focus(); return }
     lock.current = true; setState("submitting")
     if (liveComplete) {
-      try { setState(await liveComplete(password)) }
+      try {
+        const result = await liveComplete(password)
+        setState(result)
+        if (result === "createdSession" || result === "changed") {
+          const destination = target && target.startsWith("/") && !target.startsWith("//") ? target : `${prefix}/account`
+          navigate(destination === "/account" ? `${prefix}/account` : destination)
+        }
+      }
       catch { setState("unknown") }
       finally { lock.current = false; clearPasswords() }
       return

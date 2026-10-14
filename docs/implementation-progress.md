@@ -648,3 +648,7 @@ OTP throttling returns Retry-After from Redis limit expiry or the persisted 60-s
 
 ### Privacy reference layout — 2026-10-14
 Connected the omitted original privacy.css stylesheet. PrivacyPage.tsx, privacy.ts and privacy.css remain identical to design-reference; approved Yekan Bakh typography is retained.
+
+
+### Registration completion navigation — 2026-10-14
+After verified live registration or recovery, navigate to the preserved return destination or localized account panel. Removed the dead-end behavior that only showed a destination note after success. Three mocked UI regression cases passed; frontend type check and web Docker build passed.
