@@ -13,9 +13,10 @@ const previews: [State, string, string][] = [
   ["checking", "بررسی نشست", "Checking session"], ["success", "موفقیت Demo", "Demo success"], ["expired", "نشست منقضی", "Expired session"],
 ]
 
-export default function PasswordForm({ en, suffix, navigate, onContext, phone, setPhone, country, setCountry, liveSignIn, otpEnabled = false }: {
+export default function PasswordForm({ en, suffix, navigate, onContext, phone, setPhone, country, setCountry, liveSignIn, target = null, otpEnabled = false }: {
   en: boolean; suffix: string; navigate: (route: string) => void; onContext: (context: "initial" | "checkout" | "commission") => void
   phone: string; setPhone: (value: string) => void; country: string; setCountry: (value: string) => void
+  target?: string | null
   liveSignIn?: (phone: string, password: string) => Promise<"incorrect" | "service" | "limited" | "success" | "network">
   otpEnabled?: boolean
 }) {
@@ -69,7 +70,14 @@ export default function PasswordForm({ en, suffix, navigate, onContext, phone, s
     submitting.current = true
     setState("sending")
     if (liveSignIn) {
-      try { setState(await liveSignIn(phone, password)) }
+      try {
+        const result = await liveSignIn(phone, password)
+        setState(result)
+        if (result === "success") {
+          const destination = target && target.startsWith("/") && !target.startsWith("//") ? target : `${prefix}/account`
+          navigate(destination === "/account" ? `${prefix}/account` : destination)
+        }
+      }
       catch { setState("network") }
       finally { submitting.current = false; setPassword("") }
       return
@@ -96,7 +104,7 @@ export default function PasswordForm({ en, suffix, navigate, onContext, phone, s
         {!liveSignIn && state === "service" && <small>{t("Demo: ارسال واقعی انجام نشده است.", "Demo: no actual request was sent.")}</small>}
         {state === "verify" && navLink(t("ادامه به تأیید شماره", "Continue to phone verification"), `${prefix}/auth/verify${suffix}`)}
         {state === "restricted" && navLink(t("تماس با پشتیبانی", "Contact support"), `${prefix}/contact`)}
-        {state === "success" && <small>{liveSignIn ? t("پنل کاربری هنوز متصل نیست؛ می‌توانید به فروشگاه برگردید.", "The account panel is not connected yet. You can return to the shop.") : t("در محصول واقعی، انتقال فقط پس از تأیید نشست و مجوز مقصد انجام می‌شود.", "In production, redirect only after validating the session and destination permissions.")}</small>}
+        {state === "success" && <small>{liveSignIn ? t("در حال انتقال به حساب شما…", "Opening your account…") : t("در محصول واقعی، انتقال فقط پس از تأیید نشست و مجوز مقصد انجام می‌شود.", "In production, redirect only after validating the session and destination permissions.")}</small>}
       </div></div>}
       {state !== "success" && <form onSubmit={submit} noValidate aria-busy={busy}>
         <div className="password-field">

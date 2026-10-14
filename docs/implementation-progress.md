@@ -652,3 +652,7 @@ Connected the omitted original privacy.css stylesheet. PrivacyPage.tsx, privacy.
 
 ### Registration completion navigation — 2026-10-14
 After verified live registration or recovery, navigate to the preserved return destination or localized account panel. Removed the dead-end behavior that only showed a destination note after success. Three mocked UI regression cases passed; frontend type check and web Docker build passed.
+
+
+### Password login continuation — 2026-10-14
+Verified password login now opens the preserved return destination or localized account panel. Removed obsolete panel-unavailable copy. Three navigation regression tests and frontend type check passed.
