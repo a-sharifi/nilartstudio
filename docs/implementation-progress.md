@@ -622,3 +622,12 @@ Local checks: 122 frontend tests, frontend lint/type check, five browser checks 
 Added scoped authentication phone layout styles so the shared country dropdown has its own fixed flex area and divider, while the national phone input takes only the remaining width. Nested dropdown inputs no longer compete with the phone input's width. Applies to registration/OTP and password phone groups; approved auth.css is unchanged.
 
 Frontend lint/types and web Docker build passed. Browser regression passed for Persian/English at 979, 390 and 320 pixel widths, including non-overlap, country-menu keyboard dismissal, retained phone input and no horizontal overflow. No backend or phone-validation changes. Remote CI reported separately.
+
+
+## Opt-in development OTP display — 2026-10-14
+
+Added `NILART_DEV_MODE` and `NILART_FAKE_SMS` (both false in .env.example). Fake SMS enables the existing sandbox provider; the existing SMS_MODE=sandbox remains supported. Enabled both flags in the ignored local .env. API request responses include development_code only when development mode, development environment and sandbox SMS all hold. The per-request wrapper captures only a successfully delivered code; failures do not expose a code. Responses remain no-store; no code is written to logs, audit or browser persistence. Production rejects development/fake-SMS configuration.
+
+Verification pages display the server-provided sandbox code in Persian/English, remove it after success/expiry, and refresh it from a new request/resend. An already-open pre-change flow needs a new request/resend. OpenAPI/client contracts updated. No OTP verification bypass was added.
+
+Local verification: 8 backend tests including isolated PostgreSQL verification/gating and SMS failure, focused backend lint/types, 178 frontend tests, frontend lint/types, browser display/disabled-state regression, API/web Docker builds and eight healthy services passed. Remote CI reported separately.

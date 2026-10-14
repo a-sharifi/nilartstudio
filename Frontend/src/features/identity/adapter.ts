@@ -40,7 +40,7 @@ export async function requestOtp(phone: string, purpose: Purpose): Promise<LiveV
     || !Number.isFinite(expiry) || expiry <= Date.now()
     || typeof result.resend_after_seconds !== "number" || result.resend_after_seconds < 0)
     throw new IdentityApiError("unknown");
-  return { demo: false, sandbox: result.sandbox === true, purpose, phone: normalized, maskedPhone: normalized.slice(0, 5) + "••••" + normalized.slice(-3),
+  return { demo: false, sandbox: result.sandbox === true, developmentCode:result.sandbox===true&&typeof result.development_code==="string"&&/^\d{6}$/.test(result.development_code)?result.development_code:undefined, purpose, phone: normalized, maskedPhone: normalized.slice(0, 5) + "••••" + normalized.slice(-3),
     challengeId: result.challenge_id, digits: 6, expiresAt: expiry,
     resendAt: Date.now() + result.resend_after_seconds * 1000 };
 }

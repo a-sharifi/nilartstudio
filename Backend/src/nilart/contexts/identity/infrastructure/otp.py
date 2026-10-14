@@ -25,7 +25,7 @@ class DisabledSmsSender:
 
 
 class RedisSandboxSmsSender:
-    """Explicit development-only inbox. Codes expire and never enter HTTP responses/logs."""
+    """Explicit development-only inbox. Codes expire and never enter logs."""
     def __init__(self, redis_url: str, environment: str):
         if environment != "development":
             raise SmsUnavailable("Sandbox SMS requires development")

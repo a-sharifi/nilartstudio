@@ -13,6 +13,7 @@ export interface DemoVerifyFlow {
 
 export interface LiveVerifyFlow {
   sandbox?: boolean
+  developmentCode?: string
   demo: false
   purpose: Purpose
   maskedPhone: string

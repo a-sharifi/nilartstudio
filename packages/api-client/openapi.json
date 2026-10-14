@@ -3370,6 +3370,17 @@
             "type": "boolean",
             "title": "Sandbox",
             "default": false
+          },
+          "development_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Development Code"
           }
         },
         "type": "object",

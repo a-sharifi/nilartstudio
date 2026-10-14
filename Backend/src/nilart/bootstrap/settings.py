@@ -13,10 +13,16 @@ class Settings(BaseSettings):
     broker_url: str = "amqp://nilart:local-only@localhost:5672//"
     public_origin: str = "http://localhost:8080"
     otp_hmac_key: SecretStr | None = None
+    dev_mode: bool = False
+    fake_sms: bool = False
     sms_mode: Literal["disabled", "sandbox"] = "disabled"
 
     @model_validator(mode="after")
     def validate_origin(self):
+        if self.dev_mode and self.environment != "development":
+            raise ValueError("Development mode is permitted only in development")
+        if self.fake_sms:
+            self.sms_mode = "sandbox"
         if self.sms_mode == "sandbox" and self.environment != "development":
             raise ValueError("Sandbox SMS is permitted only in development")
         origin = urlsplit(self.public_origin)

@@ -57,12 +57,24 @@ class ChallengeOutput(BaseModel):
     resend_after_seconds: Literal[60]
     delivery_status: Literal["accepted"]
     sandbox: bool = False
+    development_code: str | None = None
 
 
 class GrantOutput(BaseModel):
     grant: str
     purpose: Literal[OtpPurpose.REGISTER, OtpPurpose.LOGIN, OtpPurpose.RECOVERY]
     expires_in_seconds: Literal[600]
+
+
+class DevelopmentSmsPreview:
+    """Capture only this request's successfully delivered fake SMS; never log it."""
+    def __init__(self, sender: SmsSender):
+        self.sender = sender
+        self.code: str | None = None
+
+    def send_code(self, phone: str, code: str, purpose: OtpPurpose) -> None:
+        self.sender.send_code(phone, code, purpose)
+        self.code = code
 
 
 def sms_dependency() -> SmsSender:
@@ -88,7 +100,7 @@ def gate(request: Request, action: str, phone: str = ""):
     return None
 
 
-@router.post("/otp/request", status_code=202, response_model=ChallengeOutput)
+@router.post("/otp/request", status_code=202, response_model=ChallengeOutput, response_model_exclude_none=True)
 def request_otp(body: OtpRequest, request: Request, response: Response,
                 db: Session = Depends(session_dependency), sms=Depends(sms_dependency)):
     try:
@@ -99,7 +111,8 @@ def request_otp(body: OtpRequest, request: Request, response: Response,
     if denied is not None:
         return denied
     try:
-        challenge = service(db, sms).request(phone, body.purpose)
+        preview = DevelopmentSmsPreview(sms) if settings.dev_mode and settings.environment == "development" and settings.sms_mode == "sandbox" else None
+        challenge = service(db, preview or sms).request(phone, body.purpose)
         db.commit()
     except IdentityError as exc:
         db.rollback()
@@ -113,7 +126,8 @@ def request_otp(body: OtpRequest, request: Request, response: Response,
     response.headers["Cache-Control"] = "no-store"
     return {"challenge_id": challenge.id, "purpose": body.purpose,
             "expires_at": challenge.expires.isoformat(), "resend_after_seconds": 60,
-            "delivery_status": "accepted", "sandbox": settings.sms_mode == "sandbox"}
+            "delivery_status": "accepted", "sandbox": settings.sms_mode == "sandbox",
+            "development_code": preview.code if preview else None}
 
 
 @router.post("/otp/verify", response_model=SessionOutput | GrantOutput)
