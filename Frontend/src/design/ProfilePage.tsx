@@ -638,7 +638,8 @@ export default function ProfilePage({
                       id="profile-fullName"
                       name="fullName"
                       autoComplete="name"
-                      dir="auto"
+                      dir={en ? "ltr" : "rtl"}
+                      style={{ textAlign: en ? "left" : "right" }}
                       value={draft.fullName}
                       onChange={(event) =>
                         change("fullName", event.target.value)
