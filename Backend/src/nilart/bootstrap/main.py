@@ -1,3 +1,4 @@
+from nilart.contexts.geography.router import router as geography_router
 from nilart.contexts.basket.router import router as basket_router
 import logging
 from uuid import uuid4
@@ -111,3 +112,5 @@ def ready():
     return {"status": "ready"}
 
 app.include_router(basket_router)
+
+app.include_router(geography_router)

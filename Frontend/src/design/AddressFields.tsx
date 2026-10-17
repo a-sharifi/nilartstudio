@@ -1,3 +1,5 @@
+import {z} from "zod"
+import Dropdown from "../components/ui/Dropdown"
 import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState } from "react"
 import {
@@ -31,7 +33,7 @@ export function AddressDetails({
           : address.phone}
       </span>
       <p>
-        {province?.name[language]}، {city?.name[language]}
+        {province?.name[language] || address.province}، {city?.name[language] || address.city}
       </p>
       <p dir="auto">{address.street}</p>
       <small>
@@ -50,6 +52,7 @@ export function AddressForm({
   initial,
   language,
   busy,
+  blocked = false,
   cityFailure,
   onRetry,
   onSave,
@@ -67,6 +70,7 @@ export function AddressForm({
   onDirtyChange?: (dirty:boolean)=>void
   language: 0 | 1
   busy: boolean
+  blocked?: boolean
   cityFailure: boolean
   onRetry: () => void
   onSave: (a: Address) => void
@@ -97,8 +101,14 @@ export function AddressForm({
     }))
     if (key === "province") onProvinceChange?.()
   }
+  const [regions,setRegions]=useState<{id:string;name_fa:string;name_en:string;cities:{id:string;name_fa:string;name_en:string}[]}[]>([])
+  const [regionsState,setRegionsState]=useState("loading")
+  const [regionRetry,setRegionRetry]=useState(0)
+  useEffect(()=>{if(!live)return;let active=true;setRegionsState("loading");fetch("/api/v1/geography/iran").then(response=>{if(!response.ok)throw new Error("regions");return response.json()}).then(rows=>{if(active){const parsed=z.array(z.object({id:z.string(),name_fa:z.string(),name_en:z.string(),cities:z.array(z.object({id:z.string(),name_fa:z.string(),name_en:z.string()}))})).parse(rows);setRegions(parsed);setDraft(old=>{const legacy=addressCountry.provinces.find(p=>p.id===old.province);return {...old,province:legacy?.name[0]||old.province.trim(),city:legacy?.cities.find(c=>c.id===old.city)?.name[0]||old.city.trim()}});setRegionsState("ready")}}).catch(()=>{if(active)setRegionsState("error")});return()=>{active=false}},[live,regionRetry])
+  const province=regions.find(row=>row.name_fa===draft.province||row.id===draft.province)
   const submit = () => {
-    const found = addressErrors(draft)
+    if(busy || blocked || live&&regionsState!=="ready")return
+    const found = addressErrors(draft, live)
     setErrors(found)
     if (Object.keys(found).length) {
       form.current
@@ -125,7 +135,7 @@ export function AddressForm({
         value={draft[key]}
         onChange={(e) => change(key, e.target.value)}
         onBlur={() =>
-          setErrors((e) => ({ ...e, [key]: addressErrors(draft)[key] }))
+          setErrors((e) => ({ ...e, [key]: addressErrors(draft, live)[key] }))
         }
         autoComplete={auto}
         type={key === "phone" ? "tel" : "text"}
@@ -200,7 +210,8 @@ export function AddressForm({
           "Fields marked * are required. Recipient details are independent of your sign-in account.",
         )}
       </p>
-      <fieldset disabled={busy} className="address-form-fields">
+      {live&&regionsState==="error"&&<p role="alert">{t("دریافت استان‌ها و شهرها ممکن نشد.","Could not load provinces and cities.")} <button type="button" onClick={()=>setRegionRetry(v=>v+1)}>{t("تلاش دوباره","Retry")}</button></p>}
+      <fieldset disabled={busy || blocked || live&&regionsState!=="ready"} className="address-form-fields">
         {field(
           "name",
           t("نام و نام خانوادگی گیرنده", "Recipient full name"),
@@ -222,6 +233,7 @@ export function AddressForm({
             )}
           </small>
         </div>
+
         <div className="address-form-grid">
           {(["province", "city"] as const).map((key) => (
             <div className="checkout-field" key={key}>
@@ -230,7 +242,7 @@ export function AddressForm({
                   ? t("استان *", "Province *")
                   : t("شهر *", "City *")}
               </label>
-              <SelectDropdown
+              {live?<Dropdown id={`address-${key}`} name={key} label={key==="province"?t("استان","Province"):t("شهر","City")} autocomplete value={draft[key]} onChange={value=>change(key,value)} required invalid={!!errors[key]} disabled={regionsState!=="ready"||key==="city"&&!province} options={(key==="province"?regions:province?.cities||[]).map(row=>({value:row.name_fa,label:language===0?row.name_fa:row.name_en}))} placeholder={regionsState==="loading"?t("در حال دریافت…","Loading…"):t("جست‌وجو و انتخاب","Search and select")}/>:<SelectDropdown
                 id={`address-${key}`}
                 name={key}
                 value={draft[key]}
@@ -269,14 +281,14 @@ export function AddressForm({
                     {item.name[language]}
                   </option>
                 ))}
-              </SelectDropdown>
+              </SelectDropdown>}
               {error(key)}
               {key === "city" && (
                 <small
                   id="city-helper"
                   role={cityLoading ? "status" : undefined}
                 >
-                  {cityLoading
+                  {live?t("شهر را از استان انتخاب‌شده جست‌وجو کنید.","Search cities in the selected province."):cityLoading
                     ? t("در حال دریافت شهرها… • Demo", "Loading cities… • Demo")
                     : !draft.province
                       ? t(
@@ -327,6 +339,7 @@ export function AddressForm({
           </small>
           {error("street")}
         </div>
+
         <div className="address-form-grid">
           {field(
             "postal",
@@ -380,7 +393,7 @@ export function AddressForm({
         <button
           type="submit"
           className="button primary"
-          disabled={busy || cityFailure || cityLoading || offline}
+          disabled={busy || blocked || cityFailure || cityLoading || offline}
         >
           {busy
             ? t("در حال ذخیره…", "Saving…")

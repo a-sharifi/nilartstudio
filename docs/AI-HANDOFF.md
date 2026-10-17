@@ -1161,3 +1161,7 @@ Password policy: registration, recovery and account password changes now accept 
 
 ### OTP request retry recovery — 2026-10-14
 OTP throttling returns Retry-After from Redis limit expiry or the persisted 60-second resend cooldown. Registration/login/recovery request forms show the actual remaining seconds and unlock on expiry; missing metadata shows ordinary retry copy without a permanent disabled form. Verified: two frontend regression tests, 17 disposable Redis tests, frontend type/lint checks and API/web Docker builds.
+
+
+### Address location catalogue and centered modal — 2026-10-17
+Account address dialogs are centered at desktop/mobile widths. Searchable province and dependent city controls load the locally served bilingual catalogue from GET /api/v1/geography/iran (31 provinces, 1119 cities). A province change clears the city; loading and retry states are explicit. Legacy fixture IDs map to readable stored names. Vendored MIT dataset attribution is included. Profile name placeholder aligns right in Persian. Backend catalogue test, frontend region tests and type checks passed.

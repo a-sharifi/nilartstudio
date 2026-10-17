@@ -12,3 +12,8 @@
 
 /* Reflect the verified session in the storefront account control. */
 .account-signed-in { color: var(--accent); background: #eee9e0; border: 1px solid var(--border); border-radius: 50%; }
+
+/* Account address forms remain centered within the viewport. */
+.account-address-dialog.account-address-dialog { position: fixed; inset: 0; margin: auto; width: min(680px, calc(100% - 32px)); height: auto; max-height: calc(100dvh - 32px); border-radius: var(--radius-card); overflow: auto; }
+
+[dir="rtl"] #profile-fullName:placeholder-shown { direction: rtl; text-align: right; }

@@ -660,3 +660,7 @@ Verified password login now opens the preserved return destination or localized 
 
 ### Storefront account session indicator — 2026-10-14
 The header reads the verified session and subscribes to login/logout/revalidation events, instead of relying on the demo sign-in flag. Signed-in accounts show an accent circle and green indicator, accessible signed-in label, and localized account destination. Guest controls restore on logout. Routing and session-state regression checks passed.
+
+
+### Address location catalogue and centered modal — 2026-10-17
+Account address dialogs are centered at desktop/mobile widths. Searchable province and dependent city controls load the locally served bilingual catalogue from GET /api/v1/geography/iran (31 provinces, 1119 cities). A province change clears the city; loading and retry states are explicit. Legacy fixture IDs map to readable stored names. Vendored MIT dataset attribution is included. Profile name placeholder aligns right in Persian. Backend catalogue test, frontend region tests and type checks passed.

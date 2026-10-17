@@ -1,0 +1,1 @@
+Iran province/city labels, vendored from https://github.com/tafakoritech/Provinces-and-Cities-of-Iran-Dataset on 2026-10-17. MIT license in LICENSE. Only names, stable upstream IDs and province membership are retained. 31 provinces / 1119 cities. This is a local address-selection catalogue, not a delivery coverage guarantee.

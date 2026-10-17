@@ -37,15 +37,15 @@ export function cleanAddress(a: Address): Address {
   let phone = normalizeDigits(a.phone).replace(/[\s()-]/g, '')
   if (phone.startsWith('+98')) phone = phone.slice(3)
   if (phone.startsWith('0')) phone = phone.slice(1)
-  return { ...a, name: a.name.trim().replace(/\s+/g, ' '), street: a.street.trim(), label: a.label.trim(), phone, postal: normalizeDigits(a.postal).trim() }
+  return { ...a, province:a.province.trim(), city:a.city.trim(), name: a.name.trim().replace(/\s+/g, ' '), street: a.street.trim(), label: a.label.trim(), phone, postal: normalizeDigits(a.postal).trim() }
 }
-export function addressErrors(a: Address) {
+export function addressErrors(a: Address, customRegions = false) {
   const v = cleanAddress(a)
   const errors: Partial<Record<keyof Address, 'required' | 'phone' | 'postal'>> = {}
   for (const key of ['name', 'phone', 'province', 'city', 'street', 'postal'] as const) if (!v[key]) errors[key] = 'required'
   if (v.phone && !addressCountry.phone.test(v.phone)) errors.phone = 'phone'
   if (v.postal && !addressCountry.postal.test(v.postal)) errors.postal = 'postal'
-  if (!addressCountry.provinces.find(p => p.id === v.province)?.cities.some(c => c.id === v.city)) errors.city = 'required'
+  if (!customRegions && !addressCountry.provinces.find(p => p.id === v.province)?.cities.some(c => c.id === v.city)) errors.city = 'required'
   return errors
 }
 export function selectDestination(state: AddressCheckout, id: string | null): AddressCheckout {

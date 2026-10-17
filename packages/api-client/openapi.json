@@ -2717,6 +2717,31 @@
           }
         }
       }
+    },
+    "/api/v1/geography/iran": {
+      "get": {
+        "tags": [
+          "geography"
+        ],
+        "summary": "Iran Regions",
+        "operationId": "iran_regions_api_v1_geography_iran_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Province"
+                  },
+                  "type": "array",
+                  "title": "Response Iran Regions Api V1 Geography Iran Get"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6084,6 +6109,60 @@
           "count"
         ],
         "title": "BasketTotals"
+      },
+      "City": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name_fa": {
+            "type": "string",
+            "title": "Name Fa"
+          },
+          "name_en": {
+            "type": "string",
+            "title": "Name En"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name_fa",
+          "name_en"
+        ],
+        "title": "City"
+      },
+      "Province": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name_fa": {
+            "type": "string",
+            "title": "Name Fa"
+          },
+          "name_en": {
+            "type": "string",
+            "title": "Name En"
+          },
+          "cities": {
+            "items": {
+              "$ref": "#/components/schemas/City"
+            },
+            "type": "array",
+            "title": "Cities"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name_fa",
+          "name_en",
+          "cities"
+        ],
+        "title": "Province"
       }
     }
   }
