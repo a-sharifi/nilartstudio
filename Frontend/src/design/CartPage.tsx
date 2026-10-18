@@ -454,7 +454,8 @@ export default function CartPage({
                   <div className="cart-coupon-input">
                     <input
                       id="cart-coupon-input"
-                      dir="ltr"
+                      dir={language === 0 && !couponInput ? "rtl" : "ltr"}
+                      style={{ textAlign: language === 0 && !couponInput ? "right" : "left" }}
                       autoComplete="off"
                       value={couponInput}
                       onChange={(event) => {

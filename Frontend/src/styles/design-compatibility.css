@@ -17,3 +17,8 @@
 .account-address-dialog.account-address-dialog { position: fixed; inset: 0; margin: auto; width: min(680px, calc(100% - 32px)); height: auto; max-height: calc(100dvh - 32px); border-radius: var(--radius-card); overflow: auto; }
 
 [dir="rtl"] #profile-fullName:placeholder-shown { direction: rtl; text-align: right; }
+
+/* Keep cart quantity controls compact instead of stretching across their grid cell. */
+.cart-quantity { display: grid; justify-items: start; }
+.cart-quantity > .quantity-stepper { width: max-content; max-width: 100%; }
+.cart-quantity > .quantity-stepper button { flex: 0 0 44px; }
