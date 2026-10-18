@@ -1,4 +1,5 @@
 "use client";
+import SandboxCheckout from "../payments/SandboxCheckout";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { isStaticInfoPage } from "./information-routes";
@@ -31,6 +32,7 @@ export default function DesignRuntime() {
   const search = useSearchParams();
   const registerGuard = useNavigationGuard();
   const demo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+  if(!demo&&/^\/(fa|en)\/(?:checkout\/sandbox|payment\/result)\/?$/.test(pathname))return <SandboxCheckout path={pathname} search={search.toString()} navigate={route=>router.push(route)}/>;
   if (!demo && /^\/(fa|en)\/account\/support\/?$/.test(pathname)) {
     return <PanelAccessBoundary permission="account.read_self" path={pathname}><SupportPage key={pathname} page={pathname} search={search.toString()} navigate={route=>router.push(route)} registerGuard={registerGuard} liveApi={supportApi}/></PanelAccessBoundary>;
   }

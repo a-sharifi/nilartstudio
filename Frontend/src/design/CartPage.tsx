@@ -11,7 +11,7 @@ import {
 } from "./cart"
 
 interface Props {
-  live?: {rows:EvaluatedLine[];busy:boolean;media:(row:EvaluatedLine)=>ReactNode;totals:{base:string;discount:string;total:string};details:(row:EvaluatedLine)=>{options?:string;exact:ExactPrices}}
+  live?: {checkout?:()=>void;rows:EvaluatedLine[];busy:boolean;media:(row:EvaluatedLine)=>ReactNode;totals:{base:string;discount:string;total:string};details:(row:EvaluatedLine)=>{options?:string;exact:ExactPrices}}
 
   snapshot: CartSnapshot
   mode: string
@@ -84,7 +84,7 @@ export default function CartPage({
   const offline = mode === "offline"
   const updating = !!live?.busy || Object.values(pending).some(Boolean)
   const canCheckout =
-    !live && totals.readyCount > 0 &&
+    (!live || !!live.checkout) && totals.readyCount > 0 &&
     !offline &&
     !updating &&
     !couponChecking &&
@@ -176,6 +176,7 @@ export default function CartPage({
     }, 550)
   }
   const checkout = () => {
+    if(live?.checkout && canCheckout){live.checkout();return}
     if (
       !canCheckout ||
       checkingRef.current ||
@@ -311,7 +312,7 @@ export default function CartPage({
         {link(t("ادامه خرید", "Continue shopping"), "/shop")}
       </div>
       <p className="cart-demo-disclaimer">
-        {live?t("سبد خرید ذخیره می‌شود. موجودی رزرو نمی‌شود و پرداخت هنوز فعال نیست.","Your basket is saved. Stock is not reserved and payment is not available yet."):t("سبد نمایشی نیل‌آرت — بدون اتصال به پرداخت، سرور یا رزرو واقعی.","NilArt demo cart — no payment, backend or real stock reservation.")}
+        {live?t("سبد خرید ذخیره می‌شود. موجودی رزرو نمی‌شود؛ پرداخت آزمایشی بدون پول واقعی است.","Your basket is saved. Stock is not reserved; sandbox payments do not charge real money."):t("سبد نمایشی نیل‌آرت — بدون اتصال به پرداخت، سرور یا رزرو واقعی.","NilArt demo cart — no payment, backend or real stock reservation.")}
       </p>
       {mode === "loading" ? (
         <div className="cart-layout" aria-busy="true">
@@ -598,7 +599,7 @@ export default function CartPage({
                   onClick={checkout}
                   aria-busy={checking}
                 >
-                  {live?t("پرداخت هنوز فعال نیست","Payment not available yet"):cta}
+                  {live?t(live.checkout?"ادامه پرداخت آزمایشی":"پرداخت هنوز فعال نیست",live.checkout?"Continue to sandbox checkout":"Payment not available yet"):cta}
                   {arrow}
                 </button>
                 {checkoutMessage && (

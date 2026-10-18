@@ -664,3 +664,9 @@ The header reads the verified session and subscribes to login/logout/revalidatio
 
 ### Address location catalogue and centered modal — 2026-10-17
 Account address dialogs are centered at desktop/mobile widths. Searchable province and dependent city controls load the locally served bilingual catalogue from GET /api/v1/geography/iran (31 provinces, 1119 cities). A province change clears the city; loading and retry states are explicit. Legacy fixture IDs map to readable stored names. Vendored MIT dataset attribution is included. Profile name placeholder aligns right in Persian. Backend catalogue test, frontend region tests and type checks passed.
+
+
+### Zarinpal sandbox checkout — 2026-10-18
+Connected the saved basket to a bilingual sandbox checkout (saved address, price review, explicit test consent), Zarinpal v4 redirect, authoritative callback verification, receipt and owner-only result/recheck. Requests require exact Origin, fresh CSRF and transactionally rechecked session/write permission. PostgreSQL snapshots retain selections, amounts and recipient; payment/order/receipt/basket updates and outbox writes are atomic. Sandbox orders remain on hold; no real money, stock, shipping or production fulfillment is enabled. Shipping/tax are explicitly zero for this test. Migration 0031 includes additive schema prerequisites 0028–0030 without their unfinished services.
+
+Local validation: six new backend tests on isolated PostgreSQL, two checkout UI tests, 297 total frontend tests, backend lint/types and frontend lint/types. A live sandbox request and browser test completed with gateway verification/reference saved. Frontend Docker build passed. The clean API Docker build hit dependency-registry DNS failure; the API image was successfully rebuilt from its installed runtime with updated source/migrations. Remote CI results are separate. See Backend/PAYMENTS.md for settings and recovery limits.

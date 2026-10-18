@@ -2742,6 +2742,195 @@
           }
         }
       }
+    },
+    "/api/v1/payments/config": {
+      "get": {
+        "tags": [
+          "sandbox-payments"
+        ],
+        "summary": "Config",
+        "operationId": "config_api_v1_payments_config_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentConfig"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/sandbox/checkout": {
+      "post": {
+        "tags": [
+          "sandbox-payments"
+        ],
+        "summary": "Checkout",
+        "operationId": "checkout_api_v1_payments_sandbox_checkout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentStart"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/sandbox/callback/{id}": {
+      "get": {
+        "tags": [
+          "sandbox-payments"
+        ],
+        "summary": "Callback",
+        "operationId": "callback_api_v1_payments_sandbox_callback__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/sandbox/{id}": {
+      "get": {
+        "tags": [
+          "sandbox-payments"
+        ],
+        "summary": "Status",
+        "operationId": "status_api_v1_payments_sandbox__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/sandbox/{id}/verify": {
+      "post": {
+        "tags": [
+          "sandbox-payments"
+        ],
+        "summary": "Verify",
+        "operationId": "verify_api_v1_payments_sandbox__id__verify_post",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOutput"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6163,6 +6352,140 @@
           "cities"
         ],
         "title": "Province"
+      },
+      "PaymentConfig": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "sandbox": {
+            "type": "boolean",
+            "const": true,
+            "title": "Sandbox"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled",
+          "sandbox"
+        ],
+        "title": "PaymentConfig"
+      },
+      "PaymentOutput": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "order_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Order Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "requesting",
+              "pending",
+              "paid",
+              "cancelled",
+              "failed",
+              "unknown"
+            ],
+            "title": "Status"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference"
+          },
+          "amount_rial": {
+            "type": "string",
+            "title": "Amount Rial"
+          },
+          "sandbox": {
+            "type": "boolean",
+            "const": true,
+            "title": "Sandbox"
+          },
+          "gateway_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gateway Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "order_id",
+          "status",
+          "reference",
+          "amount_rial",
+          "sandbox",
+          "gateway_url"
+        ],
+        "title": "PaymentOutput"
+      },
+      "PaymentStart": {
+        "properties": {
+          "command_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Command Id"
+          },
+          "basket_version": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Basket Version"
+          },
+          "address_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Address Id"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "fa",
+              "en"
+            ],
+            "title": "Language",
+            "default": "fa"
+          },
+          "sandbox_confirmed": {
+            "type": "boolean",
+            "const": true,
+            "title": "Sandbox Confirmed"
+          },
+          "expected_total": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(?:\\.\\d{1,7})?$",
+            "title": "Expected Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "command_id",
+          "basket_version",
+          "address_id",
+          "sandbox_confirmed",
+          "expected_total"
+        ],
+        "title": "PaymentStart"
       }
     }
   }

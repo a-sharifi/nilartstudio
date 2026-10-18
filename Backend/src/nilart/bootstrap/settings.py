@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     otp_hmac_key: SecretStr | None = None
     dev_mode: bool = False
     fake_sms: bool = False
+    payment_mode: Literal["disabled", "zarinpal_sandbox"] = "disabled"
+    zarinpal_merchant_id: str = "00000000-0000-0000-0000-000000000000"
     sms_mode: Literal["disabled", "sandbox"] = "disabled"
 
     @model_validator(mode="after")
@@ -25,6 +27,8 @@ class Settings(BaseSettings):
             self.sms_mode = "sandbox"
         if self.sms_mode == "sandbox" and self.environment != "development":
             raise ValueError("Sandbox SMS is permitted only in development")
+        if self.payment_mode != "disabled" and self.environment != "development":
+            raise ValueError("Sandbox payment is permitted only in development")
         origin = urlsplit(self.public_origin)
         if (origin.scheme not in {"http", "https"} or not origin.hostname
                 or origin.username or origin.password or origin.path or origin.query

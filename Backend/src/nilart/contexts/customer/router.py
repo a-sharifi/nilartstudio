@@ -38,7 +38,7 @@ class Address(Strict):
 
     @model_validator(mode="after")
     def phone_valid(self):
-        self.phone = normalize_phone(self.phone)[3:]
+        self.phone = normalize_phone("+98" + self.phone if len(self.phone) == 10 and self.phone.startswith("9") else self.phone)[3:]
         return self
 
 
