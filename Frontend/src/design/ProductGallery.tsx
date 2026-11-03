@@ -75,10 +75,10 @@ export default function ProductGallery({
       >
         ‹
       </button>
-      <span>
-        {(active + 1).toLocaleString(language === 0 ? "fa-IR" : "en-US")}{" "}
+      <span className="gallery-counter" dir={language === 0 ? "rtl" : "ltr"}>
+        <bdi dir="ltr">{(active + 1).toLocaleString(language === 0 ? "fa-IR" : "en-US")}</bdi>{" "}
         {t("از", "of")}{" "}
-        {gallery.length.toLocaleString(language === 0 ? "fa-IR" : "en-US")}
+        <bdi dir="ltr">{gallery.length.toLocaleString(language === 0 ? "fa-IR" : "en-US")}</bdi>
       </span>
       <button
         className="icon-button"

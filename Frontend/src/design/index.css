@@ -523,6 +523,7 @@ footer { background: #eee9df; border-top: 1px solid var(--border); }
 .gallery-controls { display: flex; align-items: center; gap: var(--space-1); direction: ltr; }
 .gallery-controls .icon-button { font-size: 26px; }
 .gallery-controls span { min-width: 42px; text-align: center; font-size: 12px; }
+.gallery-controls .gallery-counter { unicode-bidi: isolate; white-space: nowrap; }
 .gallery-thumbnails { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); margin-top: var(--space-3); }
 .gallery-thumbnails button { background: transparent; border: 1px solid var(--border); border-radius: var(--radius-control); padding: var(--space-1); overflow: hidden; min-height: 44px; }
 .gallery-thumbnails button.selected { border: 2px solid var(--accent); padding: 3px; }
