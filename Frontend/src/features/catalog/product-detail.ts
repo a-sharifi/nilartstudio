@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { useEffect, useState } from "react";
+import { mapPublishedOptions, type PublishedOptions } from "./published-options";
 export type PublishedSKU = { id: string; product_id: string; code: string; price: {amount: string; currency: "IRT" | "IRR"} | null };
 const copy = z.object({fa:z.string().min(1),en:z.string().min(1)});
 const presentationSchema = z.object({
@@ -13,7 +14,7 @@ const presentationSchema = z.object({
 });
 export type ProductPresentation = z.infer<typeof presentationSchema>;
 export type PublishedProduct = { id: string; slug: string; title_fa: string; title_en: string; description_fa: string; description_en: string; collection_ids: string[]; category_ids: string[]; presentation?: ProductPresentation | null };
-export type ProductDetail = { product: PublishedProduct | null; skus: PublishedSKU[]; status: "loading" | "normal" | "error" | "not-found"; retry: () => void };
+export type ProductDetail = { product: PublishedProduct | null; skus: PublishedSKU[]; options?:PublishedOptions; status: "loading" | "normal" | "error" | "not-found"; retry: () => void };
 export function mapPublishedProduct(value: unknown): PublishedProduct {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw Error("Invalid product");
   const row = value as Record<string, unknown>;
@@ -35,7 +36,7 @@ export function mapPublishedSKUs(value: unknown, productId: string): PublishedSK
 }
 export function useProductDetail(enabled: boolean, slug?: string): ProductDetail {
   const [revision,setRevision] = useState(0);
-  const [state,setState] = useState<{key?: string; product: PublishedProduct | null; skus: PublishedSKU[]; status: ProductDetail["status"]}>({product:null,skus:[],status:"loading"});
+  const [state,setState] = useState<{key?: string; product: PublishedProduct | null; skus: PublishedSKU[]; options?:PublishedOptions; status: ProductDetail["status"]}>({product:null,skus:[],status:"loading"});
   useEffect(()=>{
     if (!enabled || !slug) return;
     const controller = new AbortController();
@@ -52,7 +53,16 @@ export function useProductDetail(enabled: boolean, slug?: string): ProductDetail
       if (skuResponse.status === 404) { if (!controller.signal.aborted) setState({key:slug,product:null,skus:[],status:"not-found"}); return }
       if (!skuResponse.ok) throw Error("SKUs unavailable");
       const skus = mapPublishedSKUs(await skuResponse.json(),product.id);
-      if (!controller.signal.aborted) setState({key:slug,product,skus,status:"normal"});
+      const snapshots:unknown[]=[];
+      // Bound request fan-out for products with many published variants.
+      for(let start=0;start<skus.length;start+=8) snapshots.push(...await Promise.all(skus.slice(start,start+8).map(async sku=>{
+        const response=await fetch(`/api/v1/catalog/skus/${encodeURIComponent(sku.code)}/options`,{cache:"no-store",signal:controller.signal,headers:{Accept:"application/json"}});
+        if(response.status===404)return null;
+        if(!response.ok)throw Error("Published options unavailable");
+        return response.json();
+      })));
+      const options=mapPublishedOptions(snapshots,skus,product.id);
+      if (!controller.signal.aborted) setState({key:slug,product,skus,options,status:"normal"});
     })().catch(()=>{if (!controller.signal.aborted) fail()}).finally(()=>clearTimeout(timeout));
     return ()=>{clearTimeout(timeout);controller.abort()};
   },[enabled,slug,revision]);

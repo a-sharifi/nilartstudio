@@ -26,7 +26,7 @@ def migrate(db, filename):
 def basket(flow):
     client, db, sms = flow
     Base.metadata.create_all(db.connection())
-    for filename in ["0010_artworks.py", "0012_bundles.py", "0020_bundle_presentations.py", "0022_artwork_details.py", "0027_baskets.py"]:
+    for filename in ["0009_catalog_options.py", "0010_artworks.py", "0012_bundles.py", "0015_sku_option_mappings.py", "0020_bundle_presentations.py", "0022_artwork_details.py", "0027_baskets.py"]:
         migrate(db, filename)
     product, other, sku, alternative, foreign, bundle = [uuid4() for _ in range(6)]
     for identity in [product, other]:
@@ -160,7 +160,7 @@ def test_parallel_adds_cannot_overwrite_or_double_apply_a_stale_version():
             db.execute(text(f'CREATE SCHEMA "{schema}"'))
             db.execute(text(f'SET search_path TO "{schema}"'))
             Base.metadata.create_all(db.connection())
-            for filename in ["0005_identity.py", "0010_artworks.py", "0012_bundles.py", "0020_bundle_presentations.py", "0022_artwork_details.py", "0027_baskets.py"]:
+            for filename in ["0005_identity.py", "0009_catalog_options.py", "0010_artworks.py", "0012_bundles.py", "0015_sku_option_mappings.py", "0020_bundle_presentations.py", "0022_artwork_details.py", "0027_baskets.py"]:
                 migrate(db, filename)
             db.execute(text("INSERT INTO catalog_products(id,slug,title_fa,title_en,published) VALUES (:id,'p','محصول','Product',true)"), {"id": product})
             db.execute(text("INSERT INTO catalog_skus(id,product_id,code,published,price_amount,currency) VALUES (:id,:product,'SKU',true,10,'IRT')"), {"id": sku, "product": product})

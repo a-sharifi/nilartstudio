@@ -2,6 +2,26 @@
 
 Updated 2026-10-13. This is an implemented foundation, **not a finished commerce platform**. Use Git history for the exact source revision.
 
+## Browser audit continuation — 2026-10-22
+
+Latest server follow-up: pinned SKU mappings now supply authoritative basket option labels/UUID selections, which existing checkout acceptance and order snapshots preserve. Real browser zero-charge order `3f7f9917-7180-43f6-a5e0-d3d936cfe3c1` retains Small/کوچک after reviewed mapping v3 publication. Full backend suite 721 passed, zero skipped; preview API/worker/scheduler rebuilt, main unchanged. Synthetic SKU now explicitly priced 0 IRT with physical 100g profile v1 and approved gallery; one unit committed to this unshipped test order, admin basket empty. This supersedes the older historical-label gap below; remaining multi-SKU/financial/artist/release gaps still apply.
+
+Latest correction: public authored options now load frozen published SKU mappings from the existing API, with identity validation, bounded request concurrency and safe fallback for incompatible historical definitions. QA mapping v2 has selectable Small and intentionally unsupported QA Large; browser draft isolation/review/publication/fa/en checks pass. 11 focused tests, build/lint pass, preview web rebuilt. This supersedes the raw-SKU-only display gap below; AC-03 exact notebook/stock transitions and server-side historical option labels still remain open. Main unchanged.
+
+Basket follow-up: live quantity/reload/edit/invalid-zero/Persian-digit/remove-undo checks pass against real preview. Fixed demo disclosure/accessibility label on live basket rows; 7 focused tests, lint/build pass and preview rebuilt. Retained preview admin basket has synthetic RSV-e7134e0e quantity 3. Newly confirmed gap: current published QA Size/Small mapping is not rendered as authored public option families; AC-03 remains blocked. See audit for exact action limits.
+
+Follow-up: synthetic product memberships now persist across two collections and one category, and populated public filters return the same product/SKU. Corrected live collection cards using demo pricing/favorites and false out-of-stock labels for missing prices; locale links now explicit. Browser fa/en retest, 8 focused tests, lint and build pass. AC-01/02 shared stock-changing purchase remains open because this SKU lacks a published price. See the audit follow-up for exact evidence.
+
+See `admin-browser-audit-2026-10-22.md`. Fixed shop URL filters being discarded against the empty loading catalogue. Real-browser English/Persian reloads and selective chip removal pass in preview; 3 focused tests, production build and typecheck pass. Main untouched; populated collection acceptance and the previously recorded release gaps remain open.
+
+## Current integrated checkpoint — 2026-10-21
+
+Read `admin-integrated-release-progress.md`, `admin-integrated-acceptance.json` and `artwork-checkout-integration.md` first. Isolated preview0054 now includes managed original/print/licensed artwork authoring, accepted settings-backed checkout, digital/mixed stock separation, protected digital fulfillment and frozen-policy/tax refund bounds. Main stays0051. Keep the integrated-preview compose override; do not reset demo resources or deploy partial stages to main. Remaining work is family/group costing and production dependencies, gateway/artist/customer finance and official profit, full commissions/artist workspaces, operational queues and final56-view/AC-01–22 release acceptance.
+
+## Browser audit checkpoint — 2026-10-21
+
+Read `admin-browser-audit-2026-10-21.md` and its JSON evidence. Five dedicated browser-registered roles and labeled synthetic records remain in preview only; private credentials/session files are outside Git. All 56 admin routes were checked in fa/en at 1440/390 px: 54 workspaces and two placeholders (settlements/profit). Forty-eight customer layout variants, browser-only connected authoring/purchase/production/checkout/delivery/return/support/commission-preview flows, permission revocation and session invalidation are recorded. Supplemental browser tests use explicitly labeled API/imported-state fixtures. The shared filter reload, unlabeled dropdown toggle, overlapping CSRF rotation, commission-review alias and mixed physical/digital return-state defects were corrected and retested. Backend718/frontend434 pass. Full acceptance is still blocked; do not equate route coverage or supplemental mocked tests with complete browser acceptance. Keep main0051 unchanged and preserve preview0054 resources.
+
 ## Instructions for the receiving AI
 
 Continue this repository; do not recreate it. Read this document, `docs/implementation-progress.md`, `docs/architecture.md`, `docs/rfp.md`, and relevant backend contracts before editing. Read applicable `AGENTS.md` instructions and preserve unrelated working-tree changes.
@@ -87,7 +107,7 @@ Profile version 0 means no saved profile; first save becomes 1. Stale writes ret
 
 ### Migrations and background processing
 
-Current head **0013**: outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; commission request storage follows artworks; bundle composition follows commission requests; versioned explicit SKU price editing follows bundles; applied locally at head 0013. Do not rewrite applied migrations destructively.
+Current head **0022** (2026-10-13; later continuations below): outbox → collections → catalog foundations → processed events → accounts/sessions → OTP/grants → roles → profiles → draft SKU options/audits. Artwork descriptions follow draft options; commission request storage follows artworks; bundle composition follows commission requests; versioned explicit SKU price editing follows bundles; applied locally at head 0013. Do not rewrite applied migrations destructively.
 
 Outbox insertion shares the domain transaction. Dispatch locks with SKIP LOCKED and confirms broker publishing; consumption records event IDs transactionally. Only `infrastructure.ping` has a handler; stock/payment workflows do not exist yet. Celery uses JSON, persistent delivery, late ack, prefetch 1 and bounded retries. Optional beat must have one active instance.
 
@@ -1073,6 +1093,27 @@ USER-02–09 remain required: persisted orders, receipt, cancellation, returns/r
 
 Verification evidence: isolated PostgreSQL tests cover ownership, validation, revoked permissions, optimistic conflicts, idempotency, unpublished favorite visibility, default addresses, atomic audit/outbox rollback and event deduplication. Five browser tests use mocked contracts for address reload, preference acknowledgement, support conversation, notification acknowledgement and guest denial. Browser checks and isolated database tests are separate evidence; no end-to-end paid purchase is claimed. Remote CI remains unverified.
 
+## Admin continuation (2026-10-13)
+
+`features/admin/AdminPanel.tsx` connects the fa/en admin landing shell and published
+catalog browser, with collections/categories, products/SKUs, packages/bundles aliases
+and artworks. `catalog-api.ts` validates exact price strings and uses the existing
+private request/session/CSRF lifecycle for audited SKU price updates. Existing
+AccountManagementPage handles users/roles. Sidebar permissions now filter individual
+items; unimplemented business routes remain explicit unavailable states inside the
+reference shell. No fixture dashboard metrics are shown in live mode.
+
+Eleven new browser checks cover catalog contracts, aliases, decimal/version/CSRF
+writes, persisted acknowledgement, conflicts, ambiguous results, retry/empty,
+permission denial and Persian mobile navigation. Four existing panel-management
+checks and all 96 frontend unit tests pass; lint/typecheck pass. Browser fixtures
+are mocked, not live business mutations. Screenshots reviewed for English desktop
+and Persian mobile. CRUD/publication, draft listing, stock/commerce/costing/finance
+remain required; see the connected_partial page register. Unrelated in-progress
+customer-panel changes in this workspace were preserved.
+
+Admin production build: `npm run build` completed successfully after the final browser checks. Original design stylesheets remain unchanged.
+
 ## 2026-10-13 — Bundle detail aligned with the reference
 
 Restored the reference detail hierarchy: collection breadcrumbs/eyebrow, original gallery and sticker-pair composition, shared component cards, ProductOptionGroup cards, standalone links, shared grouped purchase summary, quantity/count preview, starting price and exact decimal price breakdown, discount note, guide/lightbox dialogs and four related catalog cards. Reference styling is unchanged; approved Yekan Bakh remains in place. Option changes preserve compatible selections and clear dependent incompatible fields like the reference.
@@ -1098,6 +1139,32 @@ Applied explicit local test prices to Ghosts notebook variants (145000 IRT), Cow
 Removed unconfirmed-purchase badges from homepage/shop browsing cards without claiming stock availability. Bundle cards now quote the cheapest authored allowed component options, multiply component quantities and apply the saved discount using exact decimal arithmetic. Missing data retains an unavailable price. Homepage Cats/everyday totals are 195000/180000 IRT. Reference CSS remains unchanged.
 
 Local checks: 107 frontend tests, 7 browser checks, 2 focused backend importer tests, frontend types/lint and focused backend lint passed. Web Docker build passed; all eight services healthy. Unrelated ongoing panel work remains outside this commit. Remote CI is reported separately.
+
+## Catalog administration continuation (2026-10-13)
+
+Admin collections/categories/products now use `/api/v1/admin/catalog/entries/{kind}`
+for all/draft/published lists and creation. `CatalogEditor.tsx` handles `/new` and
+`/{id}/edit`, bilingual content, explicit product memberships, reasons, protected
+navigation, audited history, version conflicts and uncertain results. Creation uses a
+stable client UUID and routes to the persisted editor after server acknowledgement.
+Explicit publication/unpublication has its own confirmation; published slugs are fixed,
+and product dependencies must be published. Public SKU/presentation/media publication
+remains separate and is not implemented here.
+
+Backend domain/application/infrastructure/presentation authoring modules and migration
+0021 implement current permission/session/Origin/CSRF rechecks, serialized dependency
+publication checks, expected versions, atomic before/after audits and change outbox
+notifications. Private SKU listing includes draft records, and the existing draft-SKU
+creation endpoint is connected in AdminPanel. See Backend/CATALOG.md for contracts.
+
+Final verification: all 312 shared backend tests passed (isolated PostgreSQL and disposable
+Redis), including 27 new authoring cases; 107 frontend unit tests; 20 browser contract
+checks. English desktop/Persian mobile editor screenshots reviewed; lint, mypy,
+frontend typecheck, generated API types and production Docker builds passed. Local
+migration head is 0022, including concurrent artwork metadata work; all eight services
+are healthy and unauthenticated admin entry reads return 401/no-store. No business
+records or roles were seeded/changed by this admin work. Browser mutations are mocked.
+Remaining page/workflow gaps are recorded as connected_partial. Remote CI is unverified.
 
 
 ## Database-backed artwork samples — 2026-10-13
@@ -1125,6 +1192,22 @@ All nine local sample artwork documents now offer an optional wood frame with th
 Local checks: 114 frontend tests, frontend lint/types, 2 PostgreSQL importer tests, focused backend lint, API/web Docker builds, eight healthy services, and browser checks for both selection directions across all nine artworks passed. Remote CI is reported separately.
 
 
+### 2026-10-13 — Admin product options and SKU mapping continuation
+
+Connected `/fa|en/admin/products/:id/options` (also `/variants`) from admin product rows. The original admin shell now hosts bilingual option/value fields, explicit combination selection, guarded removal, separate save, paginated option audits and draft SKU mapping/removal pinned to configuration and SKU versions. Existing published SKU immutability is respected. Conflicts/unknown acknowledgements retain input and require reload; navigation warns about unsaved drafts, private state clears with session changes. No price, stock or SKU publication is inferred. There is no SKU publication endpoint yet; the editor states that limitation.
+
+Validation: 7 new API contract tests, 6 new mocked browser checks, 16 existing admin/catalog browser checks and 33 backend option/mapping tests passed. Persian mobile screenshot inspected, frontend lint/type checking passed. Final full frontend suite passed 121 checks. ADM-06 remains partial: SKU publication/code editor and complete matrix/media acceptance remain outstanding. Broader milestones and RFP AC-01–22 are not complete.
+
+Local web production build succeeded and only the web service was refreshed. Six option/mapping browser checks passed against localhost:8080, including the /variants alias. Readiness returns 200; unauthenticated private options return 401/no-store; all eight local services are healthy. No business records or published SKU state were changed by this continuation.
+
+
+### 2026-10-13 — Draft SKU code editing
+
+Product options editor now exposes versioned draft SKU code edits through the existing protected authoring endpoint. Published SKU codes remain locked. Duplicate codes preserve input and allow correction; unknown/conflicting writes require reload. Unsaved code changes are guarded and cannot be mixed with option/mapping writes. After an acknowledged rename, mapping state is reread from the server; mapping read failure does not turn a confirmed code save into a false failure. Price and inventory are unchanged. SKU publication still needs implementation.
+
+Validation: 8 option API client tests, 7 option/mapping browser checks and 16 backend SKU authoring tests passed; lint and types passed. No business records were edited by the browser fixtures.
+
+
 ## Notebook and bundle photography — 2026-10-13
 
 Downloaded four licensed Pexels notebook/stationery photographs and stored optimized JPEGs locally under `Frontend/public/sample-stationery` (about 510 KB combined). Source/photographer credits and the Pexels license are in CREDITS.md. Explicit associations cover the four local notebook slugs and three local bundle slugs. Images appear in home/shop/collection cards and detail galleries; notebook gallery captions identify sample photos rather than claiming exact front/back product views. Stock photos are visibly labeled as samples, not actual NilArt product photos or exact bundle compositions. Unknown products retain missing-media handling. Original sticker/bookmark illustrations and bundle component views remain.
@@ -1133,12 +1216,75 @@ The shared reference media components and layouts are retained; presentation CSS
 
 Local checks: 122 frontend tests, frontend lint/type check, five browser checks across notebook/bundle routes and mobile rendering, web Docker build and service health passed. Remote CI is reported separately.
 
+Final code-edit continuation checks: full frontend suite 123 passed; all seven option/mapping browser checks passed on the refreshed localhost:8080 production build; production types/build and lint passed; all eight local services healthy. Only the web service was refreshed.
+
+
+### 2026-10-13 — Reviewed SKU publication
+
+Added explicit versioned SKU publication/unpublication with required reason, session/Origin/CSRF/permission checks, published-parent/current-mapping validation, product-before-SKU locks and transactional audits. Added a public reviewed snapshot endpoint that remains stable after draft edits and hides unpublished SKUs/products. No stock/prices/business records are inferred or changed. Admin editor uses a separate confirmation dialog and protects unknown/conflicting writes. No migration is added. Legacy unmapped fixtures retain their existing state and return 404 on the new snapshot endpoint.
+
+Focused backend SKU/option/publication checks: 41 passed, including publication concurrency and audit rollback. Full frontend suite: 130 passed; eight option/mapping browser checks passed; lint/types and generated API checks passed. Dedicated SKU audit-history UI and public presentation integration remain partial, along with broader admin milestones.
+
+Final reviewed-publication verification: full isolated backend suite 325 passed (no skips), frontend suite 130 passed, backend ruff/mypy and frontend lint/types passed, API client regenerated, API/web production builds succeeded. Existing local migration head remains 0023; no migration/business data was changed by this slice. All eight services are healthy, readiness is 200, unauthenticated publication is 401/no-store and unknown public snapshots are 404.
+
+
+### 2026-10-13 — SKU authoring history
+
+Added protected paginated SKU authoring history and bilingual admin before/after comparisons with actor, reason and Tehran timestamps. Older audit snapshots that omit mapping are labelled as not recorded rather than claiming removal. History has independent retry/loading state and clears on SKU selection, acknowledged mutations and session changes. Refreshed SKU metadata also updates the product list to avoid stale visibility labels. Price audits remain separate. No migrations/business records changed.
+
+Checks: 11 focused backend publication/history tests passed, full frontend suite 136 passed, nine option/mapping browser checks passed (history includes mobile, retry and pagination), backend ruff/mypy and frontend lint/types passed. A missing `dict[str, int]` annotation in concurrent order-request code was fixed to restore the shared type check. Public variant presentation, media/matrix acceptance and wider admin workflows remain required.
+
+Final SKU-history verification: 42 focused backend SKU/publication/mapping tests passed; 136 frontend tests passed; all nine option/mapping/history browser checks passed on the refreshed localhost:8080 build. API/web builds passed, all eight services healthy, readiness 200 and unauthenticated audit access 401/no-store after service-name resolution settled. Only API/web services refreshed; no migrations or real business records were modified.
+
+
+### 2026-10-13 — SKU price history
+
+Connected the existing protected price audit endpoint to the bilingual admin price editor. History preserves exact decimal strings/currencies, shows unpriced/removal states, actor and Tehran timestamps, supports retry and exclusive pagination, validates SKU/product identity and clears on selection/version/session changes. It does not convert currencies or change stock. No new backend contracts, migrations or business writes.
+
+Seven backend price-audit checks passed; two client history checks cover session clearing and pagination/retry; admin browser coverage verifies decimal/currency/removal history on mobile. Public variant presentation and broader administration remain unfinished.
+
+Final price-history checks: 7 existing backend price-audit tests, 2 new client history tests and 13 admin browser checks passed. The price-history browser check also passed on the refreshed localhost:8080 production build. Web build/types and lint passed; all eight local services healthy. Only web was refreshed; no business records or migrations were modified.
+
+
+### 2026-10-13 — Admin catalog search
+
+Connected the existing private catalog `q` filter for collections/categories/products. Explicit submit resets pagination, preserves publication filtering and protects unsaved SKU/price input. Clear search restores the full managed list. Bundle/artwork lists retain their accurately labelled current-page filter. A failed catalog load no longer displays a false empty-state confirmation. No backend writes or migrations added.
+
+Final catalog-search validation: 27 backend catalog management tests and 14 admin browser checks passed; search also passed on the refreshed localhost:8080 production build. Frontend lint/type checking and web build passed; all eight services healthy. Only web refreshed, without business writes or migrations.
+
+
+### 2026-10-13 — Admin support inbox
+
+Connected `/fa/admin/support` and `/en/admin/support` using the supplied AdminDashboard shell. Support staff can page through tickets, open chronological conversations and record versioned replies with fresh CSRF. Added protected ticket and paginated message reads, including ticket-scoped request-ID receipt lookup. An uncertain write requires explicit reload: an existing receipt confirms success; an absent receipt allows retrying the same locked payload and identifier. Conflicts retain drafts; closed tickets disable replies. Unsaved edits are guarded and private state clears with session changes. Fixed cancelled request cleanup under React development effect replay.
+
+Attachments, assignment/priority, admin closure controls and broader workflow acceptance remain outstanding. ORDER-06 is connected_partial, not accepted. Browser checks use intercepted fixtures; backend checks exercise an isolated PostgreSQL schema. No real customer replies were sent by verification.
+
+Final support verification: 10 backend customer/support PostgreSQL checks and all 7 support browser checks passed, with the browser checks repeated against the refreshed localhost:8080 production build. Frontend lint/type checking, backend ruff/mypy, generated API client and API/web production builds passed. All eight local services healthy; readiness 200 and unauthenticated ticket/conversation reads 401/no-store. Only API/web refreshed; this slice added no migration or real business writes. Concurrent customer/order/file work remains in the shared checkout.
+
+
+### 2026-10-14 — Staff support ticket closure and reopening
+
+Added protected `PUT /api/v1/admin/customer/tickets/{id}/state`: `support.manage`, fresh session/CSRF/Origin, strict optimistic version, row lock, required trimmed internal reason (1–1000 characters), audited before/after/version and transactional outbox. Staff can close an open ticket or reopen a closed ticket as submitted; redundant transitions fail. The bilingual inbox exposes explicit confirm controls, guards unsaved reasons and prevents mixing a draft reply with a status change. Unknown/conflicting status writes lock further actions until a read reload; reload clears the old intent and shows current status without automatically retrying or reversing it. Reasons remain internal and do not create customer messages.
+
+ORDER-06 remains connected_partial. Attachments, assignment/priority and broader workflow acceptance remain outstanding. Verification uses isolated backend records and intercepted browser fixtures; no real support messages or ticket states were changed.
+
+Final closure/reopening verification: 11 backend customer/support PostgreSQL checks and all 10 support browser checks passed; browser checks repeated on the refreshed localhost:8080 production build. Lint/types, backend ruff/mypy, regenerated OpenAPI client and API/web builds passed. All eight services healthy, readiness 200, unauthenticated state write 401/no-store. This slice added no migration and changed no real business records. Concurrent commission/order/download work remains in the shared checkout.
+
 
 ## Authentication phone selector spacing — 2026-10-14
 
 Added scoped authentication phone layout styles so the shared country dropdown has its own fixed flex area and divider, while the national phone input takes only the remaining width. Nested dropdown inputs no longer compete with the phone input's width. Applies to registration/OTP and password phone groups; approved auth.css is unchanged.
 
 Frontend lint/types and web Docker build passed. Browser regression passed for Persian/English at 979, 390 and 320 pixel widths, including non-overlap, country-menu keyboard dismissal, retained phone input and no horizontal overflow. No backend or phone-validation changes. Remote CI reported separately.
+
+
+### 2026-10-14 — Support inbox status filtering
+
+Added validated status filtering to the protected support list before cursor pagination. The bilingual dropdown covers all/submitted/awaiting reply/awaiting customer/closed. Changing views resets pagination and the selected conversation, with explicit unsaved-change protection; status-changing saves remove tickets that no longer match the view. Empty states describe the selected status and failed reads remain errors. No migration or real business write added. ORDER-06 remains connected_partial; assignment, priorities and attachments remain outstanding.
+
+Shop and current cats-bundle page were also checked at 390px: neither has horizontal overflow. The preceding shop filter placement is retained.
+
+Final status-filter verification: 13 current backend customer/support PostgreSQL tests and all 11 support browser checks passed. The new guarded filter check also passed on the refreshed localhost:8080 production build. Lint/types, backend ruff/mypy, generated API client and API/web builds passed. All eight services healthy; readiness 200 and unauthenticated filtered inbox 401/no-store. Only API/web refreshed, with no migration or real business write in this slice.
 
 
 ## Opt-in development OTP display — 2026-10-14
@@ -1150,24 +1296,376 @@ Verification pages display the server-provided sandbox code in Persian/English, 
 Local verification: 8 backend tests including isolated PostgreSQL verification/gating and SMS failure, focused backend lint/types, 178 frontend tests, frontend lint/types, browser display/disabled-state regression, API/web Docker builds and eight healthy services passed. Remote CI reported separately.
 
 
-### Server basket — 2026-10-14
+### 2026-10-14 — Staff support action history
 
-PUB-09 now uses the reference CartPage/CartRow layout with persisted guest/account baskets. Products, explicit bundle selections and sample artworks with optional frames support quantities, edit, remove/undo, reload, explicit guest merge and exact decimal totals. Origin/CSRF/session checks, optimistic versions and command idempotency protect writes; changed prices require confirmation. No stock reservations, order creation, payment or discount-code service is claimed; checkout and coupon controls remain disabled. Migration 0027 follows the additive 0023–0026 schema prerequisites, included without their unfinished panel services.
+Added protected ticket-scoped `GET /api/v1/admin/customer/tickets/{id}/audits`, with descending timestamp/ID cursor pagination and support.manage permission. Only staff reply/status audit actions for the ticket's owner and record ID are returned. The bilingual conversation shows action, actor, Tehran timestamp, internal reason and recorded before/after/version values. History is read on demand, supports retry/older pages, clears on ticket/version changes and clears private reasons on session changes. Unrecorded values are labelled rather than inferred. No migration or real business write added; ORDER-06 remains connected_partial.
 
-Verification: six isolated PostgreSQL tests (including concurrent updates), backend lint/types, 210 frontend tests, frontend types/lint, generated contracts, API/web Docker builds and desktop/mobile browser flows. Local services healthy. Remote CI is reported separately after push.
-
-Password policy: registration, recovery and account password changes now accept 8–128 characters. Backend boundary test accepts 8 and rejects 7; 26 identity tests passed.
+Final staff-history verification: 14 backend customer/support PostgreSQL tests, all 12 support browser checks and the new private-cache history unit check passed. The history retry/pagination/version-reset browser check also passed on the refreshed localhost:8080 production build. Lint/types, backend ruff/mypy, generated OpenAPI client and API/web builds passed. All eight services healthy; readiness 200 and unauthenticated history 401/no-store. No migration or real business record changed in this slice. Concurrent workspace changes remain preserved.
 
 
-### OTP request retry recovery — 2026-10-14
-OTP throttling returns Retry-After from Redis limit expiry or the persisted 60-second resend cooldown. Registration/login/recovery request forms show the actual remaining seconds and unlock on expiry; missing metadata shows ordinary retry copy without a permanent disabled form. Verified: two frontend regression tests, 17 disposable Redis tests, frontend type/lint checks and API/web Docker builds.
+### 2026-10-14 — Support subject search
+
+Protected support list now accepts a bounded `q` subject search, applied with status and cursor before pagination. LIKE metacharacters are escaped so `%` and `_` search literally; Persian text is supported. The bilingual form submits explicitly, resets pagination, preserves the active status, supports clear search, guards unsaved reply/reason input when changing views, and clears private search state when the session changes. Empty states distinguish search/status matches; failed reads remain errors. No migration or real business write added. ORDER-06 and the wider admin panel remain partially implemented.
+
+Final subject-search verification: 15 backend customer/support PostgreSQL tests and all 13 support browser checks passed. The new search/pagination/status/draft-guard check also passed on refreshed localhost:8080. Frontend lint/types, backend ruff/mypy, generated API client and API/web production builds passed. All eight services healthy; readiness 200 and unauthenticated subject search 401/no-store. Only API/web refreshed, without migrations or real business writes in this slice. Concurrent workspace work remains preserved.
 
 
-### Address location catalogue and centered modal — 2026-10-17
-Account address dialogs are centered at desktop/mobile widths. Searchable province and dependent city controls load the locally served bilingual catalogue from GET /api/v1/geography/iran (31 provinces, 1119 cities). A province change clears the city; loading and retry states are explicit. Legacy fixture IDs map to readable stored names. Vendored MIT dataset attribution is included. Profile name placeholder aligns right in Persian. Backend catalogue test, frontend region tests and type checks passed.
+### 2026-10-14 — Support conversation reference alignment
+
+Applied the supplied SupportConversationPage message structure and existing support-conversation.css to live admin support: ordered conversation, distinct customer/support cards, sender avatars/icons, semantic timestamps and automatic text direction. Ticket statuses use the AdminDashboard reference badge styles. Subject-search input now uses visible theme control borders/spacing. Business reply/status/history behavior remains unchanged; no backend contract or migration added.
+
+Validation uncovered shared basket/order syntax/import/type errors. Missing expression/tag delimiters, the bundle AddToBasket import, an unsupported ESLint directive and unsupported testing-library exact options were minimally corrected without changing the intended workflows. All 13 support browser checks and 11 order unit checks passed; lint/types and web production build passed. Wider admin features remain incomplete.
+
+Final reference-layout verification: reply persistence and Persian mobile browser checks passed on localhost:8080 after the successful web build. Visual inspection confirms reference message cards, status badges and visible search control without horizontal overflow. All eight local services healthy. No real business writes or migrations in this slice.
 
 
-### Zarinpal sandbox checkout — 2026-10-18
-Connected the saved basket to a bilingual sandbox checkout (saved address, price review, explicit test consent), Zarinpal v4 redirect, authoritative callback verification, receipt and owner-only result/recheck. Requests require exact Origin, fresh CSRF and transactionally rechecked session/write permission. PostgreSQL snapshots retain selections, amounts and recipient; payment/order/receipt/basket updates and outbox writes are atomic. Sandbox orders remain on hold; no real money, stock, shipping or production fulfillment is enabled. Shipping/tax are explicitly zero for this test. Migration 0031 includes additive schema prerequisites 0028–0030 without their unfinished services.
+### 2026-10-14 — Artist account administration
 
-Local validation: six new backend tests on isolated PostgreSQL, two checkout UI tests, 297 total frontend tests, backend lint/types and frontend lint/types. A live sandbox request and browser test completed with gateway verification/reference saved. Frontend Docker build passed. The clean API Docker build hit dependency-registry DNS failure; the API image was successfully rebuilt from its installed runtime with updated source/migrations. Remote CI results are separate. See Backend/PAYMENTS.md for settings and recovery limits.
+Connected `/fa/admin/artists` and `/en/admin/artists` to the reference AdminDashboard shell and existing account access editor. Protected account listing now supports a validated role filter before cursor pagination. The artist directory requires identity.manage, as do its access/restriction writes; commissions.manage alone does not expose identity data. Existing reason, version, CSRF, audit and unsaved-change controls are reused. Removing the artist role removes that row from the directory after acknowledgement. Artist role assignment remains available through Users; commission assignment, artist profiles and settlements remain unfinished. ADM-14 is connected_partial, not accepted. No migration or real business writes added.
+
+Final artist-account verification: all 10 identity management PostgreSQL tests and both artist browser checks passed. Browser checks repeated on refreshed localhost:8080, including 390px layout, audited role removal with fresh CSRF and denial before identity reads for commission-only access. Lint/types, backend ruff/mypy, regenerated API client and API/web builds passed. All eight services healthy; readiness 200 and unauthenticated artist directory 401/no-store. No migration or real business records changed in this slice. Concurrent workspace changes preserved.
+
+
+### 2026-10-14 — Admin user/artist phone search
+
+Protected account listing now accepts bounded full/partial phone search before role filtering/cursor pagination. Persian/Arabic digits and formatted/local Iranian numbers are normalized; malformed terms return a specific validation error. Users, Roles and Artists share explicit search/clear controls in the reference shell. Search preserves artist scope, resets pagination, guards unsaved access changes and clears private search state with session changes. Starting a new read clears the selected editor so its response cannot discard newly typed access edits. Failed reads do not produce a false empty-state confirmation. No migration or real business writes added; broader admin work remains unfinished.
+
+Final account-search verification: 11 identity management PostgreSQL tests and all 3 artist-directory browser checks passed, with browser checks repeated against refreshed localhost:8080. Tests cover number normalization, invalid input, artist scope, explicit search/clear, draft protection and access denial. Lint/types, backend ruff/mypy, regenerated client and API/web builds passed. All eight services healthy; readiness 200 and unauthenticated directory search 401/no-store. No migration or real business records changed in this slice.
+
+
+### 2026-10-14 — User directory role filtering
+
+Connected the existing protected role query to the bilingual Users/Roles directory using the reference dropdown and theme controls. Role changes combine with the applied phone search, reset cursor pagination, guard unsaved access changes and clear with private session state. Artists retain their fixed artist-only scope. After acknowledged access changes, accounts that no longer match the current role leave the directory. Search/clear action spacing uses reference tokens. No backend contract, migration or real business writes added; wider admin workflows remain incomplete.
+
+Final role-filter verification: all 4 account/artist directory browser checks passed, with the new role/phone/draft-guard check repeated against refreshed localhost:8080. Frontend lint and types and web production build passed. The initial shared customer-attachment lint errors were resolved before final validation. All eight services healthy. Only web refreshed; no backend contracts, migrations or real business records changed in this slice.
+
+
+### 2026-10-14 — Account restriction filtering
+
+Added protected boolean restriction filtering before account-list pagination. Users and Artists expose the reference dropdown for all/active/restricted, combined with role and phone search. View changes guard unsaved edits; acknowledged restriction changes remove rows that no longer match. No migration or real business write added. A shared attachment count query was minimally switched from scalar() to scalar_one(): COUNT always returns one row, resolving its optional-value type error without changing the limit.
+
+Final account-status verification: all 12 identity PostgreSQL tests and all 5 account/artist browser checks passed. The status/role/phone combination check also passed on refreshed localhost:8080. Frontend lint/types, backend ruff/mypy, regenerated API client and API/web builds passed. All eight services healthy; readiness 200 and unauthenticated filtered directory 401/no-store. No migration or real business records changed in this slice; concurrent workspace work preserved.
+
+
+### 2026-10-14 — Stored order administration
+
+Connected protected cross-customer admin order listing and details with orders.read_all. Server search covers reference, bilingual item title and SKU, combined with payment/fulfillment filters and descending timestamp/UUID cursor pagination. The reference AdminDashboard shell/table/panels show saved order status, Tehran timestamps, exact decimal/currency amounts and persistent detail URLs. Details include recipient/address, items/options/quantities/discounts, shipping/tax/total, recorded refund and receipt number. Read-only: no fulfillment, shipping, payment or refund writes or fake orders are created. Private data clears with the session and late responses are discarded. ORDER-01/02 are connected_partial; operational write workflows and full visual/state acceptance remain unfinished. No migration or real business writes added.
+
+Final stored-order verification: all 9 customer/admin order PostgreSQL tests and all 4 admin order browser checks passed. Browser checks repeated against refreshed localhost:8080, covering exact amounts, stored detail reloads, search/status filters, denial before reads and Persian mobile layout. Frontend lint/types, backend ruff/mypy, regenerated API client and API/web builds passed. All eight services healthy; readiness 200 and unauthenticated list/detail 401/no-store. No migration or real business writes added. Concurrent workspace changes preserved.
+
+
+### 2026-10-14 — Admin saved receipt viewing and printing
+
+Added persistent `/admin/orders/{id}/receipt` views behind orders.read_all, using the existing protected order snapshot. Receipt number, timezone-validated issue timestamp and exact paid amount are shown alongside the saved order amounts/items. No receipt is invented when absent, and no payment action is performed. The print stylesheet removes admin navigation and action controls only for the receipt view, leaving other pages' printing unchanged. Session/request read guards and cache clearing remain in place. No backend contract, migration or real business write added; wider admin workflows remain incomplete.
+
+Final saved-receipt verification: all 6 admin-order browser checks passed; both receipt/print/missing-state checks repeated on refreshed localhost:8080. Frontend lint/types and web production build passed. Print layout inspected; navigation/actions are removed and saved values remain visible. All eight services healthy. Only web refreshed; no backend contract, migration, payment action or real business write added.
+
+
+### 2026-10-14 — Admin commission queue search and statuses
+
+Replaced the loaded-page commission filter with protected server-wide search across request ID and brief text, plus validated commission status filtering before cursor pagination. The reference dropdown/search controls submit explicitly, preserve current status when clearing search, reset pagination and clear private query state with the session. Queue view changes guard unpublished drafts; confirmed discards clear selected preview/terms/note state. Acknowledged publication/status changes remove rows that no longer match the current status. Existing private PNG publication and uncertain-write recovery remain unchanged. Customer review history now displays the same note in multiple locations, so its publication browser assertion was scoped to the history region. No migration or real business writes added; artist assignment, final-file/payment workflows and wider administration remain unfinished.
+
+Final commission-queue verification: all 10 commission PostgreSQL tests, 7 focused publication client tests and 5 publishing/queue browser checks passed. All 5 browser checks repeated on refreshed localhost:8080. Frontend lint/types, backend ruff/mypy, regenerated API client and API/web builds passed. All eight services healthy; readiness 200 and unauthenticated filtered commission queue 401/no-store. No migration or real customer publication/business writes added in this slice. Concurrent workspace work preserved.
+
+
+### 2026-10-14 — Admin cancellation and return queue filters
+
+Connected server-wide reason/request ID/order ID/order reference search and validated request status/type filters before UUID cursor pagination. The reference dropdowns and explicit Search/Clear controls reset pagination and guard unsaved customer replies before changing the queue. Clearing search preserves status/type; session clearing removes private search/filter state. Existing versioned staff decisions, read-only access and uncertain-write recovery remain unchanged. No migration or real business write added; refunds, fulfillment and return inspection remain unfinished.
+
+Verification: 5 isolated PostgreSQL request-review tests (including filtered cursor pagination, reference/ID search, literal percent and invalid filters), 7 focused client tests and 5 browser checks passed. Browser checks cover combined server filters, discarded/kept reply drafts, lost-response recovery, read-only access and Persian mobile layout. Frontend lint/types, backend ruff/mypy and API client generation passed.
+
+Local verification: API/web builds passed and the refreshed localhost:8080 passed all 5 request-review browser checks again. Readiness returned 200; unauthenticated filtered requests returned 401 with no-store. Seven services are healthy. The concurrently changed local MinIO container is restarting because its configured user cannot write its existing volume; this slice did not change storage configuration or data. File-related runtime availability needs follow-up. No migration or real order decisions/refunds were performed.
+
+
+### 2026-10-14 — Admin order-request decision history
+
+Added protected GET /api/v1/admin/order-requests/{id}/reviews, requiring orders.read_all. Returns only the selected request's recorded decisions, staff actor ID, timestamp, reply and expected version, newest version first. Cursor lookup is scoped to the same request; missing requests/cursors return 404. This is read-only and adds no migration. The reference admin detail panel shows bilingual decision history, Tehran timestamps, version transitions, manual loading/retry, empty/error states and older-page loading. Private history clears on session changes, late responses are ignored, and selected request/version changes reset history after acknowledged writes or reconciliation. No real order decisions, refund, fulfillment or return inspection were performed.
+
+Verification: all 6 isolated PostgreSQL review tests, 9 focused client tests and 6 browser checks passed. Tests cover cross-request cursor rejection, permission/session denial, chronological pagination, retries, history reset after saving, and private cache/late-response clearing. Frontend lint/types, backend ruff/mypy and API client regeneration passed. Wider admin workflows remain incomplete.
+
+Final local decision-history verification: API/web production builds passed; all 6 review browser checks repeated successfully on refreshed localhost:8080. Readiness returned 200 and unauthenticated history returned 401/no-store. Fixed the observed MinIO startup failure by setting ownership of the existing nilart_minio_data volume to its configured UID/GID 10001, then restarting only MinIO; existing file contents were preserved and no storage configuration was changed. Runtime health checked after restart. No application migration or real order/refund write performed.
+
+
+### 2026-10-14 — Protected admin Activity log
+
+Connected the reference System → Activity log at /admin/activity, with /admin/audit as an alias. New GET /api/v1/admin/identity/audits requires identity.manage, consistent with existing private account audit access. Read-only overview projects action, internal reason, actor/account IDs and timestamp; detailed changes remain in scoped pages. Literal server search across action/reason and optional validated account UUID filter apply before timestamp/UUID cursor pagination. Cursors must match the current filters. Reference shell/table and bilingual explicit Search/Clear/Reload controls provide private-cache clearing, stale-response guards, Tehran timestamps, older entries, loading/error/empty states and read retries. Fixed development strict-effect cleanup so the initial read can restart safely. ORDER-07 is connected_partial; catalog/price histories remain in their scoped pages and comprehensive cross-domain aggregation is unfinished. No migration or real business writes added.
+
+Verification: 13 isolated PostgreSQL identity management tests, 2 client privacy tests and 4 activity browser checks passed. Coverage includes permissions/revocation, filtered cursor ordering, invalid account IDs, literal wildcard search, session and late-response clearing, server search/pagination, retries and Persian mobile layout. A concurrent registration test used an unsupported Testing Library role option; removed that option while preserving its exact string name assertion.
+
+Final Activity log verification: frontend lint/typecheck, backend ruff/mypy, regenerated API client and API/web production builds passed. Both privacy tests and all 3 concurrent registration transition tests passed. All 4 Activity log browser checks repeated successfully on refreshed localhost:8080. All eight services healthy; readiness 200 and unauthenticated global audit feed 401/no-store. No migration or real business write was performed; concurrent workspace changes preserved.
+
+
+### 2026-10-14 — Live admin order overview
+
+Added read-only GET /api/v1/admin/order-summary behind orders.read_all. A single SQL statement counts all persisted orders by payment/fulfillment state and submitted/in_review cancellation/return requests. Approved/rejected/completed requests are excluded from the awaiting-review count. Response contains aggregate counts only, without customer IDs, addresses or monetary aggregation. The reference dashboard now presents bilingual order overview panels and links to orders/request review, with explicit refresh, read retries, empty/error/loading states and session/stale-response clearing. Staff without order access never fetch or see the panel. Updated the stale dashboard integration notice to reflect connected orders. No migration or real order/refund/fulfillment writes added. ADM-01 remains connected_partial; inventory, costing and finance metrics remain unfinished.
+
+Verification: 10 customer/admin order PostgreSQL tests and 7 review PostgreSQL tests passed, including empty/persisted counts, access denial and request transition counts. All 18 admin shell/summary browser checks passed, including Persian mobile, unauthorized read avoidance, refresh/retry and explicit zero results.
+
+Final order-overview verification: both client session/privacy tests, frontend lint/typecheck, backend ruff/mypy, regenerated API client and API/web production builds passed. After transient nginx 502 responses immediately following container replacement settled, all 4 summary browser checks passed on localhost:8080. All eight services healthy; readiness returned 200 and unauthenticated order summary 401/no-store. No migration or real order/refund/fulfillment write added. Concurrent workspace changes preserved.
+
+
+### 2026-10-14 — Live support dashboard overview
+
+Connected GET /api/v1/admin/customer/ticket-summary behind support.manage, aggregating recorded tickets by status in one database statement. The response exposes counts only; addresses, messages and other customer records are excluded. The reference dashboard displays total tickets and submitted/awaiting_reply/awaiting_customer/closed counts, explicit zero results, refresh/retry/error/loading states and an inbox link. Staff without support access never fetch or see the panel. Aggregate cache clears on session changes and late responses are discarded. No migration, ticket reply/status changes or real business writes added. ADM-01 remains connected_partial; inventory/costing/finance metrics remain unfinished.
+
+Verification: 18 customer/support PostgreSQL tests, 2 summary privacy tests and 4 browser checks passed. Coverage includes permission/session denial, status totals and non-ticket exclusion, private cache/late-response clearing, inbox navigation, read retry, empty results and Persian mobile layout. API client regenerated; frontend lint/types and backend ruff/mypy passed.
+
+Final support-overview verification: API/web production builds passed and all 4 dashboard support browser checks repeated successfully on refreshed localhost:8080. All eight services healthy; readiness 200 and unauthenticated ticket summary 401/no-store. All 18 customer/support PostgreSQL tests and both privacy tests passed. No migration, real ticket reply/status changes or business writes performed; concurrent workspace changes preserved.
+
+
+### 2026-10-14 — Live commission dashboard overview
+
+Added GET /api/v1/admin/commissions/overview/summary behind commissions.manage, counting persisted commission statuses in one statement. Aggregate response contains no brief, account IDs, private artwork or agreement details. The reference admin dashboard now displays total commissions and awaiting_review/in_progress/awaiting_customer/revision_requested/approved/cancelled counts, an explicit queue link, refresh/retry and zero/error/loading states. Staff without commission management access never fetch or see the overview. Private counts clear with the session and late reads are discarded. No migration or real commission publication/status/business writes added. ADM-01 remains connected_partial; artist assignment, final-file/payment and wider operational workflows remain unfinished.
+
+Verification: 11 isolated commission PostgreSQL tests, 2 client privacy tests and 4 dashboard browser checks passed, covering actual persisted status changes, private projection, empty and permission/session-denied reads, session clearing/late responses, queue navigation, retry/zero state and Persian mobile layout. Frontend lint/types, backend ruff/mypy and regenerated API client passed.
+
+Final commission-overview verification: API/web production builds passed and all 4 commission dashboard browser checks repeated successfully on refreshed localhost:8080. All eight services healthy; readiness 200 and unauthenticated summary 401/no-store. No migration or real commission publication/status/business write performed; concurrent workspace changes preserved.
+
+
+### 2026-10-14 — Activity log staff actor filter
+
+Extended the protected identity.manage activity feed with optional actor_id UUID filtering combined with account ID and literal action/reason search before pagination. Cursor validation respects the actor scope. The reference Activity log editor now has bilingual Actor ID validation, explicit Search, combined filter pagination, Clear filters and session clearing. No migration or business writes added. Global audit aggregation and broader admin operations remain unfinished.
+
+Verification: all 14 isolated identity PostgreSQL tests, 2 private cache/late-response client tests and 4 Activity log browser checks passed. Tests cover combined actor/account/search filters, mismatched cursor denial, invalid/empty actor results, form validation, server query parameters, cleared actor filters, unauthorized access and Persian mobile. Frontend lint/types, backend ruff/mypy and regenerated API client passed.
+
+Final actor-filter verification: API/web production builds passed and all 4 Activity log browser checks repeated successfully on refreshed localhost:8080. All eight services healthy; readiness 200 and unauthenticated actor-filtered activity feed 401/no-store. No migration or business write performed; concurrent workspace changes preserved.
+
+
+### 2026-10-17 — Saved order context in admin request review
+
+Added an explicitly loaded order-context section to cancellation/return request review using existing orders.read_all-protected admin order details. It resolves immutable item titles, SKU/options, ordered and delivered quantities, delivery type and returnability recorded at purchase. Return reviews show requested quantities separately and include only requested lines; cancellation reviews show all order lines. Mismatched request/order IDs or unknown requested line IDs fail closed. Includes read retry, private session clearing, late-response guards, reset by request/version and a saved-order link behind the existing unsaved-reply navigation guard. Reference admin panels/tables extend the order review/details pattern. No backend contract, migration or real decision/refund/inspection writes added; actual return inspection and operational fulfillment/refunds remain unfinished.
+
+Verification: 10 client review/context tests and 7 review browser checks passed. Checks cover mismatched lines, private session/late-response clearing, saved item identity, requested versus delivered/ordered quantities, failed-read retry and unsaved reply protection. Frontend lint passed. A typecheck briefly observed concurrent customer-page edits; a fresh typecheck passed without editing those files.
+
+Final saved-order-context verification: web production build passed and all 7 review browser checks passed on localhost:8080, including mobile overflow with the loaded context. All 11 focused client tests passed, including exclusion of unrequested order lines. All eight services healthy and readiness 200. Build also required a minimal type guard for an unknown notification fixture payload in customer-feature-audit.spec.ts; no customer product behavior changed. Own changed-file whitespace checks passed; unrelated concurrent AddressFields whitespace was preserved. No API contract, migration or real decision/refund/inspection write added.
+
+
+### 2026-10-17 — Persistent admin request review URLs
+
+Connected /admin/order-requests/{id} as an orders.read_all-protected persistent detail route. Queue review actions navigate to stored request URLs; direct loads/reloads fetch only that request. Detail views retain read-only access messaging, explicit request-read retry and no fabricated detail on failures, plus guarded Back to requests navigation. Queue filters stay on the queue route; unsaved-reply view-change coverage now verifies guarded navigation back to that route. Existing decision writes, idempotency, uncertain-write recovery, saved order context and decision history are unchanged. No API contract, migration or real business writes added. Return inspection, refunds and fulfillment actions remain unfinished.
+
+Verification includes client review/context tests, browser direct reloads, failed-read retry, direct-link denial before private reads, accepting/declining draft discard, existing recovery and Persian mobile coverage. Full production verification recorded below when complete.
+
+Final persistent-review verification: all 11 client review/context tests and 10 browser checks passed; all 10 browser checks repeated on refreshed localhost:8080. Frontend lint/types and web production build passed. All eight services healthy; readiness 200. Changed-file whitespace checks passed. Web refreshed; no API contract, database migration or real decision/refund/inspection write performed. Concurrent workspace work preserved.
+
+
+### 2026-10-17 — Activity log Tehran date ranges
+
+Added optional date_from/date_to to the identity.manage activity feed. Both dates are inclusive calendar days in Asia/Tehran, combined with actor/account/reason filters before timestamp/UUID pagination; cursor lookup uses the same scope. Invalid or reversed ranges return 422. Reference native date controls submit explicitly, validate reversed ranges, retain the applied dates for older-page/reload reads and clear them with filters or the session. No migration or business writes added; broader administration remains unfinished.
+
+Verification: all 15 isolated identity PostgreSQL tests, 2 client privacy tests and 5 Activity log browser checks passed. Tests cover Tehran midnight boundaries, inclusive day ends, invalid ranges/dates, mismatched-date cursors, combined actor/date pagination, date input clearing, access denial and Persian mobile layout. Frontend lint/types, backend ruff/mypy and API client generation passed.
+
+Final date-filter verification: API/web production builds passed; all 5 Activity log browser checks repeated successfully on refreshed localhost:8080. All eight services healthy; readiness 200 after transient proxy refresh settled, and unauthenticated date-filtered feed 401/no-store. Changed-file whitespace checks passed. No migration or business write performed; concurrent workspace changes preserved.
+
+
+### 2026-10-17 — Requests linked from saved order details
+
+Extended the orders.read_all request queue with optional validated order_id filtering before cursor pagination, combined with existing query/status/type filters. Saved order details now explicitly load that order's cancellation/return requests with status, reason, Tehran timestamp and persistent review links. Supports pagination, reload/retry, true empty/error/loading states, private session clearing and stale-response guards. Client rejects cross-order responses. Request controls are excluded from saved receipts; receipt detection also accepts a trailing slash. Reference admin panels/detail links are reused. No migration or real order decisions/refund/fulfillment/inspection writes added.
+
+Verification: 7 isolated request-review PostgreSQL tests, 3 request-list privacy/scope client tests and 8 order-page browser checks passed. Includes combined order filters, cross-order empty results, invalid IDs, private cache/late-response clearing, retry/pagination query scope, direct review navigation, receipt isolation and existing Persian mobile checks. Frontend lint/types, backend ruff/mypy and API client generation passed.
+
+Final order-linked-request verification: API/web production builds passed; all 8 order-page browser checks passed again on localhost:8080. All eight services healthy and readiness 200 after concurrent web replacement settled. Unauthenticated order-scoped request list returned 401/no-store. No migration or real order decision/refund/fulfillment/inspection write added; concurrent workspace changes preserved.
+
+
+### 2026-10-17 — Exact action filtering for staff activity
+
+Added optional bounded exact action filtering to the identity.manage activity feed, composed with account/actor/date/reason scopes before pagination and cursor lookup. A reason mentioning an action code does not count as that action. The reference shared dropdown offers common access/security/support/order actions; All actions retains the full feed. Selection applies explicitly through Search, persists for older-page/reload reads and clears with filters or the session. Used a non-label container around the shared dropdown so native label activation does not reopen the menu after selection. No migration or business writes added; operational admin gaps remain unfinished.
+
+Verification: 16 isolated identity PostgreSQL tests, 2 private cache/late-response client tests and 6 Activity log browser checks passed. Covers exact-action exclusion of reason-only matches, combined scopes, pagination, mismatched-action cursor denial, empty/invalid actions, explicit apply, filter clearing, access denial and Persian mobile. Backend ruff/mypy and API client generation passed.
+
+Final exact-action verification: frontend lint/types, API/web production builds and all 6 Activity log browser checks passed on refreshed localhost:8080. All eight services healthy; readiness 200 and unauthenticated action-filtered feed 401/no-store. Changed-file whitespace checks passed. No migration or business write performed; concurrent workspace changes preserved.
+
+
+## 2026-10-17 — Materials and service rates
+
+Connected `/fa/admin/materials` and `/fa/admin/service-rates` (and English equivalents) with protected, versioned resource editing, explicit purchase/consumption conversion, exact nullable rates/currencies/validity, deliberate zero acknowledgement, archival, server filters/pagination and immutable history. Stable revision receipts support lost-response recovery; stale edits retain inputs and require review of the current version. Saved-resource consumption previews report missing data instead of inventing totals. Migration 0029 adds resource/version tables without business seeds. The worker validates and deduplicates the new save event; it does not move stock or publish prices.
+
+Validation: 21 isolated PostgreSQL costing tests, 19 outbox tests, 7 frontend unit/component tests and 13 intercepted browser checks passed; backend lint/type checking and frontend lint/type checking passed. See `docs/costing-foundation.md` for contracts and limitations. COST-01/02/03 remain connected_partial: BOM/SKU costing, cutting yield, procurement, inventory, production, finance and the other remaining admin workflows are not complete.
+
+Production verification: API/web/worker images rebuilt successfully; additive migration 0029 applied to the local database. All eight services healthy. All 13 costing browser checks passed again through localhost:8080 using intercepted fixtures (no business records created). Unauthenticated list/detail/estimate requests return 401 with no-store. New local routes: /fa/admin/materials and /fa/admin/service-rates.
+
+
+## 2026-10-18 — SKU recipes, manufacturing estimates and dependency review
+
+Connected bilingual `/admin/recipes` library/editor and `/admin/costing` entry point, with real SKU lookup, stable drafts, immutable recipe/resource snapshots, explicit quantities/bases/conversions, confirmed cutting yield and waste, validity/archive and history. Exact rational batch/unit costing requires explicit output/date/rounding and blocks incomplete or stale data. `/admin/price-review` derives changed/expired/archived/unknown resource dependencies before pagination. Reviewing new rates preserves quantities only when units/conversions and cutting dimensions allow it; changed cutting dimensions require renewed approval. Version conflicts retain inputs and require comparison, unknown saves retain an exact retry intent, private caches clear on session changes. Migration 0030 is additive and seeds no business records. See `docs/sku-recipes.md` for API contracts and unfinished scope.
+
+Validation: 19 isolated PostgreSQL recipe tests, 19 outbox tests, 21 material regression tests; 7 recipe frontend tests (plus material/support regressions); 16 intercepted recipe browser workflows. Targeted lint/type checks passed. COST-04/05/06/07/09 remain connected_partial: family templates/overrides, geometric cutting, price proposals, inventory/procurement/production/finance and other unfinished admin workflows are still outstanding.
+
+
+Local deployment verification (2026-10-18): additive migration 0030 applied; API, web and worker updated; all eight services healthy. Frontend production build passed. Container package download failed due to DNS; the API/worker source update used an existing local runtime after verifying every installed package against requirements.lock (zero mismatches). Standard Dockerfiles and dependency requirements were preserved. Protected recipe/SKU/review endpoints return unauthenticated 401 with no-store; Persian recipes/costing/review routes return 200. No business records were seeded or written by browser checks.
+
+
+## 2026-10-18 — Supplier/provider directory
+
+Connected protected bilingual `/admin/inventory/suppliers` list and stable editors using reference shell/shared dropdowns. Explicit goods/service/both type, optional contacts, localized phone digits, multi-line address/notes, archive, literal server contact search and paginated immutable history. Versioned writes require fresh permission/session/Origin/CSRF and commit supplier+revision+audit+outbox atomically. Conflicts preserve inputs and require comparison; unknown saves retain exact receipt/retry identity. Migration 0032 is additive with no supplier/balance seeds.
+
+Verification: 17 isolated PostgreSQL checks (including concurrency, reversal, rollback and TOCTOU), 7 frontend client/privacy checks and 10 intercepted browser workflows. See `docs/supplier-directory.md`. OPS-04 remains partial because supplier financial balances, purchases, independent payments and statements are not yet implemented; other remaining admin modules remain outstanding.
+
+Local deployment: frontend production build passed; API/worker source updated using an existing runtime after all installed dependency versions matched requirements.lock. Local database is at 0032; all eight services healthy. Supplier list/history reject unauthenticated requests with 401/no-store, and the Persian admin route returns 200. No business supplier or financial records were seeded.
+
+
+## 2026-10-18 — Discount placeholder replaced with real rule management and sandbox application
+
+Implemented `/admin/discounts` list/editor with versioned fixed/percentage rules, named product/collection/category scopes, validity/caps/quotas/mobile restrictions, stacking opt-in, usage counters, immutable history and retained conflict/unknown-save workflows. Live cart directs code entry to sandbox checkout; fresh server quotes and payment revalidation use exact rational allocation. Discount usage reserves atomically with order/payment/outbox; verified success redeems once; definitively rejected gateway creation releases; unresolved/resumable attempts retain reservations. Zero-total orders complete without a gateway call, with a prefixed zero-total sandbox receipt. Complete payment intents now bind retries, and stale/unmounted checkout responses cannot navigate. Migration 0033 preserves old snapshots and guards downgrade when zero-total rows cannot fit the prior schema. No business codes/orders were seeded.
+
+Verification: 27 isolated discount PostgreSQL checks plus 6 payment and 19 outbox checks; 13 frontend tests; 12 intercepted browser workflows including fa mobile. Build/lint/type verification and local deployment recorded in docs/discount-management.md. ADM-09/10 remain connected_partial in the full release register: real merchant activation, stock/fulfillment and ambiguous-provider operational recovery remain separate existing prerequisites.
+
+## 2026-10-18 — Integrated sandbox foundations and shared admin UI
+
+Implemented versioned business settings, recorded stock/valuation adjustments and linked reversals, approved-only bilingual content, and an immutable media/print library. Added an isolated resettable nilart-demo workspace at http://127.0.0.1:18080 with separate database/storage/queues and host-isolated login cookies. Synthetic users/data are created only there. The 56-view and AC-01–22 matrix is docs/admin-release-acceptance.md; full scope/current remaining work is docs/admin-sandbox-release.md.
+
+Redesigned live admin tables/filters/buttons using shared AdminFilters, AdminButton, AdminAction, AdminTable and AdminDataTable components. Migrated existing admin table markup and primary/secondary controls, made row actions accessible SVG icons, grouped catalogue/account/support filters, and converted price review/content/media lists into tables. Mobile action columns stay visible during horizontal scrolling. Preserved all existing guards, APIs and pending-intent semantics.
+
+Verification: 574 backend tests passed, 340 frontend tests passed, lint/types/production build passed; 60 existing admin browser checks, 22 foundation workflows and five fa/en desktop/mobile redesign checks passed. Two real database-backed browser journeys verified synthetic settings/stock and content/media behavior in the separate demo. A stale customer-order test was updated to verify the now-separate payment/delivery badges without changing that screen.
+
+Local deployment: private pre-migration database backup saved; additive migrations 0034–0037 applied, all eight main services healthy, new private APIs reject guests with 401/no-store. No business data seeded in the main workspace. The complete operational release is NOT finished: catalogue/media consumption, advanced costing/publication, stock reservations, purchasing/production, financial ledgers/reports, fulfillment/refunds and complete commission/artist workflows remain outstanding. Do not describe this foundation/UI release as all 56 views completed.
+
+### 2026-10-18 — Purchasing stage
+
+PurchasesPanel, SupplierStatement, purchases-api and Backend procurement/purchases.py plus purchase_stock.py now implement drafts, posting, partial receipts, receipt-linked supplier returns, exact command recovery, stock source traceability and purchase-only supplier liability. Migration 0038 follows 0037. Preserve existing records; generated API contracts include the new models. Purchase-generated stock movements have source_document_id/source_event_id and cannot be manually reversed. Recorded stock intents allow larger derived valuations while manual amount input bounds remain intact. Supplier purchase statements explicitly exclude payments; do not claim full supplier financial balances. Sources and remaining scope: docs/purchase-workflow.md and docs/admin-sandbox-release.md. Real isolated demo browser test is Frontend/tests/e2e/purchases-live.spec.ts; it requires explicit demo env flags and never targets main. Full integrated release remains unfinished. Next dependency stages include production/version-pinned consumption/QC and operational finance, with catalogue/pricing and downstream checkout/fulfillment work also pending.
+
+### 2026-10-18 — Production/WIP/QC stage
+
+Added migration 0039 and Backend contexts/production/router.py. Production drafts pin a saved effective recipe revision and target/date; start → actual issues/unused-material returns → explicit service totals → QC healthy output/normal waste/abnormal loss → finished stock. Open batch cancellation requires unused materials back or explicit WIP write-off. Material returns preserve outstanding issued cost; normal waste absorbs into output and abnormal cost is separate. Inventory source kind/document/event links prevent manual reversal bypass. The generic transaction-owned stock writer now lives in inventory/document_stock.py, with procurement/purchase_stock.py compatibility exports; existing purchase behavior is preserved. Production reads/writes require production.manage independently of inventory/pricing. UI has retained conflicts, private clearing and exact unknown-result recovery. Routes and existing inventory production/batch/QC aliases use ProductionPanel; /production/losses lists losses. Full parent-order splitting, scheduling/reservations, print consumption, labor detail and finance/reporting integration remain pending. See docs/production-workflow.md. Full integrated admin release remains unfinished.
+
+Evidence: 606 backend tests and 347 frontend tests passed; opt-in real demo purchase-to-production browser journey and existing purchase journey pass, including dropped completion response, exact recovery/replay, stock valuation and Persian mobile. Restored-copy migration preserves inventory and purchase snapshots; backup retained. No synthetic records enter main.
+
+## 2026-10-19 — Recorded cash and supplier allocations
+
+Migration 0040 adds cash/bank accounts, explicit dated openings, receipts/payments, atomic transfers, categorized expenses, linked corrections and purchase-allocated partial supplier payments/refunds. Purchase receipt, liability, cash movement and revenue remain distinct; returns after payment create supplier credit until actual refund received is recorded. Independent read/write/export permissions, exact amounts, expected versions, stable operation recovery, audit and deduplicated outbox apply. Shared fa/en admin tables/filter/icon actions cover finance routes and aliases. Date-filtered cash flow and protected CSV exports are connected. See finance-workflow.md.
+
+Verification: 615 backend tests and 347 existing frontend tests passed, plus three new finance client checks. Real isolated browser evidence verifies transfer/expense/correction, ambiguous response recovery, exact replay, CSV and mobile fa/en. Restored-copy additive migration preserves existing stock/purchases/production. No synthetic financial records or invented opening balances enter the main workspace. Full admin release remains unfinished: uploaded finance attachments, XLSX, gateway/customer/artist obligations, full reports and downstream checkout/fulfillment/refunds remain pending.
+
+Deployment verification (2026-10-19): main and isolated demo are at schema 0040; all nine services in each workspace are healthy. Main finance accounts/documents are both empty; no synthetic balances were introduced. Guest finance reads return 401/no-store and fa/en finance routes respond successfully. Sixteen emitted demo finance events were published and processed exactly once at the worker audit check. Both real finance browser journeys passed independently; finance client tests (3), backend finance checks (7), type checking, targeted lint and the frontend production build passed. The full backend run passed 615 checks; existing frontend suite passed 347 before adding the three finance client checks.
+
+## 2026-10-19 — Historical operational reporting and XLSX
+
+Added permission-controlled inventory valuation/low-stock, source movements, warehouse waste/corrections and production WIP/QC/cost reports with explicit event-time cutoffs. Historical thresholds and costs come from immutable events; incompatible quantities stay grouped by unit. Production estimates use pinned rates, actual costs stay separate, missing values remain unknown and historical reservation availability is explicitly withheld. Source links honor operational permissions and filters survive URL navigation. Dashboard inventory/WIP/low-stock/incomplete-cost metrics now use recorded reports; the stale integration placeholder was removed. CSV/XLSX exports include exact amounts, currency, complete filters and source/correction IDs under independent finance.export access. Financial document exports also support XLSX. No schema changes or synthetic main records. See operational-reporting.md.
+
+Verification: full backend suite 621 passed; frontend suite 353 plus two new dashboard checks passed; targeted lint, production build and real isolated reporting browser evidence cover historical valuation, low stock, waste reversal, source navigation, XLSX, WIP completion and fa/en desktop/mobile. Full integrated admin acceptance remains unfinished; FIN-11/12 remain connected_partial.
+
+Deployment verification (2026-10-19): the final build is deployed to both local main and isolated demo. All nine services per workspace are healthy. Schema remains 0040, main finance-account and production-batch counts remain zero, and no synthetic report fixtures were seeded there. Guest report/read/export requests return 401/no-store; fa/en reports and the finance inventory-value alias return 200/no-store. Final verification: 621 backend tests, 355 frontend tests, production build/type checking/targeted lint, and all three real isolated finance/supplier/reporting browser journeys passed. The reporting journey also verifies recorded dashboard navigation.
+
+## 2026-10-19 — Reviewed price proposals and explicit publication
+
+Migration 0041 connects exact recipe-cost snapshots to explicit margin/fee/fixed-cost/rounding proposals, custom prices and simulated discounts. Proposals are saved/revised/rejected independently of publication. Expected versions, reviewed-calculation fingerprints, shared source locks and the existing SKU price version/audit reject stale inputs and prevent duplicate publication. Pending reads flag changed resource/recipe/public-price/bundle dependencies. Own immutable receipts recover unknown outcomes. Publication, audit and outbox are atomic; historical inventory/order costs remain separate. pricing.publish is independent of catalog.manage and now also gates the legacy manual SKU-price writer; catalogue-only controls are read-only. Shared fa/en admin UI, proposal routes and the existing dependency queue remain available. See price-proposals.md.
+
+Verification covers six PostgreSQL pricing workflows, three client binding/recovery checks and a real isolated preview→draft→publication→lost-response recovery→stale rate→reviewed revision→rejection browser journey with fa/en desktop/mobile layouts. Restored-copy additive migration preserves stock, purchases, production, SKU prices and price audits. The full admin release remains unfinished; COST-08–10 remain connected_partial for family/group/bundle/scheduled review and full acceptance. An existing customer payment-filter test was updated to select the shared dropdown option through its actual interaction; customer behavior was unchanged.
+
+Deployment verification (2026-10-19): main and isolated demo are at schema 0041 with the pricing build. Main proposal/event tables remain empty; synthetic pricing decisions are confined to demo. Guest proposal reads return 401/no-store and fa/en proposal routes return 200/no-store. Ten demo pricing events were published and processed once at the worker check. Final verification: 627 backend tests, 358 frontend tests, production build/type checking/lint, 15 existing/permission browser checks and one real pricing browser journey passed.
+
+## 2026-10-19 — Sandbox payment inquiries deployed (0042)
+
+`payments/admin.py`, `PaymentsPanel.tsx` and shared `PaymentWorkspace` connect standalone `/admin/payments` (finance/payments alias) and authorized order details to recorded gateway inquiries. Fresh payments.read + finance.write, expected payment revision, reason, per-key/payment locks, immutable actor-owned receipts and audit history. Migration 0042 advances revisions for legacy callbacks/customer verification too. Malformed gateway payloads stay unknown. No manual success, stock, fulfillment, refund or settlement is invented. External inquiry still uses the existing synchronous eight-second adapter; worker-based recovery remains pending. See payment-inquiries.md.
+
+Main/demo 0042 services healthy; main payment_inquiries remains empty. Only demo received synthetic inquiry fixtures. Restored-copy migration and private backup passed. 630 backend tests, 361 frontend tests, production build, lint and database-backed browser lost-response/replay/fa-en/mobile/desktop/alias checks passed. Full release remains incomplete: authoritative checkout stock/policy integration, fulfillment, return/refund allocations, gateway settlement, artist/commission end-to-end workflows and full acceptance remain outstanding.
+
+## 2026-10-19 — Order stock commitments (0043)
+
+Implemented whole-order physical stock reservation at sandbox checkout. Customer review fingerprints bind basket/options/prices/components/settings; explicit reservation_minutes and counted opening stock are required. Frozen actual bundle choices aggregate repeated SKU demand with standalone items. Exact component prices/paid sale shares are retained for future refunds. Payment failure/cancellation releases temporary holds once; unknown results retain holds until scheduled expiry; late success reacquires all components or enters a paid-stock-shortage queue. Physical quantity/value/history are unchanged until a separate future fulfillment event.
+
+`inventory/reservations.py` + `inventory/order_stock.py` provide append-only events, independent reservation versions, configured expiry worker and reasoned staff recommit with expected versions, stable keys and actor-owned receipts. `/admin/order-stock[/:order]` and authorized order details reuse shared components, filters, icon rows and guards. Customers see owned commitment/shortage state. Historical orders are never backfilled. Existing HTTP exception detail codes now propagate to clients, allowing explicit reacceptance instead of treating validation as an uncertain charge.
+
+See order-stock-reservations.md. Shipping/tax still explicitly zero in this sandbox stage; delivery type/weight/policy enforcement, fulfillment/COGS, return/refunds, gateway settlement, complete artist workflows and integrated release acceptance remain pending. Paid orders remain on hold; a commitment never promises shipment.
+
+Final 0043 verification: 638 backend / 368 frontend tests passed, production build/typecheck/lint passed, five final browser checks passed (real isolated stock opening → no-charge checkout → committed stock/customer/staff/bilingual/mobile views and four discount checkout regressions). Separate target check confirms no-charge orders record a no-payment audit reason rather than a gateway confirmation. Real expiry worker task registered and completed; reservation outbox events published/processed. Restored-copy migration preserved old stock/purchase/production/SKU/price audit records and created empty reservation tables. Synthetic test fixture script is `Backend/scripts/seed_stock_acceptance.py`, guarded by --demo-only and exact nilart_demo database name.
+
+0043 deployment confirmed: main and isolated demo API/web/worker/scheduler healthy, main order_stock_allocations and stock_reservation_events both empty, fa/en staff pages 200/private no-store and guest stock reads 401/no-store. No main synthetic records or historical backfill. Only the isolated nilart_demo workspace was seeded for browser acceptance.
+
+## 2026-10-19 — Partial parcel fulfillment (0044)
+
+`fulfillment` owns draft/edit/pick/QC-failure/pack/dispatch/deliver/cancel/tracking commands, each expected-version/reason/key bound with immutable receipts. Dispatch consumes only the parcel's actual frozen components through the existing weighted stock helper, releases its reserved quantities, records per-component movements/actual COGS, updates allocation.shipped and derives the order state atomically with staff audit, notices and outbox. Tracking corrections retain posted cost/quantities. Pending cancellation requests and missing stock/policy/custom-print identities block dispatch.
+
+Staff routes `/admin/shipments`, `/new?order=…`, `/:id`, `/:id/label` (alias `/admin/shipping`) use shared filters/tables/icon actions, fresh permissions, unsaved/uncertain guards and explicit confirmations. Customer tracking is owner-only and excludes internal cost/notes. Shipment notices link to the owned order. Labels exclude cost/audit and are explicitly sandbox labels. Inventory/report source links point to parcels and respect fulfillment.manage. See fulfillment-workflow.md for remaining limits: complete return/refund, custom print, checkout policy, profit report and settlement integration are not done.
+
+0044 verification: 642 backend tests and 372 frontend unit tests passed; production build/typecheck/lint and seven final browser checks passed. Real repeated-SKU bundle dispatch remained bound to frozen choices after catalogue edits. Real two-parcel browser flow recovered/replayed a lost dispatch once, recalculated the next parcel's weighted inventory cost after incoming stock, preserved prior COGS, delivered both parcels, verified customer privacy/notices and printed label content without cost/audit. Final mobile Persian forms/labels were visually checked. Restored-copy migration preserved business and reservation snapshots; private backup pre-fulfillment-20261019T135001Z.dump. Demo shipment events 24 emitted/published/processed at the final worker check. Deploy workers/scheduler before exposing new API event types after migration.
+
+0044 deployment confirmed: main and isolated demo schema 0044, API/web/worker/scheduler healthy. Main fulfillment_shipments, fulfillment_events and fulfillment_dispatch movement counts all zero. Synthetic records stayed in nilart_demo. fa/en shipment pages and /admin/shipping alias passed private/no-store route checks; guest fulfillment reads are 401/no-store. Full remaining release scope is still open; do not claim all 56 admin views accepted.
+
+
+### Return inspection stage — 0045 (2026-10-19)
+
+Approved returns now have shipment/component-bounded, original-cost healthy stock recovery, separate damaged disposition, immutable receipts, safe retry and owned customer tracking. Inspection does not issue money or close the request. ORDER-04 remains partial; FIN-08/refunds and full purchase-policy acceptance remain pending. See [return inspections](return-inspections.md).
+
+0045 final evidence: 647 backend / 374 frontend tests, production build/lint, three deployed browser checks; private pre-migration backup `backups/pre-return-inspections-20261019T141919Z.dump`. Main/demo ready/healthy, main inspection count zero. Next work: explicit checkout policy acceptance and return submission, request closure/cancellation and original-paid-allocation refunds; inspection alone must never mark money refunded.
+
+
+### Original-allocation refund stage — 0046 (2026-10-20)
+
+Approved inspected returns now support exact partial/full component refunds, explicit bounded shipping/tax, explicit closure, immutable local sandbox receipts, lost-response recovery and owned customer tracking. Payments read/refund permissions are independent of finance write. Refunds never move stock or post fictional bank movements. Partially refunded orders retain remaining-parcel dispatch. FIN-08 / ORDER-04 remain partial; cancellation/shortage refunds, provider/settlement reconciliation and complete checkout-policy acceptance remain pending. See [refund workflow](refunds-workflow.md).
+
+0046 final evidence: 657 backend, 377 frontend tests; live simulated refund journey and final fa/en mobile/desktop screen checks passed. Main/demo deployed healthy at 0046; main has no synthetic refunds. Backup: `backups/pre-refunds-20261020T053822Z.dump`. Next: approved cancellation processing/release, late-payment shortage refund resolution, checkout policy acceptance and gateway settlements. Do not claim real payouts, full FIN-08 completion or full 56-view release.
+
+
+### Paid cancellation and shortage financial resolution — 0047 (2026-10-20)
+
+Approved paid cancellation now stops unshipped parcels, releases holds exactly once and records immutable operation/audit/customer history atomically. Separate finance refunds use original whole-order allocations, including paid late-stock-shortage orders, without return inspection for unshipped goods. Unknown payments and shipped/legacy-incomplete orders are blocked. Existing snapshots/physical stock/value remain preserved. This remains a partial release: unpaid/unknown cancellation completion, real payout/settlement and checkout policy work remain pending. See [cancellation workflow](cancellation-workflow.md).
+
+0047 final: 663 backend / 379 frontend tests and two deployed browser checks passed; main/demo healthy at 0047, main cancellation count zero. Backup `backups/pre-cancellations-20261020T055053Z.dump`. Continue unpaid/unknown-payment cancellation handling, staff-originated resolution requests, settings/checkout policy acceptance, settlement and artist workflows. Do not claim full release or real payouts.
+
+
+### Staff-originated shortage review — 0048 (2026-10-20)
+
+Stock-shortage detail now opens an explicitly staff-originated customer-visible cancellation review, with versions, immutable receipt/retry, independent permissions, audit/notification/outbox and active-request protection. It changes no stock or money and never auto-approves. Recommit waits for pending cancellation review. Nullable provenance preserves existing unknown history; staff origin survives approval and financial completion in customer/admin views. Unpaid/unknown payment cancellation, provider/settlement, checkout policy and artist work remain pending. See [stock resolution reviews](stock-resolution-reviews.md).
+
+0048 final: 666 backend / 381 frontend tests, isolated staff-initiation→review→cancellation→simulated-refund journey and final bilingual desktop/mobile source tracing passed. Main/demo healthy at 0048; main stock-resolution review/provenance counts zero. Backup `backups/pre-stock-resolution-20261020T060347Z.dump`. Continue unpaid/unknown payment cancellation, provider/settlement, checkout settings/policies and artist workflows; full integrated release remains incomplete.
+
+
+### Unpaid/uncertain cancellation extension — 2026-10-20
+
+Approved unshipped sandbox orders can now release stock while payment remains pending, unknown or failed. Financial review stays open. Late confirmed payment retains cancellation and enters the existing original-allocation refund workflow without reacquiring stock; repeated callbacks preserve refunds. Unknown provider outcomes remain unknown even after non-OK browser return. Contradictory paid history remains blocked. No migration/backfill is needed. Final no-payment closure, external payout/settlement, full checkout policies, catalogue/artist dependencies and 56-view acceptance remain pending. See [cancellation workflow](cancellation-workflow.md).
+
+Unpaid cancellation verification: full backend suite 670 passed; final cancellation/refund focused suite 20 passed and queue/coupon cancellation recheck 10 passed. Frontend 382 passed, typecheck/build and scoped lint passed. Isolated real-database unpaid browser journey passed in fa/en at 390/1440 widths; Persian mobile screenshot reviewed. No migration; schema remains 0048. This remains a partial sandbox release.
+
+
+### No-payment cancellation financial closure — 0049 (2026-10-20)
+
+A processed cancellation can now be financially completed against a fresh recorded rejected gateway inquiry, with independent finance/payment/order permissions, optimistic versions, immutable receipt/recovery and atomic audit/notification/outbox. It moves neither money nor stock. Later success or uncertainty reopens review while preserving closure history; paid callbacks never erase refunds. Pending/unknown/browser-cancelled evidence alone cannot close. See [financial closure workflow](cancellation-financial-closure.md). Full release acceptance, external payout/settlement, full checkout policies, catalogue/BOM/artist/reporting work remain pending.
+
+
+0049 verification: 674 backend tests passed, with 14 final cancellation/closure checks; 387 frontend tests passed; typecheck/build/scoped lint passed. Two isolated real-database browser checks passed separately (new synthetic imported rejection → cancellation → lost closure response → receipt recovery/replay → owned completed request, and final read-only fa/en 390/1440 screens). Final Persian mobile screenshot reviewed. Restored-copy migration preserved every pre-existing public table; private backup retained. Main/demo migrations advance additively to 0049. No real provider transaction or refund was performed; complete release acceptance remains pending.
+
+
+### Recorded supplier financial statements — 2026-10-20
+
+Supplier statements now combine posted purchase/cancellation/return liability with recorded supplier payments/refunds and linked reversals, exact running subtotals, Tehran recording-date filters, stable paginated revisions and full-range CSV/XLSX exports. Finance-only access has its own `/admin/finance/suppliers/{id}` route; source financial documents support deep links. Missing opening supplier balance and incomplete history are explicit. This adds no migration or money/stock command. See [supplier financial statements](supplier-financial-statements.md). Opening debts/credits and complete release acceptance remain pending.
+
+
+Verification: 678 backend tests / 391 frontend tests passed, including four real PostgreSQL statement tests for cash/stock separation, return and reversal references, exact balances, changed pagination, Tehran recording dates/prior activity, independent finance/export access, CSV formula safety, XLSX contents and explicit incomplete-history rejection. Typecheck, production build and scoped lint passed. The isolated browser journey created only new demo supplier/SKU/purchase/cash records through real APIs; it received/returned goods, paid/reversed cash, verified the recorded statement, downloaded CSV/XLSX, opened the authoritative financial source, checked fa/en 390/1440 layouts and denied customer access. Persian mobile screenshot reviewed. This stage adds no migration; schema stays 0049.
+
+
+### Explicit supplier opening balances — 0050 (2026-10-20)
+
+Finance can now confirm an external opening debt, credit or zero, with evidence, an excluded-recorded-activity acknowledgement, a frozen pre-activity date and reason. Corrections retain linked versions and signed deltas; cash, purchases and inventory are unchanged. Openings are integrated into statements, revised pagination and exports; unknown loading is distinct from missing setup. Migration 0050 creates no business data. See [supplier opening balances](supplier-opening-balances.md). Settlement against opening balances and full release acceptance remain pending.
+
+
+0050 verification: 681 backend tests passed; seven final opening/statement checks passed after adding explicit export movement types. 396 frontend tests passed, with nine targeted API/form/statement checks. Typecheck/build/scoped lint passed. A restored-copy migration preserved every field of every pre-existing public table and retained a private backup; existing suppliers received no opening data. The isolated browser journey recorded a zero confirmation, lost and recovered its committed receipt, replayed the original command, linked debt then credit corrections, checked statement/export totals and proved cash account/purchase records unchanged. Customer access was denied. Persian/English 390/1440 screenshots were reviewed. No real payment or stock operation was triggered by an opening command.
+
+
+### Supplier opening cash settlements — 0051 (2026-10-20)
+
+Opening debt payments and credit receipts now use shared operational cash documents with exact remaining-balance bounds, current opening/allocation/account version checks, retained uncertain commands and linked reversals. Corrections preserve prior cash; dependent corrective entries must be reversed first. Supplier statements include opening allocations independently of purchase balances. The bilingual responsive workspace uses shared table and icon actions at `/admin/finance/suppliers/{id}/settlements`. Migration 0051 creates no business records. See [opening settlements](supplier-opening-settlements.md). This remains a partial sandbox release; external transfers and complete integrated acceptance are pending.
+
+0051 deployment verification: main and demo healthy on schema0051; main opening allocations0. Final frontend400/100 files, backend685 wider suite plus final5-test opening regression suite, lint/typecheck/build and real demo browser journey passed. Restored-copy migration preserved existing records. Next work remains in the partial release backlog; do not recreate this settlement workflow or claim complete56-view acceptance.
+
+
+### Combined supplier balances — 2026-10-20 (schema0051 unchanged)
+
+Finance now has a shared-table report combining supplier openings, purchase liabilities and distinct purchase/opening cash allocations, with missing setup explicitly excluded from confirmed debt/credit totals. Literal bilingual search, balance-state filters, stable pagination, guarded CSV/XLSX export and icon links to statements/settlements use independent finance permissions. One database snapshot verifies source purchase history; stale or incomplete reports reject. Archived balances remain visible. No migration, stock, cash or business-data mutation. See [supplier balances report](supplier-balances-report.md). Customer/gateway/artist obligations, aging and full release acceptance remain pending.
+
+Combined supplier report deployed to main/demo on unchanged0051: backend690, frontend405/102 files, final focused database4 and real demo browser journey passed; typecheck/lint/build passed. Both readiness checks200, anonymous report401/no-store, main opening allocation count0. Main API/web/worker/scheduler healthy. Next work should advance other partial finance/checkout/catalogue/artist/reporting gaps; this current supplier-position report is complete within its documented1000-supplier bound, but FIN-05/FIN-12 and the integrated56-view release are not complete.
+
+
+### Historical supplier balances and retained filters — 2026-10-20
+
+The supplier report supports an optional recorded-through date in Tehran, reconstructing purchase/opening changes and cash/reversals without later events. Missing openings remain missing until their recording date. Pagination and exports bind the date; shareable URL filters survive reload/back, and linked statements use the same cutoff. Supplier identities remain current and are labeled accordingly. No migration or ledger mutation; schema0051. See [supplier balances report](supplier-balances-report.md). Due-date aging, other counterparties and full release acceptance remain pending.
+
+Historical supplier report deployed to main/demo, schema0051 unchanged. Final backend692/frontend412 across103 files, lint/typecheck/build and two live demo journeys passed. Main API/web/worker/scheduler healthy; both readiness200, anonymous dated report401/no-store, main opening allocation count0. Shared browser history guard now honors synchronous approval and still blocks cancelled/uncertain form navigation. Continue the broader backlog (due-date aging, other counterparties, checkout/catalogue/artist/reporting dependencies); this remains a partial56-view release.
+
+
+Admin remainder audit (2026-10-20): see `admin-remaining-audit-2026-10-20.md` for all56 views, current route gaps and superseded notes. Register remains53 connected_partial/3 missing; these are not completion percentages. Biggest blockers are catalogue media/bundle/artwork authoring, settings-backed checkout (current sandbox forces physical/address, zero shipping/tax and non-returnable lines), gateway settlement/official profit, and complete artist/commission workflows. Recommended next stage is catalogue/media and bundle authoring, rather than more supplier-report refinements. This audit changed documentation only and did not repeat the full browser/test acceptance.
+
+
+### Integrated catalogue preview0052 — 2026-10-20
+
+The requested full56-view release is in progress. The source has a verified managed bundle editor/publication/gallery/history/receipt workflow, percentage quotes and ledger-backed selected capacity, plus BOM/material edit aliases and standalone cutting workbench. Independent catalogue/price publication permissions apply. Final699 backend /418 frontend tests and two real isolated browser journeys pass; restored-copy migration preserves existing tables. Main remains stable0051; only demo uses0052 via integrated-preview.override.yaml. See `bundle-authoring.md`, `admin-integrated-release-progress.md` and `admin-integrated-acceptance.json`. Catalogue/SKU commerce profiles, artwork authoring, settings-backed checkout, family costing/production dependencies, gateway/profit/artist/support/recovery workflows and final release acceptance remain unfinished. No complete release or main rollout is claimed.

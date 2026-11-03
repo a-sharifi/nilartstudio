@@ -1,0 +1,10 @@
+import {z} from "zod"
+import {privateRequest} from "../admin/identity-api"
+const artwork=z.object({id:z.string().uuid(),number:z.number().int().positive(),note:z.string(),created_at:z.string(),action:z.enum(["approve","revise"]).nullable(),details:z.string().nullable(),decided_at:z.string().nullable()})
+export const commissionSchema=z.object({id:z.string().uuid(),brief:z.object({notebook:z.object({sku_id:z.string().uuid(),design:z.enum(["custom_cover","digital_cover"]),code:z.string(),slug:z.string(),title_fa:z.string(),title_en:z.string(),pricing:z.literal("awaiting_quote"),base_amount:z.string().nullable(),currency:z.string().nullable()}).optional(),idea:z.string(),changes:z.string(),style:z.string(),size:z.string(),execution:z.enum(["digital","handmade"]),primary_reference:z.string().uuid().optional(),references:z.array(z.object({id:z.string().uuid(),file_name:z.string(),media_type:z.string(),size:z.number(),sha256:z.string()})).optional()}),status:z.enum(["awaiting_review","in_progress","awaiting_customer","revision_requested","approved","cancelled"]),version:z.number().int().nonnegative(),created_at:z.string(),updated_at:z.string(),revision_allowance:z.number().int().nonnegative().nullable(),agreement:z.string().nullable(),artwork:z.array(artwork)})
+export type CustomerCommission=z.infer<typeof commissionSchema>
+export const commissionsApi={
+ async list(cursor?:string,status?:CustomerCommission["status"],q?:string){return z.object({items:z.array(commissionSchema),next_cursor:z.string().uuid().nullable()}).parse(await privateRequest(`/api/v1/account/commissions?limit=50${cursor?`&cursor=${encodeURIComponent(cursor)}`:""}${status?`&status=${encodeURIComponent(status)}`:""}${q?`&q=${encodeURIComponent(q)}`:""}`))},
+ async detail(id:string){return commissionSchema.parse(await privateRequest(`/api/v1/account/commissions/${encodeURIComponent(id)}`))},
+ async decide(id:string,key:string,body:{version:number;artwork_id:string;action:"approve"|"revise";details:string;acknowledged:boolean}){return commissionSchema.parse(await privateRequest(`/api/v1/account/commissions/${id}/decisions/${key}`,"PUT",body))},
+}

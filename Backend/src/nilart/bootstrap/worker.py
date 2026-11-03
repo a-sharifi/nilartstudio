@@ -2,6 +2,7 @@ from celery import Celery
 from sqlalchemy.orm import Session
 
 from nilart.bootstrap.settings import settings
+from nilart.contexts.inventory.reservations import expire
 from nilart.shared.database import engine
 from nilart.shared.outbox import consume_event, dispatch_pending
 
@@ -13,7 +14,7 @@ celery.conf.update(task_serializer="json", accept_content=["json"],
                    task_default_delivery_mode="persistent",
                    task_reject_on_worker_lost=True,
                    control_queue_exclusive=True, event_queue_exclusive=True,
-                   beat_schedule={"dispatch-outbox": {
+                   beat_schedule={"sync-sales-channels": {"task":"nilart.channels.sync", "schedule":30.0},"send-order-sms": {"task":"nilart.sms.dispatch", "schedule":5.0},"expire-stock-reservations": {"task":"nilart.inventory.expire", "schedule":30.0}, "dispatch-outbox": {
                        "task": "nilart.outbox.dispatch", "schedule": 5.0,
                    }})
 
@@ -44,3 +45,33 @@ def consume(envelope):
 @celery.task(name="nilart.health.ping")
 def ping():
     return "pong"
+
+
+@celery.task(name="nilart.inventory.expire", autoretry_for=(Exception,), retry_backoff=True, max_retries=5)
+def expire_reservations():
+    with Session(engine) as session, session.begin():
+        return expire(session)
+
+
+@celery.task(name="nilart.sms.dispatch")
+def dispatch_order_sms():
+    from nilart.contexts.messaging.service import dispatch
+    return dispatch(engine)
+
+
+@celery.task(name="nilart.channels.sync")
+def sync_sales_channels():
+    from sqlalchemy import text
+
+    from nilart.contexts.channels.service import tick
+    # One process owns the periodic scan, including commits around provider I/O.
+    with engine.connect() as connection:
+        if not connection.scalar(text("SELECT pg_try_advisory_lock(78214,61)")):
+            return
+        connection.commit()
+        try:
+            with Session(bind=connection) as session:
+                tick(session)
+        finally:
+            connection.execute(text("SELECT pg_advisory_unlock(78214,61)"))
+            connection.commit()

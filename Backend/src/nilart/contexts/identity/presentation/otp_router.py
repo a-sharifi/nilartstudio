@@ -79,7 +79,21 @@ class DevelopmentSmsPreview:
 
 
 def sms_dependency() -> SmsSender:
-    return RedisSandboxSmsSender(settings.redis_url, settings.environment) if settings.sms_mode == "sandbox" else DisabledSmsSender()
+    if settings.sms_mode == "sandbox":
+        return RedisSandboxSmsSender(settings.redis_url, settings.environment)
+    if settings.sms_mode == "kavenegar":
+        from nilart.contexts.identity.infrastructure.kavenegar import KavenegarSmsSender
+        return KavenegarSmsSender(
+            settings.kavenegar_api_key.get_secret_value() if settings.kavenegar_api_key else None,
+            {
+                OtpPurpose.LOGIN: settings.kavenegar_template_login,
+                OtpPurpose.REGISTER: settings.kavenegar_template_register,
+                OtpPurpose.RECOVERY: settings.kavenegar_template_recovery,
+                OtpPurpose.PHONE_CHANGE: settings.kavenegar_template_phone_change,
+            },
+            [name.strip() for name in settings.kavenegar_approved_templates.split(",") if name.strip()],
+        )
+    return DisabledSmsSender()
 
 
 def service(db: Session, sms: SmsSender) -> OtpService:

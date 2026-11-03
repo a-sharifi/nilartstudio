@@ -1,0 +1,8 @@
+import {cleanup,fireEvent,render,screen} from '@testing-library/react';
+import {afterEach,expect,it} from 'vitest';
+import {DailyTrend,StatusChart,TopProductsChart} from '../src/features/admin/DashboardCharts';
+afterEach(cleanup);
+const rows=[{date:'2026-11-01',orders:2,paid_orders:1,sales_amount:'100000'},{date:'2026-11-02',orders:1,paid_orders:1,sales_amount:'250000'}];
+it('shows actual values on focus and in an accessible daily table',()=>{render(<DailyTrend data={rows} metric="sales" en/>);const point=screen.getByRole('button',{name:'November 2, 2026: 250,000 toman'});fireEvent.focus(point);expect(screen.getAllByText('November 2, 2026').length).toBeGreaterThan(0);fireEvent.click(screen.getByText('Daily figures'));expect(screen.getByRole('table')).toBeTruthy();expect(screen.getAllByText('250,000').length).toBeGreaterThan(0)});
+it('uses a truthful empty state instead of inventing a nonzero plot',()=>{render(<DailyTrend data={[{date:'2026-11-01',orders:0,paid_orders:0,sales_amount:'0'}]} metric="sales" en/>);expect(screen.getByText('No paid sales in this period.')).toBeTruthy();expect(screen.queryByRole('img')).toBeNull()});
+it('retains unknown statuses explicitly and ranks real quantities',()=>{const view=render(<StatusChart data={[{key:'paid',count:3},{key:'other_state',count:1}]} en/>);expect(screen.getByText('Other status (other_state)')).toBeTruthy();expect(screen.getByText('75٪')).toBeTruthy();view.rerender(<TopProductsChart data={[{sku:'SKU-1',title_fa:'دفتر',title_en:'Notebook',quantity:3,sales_amount:'200000'}]} en/>);expect(screen.getByText('Notebook')).toBeTruthy();expect(screen.getByText('3 units')).toBeTruthy();expect(screen.getByText('200,000 toman')).toBeTruthy()});

@@ -11,7 +11,6 @@ import {
   securityFixture,
   validatePasswordChange,
   passwordChangePayload,
-  canRevokeSession,
   type PasswordDraft,
   type SecurityMode,
 } from "./security"
@@ -35,10 +34,6 @@ const previews: [SecurityMode, string, string][] = [
     "موفقیت Demo؛ ورود مجدد",
     "Demo success; sign-in required",
   ],
-  ["sessions", "نشست‌ها با قابلیت Demo", "Sessions with Demo capability"],
-  ["session-error", "خطای خروج نشست", "Session sign-out error"],
-  ["sessions-empty", "نشست‌های خالی", "Empty sessions"],
-  ["sessions-load-error", "خطای دریافت نشست‌ها", "Session list error"],
   ["loading", "بارگذاری", "Loading"],
   ["denied", "عدم مجوز", "Permission denied"],
 ]
@@ -52,7 +47,6 @@ export default function SecurityPage({
   liveApi?: import("../features/identity/security").LiveSecurityApi
 }) {
   const en = page.startsWith("/en/"),
-    index = en ? 1 : 0,
     t = (fa: string, english: string) => (en ? english : fa)
   const prefix = en ? "/en" : "/fa",
     account = `${prefix}/account`
@@ -72,27 +66,21 @@ export default function SecurityPage({
   const [state, setState] = useState<ChangeState>("idle"),
     [live, setLive] = useState(""),
     [checking, setChecking] = useState(false)
-  const [removedSessions, setRemovedSessions] = useState<string[]>([]),
-    [sessionError, setSessionError] = useState("")
-  const [sessionBusy, setSessionBusy] = useState(false),
-    [revokeTarget, setRevokeTarget] = useState<string | "others" | null>(null)
-  const [modal, setModal] = useState<"sessions" | "destination" | null>(null),
+  const [modal, setModal] = useState<"destination" | null>(null),
     [destination, setDestination] = useState("")
   const dialog = useRef<HTMLDialogElement>(null),
     origin = useRef<HTMLElement | null>(null),
     form = useRef<HTMLFormElement>(null),
     result = useRef<HTMLDivElement>(null)
   const changeLock = useRef(false),
-    sessionLock = useRef(false),
     timers = useRef(new Set<ReturnType<typeof setTimeout>>())
   const [liveSnapshot,setLiveSnapshot]=useState<Awaited<ReturnType<NonNullable<typeof liveApi>["load"]>>|null>(null)
   const liveGeneration=useRef(0)
-  const fixture = liveApi ? liveSnapshot || {...securityFixture("denied"),owner:"",minimum:8,sessions:[],maskedPhone:"",phoneVerified:false,passwordEnabled:false,otpEnabled:false,canChange:false,canManageSessions:false} : securityFixture(mode)
-  const canRevoke=(session:typeof fixture.sessions[number])=>liveApi?!!liveSnapshot&&!session.current:canRevokeSession(session,fixture.owner,fixture.canManageSessions)
+  const fixture = liveApi ? liveSnapshot || {...securityFixture("denied"),owner:"",minimum:8,maskedPhone:"",phoneVerified:false,passwordEnabled:false,otpEnabled:false,canChange:false} : securityFixture(mode)
   useEffect(()=>{
     if(!liveApi)return
-    const clear=()=>{liveGeneration.current++;setLiveSnapshot(null);setDraft({current:"",next:"",confirm:""});setShow({current:false,next:false,confirm:false});setModal(null);setRemovedSessions([]);setState("idle");setMode("denied")}
-    const load=async()=>{const request=++liveGeneration.current;try{const value=await liveApi.load();if(request===liveGeneration.current){setLiveSnapshot(value);setMode("sessions")}}catch(error){if(request===liveGeneration.current){setLiveSnapshot(null);setMode(error instanceof Error && ["unauthenticated","permission_denied"].includes(error.message)?"denied":"sessions-load-error")}}}
+    const clear=()=>{liveGeneration.current++;setLiveSnapshot(null);setDraft({current:"",next:"",confirm:""});setShow({current:false,next:false,confirm:false});setModal(null);setState("idle");setMode("denied")}
+    const load=async()=>{const request=++liveGeneration.current;try{const value=await liveApi.load();if(request===liveGeneration.current){setLiveSnapshot(value);setMode("normal")}}catch(error){if(request===liveGeneration.current){setLiveSnapshot(null);setMode(error instanceof Error && ["unauthenticated","permission_denied"].includes(error.message)?"denied":"load-error")}}}
     setMode("loading");void load()
     const unregister=liveApi.registerPrivateCache(clear)
     const unsubscribe=liveApi.subscribe(event=>{if(event.type==="changed"){clear();if(event.signedOut)return}void load()})
@@ -101,10 +89,7 @@ export default function SecurityPage({
   const privateVisible =
     mode !== "denied" && mode !== "loading" && state !== "success-relogin"
   const busy = state === "submitting",
-    blocked = busy || state === "unknown" || !fixture.canChange || sessionBusy
-  const sessions = fixture.sessions.filter(
-    (session) => !removedSessions.includes(session.id),
-  )
+    blocked = busy || state === "unknown" || !fixture.canChange
   const recovery = `${prefix}/auth/forgot-password?returnTo=${encodeURIComponent(`${account}/security`)}`
   const login = `${prefix}/auth/login?returnTo=${encodeURIComponent(`${account}/security`)}`
   const later = (fn: () => void, ms = 800) => {
@@ -118,7 +103,6 @@ export default function SecurityPage({
     () => () => {
       timers.current.forEach(clearTimeout)
       changeLock.current = false
-      sessionLock.current = false
     },
     [],
   )
@@ -142,9 +126,7 @@ export default function SecurityPage({
     setErrors({})
   }
   const close = () => {
-    if (sessionBusy) return
     setModal(null)
-    setRevokeTarget(null)
     requestAnimationFrame(() => {
       if (origin.current?.isConnected) origin.current.focus()
       else result.current?.focus()
@@ -308,87 +290,16 @@ export default function SecurityPage({
       )
     }, 650)
   }
-  const openSession = (
-    id: string | "others",
-    event: MouseEvent<HTMLElement>,
-  ) => {
-    if (sessionLock.current || !fixture.canManageSessions) return
-    const target = sessions.find((session) => session.id === id)
-    if (
-      id !== "others" &&
-      (!target ||
-        !canRevoke(target))
-    )
-      return
-    origin.current = event.currentTarget
-    setSessionError("")
-    setRevokeTarget(id)
-    setModal("sessions")
-  }
-  const revoke = () => {
-    if (sessionLock.current || !fixture.canManageSessions || !revokeTarget)
-      return
-    sessionLock.current = true
-    setSessionBusy(true)
-    const ids = sessions
-      .filter(
-        (session) =>
-          canRevoke(session) &&
-          (revokeTarget === "others" || session.id === revokeTarget),
-      )
-      .map((session) => session.id)
-    if(liveApi){
-      const request=liveGeneration.current
-      void liveApi.revoke(ids).then(()=>{if(request!==liveGeneration.current)return;setRemovedSessions(previous=>[...previous,...ids]);setModal(null);setRevokeTarget(null);setLive(t("نشست‌های انتخاب‌شده پایان یافتند.","Selected sessions ended."))}).catch(()=>{if(request===liveGeneration.current)setSessionError(t("پایان نشست تأیید نشد. فهرست را دوباره دریافت کنید.","Revocation is unconfirmed. Reload the session list."))}).finally(()=>{sessionLock.current=false;setSessionBusy(false)})
-      return
-    }
-    later(() => {
-      sessionLock.current = false
-      setSessionBusy(false)
-      if (mode === "session-error") {
-        setSessionError(
-          t(
-            "خروج نشست تأیید نشد؛ فهرست قبلی حفظ شده است. • Demo",
-            "Session sign-out was not confirmed; the previous list is preserved. • Demo",
-          ),
-        )
-        setLive(
-          t(
-            "خطای خروج نشست؛ ابطال واقعی انجام نشده است.",
-            "Session sign-out error; no actual revocation occurred.",
-          ),
-        )
-        return
-      }
-      setRemovedSessions((previous) => [...previous, ...ids])
-      setModal(null)
-      setRevokeTarget(null)
-      setLive(
-        t(
-          "خروج نشست‌های انتخاب‌شده شبیه‌سازی شد · Demo؛ نشست جاری باقی است و هیچ ابطال واقعی انجام نشد.",
-          "Selected-session sign-out simulated · Demo; the current session remains and no actual revocation occurred.",
-        ),
-      )
-      requestAnimationFrame(() =>
-        document.getElementById("security-sessions-title")?.focus(),
-      )
-    }, 750)
-  }
   const preview = (value: SecurityMode) => {
     timers.current.forEach(clearTimeout)
     timers.current.clear()
     changeLock.current = false
-    sessionLock.current = false
     clearPasswords()
     setMode(value)
     setState("idle")
     setLive("")
     setChecking(false)
-    setRemovedSessions([])
-    setSessionError("")
-    setSessionBusy(false)
     setModal(null)
-    setRevokeTarget(null)
   }
   const policyText = liveApi ? t("پس از تغییر رمز، همه نشست‌ها پایان می‌یابند و ورود دوباره لازم است.","Changing your password ends all sessions and requires sign-in again.") :
     fixture.sessionPolicy === "other-sessions"
@@ -492,7 +403,7 @@ export default function SecurityPage({
           </p>
         </div>
         </>}
-        {liveApi && mode==="sessions-load-error" && <div className="security-warning" role="alert"><p>{t("دریافت اطلاعات امنیت ممکن نشد.","Unable to load security settings.")}</p><button className="button secondary" onClick={()=>{const request=++liveGeneration.current;setMode("loading");void liveApi.load().then(value=>{if(request===liveGeneration.current){setLiveSnapshot(value);setMode("sessions")}}).catch(()=>{if(request===liveGeneration.current)setMode("sessions-load-error")})}}>{t("دوباره تلاش کنید","Try again")}</button></div>}
+        {liveApi && mode==="load-error" && <div className="security-warning" role="alert"><p>{t("دریافت اطلاعات امنیت ممکن نشد.","Unable to load security settings.")}</p><button className="button secondary" onClick={()=>{const request=++liveGeneration.current;setMode("loading");void liveApi.load().then(value=>{if(request===liveGeneration.current){setLiveSnapshot(value);setMode("normal")}}).catch(()=>{if(request===liveGeneration.current)setMode("load-error")})}}>{t("دوباره تلاش کنید","Try again")}</button></div>}
         {liveSnapshot?.sandboxSms && <p className="security-warning">{t("پیامک در حالت آزمایشی محلی است.","SMS uses the local sandbox.")}</p>}
         <div className="security-live" role="status" aria-live="polite">
           {live}
@@ -830,120 +741,6 @@ export default function SecurityPage({
                     </p>}
                   </form>
                 </section>
-                {fixture.sessionsEnabled && (
-                  <section className="security-card security-sessions">
-                    <div className="security-section-heading">
-                      <span className="security-section-icon">
-                        <Glyph name="grid" size={21} />
-                      </span>
-                      <div>
-                        <h2 id="security-sessions-title" tabIndex={-1}>
-                          {t("نشست‌های حساب", "Account sessions")}
-                        </h2>
-                        <p>
-                          {(liveApi?t("نشست‌های فعال این حساب؛ اطلاعات دستگاه ثبت نشده است.","Active sessions for this account; device information is not recorded."):t(
-                            "قابلیت مدیریت و مجوز در قرارداد Demo فعال است؛ این نشست‌ها واقعی نیستند.",
-                            "Management capability and permission are enabled in the Demo contract; these are not real sessions.",
-                          ))}
-                        </p>
-                      </div>
-                    </div>
-                    {mode === "sessions-load-error" ? (
-                      <div className="security-warning">
-                        <p>
-                          {t(
-                            "دریافت نشست‌ها ممکن نشد؛ خالی‌بودن فهرست فرض نمی‌شود.",
-                            "Unable to load sessions; an empty list is not assumed.",
-                          )}
-                        </p>
-                        <button
-                          type="button"
-                          className="text-link"
-                          onClick={check}
-                          disabled={checking}
-                        >
-                          {t("تلاش دوباره", "Try again")}
-                        </button>
-                      </div>
-                    ) : !sessions.length ? (
-                      <p className="security-empty-sessions">
-                        {(liveApi?t("نشست فعالی برای نمایش نیست.","No active sessions to display."):t(
-                          "در پاسخ نمونه، نشستی برای نمایش ثبت نشده است.",
-                          "No sessions are listed in the fixture response.",
-                        ))}
-                      </p>
-                    ) : (
-                      <>
-                        <div className="security-session-list">
-                          {sessions.map((session) => (
-                            <article key={session.id}>
-                              <span className="security-device-icon">
-                                <Glyph
-                                  name={session.current ? "grid" : "user"}
-                                  size={21}
-                                />
-                              </span>
-                              <div>
-                                <h3>{session.device[index]}</h3>
-                                <p>
-                                  {(liveApi?t("زمان ایجاد نشست","Session created"):t(
-                                    "آخرین فعالیت گزارش‌شده",
-                                    "Reported last activity",
-                                  ))}
-                                  :{" "}
-                                  <time dateTime={session.lastActivity}>
-                                    {new Intl.DateTimeFormat(
-                                      en ? "en-GB" : "fa-IR",
-                                      {
-                                        dateStyle: "medium",
-                                        timeStyle: "short",
-                                        timeZone: "Asia/Tehran",
-                                      },
-                                    ).format(new Date(session.lastActivity))}
-                                  </time>
-                                </p>
-                              </div>
-                              {session.current ? (
-                                <span className="security-current-session">
-                                  {(liveApi?t("نشست جاری","Current session"):t(
-                                    "نشست جاری · Demo",
-                                    "Current session · Demo",
-                                  ))}
-                                </span>
-                              ) : (
-                                <button
-                                  type="button"
-                                  className="text-link"
-                                  disabled={
-                                    sessionBusy || busy || state === "unknown"
-                                  }
-                                  onClick={(event) =>
-                                    openSession(session.id, event)
-                                  }
-                                >
-                                  {t("خروج این نشست", "Sign out this session")}
-                                </button>
-                              )}
-                            </article>
-                          ))}
-                        </div>
-                        <button
-                          className="button secondary"
-                          type="button"
-                          disabled={
-                            !sessions.some((session) => !session.current) ||
-                            sessionBusy ||
-                            busy ||
-                            state === "unknown"
-                          }
-                          onClick={(event) => openSession("others", event)}
-                        >
-                          {t("خروج از سایر نشست‌ها", "Sign out other sessions")}
-                        </button>
-                      </>
-                    )}
-                  </section>
-                )}
               </div>
               <aside className="security-aside">
                 <section className="security-guide">
@@ -1068,84 +865,17 @@ export default function SecurityPage({
         >
           <div className="modal-head">
             <h2 id="security-dialog-title">
-              {modal === "sessions"
-                ? revokeTarget === "others"
-                  ? t("از سایر نشست‌ها خارج شوید؟", "Sign out other sessions?")
-                  : t("این نشست خارج شود؟", "Sign out this session?")
-                : t(
-                    "مسیر مستقل تغییر شماره یا پشتیبانی",
-                    "Independent phone-change or support flow",
-                  )}
+              {t("مسیر مستقل تغییر شماره یا پشتیبانی", "Independent phone-change or support flow")}
             </h2>
             <button
               type="button"
               className="icon-button"
               onClick={close}
-              disabled={sessionBusy}
               aria-label={t("بستن", "Close")}
             >
               <Glyph name="close" />
             </button>
           </div>
-          {modal === "sessions" ? (
-            <div>
-              <p>
-                {revokeTarget === "others"
-                  ? (liveApi?t("نشست‌های دیگر پایان می‌یابند و نشست جاری باقی می‌ماند.","Other sessions will end; the current session remains."):t(
-                      "در پاسخ نمونه، فقط نشست‌های غیرجاری انتخاب شده‌اند. نشست جاری باقی می‌ماند؛ این اقدام حذف حساب یا لغو سفارش نیست.",
-                      "The fixture selects only non-current sessions. The current session remains; this does not delete the account or cancel orders.",
-                    ))
-                  : (liveApi?t("نشست انتخاب‌شده پایان می‌یابد و نشست جاری باقی می‌ماند.","The selected session will end; the current session remains."):t(
-                      "فقط نشست انتخاب‌شده در محدوده مجوز نمونه خارج می‌شود؛ نشست جاری باقی می‌ماند.",
-                      "Only the selected session is signed out within the fixture permission; the current session remains.",
-                    ))}
-              </p>
-              <div className="security-revoke-summary">
-                {sessions
-                  .filter(
-                    (session) =>
-                      !session.current &&
-                      (revokeTarget === "others" ||
-                        session.id === revokeTarget),
-                  )
-                  .map((session) => (
-                    <strong key={session.id}>{session.device[index]}</strong>
-                  ))}
-              </div>
-              <small>
-                {(liveApi?t("تأیید این اقدام، دسترسی نشست انتخاب‌شده را پایان می‌دهد.","Confirming this action ends access for the selected session."):t(
-                  "مجوز این عملیات در پاسخ Demo معتبر است؛ در نسخه واقعی تأیید نشست و احراز هویت مجدد تابع سرویس است. هیچ ابطال واقعی انجام نمی‌شود.",
-                  "Operation permission is valid in the Demo response; real session checks and reauthentication follow the service policy. No actual revocation occurs.",
-                ))}
-              </small>
-              {sessionError && (
-                <p className="security-operation-error" role="alert">
-                  {sessionError}
-                </p>
-              )}
-              <div className="security-dialog-actions">
-                <button
-                  type="button"
-                  className="button primary"
-                  onClick={revoke}
-                  disabled={sessionBusy}
-                >
-                  {sessionBusy
-                    ? t("در حال خروج…", "Signing out…")
-                    : t("تأیید خروج", "Confirm sign-out")}
-                </button>
-                <button
-                  type="button"
-                  className="button secondary"
-                  data-modal-cancel
-                  disabled={sessionBusy}
-                  onClick={close}
-                >
-                  {t("انصراف", "Cancel")}
-                </button>
-              </div>
-            </div>
-          ) : (
             <div>
               <p>
                 {t(
@@ -1158,7 +888,6 @@ export default function SecurityPage({
                 {t("بازگشت به امنیت حساب", "Back to account security")}
               </button>
             </div>
-          )}
         </dialog>
       </div>
     </DashboardPage>

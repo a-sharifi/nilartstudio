@@ -1,0 +1,13 @@
+import {cleanup,fireEvent,render,screen} from '@testing-library/react'
+import {afterEach,expect,it,vi} from 'vitest'
+import SupplierBalancesPanel from '../src/features/admin/SupplierBalancesPanel'
+import {supplierBalancesApi} from '../src/features/admin/supplier-balances-api'
+vi.mock('../src/features/admin/supplier-balances-api',async original=>({...await original<typeof import('../src/features/admin/supplier-balances-api')>(),supplierBalancesApi:{load:vi.fn(),exportUrl:()=>'/safe-export'}}))
+vi.mock('../src/design/AdminDashboard',()=>({default:({live}:{live:{children:React.ReactNode}})=><main>{live.children}</main>}))
+vi.mock('../src/features/identity/use-account-access',()=>({useAccountAccess:()=>({access:{permissions:['finance.read','finance.export']}})}))
+const result={q:'',status:'all',currency:'IRT',fingerprint:'a'.repeat(64),total_suppliers:0,unconfigured_suppliers:0,payable:'0',receivable:'0',recorded_net:'0',items:[],next_offset:null}
+afterEach(()=>{cleanup();vi.resetAllMocks()})
+it('requires applying changed filters before export',async()=>{vi.mocked(supplierBalancesApi.load).mockResolvedValue(result as never);render(<SupplierBalancesPanel path="/en/admin/finance/supplier-balances" navigate={vi.fn()}/>);await screen.findByText('No suppliers match these filters.');expect(screen.getAllByRole('link')).toHaveLength(2);fireEvent.change(screen.getByLabelText('Search suppliers'),{target:{value:'changed'}});expect(screen.queryByRole('link')).toBeNull();expect(screen.getByText('Filters changed. Load the report to apply them.')).toBeTruthy()})
+it('does not render a zero report when loading fails',async()=>{vi.mocked(supplierBalancesApi.load).mockRejectedValue(new Error('service_unavailable'));render(<SupplierBalancesPanel path="/en/admin/finance/supplier-balances" navigate={vi.fn()}/>);await screen.findByRole('alert');expect(screen.queryByText('No suppliers match these filters.')).toBeNull();expect(screen.queryByRole('link')).toBeNull()})
+
+it('restores shared date and search filters and removes exports after date edits',async()=>{vi.mocked(supplierBalancesApi.load).mockResolvedValue({...result,q:'S-1',as_of_date:'2026-10-18'} as never);render(<SupplierBalancesPanel path="/en/admin/finance/supplier-balances" search="q=S-1&as_of_date=2026-10-18" navigate={vi.fn()}/>);await screen.findByText('No suppliers match these filters.');expect(supplierBalancesApi.load).toHaveBeenCalledWith('S-1','all',0,undefined,'2026-10-18');expect((screen.getByLabelText('Recorded through (Tehran)') as HTMLInputElement).value).toBe('2026-10-18');fireEvent.change(screen.getByLabelText('Recorded through (Tehran)'),{target:{value:'2026-10-17'}});expect(screen.queryByRole('link')).toBeNull()})

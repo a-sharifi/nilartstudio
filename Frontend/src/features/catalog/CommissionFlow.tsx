@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import NotebookCommission from "./NotebookCommission";
 import CommissionsPage from "../../design/CommissionsPage";
 import ReferencesPage, { type ReferenceNavigationGuard } from "../../design/ReferencesPage";
 import PreferencesPage from "../../design/PreferencesPage";
@@ -11,7 +12,7 @@ import { sessionLifecycle } from "../identity/session-lifecycle";
 let checkpoint: { owner: string; reference: ReferenceDraft | null; preferences: PreferencesDraft | null } | null = null;
 sessionLifecycle.registerPrivateCache(() => { checkpoint = null; });
 
-export type CommissionBody = { idea: string; changes: string; style: string; size: string; execution: string };
+export type CommissionBody = { notebook_pricing_fingerprint?: string; notebook_technique?: "digital" | "pencil"; notebook_sku_id?: string; notebook_design?: "custom_cover" | "digital_cover"; idea: string; changes: string; style: string; size: string; execution: string; input_kind?: "idea" | "image"; primary_reference?: string | null; references?: {id:string;file_name:string;content_base64:string}[] };
 export function useCommissionSubmission() {
   const [status, setStatus] = useState("");
   const [receipt, setReceipt] = useState("");
@@ -104,12 +105,16 @@ export default function CommissionFlow({ path, language, onNavigate, registerGua
     ["unknown", "saving"].includes(submission.status) ? () => false : candidate,
   );
   const common = { language, signedIn, onNavigate: guardedNavigate, live: true, onDemoSignIn: () => {}, registerGuard: guard };
-  if (/\/preferences\/?$/.test(path)) return <PreferencesPage key={key} {...common} reference={reference} saved={preferences} onSave={draft => { if (signedIn && owner) { setPreferences(draft); checkpoint = { owner, reference, preferences: draft }; } }} liveSubmission={{ ...submission, submit: draft => {
+  if (/\/notebook\/checkout\//.test(path)) return <NotebookCommission key={key} path={path} en={language===1} signedIn={signedIn} submission={submission} onNavigate={guardedNavigate} registerGuard={guard} />;
+  if (/\/preferences\/?$/.test(path)) return <PreferencesPage key={key} {...common} reference={reference} saved={preferences} onSave={draft => { if (signedIn && owner) { setPreferences(draft); checkpoint = { owner, reference, preferences: draft }; } }} liveSubmission={{ ...submission, submit: async draft => {
+    const sessionRevision = sessionLifecycle.capture();
+    const images = await Promise.all((reference?.files || []).map(async image => ({id:image.id,file_name:image.file.name,content_base64:await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result).split(",")[1]);reader.onerror=()=>reject(new Error("Image read failed"));reader.readAsDataURL(image.file)})})));
+    if (!sessionLifecycle.current(sessionRevision)) return false;
     const size = preferenceSizes.find(value => value.id === draft.size);
-    return submission.submit({ idea: reference?.brief || "", changes: "", style: draft.style,
+    return submission.submit({ idea: reference?.brief || "", changes: "", style: draft.style, input_kind: reference?.kind || "idea", primary_reference: images.length ? reference?.primary : null, references: images,
       execution: draft.execution === "hand" ? "handmade" : "digital",
       size: size ? `${size.width} × ${size.height} ${size.unit}` : `${normalizeDimension(draft.width)} × ${normalizeDimension(draft.height)} cm` });
   } }} />;
   if (/\/references?\/?$/.test(path)) return <ReferencesPage key={key} {...common} draft={reference} onSave={draft => { if (signedIn && owner) { setReference(draft); checkpoint = { owner, reference: draft, preferences }; } }} />;
-  return <CommissionsPage key={`${key}:${ready}`} {...common} initialMode={ready ? "normal" : "loading"} />;
+  return <CommissionsPage key={`${key}:${ready}`} {...common} initialMode={ready ? "normal" : "loading"} initialKind={/\/notebook(?:\/|$)/.test(path) ? "notebook" : "artwork"} notebookContent={<NotebookCommission key={key} embedded path={path} en={language===1} signedIn={signedIn} submission={submission} onNavigate={guardedNavigate} registerGuard={guard} />} />;
 }

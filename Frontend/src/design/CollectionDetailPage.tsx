@@ -28,6 +28,7 @@ import {
 import ProductCard from "./ProductCard"
 import BundleResultCard from "./BundleResultCard"
 import FilterPanel from "./FilterPanel"
+import { ReferenceProductImage, ReferenceBundleImage } from "./ReferenceMedia"
 
 type Props = {
   collections?: Collection[]
@@ -273,6 +274,7 @@ export default function CollectionDetailPage({
             </div>
           ) : (
             <CollectionHero
+              demo={demo}
               collection={collection}
               title={title}
               language={language}
@@ -489,8 +491,9 @@ export default function CollectionDetailPage({
                   <div className="catalog-grid">
                     {visible.map(({ item, price }) => {
                       const common = {
+                        live: !demo,
                         name: item.name[language],
-                        route: `/${
+                        route: `${demo ? "" : language === 0 ? "/fa" : "/en"}/${
                           item.type === "bundle" ? "bundles" : "products"
                         }/${item.slug}`,
                         collection: title,
@@ -503,6 +506,7 @@ export default function CollectionDetailPage({
                               ].join(" · ")
                             : "",
                         price,
+                        priceUnavailableLabel: !demo ? t("قیمت دریافت نشده", "Price unavailable") : undefined,
                         language,
                         arrow,
                         heart,
@@ -514,7 +518,11 @@ export default function CollectionDetailPage({
                           state.filters.min ||
                           state.filters.max
                         ),
-                        media: (
+                        media: !demo ? (
+                          item.type === "product"
+                            ? <ReferenceProductImage slug={item.slug} language={language} />
+                            : <ReferenceBundleImage slug={item.slug} language={language} />
+                        ) : (
                           <div className="result-placeholder">
                             {renderMedia(
                               item.type === "bundle"
@@ -540,7 +548,7 @@ export default function CollectionDetailPage({
                           {...common}
                           startingPrice={!demo?item.startingPrice:undefined}
                           favorite={demo && favorites.includes(item.id)}
-                          onFavorite={() => favorite(item.id)}
+                          onFavorite={demo ? () => favorite(item.id) : undefined}
                         />
                       )
                     })}
@@ -580,15 +588,15 @@ export default function CollectionDetailPage({
                   >
                     {t("بعدی", "Next")}
                   </button>
-                  <small>{t("صفحه‌بندی داده نمایشی", "Demo pagination")}</small>
+                  {demo && <small>{t("صفحه‌بندی داده نمایشی", "Demo pagination")}</small>}
                 </nav>
               )}
-              <p className="detail-catalog-note">
+              {demo && <p className="detail-catalog-note">
                 {t(
                   "فقط نمونه طراحی؛ قیمت، موجودی و تخفیف تأیید کاتالوگ واقعی نیستند. انتخاب نهایی سایز، برگ و جلد در جزئیات محصول انجام می‌شود.",
                   "Design samples only; prices, stock and savings are not a real catalog. Final size, sheet count and cover are chosen on detail pages.",
                 )}
-              </p>
+              </p>}
             </div>
           </div>
           {renderSheet(
@@ -659,18 +667,22 @@ function FilterIcon() {
   )
 }
 function CollectionHero({
+  demo,
   collection,
   title,
   language,
   titleRef,
   media,
 }: {
+  demo: boolean
   collection: Collection
   title: string
   language: 0 | 1
   titleRef: React.RefObject<HTMLHeadingElement | null>
   media: ReactNode
 }) {
+  const [failed,setFailed]=useState("")
+  const approved=collection.image&&collection.image!==failed
   return (
     <section className="detail-hero">
       <div className="detail-hero-copy">
@@ -685,20 +697,20 @@ function CollectionHero({
         </h1>
         <p>
           {(collection.description || defaultCollectionDescription)[language]}
-          <small>
+          {demo && <small>
             {language === 0
               ? "متن و تصاویر نمونه طراحی"
               : "Sample copy & imagery"}
-          </small>
+          </small>}
         </p>
       </div>
       <div className={`detail-hero-image ${collection.color}`}>
-        <div aria-hidden="true">{media}</div>
-        <span className="detail-hero-caption">
+        {approved?<img className="collection-approved-cover" src={collection.image} alt={collection.imageAlt[language]||title} onError={()=>setFailed(collection.image||"")} />:<div aria-hidden="true">{media}</div>}
+        {!approved&&<span className="detail-hero-caption">
           {language === 0
             ? "جای‌نگهدار تصویر کالکشن"
             : "Collection image placeholder"}
-        </span>
+        </span>}
       </div>
     </section>
   )

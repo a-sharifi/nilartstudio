@@ -88,7 +88,7 @@ export default function ReferencesPage({
   live?: boolean
   initialMode?: ReferenceMode
 }) {
-  const config = live ? { ...referenceDemoConfig, maxText: 4000 } : referenceDemoConfig
+  const config = live ? { ...referenceDemoConfig, maxText: 4000, maxBytes: 5 * 1024 * 1024 } : referenceDemoConfig
   const owner = live ? "account-session" : "demo-session"
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
   const num = (n: number) =>
@@ -145,7 +145,7 @@ export default function ReferencesPage({
     kind,
     brief,
     primary,
-    files: files.map(({ url: _url, warning: _warning, ...f }) => f),
+    files: files.map(({ id, file, status, receipt }) => ({ id, file, status, receipt })),
     version: (draft?.version || 0) + 1,
   })
   const currentSignature = referenceSignature({ kind, brief, primary, files })
@@ -272,7 +272,7 @@ export default function ReferencesPage({
     const fresh: LocalReference[] = []
     for (const file of incoming) {
       if (!authorizedRef.current || epoch !== privateEpoch.current) break
-      const error = referenceFileError(file)
+      const error = referenceFileError(file, config.maxBytes)
       if (error) {
         setFileError(
           error === "type"
@@ -325,7 +325,8 @@ export default function ReferencesPage({
           break
         }
         ownedUrls.current.add(url)
-        fresh.push({ id: crypto.randomUUID(), file, url, status: "ready" })
+        const fileId = crypto.randomUUID()
+        fresh.push({ id: fileId, file, url, status: live ? "accepted" : "ready", ...(live ? {receipt: `local-selection-${fileId}`} : {}) })
         if (replacement) break
       } catch {
         URL.revokeObjectURL(url)
@@ -550,7 +551,7 @@ export default function ReferencesPage({
         : file.status === "checking"
           ? t("در حال بررسی فایل", "Checking file")
           : file.status === "accepted"
-            ? t("آپلود شد — Demo، فقط محلی", "Uploaded — Demo, local only")
+            ? live ? t("آماده ثبت نهایی", "Ready for final submission") : t("آپلود شد — Demo، فقط محلی", "Uploaded — Demo, local only")
             : t("آپلود ناموفق — Demo", "Upload failed — Demo")
   const policyLink = (
     <a
@@ -616,7 +617,7 @@ export default function ReferencesPage({
           : saveStatus === "saved" || initial
             ? t(
                 "ذخیره شد — فقط حافظه نشست Demo",
-                live ? "Kept in this session only" : "Saved — Demo session memory only",
+                live ? "Kept in this session only" : "Saved — session memory only",
               )
             : t(
                 "هنوز اطلاعاتی ذخیره نشده است",
@@ -689,9 +690,9 @@ export default function ReferencesPage({
         ))}
       </ol>
       <div className="ref-demo-banner">
-        <span>{live ? t("توضیحات متنی", "Text brief") : "DEMO"}</span>
+        <span>{live ? t("تصویر و توضیحات", "Images and brief") : "DEMO"}</span>
         <p>
-          {live ? t("فعلاً فقط ایده متنی پذیرفته می‌شود؛ آپلود تصویر در دسترس نیست. تا ثبت نهایی، متن فقط در حافظه این نشست است و با خروج یا بازخوانی پاک می‌شود.", "Only text briefs are supported; image upload is unavailable. Until final submission, your brief stays in session memory and clears on sign-out or reload.") : t(
+          {live ? t("تصویر و توضیح را اضافه کنید و ادامه دهید. تصاویر هنگام ثبت نهایی به‌صورت خصوصی ارسال می‌شوند. تا آن زمان، پیش‌نویس فقط در حافظه این نشست است؛ بازخوانی صفحه آن را پاک می‌کند.", "Add your images and brief, then continue. Images are sent privately on final submission. Until then, the draft is kept in this session only and clears on reload.") : t(
             "آپلود و ذخیره شبیه‌سازی می‌شوند؛ فایل به هیچ سروری ارسال نمی‌شود. داده فقط در حافظه نشست نمونه است و با خروج، انقضای نشست یا بازخوانی صفحه از بین می‌رود.",
             "Upload and save are simulated; no file is sent to a server. Data is only in demo session memory and is lost on sign-out, session expiry or page reload.",
           )}
@@ -727,19 +728,19 @@ export default function ReferencesPage({
             </h2>
             <p>
               {t(
-                "شناسه یا لینک درخواست مجوز دسترسی نیست. در این نمونه، فایل و متن خصوصی بدون ورود دریافت یا نمایش داده نمی‌شوند.",
-                "A request id or link is not authorization. In this demo, private files and text are not collected or shown without sign-in.",
+                live ? "برای ثبت توضیحات و ارسال تصاویر خصوصی، ابتدا وارد حساب خود شوید؛ سپس به همین صفحه برمی‌گردید." : "شناسه یا لینک درخواست مجوز دسترسی نیست. در این نمونه، فایل و متن خصوصی بدون ورود دریافت یا نمایش داده نمی‌شوند.",
+                live ? "Sign in to add your brief and private reference images. You will return to this page afterward." : "A request id or link is not authorization. In this demo, private files and text are not collected or shown without sign-in.",
               )}
             </p>
             <div>
               <a
                 className="button secondary"
-                href={`/login?returnTo=${encodeURIComponent(`${prefix}/commissions/new/references`)}`}
+                href={`${prefix}/auth/login?returnTo=${encodeURIComponent(`${prefix}/commissions/new/references`)}`}
                 onClick={(e) => {
                   e.preventDefault()
                   navigate(
                     t("ورود و ادامه", "Sign in and continue"),
-                    `/login?returnTo=${encodeURIComponent(`${prefix}/commissions/new/references`)}`,
+                    `${prefix}/auth/login?returnTo=${encodeURIComponent(`${prefix}/commissions/new/references`)}`,
                   )
                 }}
               >
@@ -793,14 +794,14 @@ export default function ReferencesPage({
               </div>
               <fieldset className="ref-input-types" disabled={frozen}>
                 <legend className="sr-only">
-                  {t("نوع ورودی سفارش — Demo", "Request input type — Demo")}
+                  {t(live ? "نوع ورودی سفارش" : "نوع ورودی سفارش — Demo", live ? "Request input type" : "Request input type — Demo")}
                 </legend>
                 {(["image", "idea"] as const).map((v) => (
                   <label key={v} className={kind === v ? "selected" : ""}>
                     <input
                       type="radio"
                       name="ref-kind"
-                      disabled={live && v === "image"}
+                      disabled={false}
                       checked={kind === v}
                       onChange={() => {
                         setKind(v)
@@ -820,12 +821,12 @@ export default function ReferencesPage({
                       <small>
                         {v === "image"
                           ? t(
-                              "تصویر و توضیح ضروری است · Demo",
-                              "Image and brief required · Demo",
+                              live ? "تصویر و توضیح ضروری است" : "تصویر و توضیح ضروری است · Demo",
+                              live ? "Image and brief required" : "Image and brief required · Demo",
                             )
                           : t(
-                              "توضیح ضروری؛ تصویر اختیاری · Demo",
-                              "Brief required; image optional · Demo",
+                              live ? "توضیح ضروری؛ تصویر اختیاری" : "توضیح ضروری؛ تصویر اختیاری · Demo",
+                              live ? "Brief required; image optional" : "Brief required; image optional · Demo",
                             )}
                       </small>
                     </span>
@@ -855,8 +856,8 @@ export default function ReferencesPage({
               </div>
               <p className="ref-limits">
                 {t(
-                  "تنظیمات نمونه، نه محدودیت سرویس واقعی:",
-                  "Demo configuration, not live service limits:",
+                  live ? "محدودیت تصاویر:" : "تنظیمات نمونه، نه محدودیت سرویس واقعی:",
+                  live ? "Image limits:" : "Demo configuration, not live service limits:",
                 )}{" "}
                 <bdi>JPG, PNG, WEBP</bdi> · {t("هر تصویر تا", "Up to")}{" "}
                 {num(config.maxBytes / 1024 / 1024)} MB ·{" "}
@@ -1108,8 +1109,8 @@ export default function ReferencesPage({
                   )}
                   <p className="ref-file-explanation">
                     {t(
-                      "با حذف مرجع اصلی، باید جایگزین آن را انتخاب کنید. تصاویر تکمیلی خودکار ادغام نمی‌شوند؛ ارتباطشان را در توضیح مشخص کنید. حذف اینجا فقط نسخه محلی نمونه را حذف می‌کند.",
-                      "After removing the primary reference, select a replacement. Additional images are not automatically combined; explain their relationship in your brief. Removal here deletes only the local demo copy.",
+                      "با حذف مرجع اصلی، باید جایگزین آن را انتخاب کنید. تصاویر تکمیلی خودکار ادغام نمی‌شوند؛ ارتباطشان را در توضیح مشخص کنید. حذف اینجا فقط نسخهٔ انتخاب‌شده در این صفحه را حذف می‌کند.",
+                      "After removing the primary reference, select a replacement. Additional images are not automatically combined; explain their relationship in your brief. Removal here deletes only the local selected copy.",
                     )}
                   </p>
                 </div>
@@ -1118,8 +1119,8 @@ export default function ReferencesPage({
                 <RefIcon name="lock" size={16} />
                 <p>
                   {t(
-                    "پیش‌نمایش‌ها خصوصی و محلی‌اند و لینک عمومی ندارند. سیاست واقعی پردازش هنوز متصل نیست؛ قبل از آپلود واقعی، آن را بررسی کنید.",
-                    "Previews are private and local, with no public link. A live processing policy is not connected; review it before any real upload.",
+                    live ? "پیش‌نمایش‌ها محلی‌اند؛ پس از ثبت نهایی، تصاویر فقط برای صاحب درخواست و کارکنان مجاز قابل دسترسی هستند." : "پیش‌نمایش‌ها خصوصی و محلی‌اند و لینک عمومی ندارند. سیاست واقعی پردازش هنوز متصل نیست؛ قبل از آپلود واقعی، آن را بررسی کنید.",
+                    live ? "Previews are local. After final submission, images are accessible only to the request owner and authorized staff." : "Previews are private and local, with no public link. A live processing policy is not connected; review it before any real upload.",
                   )}
                 </p>
               </div>
@@ -1171,8 +1172,7 @@ export default function ReferencesPage({
                   )}
                 </span>
                 <bdi>
-                  {num(authorized ? brief.length : 0)} / {num(config.maxText)} ·
-                  Demo
+                  {num(authorized ? brief.length : 0)} / {num(config.maxText)}{!live && " · Demo"}
                 </bdi>
               </div>
               {authorized && briefError && (
@@ -1282,8 +1282,8 @@ export default function ReferencesPage({
                     "Wait for the demo upload and check to finish before continuing.",
                   )
                 : t(
-                    "ادامه پس از اعتبارسنجی و تأیید ذخیره نمونه انجام می‌شود؛ سفارش هنوز ثبت نشده است.",
-                    "Continue follows validation and confirmed demo save; no order has been placed.",
+                    live ? "پس از بررسی ورودی‌ها به مرحله بعد می‌روید؛ ارسال تصاویر و ثبت درخواست در مرحله نهایی انجام می‌شود." : "ادامه پس از اعتبارسنجی و تأیید ذخیره نمونه انجام می‌شود؛ سفارش هنوز ثبت نشده است.",
+                    live ? "Continue after validation. Images are sent and the request is recorded at final submission." : "Continue follows validation and confirmed demo save; no order has been placed.",
                   )}
             </p>
           </div>
@@ -1333,8 +1333,8 @@ export default function ReferencesPage({
               <h2>{t("ایده شما، با حریم شما", "Your idea, your privacy")}</h2>
               <p>
                 {t(
-                  "در مسیر واقعی، تصاویر و توضیحات برای بررسی و اجرای درخواست استفاده می‌شوند؛ متن نهایی باید با سیاست تأییدشده محصول تطبیق داده شود.",
-                  "In the intended live flow, images and descriptions are used to assess and fulfil the request; final wording must match an approved product policy.",
+                  live ? "تصاویر و توضیحات برای بررسی و اجرای درخواست شما استفاده می‌شوند." : "در مسیر واقعی، تصاویر و توضیحات برای بررسی و اجرای درخواست استفاده می‌شوند؛ متن نهایی باید با سیاست تأییدشده محصول تطبیق داده شود.",
+                  live ? "Images and descriptions are used to review and fulfil your request." : "In the intended live flow, images and descriptions are used to assess and fulfil the request; final wording must match an approved product policy.",
                 )}
               </p>
               <p>
@@ -1408,14 +1408,14 @@ export default function ReferencesPage({
         </div>
         <p>
           {t(
-            "خروج بدون ذخیره، تغییرات ذخیره‌نشده را کنار می‌گذارد. نسخه قبلیِ ذخیره‌شده نمونه، در صورت وجود، فقط در حافظه همین نشست باقی می‌ماند.",
-            "Leaving without saving discards unsaved changes. Any previously saved demo version remains only in this session's memory.",
+            "خروج بدون ذخیره، تغییرات ذخیره‌نشده را کنار می‌گذارد. نسخه قبلیِ نگه‌داشته‌شده، در صورت وجود، فقط در حافظه همین نشست باقی می‌ماند.",
+            "Leaving without saving discards unsaved changes. Any previously saved version remains only in this session's memory.",
           )}
         </p>
         <small>
           {t(
-            "ذخیره فقط در حافظه نشست Demo است و با بازخوانی صفحه بازیابی نمی‌شود.",
-            "Save is only in Demo session memory; it is not recoverable after a page reload.",
+            "ذخیره فقط در حافظه همین نشست است و با بازخوانی صفحه بازیابی نمی‌شود.",
+            "Save is only in session memory; it is not recoverable after a page reload.",
           )}
         </small>
         <div>
@@ -1427,7 +1427,7 @@ export default function ReferencesPage({
             disabled={saveStatus === "saving" || uploading}
             onClick={() => save(false, true)}
           >
-            {t("ذخیره و خروج — Demo", "Save and leave — Demo")}
+            {t(live ? "نگه‌داشتن و خروج" : "ذخیره و خروج — Demo", live ? "Keep and leave" : "Save and leave — Demo")}
           </button>
           <button
             className="ref-discard"

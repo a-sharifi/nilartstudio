@@ -34,3 +34,7 @@ it("starting bundle quotes honor authored choices, repeated quantities and missi
  expect(cheapestBundleQuote(bundle,document,{})).toBeNull()
  expect(cheapestBundleQuote(bundle,null,products)).toBeNull()
 })
+it('uses exact percentage discounts with half-up micro-unit rounding',()=>{
+ expect(bundleQuote([{sku:sku('100'),quantity:4}],{kind:'percent',amount:'10',currency:'IRT'},1)?.price).toBe(360000000n)
+ expect(bundleQuote([{sku:sku('0.000001'),quantity:1}],{kind:'percent',amount:'50',currency:'IRT'},1)?.price).toBe(0n)
+})

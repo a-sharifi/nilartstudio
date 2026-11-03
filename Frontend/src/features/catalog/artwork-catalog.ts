@@ -2,7 +2,7 @@ import {z} from "zod"
 import { useEffect, useState } from "react"
 import type { GalleryWork } from "../../design/ArtworksPage"
 
-const artworkDetails=z.object({artist_fa:z.string(),artist_en:z.string(),medium:z.enum(["colored-pencil","oil","acrylic"]),style:z.enum(["landscape","abstract"]),width_cm:z.number().int().positive(),height_cm:z.number().int().positive(),price_amount:z.string().regex(/^(?:0|[1-9]\d{0,11})(?:\.\d{1,2})?$/),currency:z.enum(["IRT","IRR"]),stock:z.number().int().nonnegative(),image_url:z.string().regex(/^\/sample-artworks\/[a-z0-9-]+\.jpg$/),image_credit:z.string(),image_source:z.string(),surface_fa:z.string().nullable().optional(),surface_en:z.string().nullable().optional(),frame_fa:z.string().nullable().optional(),frame_en:z.string().nullable().optional(),framed_fa:z.string().nullable().optional(),framed_en:z.string().nullable().optional(),frame_price_amount:z.string().regex(/^(?:0|[1-9]\d{0,11})(?:\.\d{1,2})?$/).nullable().optional(),sample:z.literal(true)})
+const artworkDetails=z.object({artist_fa:z.string(),artist_en:z.string(),medium:z.enum(["colored-pencil","oil","acrylic","mixed-media"]),style:z.enum(["landscape","abstract"]),width_cm:z.number().positive(),height_cm:z.number().positive(),original_price_amount:z.string().nullable().optional(),price_amount:z.string().regex(/^(?:0|[1-9]\d{0,11})(?:\.\d{1,2})?$/),currency:z.enum(["IRT","IRR"]),stock:z.number().int().nonnegative(),image_url:z.string().regex(/^(?:\/sample-artworks\/[a-z0-9-]+\.jpg|\/api\/v1\/media\/[a-f0-9-]{36}\/versions\/[a-f0-9-]{36}\/content)$/),image_credit:z.string(),image_source:z.string(),surface_fa:z.string().nullable().optional(),surface_en:z.string().nullable().optional(),frame_fa:z.string().nullable().optional(),frame_en:z.string().nullable().optional(),framed_fa:z.string().nullable().optional(),framed_en:z.string().nullable().optional(),frame_price_amount:z.string().regex(/^(?:0|[1-9]\d{0,11})(?:\.\d{1,2})?$/).nullable().optional(),sample:z.boolean(),edition:z.enum(["original","print","digital"]).default("original"),linked_sku_id:z.string().uuid().nullable().default(null),license_fa:z.string().default(""),license_en:z.string().default(""),gallery:z.array(z.object({asset_id:z.string().uuid(),revision_id:z.string().uuid(),alt_fa:z.string(),alt_en:z.string()})).default([])})
 export type ArtworkRecord = {
   id: string
   slug: string
@@ -26,7 +26,7 @@ export function mapArtwork(value: unknown): GalleryWork {
   return {
     id: record.slug, title: [record.title_fa, record.title_en], catalogRecord: record,
     medium: details?.medium??"", style: details?.style??"", width: details?.width_cm??null, height: details?.height_cm??null, price: details?Number(details.price_amount)/(details.currency==="IRR"?10:1):null,
-    status: details&&details.stock>0?"available":"unavailable", unique: false, palette: 0,
+    status: details&&details.stock>0?"available":"unavailable", unique: !!details&&!details.sample&&details.edition==="original", palette: 0,
   }
 }
 

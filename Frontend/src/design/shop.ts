@@ -37,6 +37,7 @@ export type ShopFilters = Filters & {
   cover: string
 }
 export type ShopQuery = {
+  q?: string
   type: "all" | "products" | "bundles"
   sort: "newest" | "low" | "high"
   page: number
@@ -58,7 +59,10 @@ export function shopScope(path: string) {
   return /^\/(fa|en)\/categories\/([^/]+)$/.exec(path)?.[2] || ""
 }
 export function isShopRoute(path: string) {
-  return /^\/(fa|en)\/(shop|categories\/[^/]+)$/.test(path.split(/[?#]/)[0])
+  return /^(?:\/(fa|en))?\/search\/?$/.test(path.split(/[?#]/)[0]) || /^\/(fa|en)\/(shop|categories\/[^/]+)$/.test(path.split(/[?#]/)[0])
+}
+export function normalizeSearch(value: string) {
+  return value.normalize("NFKC").toLocaleLowerCase().replace(/[يى]/g,"ی").replace(/ك/g,"ک").replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/\u200c/g," ").replace(/\s+/g," ").trim()
 }
 export function priceDigits(value: string) {
   return value
@@ -147,6 +151,7 @@ export function parseShopQuery(search: string, scope = "", catalog?: ShopCatalog
     max = priceDigits(text("max"))
   const validPrices = !priceError(min, max)
   return {
+    ...(text("q").trim() ? {q: text("q").trim().slice(0, 150)} : {}),
     type: scope
       ? "products"
       : text("type") === "products" || text("type") === "bundles"
@@ -181,6 +186,7 @@ export function parseShopQuery(search: string, scope = "", catalog?: ShopCatalog
 }
 export function serializeShopQuery(query: ShopQuery, scope = "") {
   const params = new URLSearchParams()
+  if (query.q) params.set("q", query.q)
   if (query.type !== "all" && !scope) params.set("type", query.type)
   if (query.sort !== "newest") params.set("sort", query.sort)
   if (query.page > 1) params.set("page", String(query.page))
@@ -234,6 +240,10 @@ export function shopResults(
   )
   return [...unique.values()]
     .filter((item) => {
+      if (query.q) {
+        const haystack = normalizeSearch([...item.name, item.slug, ...(item.collections || [])].join(" "))
+        if (!normalizeSearch(query.q).split(" ").filter(Boolean).every(term => haystack.includes(term))) return false
+      }
       if (filters.collection && !item.collections.includes(filters.collection))
         return false
       if (scope || filters.category)

@@ -94,12 +94,12 @@ export function installHistoryGuard(browser: Window, getGuard: () => NavigationG
     const attempt: Attempt = { origin: position, target: targetPosition, guard, approved: false };
     let checking = true;
     const allowed = guard(() => {
-      if (checking) return;
+      if (checking) { attempt.approved = true; return; }
       attempt.approved = true;
       replay(attempt);
     });
     checking = false;
-    if (allowed) { position = targetPosition; acceptedRoute = route(); pending = null; return; }
+    if (allowed || attempt.approved) { position = targetPosition; acceptedRoute = route(); pending = null; return; }
     event.stopImmediatePropagation();
     pending = attempt;
     restoring = attempt.origin;

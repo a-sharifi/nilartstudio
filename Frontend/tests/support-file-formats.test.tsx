@@ -1,0 +1,6 @@
+import {expect,test} from "vitest"
+import {readSupportFile,supportFileType} from "../src/features/customer/support-file-formats"
+function file(name:string,type:string,bytes:number[]){const value=Uint8Array.from(bytes);return {name,type,size:value.length,arrayBuffer:async()=>value.buffer}}
+test("JPEG and PDF selections accept matching bytes and normalize extensions",async()=>{expect(supportFileType("PHOTO.JPEG")).toBe("image/jpeg");expect(await readSupportFile(file("photo.jpg","image/jpeg",[255,216,255,224]))).toBe("/9j/4A==");expect(await readSupportFile(file("evidence.pdf","application/pdf",[37,80,68,70,45,49]))).toBe("JVBERi0x")})
+test("spoofed MIME types, unsupported names and invalid signatures fail before upload",async()=>{for(const item of [file("fake.pdf","application/pdf",[255,216,255]),file("fake.jpg","application/pdf",[255,216,255]),file("../photo.jpg","image/jpeg",[255,216,255]),file("photo.svg","image/svg+xml",[1,2]),file("bad.png","image/png",[1,2])])await expect(readSupportFile(item)).rejects.toThrow("invalid_attachment")})
+test("empty and oversized files fail before reading",async()=>{for(const size of [0,5242881])await expect(readSupportFile({name:"file.pdf",type:"application/pdf",size,arrayBuffer:()=>{throw new Error("must not read")}})).rejects.toThrow("invalid_attachment")})

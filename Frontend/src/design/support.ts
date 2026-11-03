@@ -12,6 +12,14 @@ export const topics = [
   ["technical", "مشکل فنی", "Technical issue", false],
   ["other", "سایر", "Other", false],
 ] as const
+export const liveSupportTopics = [
+  ["general","پرسش عمومی","General question",false],
+  ["account","حساب کاربری","Account",false],
+  ["product","محصول","Product",false],
+  ["commission","نقاشی سفارشی","Commission",false],
+  ["technical","مشکل فنی","Technical issue",false],
+  ["other","سایر","Other",false],
+] as const
 export const supportOrders = [
   { id: "NA-24018", owner: "demo-customer", items: [["print", "چاپ هنری باغ آرام · A4 · تعداد ۱", "Quiet garden print · A4 · Qty 1"]] },
   { id: "NA-23976", owner: "demo-customer", items: [["digital", "مجموعه دیجیتال · نسخه PDF · تعداد ۱", "Digital collection · PDF edition · Qty 1"]] },
@@ -24,9 +32,9 @@ export const supportTickets: Ticket[] = [
 ]
 export type SupportDraft = { topic: string; order: string; item: string; subject: string; description: string }
 export const blankSupportDraft = (): SupportDraft => ({ topic: "", order: "", item: "", subject: "", description: "" })
-export function validateSupport(draft: SupportDraft, owner: string) {
+export function validateSupport(draft: SupportDraft, owner: string, live=false) {
   const errors: Record<string, string> = {}
-  const topic = topics.find(t => t[0] === draft.topic)
+  const topic = (live?liveSupportTopics:topics).find(t => t[0] === draft.topic)
   if (!topic) errors.topic = "topic"
   const order = supportOrders.find(o => o.id === draft.order && o.owner === owner)
   if ((topic?.[3] && !order) || (draft.order && !order)) errors.order = "order"

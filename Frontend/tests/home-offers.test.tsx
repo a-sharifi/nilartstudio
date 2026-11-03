@@ -1,0 +1,7 @@
+import {cleanup,render,screen,waitFor} from '@testing-library/react';
+import {afterEach,expect,it,vi} from 'vitest';
+import {HomeSpecialOffers} from '../src/features/marketing/HomeSpecialOffers';
+const item={kind:'sku',target_id:'11111111-1111-4111-8111-111111111111',slug:'notebook-love',title_fa:'دفتر لاو',title_en:'Love notebook',variant_fa:'A5 · خط‌دار',variant_en:'A5 · Ruled paper',image_url:null,original_amount:'598000',sale_amount:'538200',ends_at:'2099-11-10T10:00:00Z'};
+afterEach(()=>{cleanup();vi.unstubAllGlobals()});
+it('shows only server-authorized offers with exact variant links and original price',async()=>{const fetch=vi.fn().mockResolvedValue({ok:true,json:async()=>[item]});vi.stubGlobal('fetch',fetch);render(<HomeSpecialOffers en/>);expect(await screen.findByText('Love notebook')).toBeTruthy();expect(screen.getByText('A5 · Ruled paper')).toBeTruthy();expect(screen.getByText('538,200 toman')).toBeTruthy();expect(screen.getByText('598,000').tagName).toBe('S');expect(screen.getByRole('link',{name:/Love notebook/}).getAttribute('href')).toBe('/en/products/notebook-love?sku=11111111-1111-4111-8111-111111111111');expect(fetch).toHaveBeenCalledTimes(1)});
+it('hides expired and invalid offers instead of advertising stale prices',async()=>{vi.stubGlobal('fetch',vi.fn().mockResolvedValue({ok:true,json:async()=>[{...item,ends_at:'2000-01-01T00:00:00Z'},{...item,sale_amount:'598000'}]}));const view=render(<HomeSpecialOffers en/>);await waitFor(()=>expect(fetch).toHaveBeenCalled());expect(view.container.textContent).toBe('')});

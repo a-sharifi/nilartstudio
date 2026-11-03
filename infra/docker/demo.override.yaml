@@ -1,0 +1,21 @@
+# Always combine with compose.yaml using project name nilart-demo and .env.demo.
+services:
+  postgres:
+    environment:
+      POSTGRES_DB: nilart_demo
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U nilart -d nilart_demo']
+  api:
+    image: nilart-demo-api:latest
+    environment: &demo_environment
+      NILART_DEMO_WORKSPACE: 'true'
+      NILART_DATABASE_URL: postgresql+psycopg://nilart:${POSTGRES_PASSWORD:?Demo password required}@postgres:5432/nilart_demo
+      NILART_DEMO_ADMIN_PASSWORD: ${NILART_DEMO_ADMIN_PASSWORD:?Demo login password required}
+  worker:
+    image: nilart-demo-api:latest
+    environment: *demo_environment
+  scheduler:
+    image: nilart-demo-api:latest
+    environment: *demo_environment
+  web:
+    image: nilart-demo-web:latest

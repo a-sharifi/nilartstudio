@@ -1,0 +1,7 @@
+import {act,cleanup,renderHook} from "@testing-library/react"
+import {afterEach,expect,test,vi} from "vitest"
+import {useReturnClock} from "../src/features/customer/use-return-clock"
+afterEach(()=>{cleanup();vi.useRealTimers()})
+test("return clock updates immediately after the recorded deadline",()=>{vi.useFakeTimers();vi.setSystemTime(new Date("2026-10-17T10:00:00Z"));const deadline=Date.now()+1000;const {result}=renderHook(()=>useReturnClock(new Date(deadline).toISOString()));expect(result.current).toBeLessThan(deadline);act(()=>vi.advanceTimersByTime(1001));expect(result.current).toBeGreaterThan(deadline);expect(vi.getTimerCount()).toBe(0)})
+test("return clock rechecks after background suspension and removes timers on unmount",()=>{vi.useFakeTimers();vi.setSystemTime(new Date("2026-10-17T10:00:00Z"));const {result,unmount}=renderHook(()=>useReturnClock("2026-10-18T10:00:00Z"));vi.setSystemTime(new Date("2026-10-19T10:00:00Z"));act(()=>window.dispatchEvent(new Event("focus")));expect(result.current).toBe(Date.now());unmount();expect(vi.getTimerCount()).toBe(0)})
+test("deadline changes replace the previous timer and missing deadlines schedule none",()=>{vi.useFakeTimers();vi.setSystemTime(new Date("2026-10-17T10:00:00Z"));const {rerender}=renderHook(({deadline})=>useReturnClock(deadline),{initialProps:{deadline:"2026-10-18T10:00:00Z" as string|undefined}});expect(vi.getTimerCount()).toBe(1);rerender({deadline:"2026-10-20T10:00:00Z"});expect(vi.getTimerCount()).toBe(1);rerender({deadline:undefined});expect(vi.getTimerCount()).toBe(0)})

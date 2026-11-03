@@ -1,0 +1,9 @@
+import {afterEach,expect,it,vi} from 'vitest'
+import {waitFor} from '@testing-library/react'
+import {installHistoryGuard,type NavigationGuard} from '../src/features/navigation/history-guard'
+let uninstall:(()=>void)|undefined
+afterEach(()=>{uninstall?.();uninstall=undefined})
+function setup(guard:()=>NavigationGuard|null){window.history.replaceState({},'','/guard-start');uninstall=installHistoryGuard(window,guard);window.history.pushState({},'','/guard-next')}
+it('allows a guard that immediately calls proceed, preserving router state',async()=>{const guard=vi.fn((proceed:()=>void)=>{proceed();return false});setup(()=>guard);window.history.back();await waitFor(()=>expect(guard).toHaveBeenCalledOnce());await waitFor(()=>expect(window.location.pathname).toBe('/guard-start'));expect(window.history.state.__nilartHistory.position).toBe(0)})
+it('restores denied traversal and replays deferred approval only once',async()=>{let proceed:(()=>void)|undefined;const guard=vi.fn((go:()=>void)=>{proceed=go;return false});setup(()=>guard);window.history.back();await waitFor(()=>expect(guard).toHaveBeenCalledOnce());await waitFor(()=>expect(window.location.pathname).toBe('/guard-next'));proceed!();await waitFor(()=>expect(window.location.pathname).toBe('/guard-start'));expect(guard).toHaveBeenCalledOnce();proceed!();expect(window.location.pathname).toBe('/guard-start')})
+it('does not replay old approval after the active form or session changes',async()=>{let proceed:(()=>void)|undefined;const guard:NavigationGuard=go=>{proceed=go;return false};let active:NavigationGuard|null=guard;setup(()=>active);window.history.back();await waitFor(()=>expect(proceed).toBeDefined());await waitFor(()=>expect(window.location.pathname).toBe('/guard-next'));active=null;proceed!();await new Promise(resolve=>setTimeout(resolve,20));expect(window.location.pathname).toBe('/guard-next')})

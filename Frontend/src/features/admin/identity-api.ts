@@ -3,9 +3,12 @@ import {sessionLifecycle} from "../identity/session-lifecycle"
 export const accountSchema=z.object({id:z.string().uuid(),phone:z.string(),phone_verified:z.boolean(),blocked:z.boolean(),version:z.number().int().nonnegative(),roles:z.array(z.enum(["customer","artist","operations","finance","admin"])),overrides:z.record(z.string(),z.boolean()),permissions:z.array(z.string())})
 export type ManagedAccount=z.infer<typeof accountSchema>
 export class ManagementApiError extends Error {}
+let commandTail:Promise<void>=Promise.resolve()
 export async function privateRequest(path:string,method="GET",body?:unknown) {
  const revision=sessionLifecycle.capture()
  const current=()=>{if(!sessionLifecycle.current(revision))throw new ManagementApiError("permission_denied")}
+ const perform=async()=>{
+ current()
  const headers:Record<string,string>={Accept:"application/json"}
  try {
   if(method!=="GET"){
@@ -24,9 +27,18 @@ export async function privateRequest(path:string,method="GET",body?:unknown) {
   if(response.status===204)return null
   const data:unknown=await response.json();current();return data
  } catch(error){if(error instanceof ManagementApiError)throw error;throw new ManagementApiError("result_unknown")}
+ }
+ if(method==="GET")return perform()
+ // CSRF bootstrap rotates the session token. Keep each bootstrap and command
+ // together so overlapping checkout reviews cannot invalidate one another.
+ const previous=commandTail
+ let release!:()=>void
+ commandTail=new Promise<void>(resolve=>{release=resolve})
+ await previous
+ try{return await perform()}finally{release()}
 }
 export const identityManagementApi={
- async list(cursor?:string){return z.object({items:z.array(accountSchema),next_cursor:z.string().uuid().nullable()}).parse(await privateRequest(`/api/v1/admin/identity/accounts${cursor?`?cursor=${encodeURIComponent(cursor)}`:""}`))},
+ async list(cursor?:string,role?:ManagedAccount["roles"][number],search?:string,blocked?:boolean){const query=new URLSearchParams();if(cursor)query.set("cursor",cursor);if(role)query.set("role",role);if(search)query.set("q",search);if(blocked!==undefined)query.set("blocked",String(blocked));return z.object({items:z.array(accountSchema),next_cursor:z.string().uuid().nullable()}).parse(await privateRequest(`/api/v1/admin/identity/accounts${query.size?`?${query}`:""}`))},
  async permissions(){return z.array(z.string()).parse(await privateRequest("/api/v1/admin/identity/permissions"))},
  async update(account:ManagedAccount,reason:string){const result=accountSchema.parse(await privateRequest(`/api/v1/admin/identity/accounts/${account.id}/access`,"PUT",{version:account.version,roles:account.roles,overrides:account.overrides,blocked:account.blocked,reason}));if(result.id!==account.id)throw new ManagementApiError("result_unknown");return result},
  async audits(id:string){return z.array(z.object({id:z.string().uuid(),actor_id:z.string().uuid().nullable(),account_id:z.string().uuid(),action:z.string(),reason:z.string(),created_at:z.string(),changes:z.record(z.string(),z.unknown())})).parse(await privateRequest(`/api/v1/admin/identity/accounts/${id}/audits`))}

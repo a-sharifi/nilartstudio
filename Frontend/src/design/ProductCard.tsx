@@ -109,7 +109,7 @@ export default function ProductCard(props: ProductCardProps) {
         </p>
         <div className="product-price">
           {startingPrice ? <>
-            {t("از ","From ")}<strong>{formatCatalogAmount(startingPrice.amount,language)}</strong>{" "}{startingPrice.currency==="IRT"?t("تومان","toman"):t("ریال","rial")}
+            {startingPrice.original_amount&&<span className="storefront-sale-tag"><span>{t("فروش ویژه","Special offer")}</span><s>{formatCatalogAmount(startingPrice.original_amount,language)}</s></span>}{t("از ","From ")}<strong>{formatCatalogAmount(startingPrice.amount,language)}</strong>{" "}{startingPrice.currency==="IRT"?t("تومان","toman"):t("ریال","rial")}
           </> : price === undefined ? (
             <span className="unavailable">
               {priceUnavailableLabel || t("ناموجود", "Out of stock")}

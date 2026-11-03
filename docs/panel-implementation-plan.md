@@ -20,3 +20,7 @@ Each slice includes additive migrations, server permissions and ownership, exact
 Map AC-01–22 to tests. Verify concurrency, rollback, repeated callbacks/refunds, stock aggregation, costing units, late payments, private files, revocation and assignment. Compare every page in fa/en and desktop/mobile. Page register must record routes/APIs/permissions and actual acceptance evidence; no fake dashboard records. Run appropriate backend/frontend/browser/build checks, update progress/handoff, commit and push to codex/foundation-ai-handoff. Remote CI is reported separately.
 
 Production activation remains gated on approved business data, policies, providers/credentials and deployment configuration. Full RFP phase 2 is required. Existing prototypes remain disabled until their business workflow is connected.
+
+## 2026-10-18 — One integrated sandbox release
+
+The accepted execution specification and current stage are tracked in [admin-sandbox-release.md](./admin-sandbox-release.md); per-view and AC-01–22 acceptance is tracked in [admin-release-acceptance.md](./admin-release-acceptance.md). Separate resettable demo workspace and labeled simulated AI with human review were explicitly selected. All required customer/artist dependencies are included. Completion means the entire integrated release, not only the new foundation screens.

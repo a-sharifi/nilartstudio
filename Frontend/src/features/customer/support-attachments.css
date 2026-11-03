@@ -1,0 +1,10 @@
+.support-attachments { padding:var(--space-4); margin-block:var(--space-6); min-width:0; }
+.support-attachments h2 { font-size:18px; line-height:30px; font-weight:500; margin-bottom:var(--space-3); }
+.support-attachments > p { font-size:12px; line-height:24px; color:var(--muted); overflow-wrap:anywhere; margin-block:var(--space-3); }
+.support-attachments > p[role=alert] { color:var(--error); }
+.support-attachments > label { display:grid; gap:var(--space-3); font-size:12px; margin-block:var(--space-4); }
+.support-attachments input[type=file] { display:block; width:100%; min-width:0; font:inherit; padding:var(--space-3); border:1px solid var(--border); border-radius:var(--radius-control); background:var(--surface); }
+.support-attachments > .button { max-width:100%; margin-block:var(--space-3); white-space:normal; }
+.support-attachments a { text-decoration:underline; text-underline-offset:4px; }
+.support-attachment-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); margin-top:var(--space-4); }
+.support-attachment-actions .text-link { min-height:44px; border:0; background:none; font:inherit; font-size:12px; }

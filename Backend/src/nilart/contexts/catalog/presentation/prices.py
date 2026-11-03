@@ -52,14 +52,14 @@ def read_price(sku_id: UUID, request: Request, db: Session = Depends(session_dep
 @router.put("/skus/{sku_id}/price", response_model=PriceOutput)
 def update_price(sku_id: UUID, body: PriceUpdate, request: Request,
                  db: Session = Depends(session_dependency),
-                 principal: Principal = Depends(require_permission("catalog.manage"))):
+                 principal: Principal = Depends(require_permission("pricing.publish"))):
     if request.headers.get("origin") != settings.public_origin:
         return failure(request, "origin_invalid", 403)
     account = session_account(request, db, lock=True)
     if not account:
         return failure(request, "unauthenticated", 401)
     current = SqlIdentityRepository(db).principal(account.id, lock=True)
-    if account.id != principal.account_id or not current.allows("catalog.manage"):
+    if account.id != principal.account_id or not current.allows("pricing.publish"):
         return failure(request, "permission_denied", 403)
     csrf = request.headers.get("X-CSRF-Token", "")
     if not csrf or len(csrf) > 128 or not hmac.compare_digest(token_digest(csrf), account.csrf_hash):

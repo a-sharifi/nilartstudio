@@ -1,0 +1,86 @@
+[
+  {
+    "origin": "http://localhost:8080",
+    "routes": {
+      "/": 200,
+      "/fa/admin/promotions": 200,
+      "/fa/commissions/notebook#notebook-request": 200,
+      "/api/v1/admin/promotions": 401
+    },
+    "homepage_script_paths": [
+      "/_next/static/chunks/19t81mqpv7qq4.js",
+      "/_next/static/chunks/0frxv4_m-m2u5.js",
+      "/_next/static/chunks/turbopack-3-ry682tkyiqk.js",
+      "/_next/static/chunks/3lie8xlwky78h.js",
+      "/_next/static/chunks/2idg_w4_s_0s4.js",
+      "/_next/static/chunks/33v9kefjf77da.js",
+      "/_next/static/chunks/34a_mlh-fxrze.js",
+      "/_next/static/chunks/0cz1d0mv5g_q7.js",
+      "/_next/static/chunks/0s2cptn1mmf6r.js"
+    ],
+    "banner_count": 2,
+    "primary_code": "WELCOME-NIL-100",
+    "banner_links": [
+      "/fa/shop",
+      "/fa/commissions/notebook#notebook-request"
+    ],
+    "offer_count": 0,
+    "offers": []
+  },
+  {
+    "origin": "https://nilartstudio.ir",
+    "routes": {
+      "/": 200,
+      "/fa/admin/promotions": 200,
+      "/fa/commissions/notebook#notebook-request": 200,
+      "/api/v1/admin/promotions": 401
+    },
+    "homepage_script_paths": [
+      "/_next/static/chunks/19t81mqpv7qq4.js",
+      "/_next/static/chunks/0frxv4_m-m2u5.js",
+      "/_next/static/chunks/turbopack-3-ry682tkyiqk.js",
+      "/_next/static/chunks/3lie8xlwky78h.js",
+      "/_next/static/chunks/2idg_w4_s_0s4.js",
+      "/_next/static/chunks/33v9kefjf77da.js",
+      "/_next/static/chunks/34a_mlh-fxrze.js",
+      "/_next/static/chunks/0cz1d0mv5g_q7.js",
+      "/_next/static/chunks/0s2cptn1mmf6r.js"
+    ],
+    "banner_count": 2,
+    "primary_code": "WELCOME-NIL-100",
+    "banner_links": [
+      "/fa/shop",
+      "/fa/commissions/notebook#notebook-request"
+    ],
+    "offer_count": 3,
+    "offers": [
+      {
+        "slug": "gav-bookmark",
+        "variant": "طرح 1",
+        "original": "150000.000000",
+        "sale": "135000",
+        "page_status": 200,
+        "image_status": 200,
+        "image_type": "image/webp"
+      },
+      {
+        "slug": "love-notebook",
+        "variant": "A5 · کاغذ خط‌دار",
+        "original": "598000.000000",
+        "sale": "538200",
+        "page_status": 200,
+        "image_status": 200,
+        "image_type": "image/webp"
+      },
+      {
+        "slug": "qolche-sketchbook",
+        "variant": "A5 · کرافت تیره ۷۰ گرم",
+        "original": "298000.000000",
+        "sale": "268200",
+        "page_status": 200,
+        "image_status": 200,
+        "image_type": "image/webp"
+      }
+    ]
+  }
+]

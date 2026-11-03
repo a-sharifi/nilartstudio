@@ -40,20 +40,24 @@ test("reference admin shell edits roles and protects unsaved changes on mobile",
 })
 
 test("live reference security page clears password fields after confirmed change",async({page})=>{
+ let sessionRequests=0
+ page.on("request",request=>{if(request.url().includes("/account/security/sessions"))sessionRequests++})
  await page.route("**/api/v1/account/profile",route=>route.fulfill({json:{account_id:owner,phone:"+989123456789",full_name:"",version:0}}))
  await page.route("**/api/v1/account/security/methods",route=>route.fulfill({json:{password_enabled:true,otp_enabled:false,can_change:true,sandbox_sms:false}}))
- await page.route("**/api/v1/account/security/sessions",route=>route.fulfill({json:[{id,created_at:"2026-10-13T10:00:00Z",expires_at:"2026-10-14T10:00:00Z",current:true}]}))
  await page.route("**/api/v1/auth/session/csrf",route=>route.fulfill({json:{csrf_token:"test-csrf"}}))
  let payload:unknown
  await page.route("**/api/v1/account/security/password",route=>{payload=route.request().postDataJSON();return route.fulfill({json:{reauthenticate:true}})})
  await page.goto("/en/account/security")
- await expect(page.getByText("Current session",{exact:true})).toBeVisible()
+ await expect(page.getByLabel("Current password",{exact:true})).toBeVisible()
+ await expect(page.locator(".security-sessions")).toHaveCount(0)
+ await expect(page.getByRole("button",{name:"Sign out other sessions",exact:true})).toHaveCount(0)
  await expect(page.getByText("Preview states",{exact:true})).toHaveCount(0)
  await page.getByLabel("Current password",{exact:true}).fill("a current passphrase")
  await page.getByLabel("New password",{exact:true}).fill("a new secure passphrase")
  await page.getByLabel("Confirm new password",{exact:true}).fill("a new secure passphrase")
  await page.getByRole("button",{name:"Change password",exact:true}).click()
  await expect(page.getByRole("heading",{name:"Your password has been changed"})).toBeVisible()
+ expect(sessionRequests).toBe(0)
  expect(payload).toEqual({current_password:"a current passphrase",new_password:"a new secure passphrase"})
  await expect(page.getByLabel("Current password",{exact:true})).toHaveCount(0)
  await page.screenshot({path:"/tmp/nilart-security-confirmed-desktop.png",fullPage:true})

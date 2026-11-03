@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-10-13",
+  "updated": "2026-10-21",
   "source": "docs/ui-ux-design-spec.md",
   "status_note": "Connected is partial. Reference presence is not visual or workflow acceptance. API and acceptance evidence are populated only after verification.",
   "pages": [
@@ -930,12 +930,25 @@
       "proposed_route": "/admin",
       "required": true,
       "milestone": 8,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "AdminDashboard.tsx",
-      "extension_pattern": null,
-      "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "extension_pattern": "AdminDashboard reference shell, panels, tables and shared Dropdown",
+      "read_permission": "any administration permission",
+      "api_contracts": [
+        "GET /api/v1/auth/access",
+        "GET /api/v1/admin/order-summary (orders.read_all)",
+        "GET /api/v1/admin/customer/ticket-summary (support.manage)",
+        "GET /api/v1/admin/commissions/overview/summary (commissions.manage)",
+        "/api/v1/admin/reports/{report}",
+        "/api/v1/admin/reports/{report}/export"
+      ],
+      "acceptance_evidence": [
+        "2026-10-13: admin-panel.spec.ts browser contract checks; desktop English and mobile Persian screenshots reviewed. Published catalog reads and explicit SKU price editing only; CRUD, publication, stock and business metrics remain pending.",
+        "2026-10-14: Persisted order/payment/fulfillment and pending cancellation/return counts, permission-gated reference dashboard panel, refresh/retry/empty states and navigation. Backend PostgreSQL tests plus admin-summary.spec.ts and order-summary.test.tsx. Inventory, costing, finance metrics and broader dashboard acceptance remain unfinished.",
+        "2026-10-14: Permission-gated support overview with recorded status totals, refresh/retry/zero states, inbox link, private session clearing and Persian mobile checks. Inventory, finance and costing dashboards remain unfinished.",
+        "2026-10-14: Live commission overview with recorded status counts, permission-gated reads, queue link, refresh/retry/zero states, session clearing and Persian mobile coverage. Assignment and broader operational workflows remain unfinished.",
+        "2026-10-19: Permission-filtered recorded inventory/WIP/low-stock/incomplete production-cost dashboard metrics and report links now supplement existing order/commission/support summaries. Shared snapshot cutoff, error and private-cache clearing tested. Other domain queues and the complete dashboard remain pending. See docs/operational-reporting.md; evidence: Backend/tests/test_operational_reports_postgres.py, Frontend/tests/reports-api.test.tsx, operational-summary.test.tsx and isolated reports-live.spec.ts."
+      ]
     },
     {
       "id": "ADM-02",
@@ -943,12 +956,21 @@
       "proposed_route": "/admin/collections",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
-      "extension_pattern": "AdminDashboard.tsx",
+      "extension_pattern": "AdminDashboard shell, account-management form fields, panels and shared Dropdown",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET/POST /api/v1/admin/catalog/entries/collections",
+        "GET/PUT /api/v1/admin/catalog/entries/collections/{id}",
+        "POST /api/v1/admin/catalog/entries/collections/{id}/publication",
+        "GET /api/v1/admin/catalog/entries/collections/{id}/audits"
+      ],
+      "acceptance_evidence": [
+        "2026-10-13: test_catalog_management.py real isolated PostgreSQL: versions, concurrent writes, public isolation, permission/session/CSRF rechecks, audit/outbox rollback. catalog-management.spec.ts and admin-panel.spec.ts mocked browser contracts: draft editing, stable ID/reload, explicit publication, conflicts, private SKU creation and Persian mobile. Desktop/mobile screenshots reviewed. SKU mapping/publication, approved media and bundle/artwork authoring remain pending.",
+        "Admin catalog search uses the existing private q predicate across all pages, preserves status filter and resets pagination on explicit submit/clear. admin-panel.spec.ts verifies a result outside the previously displayed page; existing catalog management tests verify literal matching and permissions. Bundles/artworks remain explicitly current-page search.",
+        "2026-10-21: isolated0053 catalogue profile stage: approved immutable galleries, bilingual specifications, explicit SKU delivery/weight/return metadata, public product/SKU overrides; exact receipt/conflict recovery, permissions, rollback, browser fa/en mobile/desktop and navigation/keyboard checks. See docs/catalog-profiles.md. Full dependent workflow acceptance remains pending."
+      ]
     },
     {
       "id": "ADM-03",
@@ -956,12 +978,20 @@
       "proposed_route": "/admin/categories",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
-      "extension_pattern": "AdminDashboard.tsx",
+      "extension_pattern": "AdminDashboard shell, account-management form fields, panels and shared Dropdown",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET/POST /api/v1/admin/catalog/entries/categories",
+        "GET/PUT /api/v1/admin/catalog/entries/categories/{id}",
+        "POST /api/v1/admin/catalog/entries/categories/{id}/publication",
+        "GET /api/v1/admin/catalog/entries/categories/{id}/audits"
+      ],
+      "acceptance_evidence": [
+        "2026-10-13: test_catalog_management.py real isolated PostgreSQL: versions, concurrent writes, public isolation, permission/session/CSRF rechecks, audit/outbox rollback. catalog-management.spec.ts and admin-panel.spec.ts mocked browser contracts: draft editing, stable ID/reload, explicit publication, conflicts, private SKU creation and Persian mobile. Desktop/mobile screenshots reviewed. SKU mapping/publication, approved media and bundle/artwork authoring remain pending.",
+        "Admin catalog search uses the existing private q predicate across all pages, preserves status filter and resets pagination on explicit submit/clear. admin-panel.spec.ts verifies a result outside the previously displayed page; existing catalog management tests verify literal matching and permissions. Bundles/artworks remain explicitly current-page search."
+      ]
     },
     {
       "id": "ADM-04",
@@ -969,12 +999,19 @@
       "proposed_route": "/admin/products",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
-      "extension_pattern": "AdminDashboard.tsx",
+      "extension_pattern": "AdminDashboard shell, account-management form fields, panels and shared Dropdown",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/catalog/entries/products",
+        "GET /api/v1/admin/catalog/entries/products/{id}/skus"
+      ],
+      "acceptance_evidence": [
+        "2026-10-13: test_catalog_management.py real isolated PostgreSQL: versions, concurrent writes, public isolation, permission/session/CSRF rechecks, audit/outbox rollback. catalog-management.spec.ts and admin-panel.spec.ts mocked browser contracts: draft editing, stable ID/reload, explicit publication, conflicts, private SKU creation and Persian mobile. Desktop/mobile screenshots reviewed. SKU mapping/publication, approved media and bundle/artwork authoring remain pending.",
+        "Admin catalog search uses the existing private q predicate across all pages, preserves status filter and resets pagination on explicit submit/clear. admin-panel.spec.ts verifies a result outside the previously displayed page; existing catalog management tests verify literal matching and permissions. Bundles/artworks remain explicitly current-page search.",
+        "2026-10-21: isolated0053 catalogue profile stage: approved immutable galleries, bilingual specifications, explicit SKU delivery/weight/return metadata, public product/SKU overrides; exact receipt/conflict recovery, permissions, rollback, browser fa/en mobile/desktop and navigation/keyboard checks. See docs/catalog-profiles.md. Full dependent workflow acceptance remains pending."
+      ]
     },
     {
       "id": "ADM-05",
@@ -982,12 +1019,20 @@
       "proposed_route": "/admin/products/:id/edit",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
-      "extension_pattern": "AdminDashboard.tsx",
+      "extension_pattern": "AdminDashboard shell, account-management form fields, panels and shared Dropdown",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "POST /api/v1/admin/catalog/entries/products",
+        "GET/PUT /api/v1/admin/catalog/entries/products/{id}",
+        "POST /api/v1/admin/catalog/entries/products/{id}/publication",
+        "GET /api/v1/admin/catalog/entries/products/{id}/audits"
+      ],
+      "acceptance_evidence": [
+        "2026-10-13: test_catalog_management.py real isolated PostgreSQL: versions, concurrent writes, public isolation, permission/session/CSRF rechecks, audit/outbox rollback. catalog-management.spec.ts and admin-panel.spec.ts mocked browser contracts: draft editing, stable ID/reload, explicit publication, conflicts, private SKU creation and Persian mobile. Desktop/mobile screenshots reviewed. SKU mapping/publication, approved media and bundle/artwork authoring remain pending.",
+        "2026-10-21: isolated0053 catalogue profile stage: approved immutable galleries, bilingual specifications, explicit SKU delivery/weight/return metadata, public product/SKU overrides; exact receipt/conflict recovery, permissions, rollback, browser fa/en mobile/desktop and navigation/keyboard checks. See docs/catalog-profiles.md. Full dependent workflow acceptance remains pending."
+      ]
     },
     {
       "id": "ADM-06",
@@ -995,12 +1040,32 @@
       "proposed_route": "/admin/products/:id/variants",
       "required": true,
       "milestone": 2,
-      "status": "foundation",
+      "status": "connected_partial",
       "reference_component": null,
-      "extension_pattern": "AdminDashboard.tsx",
+      "extension_pattern": "AdminDashboard shell, account-management form fields, panels and shared Dropdown",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/catalog/entries/products/{id}/skus",
+        "POST /api/v1/admin/catalog/products/{id}/skus",
+        "GET/PUT /api/v1/admin/catalog/skus/{sku_id}/price",
+        "GET/PUT /api/v1/admin/catalog/products/{id}/options",
+        "GET /api/v1/admin/catalog/products/{id}/options/audits",
+        "GET/PUT /api/v1/admin/catalog/skus/{sku_id}/options",
+        "PUT /api/v1/admin/catalog/skus/{sku_id}",
+        "POST /api/v1/admin/catalog/skus/{sku_id}/publication",
+        "GET /api/v1/catalog/skus/{code}/options",
+        "GET /api/v1/admin/catalog/skus/{sku_id}/audits",
+        "GET /api/v1/admin/catalog/skus/{sku_id}/price/audits"
+      ],
+      "acceptance_evidence": [
+        "2026-10-13: test_catalog_management.py real isolated PostgreSQL: versions, concurrent writes, public isolation, permission/session/CSRF rechecks, audit/outbox rollback. catalog-management.spec.ts and admin-panel.spec.ts mocked browser contracts: draft editing, stable ID/reload, explicit publication, conflicts, private SKU creation and Persian mobile. Desktop/mobile screenshots reviewed. SKU mapping/publication, approved media and bundle/artwork authoring remain pending.",
+        "2026-10-13 continuation: /admin/products/:id/options and /variants connect bilingual option/value and explicit combination editing, paginated option history and version-pinned draft SKU mappings/removal. options-api.test.tsx (7 checks), product-options.spec.ts (6 mocked browser checks): persisted draft, explicit choices, mapping/removal, stale snapshot, published SKU protection, conflicts, unknown acknowledgement and Persian mobile viewport. Backend existing option/mapping tests: 33 passed on isolated PostgreSQL. SKU publication, code editing and complete matrix/media acceptance remain pending.",
+        "Draft SKU code editor connected: versioned protected write, duplicate code correction, unsaved guards, acknowledged reload persistence and server mapping reread. 16 backend authoring tests, 8 API-client tests and 7 browser checks passed. SKU publication and full matrix/media acceptance remain outstanding.",
+        "Reviewed SKU publication/unpublication connected with explicit reason/confirmation, shared version checks, current mapping/product validation and immutable public mapping snapshots. test_sku_publication.py validates visibility, stable snapshots, conflicts, concurrency and audit rollback; eight browser option/mapping checks passed. Dedicated SKU audit-history UI, public presentation integration and full media/matrix acceptance remain outstanding.",
+        "SKU authoring audit-history UI connected: descending exclusive pagination, actor/reason/time and before/after comparisons, error retry, no invented mapping removal for older snapshots, session/SKU isolation and mobile viewport. test_sku_publication.py checks permissions, cursor/limits and audited publication reason; options-api.test.tsx validates row identity; product-options.spec.ts exercises history/retry/pagination. Public variant presentation and full media/matrix acceptance remain partial.",
+        "SKU price-history UI connected in admin price editor: exact decimal/currency before/after amounts, removals, actor/Tehran timestamps, exclusive pagination, independent retry and private-cache clearing. price-history.test.tsx verifies session clearing and retry/cursor; admin-panel.spec.ts verifies mobile decimal/currency/removal history. Seven existing backend price-audit tests passed.",
+        "2026-10-21: isolated0053 catalogue profile stage: approved immutable galleries, bilingual specifications, explicit SKU delivery/weight/return metadata, public product/SKU overrides; exact receipt/conflict recovery, permissions, rollback, browser fa/en mobile/desktop and navigation/keyboard checks. See docs/catalog-profiles.md. Full dependent workflow acceptance remains pending."
+      ]
     },
     {
       "id": "ADM-07",
@@ -1008,12 +1073,22 @@
       "proposed_route": "/admin/bundles",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
-      "extension_pattern": "AdminDashboard.tsx",
+      "extension_pattern": "BundlesPanel.tsx",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/catalog/bundles",
+        "GET /api/v1/admin/catalog/bundles",
+        "GET /api/v1/admin/catalog/bundles/{id}",
+        "GET /api/v1/admin/catalog/bundles/{id}/history",
+        "GET/PUT /api/v1/admin/catalog/bundles/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-13: admin-panel.spec.ts browser contract checks; desktop English and mobile Persian screenshots reviewed. Published catalog reads and explicit SKU price editing only; CRUD, publication, stock and business metrics remain pending.",
+        "2026-10-20 / 0052 integrated preview: managed draft/publication editor, approved immutable galleries, components/choices, discounts/estimates, atomic scoped receipts, independent price-publication grant and public ledger-backed capacity. Seven PostgreSQL cases, client/editor checks and two real demo journeys. Full costing/public collection/checkout integration and release acceptance remain pending; see bundle-authoring.md. Main not rolled out.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "ADM-08",
@@ -1021,12 +1096,20 @@
       "proposed_route": "/admin/bundles/:id/edit",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
-      "extension_pattern": "AdminDashboard.tsx",
+      "extension_pattern": "BundlesPanel.tsx",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/catalog/bundles",
+        "GET /api/v1/admin/catalog/bundles/{id}",
+        "GET /api/v1/admin/catalog/bundles/{id}/history",
+        "GET/PUT /api/v1/admin/catalog/bundles/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-20 / 0052 integrated preview: managed draft/publication editor, approved immutable galleries, components/choices, discounts/estimates, atomic scoped receipts, independent price-publication grant and public ledger-backed capacity. Seven PostgreSQL cases, client/editor checks and two real demo journeys. Full costing/public collection/checkout integration and release acceptance remain pending; see bundle-authoring.md. Main not rolled out.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "ADM-09",
@@ -1034,12 +1117,23 @@
       "proposed_route": "/admin/discounts",
       "required": true,
       "milestone": 5,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/discounts/rules",
+        "GET /api/v1/admin/discounts/rules/{id}",
+        "GET /api/v1/admin/discounts/rules/{id}/versions",
+        "GET/PUT /api/v1/admin/discounts/rules/{id}/versions/{revision}",
+        "GET /api/v1/admin/discounts/rules/{id}/usage",
+        "GET /api/v1/admin/discounts/choices/{kind}",
+        "POST /api/v1/discounts/quote",
+        "POST /api/v1/payments/sandbox/checkout"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Discount placeholder replaced with reference-shell versioned fixed/percentage rules, validity/caps/quotas, named catalogue scopes, mobile allowlist, explicit bundle stacking, usage/history and save recovery. Codes apply in existing sandbox checkout with exact allocation, fresh revalidation, transactional quota reservation, immutable intent, verified redemption and zero-total completion without a gateway call. 26 isolated discount PostgreSQL checks plus 6 payment/19 outbox regressions; 13 frontend checks and 12 intercepted browser workflows including Persian mobile. See docs/discount-management.md. Production merchant/stock/fulfillment and abandoned-provider operational recovery remain separate prerequisites."
+      ]
     },
     {
       "id": "ADM-10",
@@ -1047,12 +1141,23 @@
       "proposed_route": "/admin/discounts/:id/edit",
       "required": true,
       "milestone": 5,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/discounts/rules",
+        "GET /api/v1/admin/discounts/rules/{id}",
+        "GET /api/v1/admin/discounts/rules/{id}/versions",
+        "GET/PUT /api/v1/admin/discounts/rules/{id}/versions/{revision}",
+        "GET /api/v1/admin/discounts/rules/{id}/usage",
+        "GET /api/v1/admin/discounts/choices/{kind}",
+        "POST /api/v1/discounts/quote",
+        "POST /api/v1/payments/sandbox/checkout"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Discount placeholder replaced with reference-shell versioned fixed/percentage rules, validity/caps/quotas, named catalogue scopes, mobile allowlist, explicit bundle stacking, usage/history and save recovery. Codes apply in existing sandbox checkout with exact allocation, fresh revalidation, transactional quota reservation, immutable intent, verified redemption and zero-total completion without a gateway call. 26 isolated discount PostgreSQL checks plus 6 payment/19 outbox regressions; 13 frontend checks and 12 intercepted browser workflows including Persian mobile. See docs/discount-management.md. Production merchant/stock/fulfillment and abandoned-provider operational recovery remain separate prerequisites."
+      ]
     },
     {
       "id": "ADM-11",
@@ -1060,12 +1165,24 @@
       "proposed_route": "/admin/media",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
-      "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "content.manage",
+      "api_contracts": [
+        "GET /api/v1/admin/media",
+        "GET /api/v1/admin/media/choices/skus",
+        "GET /api/v1/admin/media/{id}",
+        "GET /api/v1/admin/media/{id}/versions",
+        "GET/PUT /api/v1/admin/media/{id}/versions/{revision}",
+        "GET /api/v1/admin/media/{id}/versions/{revision}/content",
+        "GET /api/v1/media/{id}/content"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18 integrated sandbox foundation: Immutable bounded PNG/JPEG/PDF library, public/private purpose separation, print SKU/size binding, explicit image publication, protected revision downloads, conflict/retry/privacy UI. Catalogue galleries/print consumption integrations remain pending. See docs/admin-sandbox-release.md. Entire integrated release remains incomplete.",
+        "2026-10-21: isolated0053 catalogue profile stage: approved immutable galleries, bilingual specifications, explicit SKU delivery/weight/return metadata, public product/SKU overrides; exact receipt/conflict recovery, permissions, rollback, browser fa/en mobile/desktop and navigation/keyboard checks. See docs/catalog-profiles.md. Full dependent workflow acceptance remains pending.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "ADM-12",
@@ -1073,12 +1190,17 @@
       "proposed_route": "/admin/artworks",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
-      "extension_pattern": "AdminDashboard.tsx",
+      "extension_pattern": "AdminDashboard reference shell, panels, tables and shared Dropdown",
       "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/catalog/artworks"
+      ],
+      "acceptance_evidence": [
+        "2026-10-13: admin-panel.spec.ts browser contract checks; desktop English and mobile Persian screenshots reviewed. Published catalog reads and explicit SKU price editing only; CRUD, publication, stock and business metrics remain pending.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "ADM-13",
@@ -1109,12 +1231,20 @@
       "proposed_route": "/admin/artists",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
-      "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "identity.manage",
+      "api_contracts": [
+        "GET /api/v1/admin/identity/accounts?role=artist",
+        "PUT /api/v1/admin/identity/accounts/{id}/access",
+        "GET /api/v1/admin/identity/accounts/{id}/audits"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_identity_management_postgres.py",
+        "Frontend/tests/e2e/admin-artists.spec.ts",
+        "Artist-role directory, audited access/restriction controls; assignment, profiles and settlement remain unfinished."
+      ]
     },
     {
       "id": "ADM-15",
@@ -1122,12 +1252,20 @@
       "proposed_route": "/admin/content",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
-      "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "content.manage",
+      "api_contracts": [
+        "GET /api/v1/admin/content",
+        "GET /api/v1/admin/content/{slug}",
+        "GET /api/v1/admin/content/{slug}/versions",
+        "GET/PUT /api/v1/admin/content/{slug}/versions/{revision}",
+        "GET /api/v1/content/{slug}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18 integrated sandbox foundation: Bilingual informational copy with private drafts, explicit publish/unpublish, immutable history, approved-only public pages and recovery UI. Rich page-specific sections and broader support workflows remain pending. See docs/admin-sandbox-release.md. Entire integrated release remains incomplete."
+      ]
     },
     {
       "id": "ADM-16",
@@ -1135,12 +1273,19 @@
       "proposed_route": "/admin/settings",
       "required": true,
       "milestone": 2,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
-      "read_permission": "catalog.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "identity.manage",
+      "api_contracts": [
+        "GET /api/v1/admin/settings",
+        "GET /api/v1/admin/settings/versions",
+        "GET/PUT /api/v1/admin/settings/versions/{revision}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18 integrated sandbox foundation: Versioned identity/contact, IRT currency, tax, reservation/returns, shipping methods and basic commission configuration; explicit incomplete values, exact retry, reviewed conflicts and history. Downstream enforcement, full size pricing and integration settings remain pending. See docs/admin-sandbox-release.md. Entire integrated release remains incomplete.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "COST-01",
@@ -1148,12 +1293,20 @@
       "proposed_route": "/admin/materials",
       "required": true,
       "milestone": 3,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/costing/resources",
+        "GET /api/v1/admin/costing/resources/{id}",
+        "GET /api/v1/admin/costing/resources/{id}/versions",
+        "GET/PUT /api/v1/admin/costing/resources/{id}/versions/{revision_id}",
+        "GET /api/v1/admin/costing/resources/{id}/estimate"
+      ],
+      "acceptance_evidence": [
+        "2026-10-17: Material/service editors, explicit units/conversions, exact nullable rates and validity, archive/filter/pagination, immutable history, conflict comparison and unknown-save recovery. 21 isolated PostgreSQL tests, 19 outbox tests, 7 frontend tests and 13 intercepted browser checks passed, including Persian mobile. See docs/costing-foundation.md. Supplier entities, BOM/SKU costing, yield, procurement, inventory and finance remain pending."
+      ]
     },
     {
       "id": "COST-02",
@@ -1161,12 +1314,21 @@
       "proposed_route": "/admin/materials/:id/edit",
       "required": true,
       "milestone": 3,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/costing/resources",
+        "GET /api/v1/admin/costing/resources/{id}",
+        "GET /api/v1/admin/costing/resources/{id}/versions",
+        "GET/PUT /api/v1/admin/costing/resources/{id}/versions/{revision_id}",
+        "GET /api/v1/admin/costing/resources/{id}/estimate"
+      ],
+      "acceptance_evidence": [
+        "2026-10-17: Material/service editors, explicit units/conversions, exact nullable rates and validity, archive/filter/pagination, immutable history, conflict comparison and unknown-save recovery. 21 isolated PostgreSQL tests, 19 outbox tests, 7 frontend tests and 13 intercepted browser checks passed, including Persian mobile. See docs/costing-foundation.md. Supplier entities, BOM/SKU costing, yield, procurement, inventory and finance remain pending.",
+        "2026-10-20 integrated preview: reference BOM/material edit aliases connect to existing workspaces; standalone cutting workbench computes reviewed layouts with approval saved in recipe revisions. Read-only browser verification passed. Family templates and full release acceptance remain pending."
+      ]
     },
     {
       "id": "COST-03",
@@ -1174,12 +1336,20 @@
       "proposed_route": "/admin/service-rates",
       "required": true,
       "milestone": 3,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/costing/resources",
+        "GET /api/v1/admin/costing/resources/{id}",
+        "GET /api/v1/admin/costing/resources/{id}/versions",
+        "GET/PUT /api/v1/admin/costing/resources/{id}/versions/{revision_id}",
+        "GET /api/v1/admin/costing/resources/{id}/estimate"
+      ],
+      "acceptance_evidence": [
+        "2026-10-17: Material/service editors, explicit units/conversions, exact nullable rates and validity, archive/filter/pagination, immutable history, conflict comparison and unknown-save recovery. 21 isolated PostgreSQL tests, 19 outbox tests, 7 frontend tests and 13 intercepted browser checks passed, including Persian mobile. See docs/costing-foundation.md. Supplier entities, BOM/SKU costing, yield, procurement, inventory and finance remain pending."
+      ]
     },
     {
       "id": "COST-04",
@@ -1187,12 +1357,23 @@
       "proposed_route": "/admin/boms",
       "required": true,
       "milestone": 3,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/costing/recipe-skus",
+        "GET /api/v1/admin/costing/recipes",
+        "GET /api/v1/admin/costing/recipes/{id}",
+        "GET /api/v1/admin/costing/recipes/{id}/versions",
+        "GET/PUT /api/v1/admin/costing/recipes/{id}/versions/{revision}",
+        "GET /api/v1/admin/costing/recipes/{id}/estimate",
+        "GET /api/v1/admin/costing/recipe-reviews"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Versioned SKU recipe library/editor, resource snapshots, confirmed cutting yield/waste, exact rational batch/per-output estimates with explicit rounding and incomplete states, derived dependency-review queue. 19 PostgreSQL recipe tests cover authorization/TOCTOU, exact arithmetic, immutable replay, concurrent edits, atomic rollback and reversible migration; 7 frontend tests cover DTO scope/recovery/private clearing; 16 intercepted browser workflows cover drafts, history, conflict/recovery, calculations, rate/dimension review, queue and Persian mobile. See docs/sku-recipes.md. Templates/inherited overrides, automatic geometric yield, price proposals/publication and production remain unfinished. Actual routes /admin/recipes and /admin/price-review extend the reference shell.",
+        "2026-10-20 integrated preview: reference BOM/material edit aliases connect to existing workspaces; standalone cutting workbench computes reviewed layouts with approval saved in recipe revisions. Read-only browser verification passed. Family templates and full release acceptance remain pending."
+      ]
     },
     {
       "id": "COST-05",
@@ -1200,12 +1381,23 @@
       "proposed_route": "/admin/boms/:id/edit",
       "required": true,
       "milestone": 3,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/costing/recipe-skus",
+        "GET /api/v1/admin/costing/recipes",
+        "GET /api/v1/admin/costing/recipes/{id}",
+        "GET /api/v1/admin/costing/recipes/{id}/versions",
+        "GET/PUT /api/v1/admin/costing/recipes/{id}/versions/{revision}",
+        "GET /api/v1/admin/costing/recipes/{id}/estimate",
+        "GET /api/v1/admin/costing/recipe-reviews"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Versioned SKU recipe library/editor, resource snapshots, confirmed cutting yield/waste, exact rational batch/per-output estimates with explicit rounding and incomplete states, derived dependency-review queue. 19 PostgreSQL recipe tests cover authorization/TOCTOU, exact arithmetic, immutable replay, concurrent edits, atomic rollback and reversible migration; 7 frontend tests cover DTO scope/recovery/private clearing; 16 intercepted browser workflows cover drafts, history, conflict/recovery, calculations, rate/dimension review, queue and Persian mobile. See docs/sku-recipes.md. Templates/inherited overrides, automatic geometric yield, price proposals/publication and production remain unfinished. Actual routes /admin/recipes and /admin/price-review extend the reference shell.",
+        "2026-10-20 integrated preview: reference BOM/material edit aliases connect to existing workspaces; standalone cutting workbench computes reviewed layouts with approval saved in recipe revisions. Read-only browser verification passed. Family templates and full release acceptance remain pending."
+      ]
     },
     {
       "id": "COST-06",
@@ -1213,12 +1405,23 @@
       "proposed_route": "/admin/costing/cutting",
       "required": true,
       "milestone": 3,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/costing/recipe-skus",
+        "GET /api/v1/admin/costing/recipes",
+        "GET /api/v1/admin/costing/recipes/{id}",
+        "GET /api/v1/admin/costing/recipes/{id}/versions",
+        "GET/PUT /api/v1/admin/costing/recipes/{id}/versions/{revision}",
+        "GET /api/v1/admin/costing/recipes/{id}/estimate",
+        "GET /api/v1/admin/costing/recipe-reviews"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Versioned SKU recipe library/editor, resource snapshots, confirmed cutting yield/waste, exact rational batch/per-output estimates with explicit rounding and incomplete states, derived dependency-review queue. 19 PostgreSQL recipe tests cover authorization/TOCTOU, exact arithmetic, immutable replay, concurrent edits, atomic rollback and reversible migration; 7 frontend tests cover DTO scope/recovery/private clearing; 16 intercepted browser workflows cover drafts, history, conflict/recovery, calculations, rate/dimension review, queue and Persian mobile. See docs/sku-recipes.md. Templates/inherited overrides, automatic geometric yield, price proposals/publication and production remain unfinished. Actual routes /admin/recipes and /admin/price-review extend the reference shell.",
+        "2026-10-20 integrated preview: reference BOM/material edit aliases connect to existing workspaces; standalone cutting workbench computes reviewed layouts with approval saved in recipe revisions. Read-only browser verification passed. Family templates and full release acceptance remain pending."
+      ]
     },
     {
       "id": "COST-07",
@@ -1226,12 +1429,22 @@
       "proposed_route": "/admin/costing",
       "required": true,
       "milestone": 3,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/costing/recipe-skus",
+        "GET /api/v1/admin/costing/recipes",
+        "GET /api/v1/admin/costing/recipes/{id}",
+        "GET /api/v1/admin/costing/recipes/{id}/versions",
+        "GET/PUT /api/v1/admin/costing/recipes/{id}/versions/{revision}",
+        "GET /api/v1/admin/costing/recipes/{id}/estimate",
+        "GET /api/v1/admin/costing/recipe-reviews"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Versioned SKU recipe library/editor, resource snapshots, confirmed cutting yield/waste, exact rational batch/per-output estimates with explicit rounding and incomplete states, derived dependency-review queue. 19 PostgreSQL recipe tests cover authorization/TOCTOU, exact arithmetic, immutable replay, concurrent edits, atomic rollback and reversible migration; 7 frontend tests cover DTO scope/recovery/private clearing; 16 intercepted browser workflows cover drafts, history, conflict/recovery, calculations, rate/dimension review, queue and Persian mobile. See docs/sku-recipes.md. Templates/inherited overrides, automatic geometric yield, price proposals/publication and production remain unfinished. Actual routes /admin/recipes and /admin/price-review extend the reference shell."
+      ]
     },
     {
       "id": "COST-08",
@@ -1239,12 +1452,18 @@
       "proposed_route": "/admin/pricing/:sku",
       "required": true,
       "milestone": 3,
-      "status": "foundation",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/pricing/calculate",
+        "/api/v1/admin/pricing/proposals",
+        "/api/v1/admin/pricing/proposals/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Exact margin/fee/fixed-cost/rounding calculation, custom-price and discount preview, saved/revised/rejected proposals, stale dependency and current-price checks, affected-bundle review, explicit audited/idempotent publication and retained receipt recovery. Six database tests, three client checks and a real isolated fa/en desktop/mobile browser journey verify these paths. Group/family policies, full bundle proposals and integrated acceptance remain pending. See docs/price-proposals.md."
+      ]
     },
     {
       "id": "COST-09",
@@ -1252,12 +1471,26 @@
       "proposed_route": "/admin/pricing/reviews",
       "required": true,
       "milestone": 3,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/costing/recipe-skus",
+        "GET /api/v1/admin/costing/recipes",
+        "GET /api/v1/admin/costing/recipes/{id}",
+        "GET /api/v1/admin/costing/recipes/{id}/versions",
+        "GET/PUT /api/v1/admin/costing/recipes/{id}/versions/{revision}",
+        "GET /api/v1/admin/costing/recipes/{id}/estimate",
+        "GET /api/v1/admin/costing/recipe-reviews",
+        "/api/v1/admin/pricing/calculate",
+        "/api/v1/admin/pricing/proposals",
+        "/api/v1/admin/pricing/proposals/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Versioned SKU recipe library/editor, resource snapshots, confirmed cutting yield/waste, exact rational batch/per-output estimates with explicit rounding and incomplete states, derived dependency-review queue. 19 PostgreSQL recipe tests cover authorization/TOCTOU, exact arithmetic, immutable replay, concurrent edits, atomic rollback and reversible migration; 7 frontend tests cover DTO scope/recovery/private clearing; 16 intercepted browser workflows cover drafts, history, conflict/recovery, calculations, rate/dimension review, queue and Persian mobile. See docs/sku-recipes.md. Templates/inherited overrides, automatic geometric yield, price proposals/publication and production remain unfinished. Actual routes /admin/recipes and /admin/price-review extend the reference shell.",
+        "2026-10-19: Exact margin/fee/fixed-cost/rounding calculation, custom-price and discount preview, saved/revised/rejected proposals, stale dependency and current-price checks, affected-bundle review, explicit audited/idempotent publication and retained receipt recovery. Six database tests, three client checks and a real isolated fa/en desktop/mobile browser journey verify these paths. Group/family policies, full bundle proposals and integrated acceptance remain pending. See docs/price-proposals.md."
+      ]
     },
     {
       "id": "COST-10",
@@ -1265,12 +1498,18 @@
       "proposed_route": "/admin/pricing/reviews/:id",
       "required": true,
       "milestone": 3,
-      "status": "foundation",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "pricing.publish",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/pricing/calculate",
+        "/api/v1/admin/pricing/proposals",
+        "/api/v1/admin/pricing/proposals/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Exact margin/fee/fixed-cost/rounding calculation, custom-price and discount preview, saved/revised/rejected proposals, stale dependency and current-price checks, affected-bundle review, explicit audited/idempotent publication and retained receipt recovery. Six database tests, three client checks and a real isolated fa/en desktop/mobile browser journey verify these paths. Group/family policies, full bundle proposals and integrated acceptance remain pending. See docs/price-proposals.md."
+      ]
     },
     {
       "id": "OPS-01",
@@ -1278,12 +1517,18 @@
       "proposed_route": "/admin/inventory",
       "required": true,
       "milestone": 4,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "OperationsPage.tsx",
       "extension_pattern": null,
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/inventory",
+        "GET /api/v1/admin/inventory/choices/{kind}",
+        "GET /api/v1/admin/inventory/positions/{id}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18 integrated sandbox foundation: Recorded stock/value/available balances, named source choices, literal search, kind/low-stock filters. No fabricated opening stock. Reservations and purchase/production/checkout integrations remain pending. See docs/admin-sandbox-release.md. Entire integrated release remains incomplete."
+      ]
     },
     {
       "id": "OPS-02",
@@ -1291,12 +1536,22 @@
       "proposed_route": "/admin/inventory/:item/movements",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/inventory/positions/{id}/movements",
+        "GET/PUT /api/v1/admin/inventory/commands/{id}",
+        "GET /api/v1/admin/order-stock",
+        "GET /api/v1/admin/order-stock/{id}",
+        "GET /api/v1/admin/order-stock/{id}/events",
+        "GET|PUT /api/v1/admin/order-stock/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18 integrated sandbox foundation: Immutable physical movements and valuation, exact command recovery, moving-average outgoing costs and latest-movement linked reversals. Reservation tracking and source-document integrations remain pending. See docs/admin-sandbox-release.md. Entire integrated release remains incomplete.",
+        "2026-10-19: Schema 0043 connects checkout to aggregated physical stock, freezes actual selected bundle components, configurable expiry, definite-failure release, unknown/late outcomes, paid-shortage queue and versioned actor-owned staff recommit receipts. No historical backfill or shipment promise. Evidence: test_order_stock_postgres.py, concurrent test_discounts_postgres.py, order-stock client tests and isolated order-stock-live.spec.ts. See docs/order-stock-reservations.md; full fulfillment/policy/refund workflow remains pending."
+      ]
     },
     {
       "id": "OPS-03",
@@ -1304,12 +1559,16 @@
       "proposed_route": "/admin/inventory/adjustments/new",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET/PUT /api/v1/admin/inventory/commands/{id}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18 integrated sandbox foundation: Explicit opening/increase/decrease/threshold commands with reason, valuation, version checks, no negative available quantity and audited reversal. Historical backdated documents and broader source-document corrections remain pending. See docs/admin-sandbox-release.md. Entire integrated release remains incomplete."
+      ]
     },
     {
       "id": "OPS-04",
@@ -1317,12 +1576,30 @@
       "proposed_route": "/admin/suppliers",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/procurement/suppliers",
+        "GET /api/v1/admin/procurement/suppliers/{id}",
+        "GET /api/v1/admin/procurement/suppliers/{id}/versions",
+        "GET/PUT /api/v1/admin/procurement/suppliers/{id}/versions/{revision}",
+        "GET /api/v1/admin/procurement/suppliers/{id}/purchase-statement",
+        "GET /api/v1/admin/finance/suppliers/{id}/opening/settlement",
+        "GET /api/v1/admin/finance/suppliers/{id}/opening/settlements",
+        "GET /api/v1/admin/finance/supplier-balances",
+        "GET /api/v1/admin/finance/supplier-balances/export"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Reference-shell supplier/provider directory with optional contacts, archive/search/pagination, immutable history, idempotent save recovery and conflict review. 17 PostgreSQL checks, 7 frontend tests and 10 intercepted browser workflows, including Persian mobile. See docs/supplier-directory.md. Balances, purchases, independent payments, corrections and statements/exports remain unfinished.",
+        "2026-10-18: Paginated recorded purchase-liability statement after linked returns, with source-document links; explicitly excludes financial payments. See docs/purchase-workflow.md. Full supplier financial balances and exports remain pending.",
+        "2026-10-20: Read-only supplier financial statement integrates immutable purchase liability, cash allocations and corrections with exact totals, recording-date scope, stable pagination, independent finance access and CSV/XLSX exports. Opening supplier balance remains explicitly unconfigured. See supplier-financial-statements.md; full acceptance remains pending.",
+        "2026-10-20 / 0050: Explicit externally evidenced supplier opening debt/credit/zero confirmations, linked optimistic corrections, atomic audit/outbox and statement/export integration. No cash/stock mutation or existing-data backfill. Opening settlement and full acceptance remain pending; see supplier-opening-balances.md.",
+        "2026-10-20 / 0051: Shared cash-ledger opening debt payments and credit receipts, exact bounds, current opening/allocation/account proofs, uncertain receipt recovery, dependent linked reversals and statement integration. No purchase or stock changes; see supplier-opening-settlements.md. Full release acceptance remains pending.",
+        "2026-10-20: Combined current supplier balance report with separately recorded opening/purchase allocations, explicit unconfigured openings, gross confirmed debt/credit, archived identities, single-snapshot consistency, versioned pagination, independent CSV/XLSX export and statement/settlement source links. No migration. See supplier-balances-report.md; complete acceptance remains pending.",
+        "2026-10-20: Supplier balances now support historical Tehran recording-day cutoffs, date-bound snapshot pagination/exports, nullable not-yet-recorded openings, URL filter restore and matching statement cutoffs. Due-date aging remains pending; see supplier-balances-report.md."
+      ]
     },
     {
       "id": "OPS-05",
@@ -1330,12 +1607,19 @@
       "proposed_route": "/admin/purchases",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/procurement/purchases",
+        "GET /api/v1/admin/procurement/purchases/{id}",
+        "GET /api/v1/admin/procurement/purchases/{id}/events",
+        "GET/PUT /api/v1/admin/procurement/purchases/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Persisted drafts/posting, frozen invoice amounts, partial stock receipts, receipt-linked returns, cumulative exact allocation, moving-average valuation, source traceability, audited/idempotent commands and unknown-result recovery. PostgreSQL tests and isolated real database-backed browser journey cover draft → post → receive → return, stock and supplier statement. See docs/purchase-workflow.md. Financial payments, purchase-unit entry and full integrated release acceptance remain pending."
+      ]
     },
     {
       "id": "OPS-06",
@@ -1343,12 +1627,19 @@
       "proposed_route": "/admin/purchases/:id",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/procurement/purchases",
+        "GET /api/v1/admin/procurement/purchases/{id}",
+        "GET /api/v1/admin/procurement/purchases/{id}/events",
+        "GET/PUT /api/v1/admin/procurement/purchases/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Persisted drafts/posting, frozen invoice amounts, partial stock receipts, receipt-linked returns, cumulative exact allocation, moving-average valuation, source traceability, audited/idempotent commands and unknown-result recovery. PostgreSQL tests and isolated real database-backed browser journey cover draft → post → receive → return, stock and supplier statement. See docs/purchase-workflow.md. Financial payments, purchase-unit entry and full integrated release acceptance remain pending."
+      ]
     },
     {
       "id": "OPS-07",
@@ -1356,12 +1647,19 @@
       "proposed_route": "/admin/purchases/:id/receipts/new",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/procurement/purchases",
+        "GET /api/v1/admin/procurement/purchases/{id}",
+        "GET /api/v1/admin/procurement/purchases/{id}/events",
+        "GET/PUT /api/v1/admin/procurement/purchases/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Persisted drafts/posting, frozen invoice amounts, partial stock receipts, receipt-linked returns, cumulative exact allocation, moving-average valuation, source traceability, audited/idempotent commands and unknown-result recovery. PostgreSQL tests and isolated real database-backed browser journey cover draft → post → receive → return, stock and supplier statement. See docs/purchase-workflow.md. Financial payments, purchase-unit entry and full integrated release acceptance remain pending."
+      ]
     },
     {
       "id": "OPS-08",
@@ -1369,12 +1667,20 @@
       "proposed_route": "/admin/production",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/production",
+        "GET /api/v1/admin/production/recipe-choices",
+        "GET /api/v1/admin/production/{id}",
+        "GET /api/v1/admin/production/{id}/events",
+        "GET/PUT /api/v1/admin/production/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Version-pinned production drafts/start, actual material issues/returns, explicit service totals, recorded WIP, QC healthy output, normal waste, abnormal loss and finished stock transfer, cancellation/write-off, immutable commands and uncertain-result recovery. PostgreSQL tests and real isolated purchase-to-production browser journey verify persisted behavior and duplicate protection. See docs/production-workflow.md. Scheduling/parent-order splits, print consumption, finance and full integrated release remain pending."
+      ]
     },
     {
       "id": "OPS-09",
@@ -1382,12 +1688,20 @@
       "proposed_route": "/admin/production/:id",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/production",
+        "GET /api/v1/admin/production/recipe-choices",
+        "GET /api/v1/admin/production/{id}",
+        "GET /api/v1/admin/production/{id}/events",
+        "GET/PUT /api/v1/admin/production/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Version-pinned production drafts/start, actual material issues/returns, explicit service totals, recorded WIP, QC healthy output, normal waste, abnormal loss and finished stock transfer, cancellation/write-off, immutable commands and uncertain-result recovery. PostgreSQL tests and real isolated purchase-to-production browser journey verify persisted behavior and duplicate protection. See docs/production-workflow.md. Scheduling/parent-order splits, print consumption, finance and full integrated release remain pending."
+      ]
     },
     {
       "id": "OPS-10",
@@ -1395,12 +1709,20 @@
       "proposed_route": "/admin/production/:id/qc",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/production",
+        "GET /api/v1/admin/production/recipe-choices",
+        "GET /api/v1/admin/production/{id}",
+        "GET /api/v1/admin/production/{id}/events",
+        "GET/PUT /api/v1/admin/production/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18: Version-pinned production drafts/start, actual material issues/returns, explicit service totals, recorded WIP, QC healthy output, normal waste, abnormal loss and finished stock transfer, cancellation/write-off, immutable commands and uncertain-result recovery. PostgreSQL tests and real isolated purchase-to-production browser journey verify persisted behavior and duplicate protection. See docs/production-workflow.md. Scheduling/parent-order splits, print consumption, finance and full integrated release remain pending."
+      ]
     },
     {
       "id": "OPS-11",
@@ -1408,12 +1730,20 @@
       "proposed_route": "/admin/waste",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "OperationsPage.tsx",
       "read_permission": "inventory.manage",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET/PUT /api/v1/admin/inventory/commands/{id}",
+        "GET /api/v1/admin/inventory/waste",
+        "GET /api/v1/admin/production?losses=true"
+      ],
+      "acceptance_evidence": [
+        "2026-10-18 integrated sandbox foundation: Recorded stock waste/damage using current weighted-average valuation and immutable movement history. Production QC and normal/abnormal expense allocation remain pending. See docs/admin-sandbox-release.md. Entire integrated release remains incomplete.",
+        "2026-10-18: Production waste and abnormal damage are recorded in immutable QC/cancellation events and filterable at /admin/production/losses under production.manage. Existing stock-only waste uses inventory adjustments. Cross-domain waste reports and full financial integration remain pending. See docs/production-workflow.md.",
+        "2026-10-18: /admin/waste and /admin/inventory/waste show persisted stock write-offs, source item history and linked reversal status under inventory.manage. Production losses require production.manage independently; zero-value physical write-offs remain visible. Tests verify reversal preservation, search, permissions and the real demo waste view. Complete cross-domain financial reporting remains pending."
+      ]
     },
     {
       "id": "FIN-01",
@@ -1421,12 +1751,16 @@
       "proposed_route": "/admin/finance",
       "required": true,
       "milestone": 8,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "FinancePage.tsx",
       "extension_pattern": null,
       "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/finance"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Recorded account overview and permission-filtered finance navigation; consolidated revenue, gateway, customer/artist obligations and actionable cross-domain dashboard queues remain pending. Evidence: Backend/tests/test_operational_finance_postgres.py, Frontend/tests/finance-api.test.tsx and isolated Frontend/tests/e2e/finance-live.spec.ts; see docs/finance-workflow.md."
+      ]
     },
     {
       "id": "FIN-02",
@@ -1434,12 +1768,16 @@
       "proposed_route": "/admin/finance/movements",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "FinancePage.tsx",
       "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/finance"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Immutable staff-recorded receipts/payments, atomic transfers, reasoned linked reversals, account versions and exact operation recovery; uploaded private supporting files and external adapters remain pending. Evidence: Backend/tests/test_operational_finance_postgres.py, Frontend/tests/finance-api.test.tsx and isolated Frontend/tests/e2e/finance-live.spec.ts; see docs/finance-workflow.md."
+      ]
     },
     {
       "id": "FIN-03",
@@ -1447,12 +1785,16 @@
       "proposed_route": "/admin/finance/accounts",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "FinancePage.tsx",
       "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/finance"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Explicit dated opening balances, cash/bank account metadata, exact balances, independent permissions and nonnegative cash; no historical balances invented. Multi-currency configuration remains pending. Evidence: Backend/tests/test_operational_finance_postgres.py, Frontend/tests/finance-api.test.tsx and isolated Frontend/tests/e2e/finance-live.spec.ts; see docs/finance-workflow.md."
+      ]
     },
     {
       "id": "FIN-04",
@@ -1460,12 +1802,16 @@
       "proposed_route": "/admin/finance/expenses",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "FinancePage.tsx",
       "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/finance"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Categorized expenses, references, linked corrections and cash-flow attribution; supporting file upload remains pending. Evidence: Backend/tests/test_operational_finance_postgres.py, Frontend/tests/finance-api.test.tsx and isolated Frontend/tests/e2e/finance-live.spec.ts; see docs/finance-workflow.md."
+      ]
     },
     {
       "id": "FIN-05",
@@ -1473,12 +1819,25 @@
       "proposed_route": "/admin/finance/balances",
       "required": true,
       "milestone": 4,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "FinancePage.tsx",
       "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/finance",
+        "GET /api/v1/admin/finance/suppliers/{id}/opening/settlement",
+        "GET /api/v1/admin/finance/suppliers/{id}/opening/settlements",
+        "GET /api/v1/admin/finance/supplier-balances",
+        "GET /api/v1/admin/finance/supplier-balances/export"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Purchase-linked partial supplier payments/refunds and credit after purchase returns, bounded against current liability; customer/gateway/artist obligations and consolidated supplier statements remain pending. Evidence: Backend/tests/test_operational_finance_postgres.py, Frontend/tests/finance-api.test.tsx and isolated Frontend/tests/e2e/finance-live.spec.ts; see docs/finance-workflow.md.",
+        "2026-10-20: Read-only supplier financial statement integrates immutable purchase liability, cash allocations and corrections with exact totals, recording-date scope, stable pagination, independent finance access and CSV/XLSX exports. Opening supplier balance remains explicitly unconfigured. See supplier-financial-statements.md; full acceptance remains pending.",
+        "2026-10-20 / 0050: Explicit externally evidenced supplier opening debt/credit/zero confirmations, linked optimistic corrections, atomic audit/outbox and statement/export integration. No cash/stock mutation or existing-data backfill. Opening settlement and full acceptance remain pending; see supplier-opening-balances.md.",
+        "2026-10-20 / 0051: Shared cash-ledger opening debt payments and credit receipts, exact bounds, current opening/allocation/account proofs, uncertain receipt recovery, dependent linked reversals and statement integration. No purchase or stock changes; see supplier-opening-settlements.md. Full release acceptance remains pending.",
+        "2026-10-20: Combined current supplier balance report with separately recorded opening/purchase allocations, explicit unconfigured openings, gross confirmed debt/credit, archived identities, single-snapshot consistency, versioned pagination, independent CSV/XLSX export and statement/settlement source links. No migration. See supplier-balances-report.md; complete acceptance remains pending.",
+        "2026-10-20: Supplier balances now support historical Tehran recording-day cutoffs, date-bound snapshot pagination/exports, nullable not-yet-recorded openings, URL filter restore and matching statement cutoffs. Due-date aging remains pending; see supplier-balances-report.md."
+      ]
     },
     {
       "id": "FIN-06",
@@ -1486,12 +1845,20 @@
       "proposed_route": "/admin/finance/payments",
       "required": true,
       "milestone": 5,
-      "status": "missing",
-      "reference_component": null,
+      "status": "connected_partial",
+      "reference_component": "PaymentsPanel.tsx",
       "extension_pattern": "FinancePage.tsx",
-      "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "payments.read",
+      "api_contracts": [
+        "GET /api/v1/admin/payments",
+        "GET /api/v1/admin/payments/{id}/inquiries",
+        "GET|PUT /api/v1/admin/payments/{id}/inquiries/{key}"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Recorded sandbox payments, independent read/write permissions, reasoned versioned gateway inquiry, immutable actor-owned receipts, idempotent replay and unknown-result recovery. Finance route alias and order-detail integration. See docs/payment-inquiries.md. Refunds, settlement and background inquiry remain pending.",
+        "2026-10-20 / 0049: Explicit no-payment financial closure against a fresh rejected inquiry, immutable receipts, safe retries and reopening on later uncertain/successful verification; no stock or money movement. See cancellation-financial-closure.md and test_financial_closures_postgres.py. Complete release acceptance remains pending.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "FIN-07",
@@ -1512,12 +1879,30 @@
       "proposed_route": "/admin/finance/refunds",
       "required": true,
       "milestone": 6,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "FinancePage.tsx",
-      "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "payments.read",
+      "api_contracts": [
+        "GET /api/v1/admin/refunds",
+        "POST /api/v1/admin/refunds/quotes",
+        "GET|PUT /api/v1/admin/refunds/commands/{key}",
+        "GET /api/v1/account/orders/{id}/refunds",
+        "GET /api/v1/admin/order-requests/{id}/cancellation-plan",
+        "GET|PUT /api/v1/admin/order-requests/{id}/cancellations/{key}"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_refunds_postgres.py",
+        "Frontend/tests/refunds-api.test.tsx",
+        "Frontend/tests/e2e/refunds-live.spec.ts",
+        "docs/refunds-workflow.md",
+        "Backend/tests/test_cancellations_postgres.py",
+        "Frontend/tests/e2e/cancellations-live.spec.ts",
+        "docs/cancellation-workflow.md",
+        "2026-10-20: Approved unpaid/unknown sandbox cancellation releases stock independently of reconciliation. Late success preserves cancellation and original-allocation refund eligibility, without stock recommit. See cancellation-workflow.md and test_cancellations_postgres.py. No-payment financial closure and full release acceptance remain pending.",
+        "2026-10-20 / 0049: Explicit no-payment financial closure against a fresh rejected inquiry, immutable receipts, safe retries and reopening on later uncertain/successful verification; no stock or money movement. See cancellation-financial-closure.md and test_financial_closures_postgres.py. Complete release acceptance remains pending.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "FIN-09",
@@ -1538,12 +1923,16 @@
       "proposed_route": "/admin/reports/cashflow",
       "required": true,
       "milestone": 8,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "FinancePage.tsx",
       "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/finance"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Date-filtered recorded cash flow excludes openings/internal transfers, includes linked corrections at their own dates and shows net operating expenses; complete downstream integration remains pending. Evidence: Backend/tests/test_operational_finance_postgres.py, Frontend/tests/finance-api.test.tsx and isolated Frontend/tests/e2e/finance-live.spec.ts; see docs/finance-workflow.md."
+      ]
     },
     {
       "id": "FIN-11",
@@ -1551,12 +1940,17 @@
       "proposed_route": "/admin/reports/inventory",
       "required": true,
       "milestone": 8,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "FinancePage.tsx",
       "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "/api/v1/admin/reports/{report}",
+        "/api/v1/admin/reports/{report}/export"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Historical recorded inventory valuation, unit-separated totals, configured low-stock, source movement/warehouse waste and reversal history, pinned production estimates versus actual WIP/QC/normal and abnormal waste, source links, full-filter pagination and CSV/XLSX are connected. Reservation history and official downstream sales/fulfillment integration remain pending. See docs/operational-reporting.md; evidence: Backend/tests/test_operational_reports_postgres.py, Frontend/tests/reports-api.test.tsx, operational-summary.test.tsx and isolated reports-live.spec.ts."
+      ]
     },
     {
       "id": "FIN-12",
@@ -1564,12 +1958,28 @@
       "proposed_route": "/admin/finance/export",
       "required": true,
       "milestone": 8,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "FinancePage.tsx",
       "extension_pattern": null,
-      "read_permission": "finance.read",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "finance.export",
+      "api_contracts": [
+        "/api/v1/admin/finance",
+        "/api/v1/admin/reports/{report}",
+        "/api/v1/admin/reports/{report}/export",
+        "GET /api/v1/admin/finance/suppliers/{id}/opening/settlement",
+        "GET /api/v1/admin/finance/suppliers/{id}/opening/settlements",
+        "GET /api/v1/admin/finance/supplier-balances",
+        "GET /api/v1/admin/finance/supplier-balances/export"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Independent finance.export CSV for bounded explicit date ranges, source IDs/currency/filter/reversal links and formula-safe text. XLSX and other domain exports remain pending. Evidence: Backend/tests/test_operational_finance_postgres.py, Frontend/tests/finance-api.test.tsx and isolated Frontend/tests/e2e/finance-live.spec.ts; see docs/finance-workflow.md.",
+        "2026-10-19: Protected CSV/XLSX now covers recorded financial documents and inventory/movement/production/warehouse-waste reports with exact decimal text, full filters, source/correction IDs and bounded ranges. Other domain exports and complete accounting handoff remain pending. See docs/operational-reporting.md; evidence: Backend/tests/test_operational_reports_postgres.py, Frontend/tests/reports-api.test.tsx, operational-summary.test.tsx and isolated reports-live.spec.ts.",
+        "2026-10-20: Read-only supplier financial statement integrates immutable purchase liability, cash allocations and corrections with exact totals, recording-date scope, stable pagination, independent finance access and CSV/XLSX exports. Opening supplier balance remains explicitly unconfigured. See supplier-financial-statements.md; full acceptance remains pending.",
+        "2026-10-20 / 0050: Explicit externally evidenced supplier opening debt/credit/zero confirmations, linked optimistic corrections, atomic audit/outbox and statement/export integration. No cash/stock mutation or existing-data backfill. Opening settlement and full acceptance remain pending; see supplier-opening-balances.md.",
+        "2026-10-20 / 0051: Shared cash-ledger opening debt payments and credit receipts, exact bounds, current opening/allocation/account proofs, uncertain receipt recovery, dependent linked reversals and statement integration. No purchase or stock changes; see supplier-opening-settlements.md. Full release acceptance remains pending.",
+        "2026-10-20: Combined current supplier balance report with separately recorded opening/purchase allocations, explicit unconfigured openings, gross confirmed debt/credit, archived identities, single-snapshot consistency, versioned pagination, independent CSV/XLSX export and statement/settlement source links. No migration. See supplier-balances-report.md; complete acceptance remains pending.",
+        "2026-10-20: Supplier balances now support historical Tehran recording-day cutoffs, date-bound snapshot pagination/exports, nullable not-yet-recorded openings, URL filter restore and matching statement cutoffs. Due-date aging remains pending; see supplier-balances-report.md."
+      ]
     },
     {
       "id": "ORDER-01",
@@ -1577,12 +1987,25 @@
       "proposed_route": "/admin/orders",
       "required": true,
       "milestone": 5,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "OrdersPage.tsx",
       "extension_pattern": null,
       "read_permission": "orders.read_all",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/orders (q, payment, fulfillment, cursor)",
+        "GET /api/v1/admin/orders/{id}",
+        "GET /api/v1/admin/order-stock",
+        "GET /api/v1/admin/order-stock/{id}",
+        "GET /api/v1/admin/order-stock/{id}/events",
+        "GET|PUT /api/v1/admin/order-stock/{id}/commands/{key}"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_orders_postgres.py",
+        "Frontend/tests/e2e/admin-orders.spec.ts",
+        "Read-only stored order snapshots, search/status pagination, exact money and private details; fulfillment/refund workflows remain unfinished.",
+        "2026-10-19: Schema 0043 connects checkout to aggregated physical stock, freezes actual selected bundle components, configurable expiry, definite-failure release, unknown/late outcomes, paid-shortage queue and versioned actor-owned staff recommit receipts. No historical backfill or shipment promise. Evidence: test_order_stock_postgres.py, concurrent test_discounts_postgres.py, order-stock client tests and isolated order-stock-live.spec.ts. See docs/order-stock-reservations.md; full fulfillment/policy/refund workflow remains pending.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "ORDER-02",
@@ -1590,12 +2013,41 @@
       "proposed_route": "/admin/orders/:id",
       "required": true,
       "milestone": 5,
-      "status": "prototype",
+      "status": "connected_partial",
       "reference_component": "OrdersPage.tsx",
       "extension_pattern": null,
       "read_permission": "orders.read_all",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/orders (q, payment, fulfillment, cursor)",
+        "GET /api/v1/admin/orders/{id}",
+        "GET /api/v1/admin/order-requests (order_id, cursor)",
+        "GET /api/v1/admin/order-stock",
+        "GET /api/v1/admin/order-stock/{id}",
+        "GET /api/v1/admin/order-stock/{id}/events",
+        "GET|PUT /api/v1/admin/order-stock/{id}/commands/{key}",
+        "GET /api/v1/admin/order-requests/{id}/cancellation-plan",
+        "GET|PUT /api/v1/admin/order-requests/{id}/cancellations/{key}",
+        "GET /api/v1/admin/order-stock/{id}/resolution-plan",
+        "GET|PUT /api/v1/admin/order-stock/{id}/resolution-reviews/{key}"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_orders_postgres.py",
+        "Frontend/tests/e2e/admin-orders.spec.ts",
+        "Read-only stored order snapshots, search/status pagination, exact money and private details; fulfillment/refund workflows remain unfinished.",
+        "2026-10-17: Cancellation/return review can explicitly load protected saved order context: item names/SKUs/options, ordered/delivered/requested counts, delivery type and original returnability. Unknown request lines are rejected; saved-order navigation guards reply drafts. Real return inspection/refund/fulfillment remain unfinished.",
+        "2026-10-17: Persistent /admin/order-requests/{id} review URLs with direct protected read/reload, failure retry, read-only messaging and guarded return to queue. Frontend/tests/e2e/order-review.spec.ts and order-review-panel.test.tsx. Real return inspection/refund/fulfillment remain unfinished.",
+        "2026-10-17: Saved order details explicitly load only that order's cancellation/return requests, reject cross-order results, page/retry and open persistent review URLs. Request controls are absent from saved receipts, including trailing-slash URLs. Actual fulfillment/refunds/inspection remain unfinished.",
+        "2026-10-19: Schema 0043 connects checkout to aggregated physical stock, freezes actual selected bundle components, configurable expiry, definite-failure release, unknown/late outcomes, paid-shortage queue and versioned actor-owned staff recommit receipts. No historical backfill or shipment promise. Evidence: test_order_stock_postgres.py, concurrent test_discounts_postgres.py, order-stock client tests and isolated order-stock-live.spec.ts. See docs/order-stock-reservations.md; full fulfillment/policy/refund workflow remains pending.",
+        "Backend/tests/test_cancellations_postgres.py",
+        "Frontend/tests/e2e/cancellations-live.spec.ts",
+        "docs/cancellation-workflow.md",
+        "Backend/tests/test_stock_resolution_reviews_postgres.py",
+        "Frontend/tests/e2e/stock-resolution-live.spec.ts",
+        "docs/stock-resolution-reviews.md",
+        "2026-10-20: Approved unpaid/unknown sandbox cancellation releases stock independently of reconciliation. Late success preserves cancellation and original-allocation refund eligibility, without stock recommit. See cancellation-workflow.md and test_cancellations_postgres.py. No-payment financial closure and full release acceptance remain pending.",
+        "2026-10-20 / 0049: Explicit no-payment financial closure against a fresh rejected inquiry, immutable receipts, safe retries and reopening on later uncertain/successful verification; no stock or money movement. See cancellation-financial-closure.md and test_financial_closures_postgres.py. Complete release acceptance remains pending.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "ORDER-03",
@@ -1603,12 +2055,24 @@
       "proposed_route": "/admin/shipments/:id",
       "required": true,
       "milestone": 6,
-      "status": "missing",
-      "reference_component": null,
+      "status": "connected_partial",
+      "reference_component": "ShipmentsPanel.tsx",
       "extension_pattern": "AdminDashboard.tsx",
-      "read_permission": "orders.read_all",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "fulfillment.manage",
+      "api_contracts": [
+        "GET /api/v1/admin/fulfillment/orders",
+        "GET /api/v1/admin/fulfillment/orders/{id}",
+        "GET /api/v1/admin/fulfillment/shipments",
+        "GET /api/v1/admin/fulfillment/shipments/{id}",
+        "GET /api/v1/admin/fulfillment/shipments/{id}/events",
+        "GET|PUT /api/v1/admin/fulfillment/shipments/{id}/commands/{key}",
+        "GET /api/v1/account/orders/{id}/shipments"
+      ],
+      "acceptance_evidence": [
+        "2026-10-19: Schema 0044 adds draft/edit/pick/QC failure/packing/partial dispatch/delivery, tracking corrections, labels, actual weighted inventory cost, shipment-level idempotent receipts, owned customer tracking and notices. Dispatch consumes actual frozen bundle components once. Legacy/custom print missing identities are blocked. See fulfillment-workflow.md; full return/refund/custom print/policy/profit integration remains pending.",
+        "2026-10-20: Approved unpaid/unknown sandbox cancellation releases stock independently of reconciliation. Late success preserves cancellation and original-allocation refund eligibility, without stock recommit. See cancellation-workflow.md and test_cancellations_postgres.py. No-payment financial closure and full release acceptance remain pending.",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "ORDER-04",
@@ -1616,12 +2080,21 @@
       "proposed_route": "/admin/returns/:id",
       "required": true,
       "milestone": 6,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
       "read_permission": "orders.read_all",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "api_contracts": [
+        "GET /api/v1/admin/order-requests/{id}/return-plan",
+        "GET|PUT /api/v1/admin/order-requests/{id}/inspections/{key}",
+        "GET /api/v1/account/requests/{id}/inspections"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_return_inspections_postgres.py",
+        "Frontend/tests/return-inspections-api.test.tsx",
+        "docs/return-inspections.md",
+        "2026-10-21:0054 managed original/print/licensed artwork authoring, settings-backed accepted checkout, frozen policy/license/financial terms, digital/mixed stock separation and protected delivery, proportional tax/shipping refund bounds. Three real isolated browser journeys and automated suites passed. See docs/artwork-checkout-integration.md. Final integrated acceptance remains pending."
+      ]
     },
     {
       "id": "ORDER-05",
@@ -1629,12 +2102,23 @@
       "proposed_route": "/admin/commissions/reviews",
       "required": true,
       "milestone": 7,
-      "status": "foundation",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
-      "read_permission": "orders.read_all",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "commissions.manage",
+      "api_contracts": [
+        "GET /api/v1/admin/commissions (q, status, cursor)",
+        "GET /api/v1/admin/commissions/{id}",
+        "PUT /api/v1/admin/commissions/{id}/artwork/{artwork_id}",
+        "GET /api/v1/admin/commissions/{id}/artwork/{artwork_id}/preview"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_commission_reviews_postgres.py",
+        "Frontend/tests/e2e/commission-publishing.spec.ts",
+        "Frontend/tests/commission-publishing-api.test.tsx",
+        "Frontend/tests/commission-publishing.test.tsx",
+        "Protected global queue and private PNG publication with draft/unknown-write guards; assignment and complete operational acceptance remain unfinished."
+      ]
     },
     {
       "id": "ORDER-06",
@@ -1642,12 +2126,27 @@
       "proposed_route": "/admin/support",
       "required": true,
       "milestone": 6,
-      "status": "missing",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
-      "read_permission": "orders.read_all",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "support.manage",
+      "api_contracts": [
+        "GET /api/v1/admin/customer/tickets",
+        "GET /api/v1/admin/customer/tickets/{id}",
+        "GET /api/v1/admin/customer/tickets/{id}/messages (cursor or request_id lookup)",
+        "POST /api/v1/admin/customer/tickets/{id}/reply",
+        "PUT /api/v1/admin/customer/tickets/{id}/state (version, status, audit reason)",
+        "GET /api/v1/admin/customer/tickets/{id}/audits"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_customer_panel_postgres.py",
+        "Frontend/tests/e2e/admin-support.spec.ts",
+        "Bilingual inbox/conversations, idempotent replies, uncertain receipt recovery, unsaved navigation guard; attachments and wider workflow acceptance remain outstanding.",
+        "2026-10-14: Staff close/reopen, required audited reason, optimistic version, unknown-write reload guard; assignments/priorities/attachments remain outstanding.",
+        "2026-10-14: Server status filter before pagination; bilingual status selector, guarded view changes and matching-row refresh.",
+        "2026-10-14: Staff action history, cursor pagination/retry, session/version clearing; Frontend/tests/support-history.test.tsx and admin-support.spec.ts.",
+        "2026-10-14: Subject search with status/cursor, literal wildcard handling, Persian search, explicit submit/clear and draft navigation guards."
+      ]
     },
     {
       "id": "ORDER-07",
@@ -1655,12 +2154,22 @@
       "proposed_route": "/admin/audit",
       "required": true,
       "milestone": 6,
-      "status": "foundation",
+      "status": "connected_partial",
       "reference_component": null,
       "extension_pattern": "AdminDashboard.tsx",
-      "read_permission": "orders.read_all",
-      "api_contracts": [],
-      "acceptance_evidence": []
+      "read_permission": "identity.manage",
+      "api_contracts": [
+        "GET /api/v1/admin/identity/audits (q, action, account_id, actor_id, date_from, date_to, cursor)"
+      ],
+      "acceptance_evidence": [
+        "Backend/tests/test_identity_management_postgres.py",
+        "Frontend/tests/admin-activity.test.tsx",
+        "Frontend/tests/e2e/admin-activity.spec.ts",
+        "Protected recorded account/support/order actions overview at /admin/activity and /admin/audit; full cross-domain audit aggregation and detailed change views remain unfinished.",
+        "2026-10-14: Combined staff actor/account/reason filtering before pagination; scoped cursor validation, UUID validation and session filter clearing.",
+        "2026-10-17: Inclusive Tehran-day date range combined with actor/account/search, scoped cursor validation, invalid range checks and session-cleared date inputs.",
+        "2026-10-17: Exact action filtering, combined with existing scopes, curated bilingual action selector, explicit search/clear, scoped cursor validation and session clearing."
+      ]
     },
     {
       "id": "SYS-01",

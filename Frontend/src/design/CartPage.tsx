@@ -447,7 +447,7 @@ export default function CartPage({
             <aside className="cart-summary-column">
               <section className="cart-coupon">
                 <h2>{t("کد تخفیف دارید؟", "Have a discount code?")}</h2>
-                <form onSubmit={applyCode}>
+                {!live&&<form onSubmit={applyCode}>
                   <label htmlFor="cart-coupon-input">
                     {t("کد تخفیف", "Discount code")}
                   </label>
@@ -484,9 +484,10 @@ export default function CartPage({
                         : t("اعمال کد", "Apply code")}
                     </button>
                   </div>
-                </form>
+                </form>}
+                {live&&<button className="button secondary" disabled={!live.checkout||offline||updating} onClick={()=>live.checkout?.()}>{t("اعمال کد در پرداخت","Apply code at checkout")}</button>}
                 <p id="cart-code-demo" className="coupon-demo-note">
-                  {live?t("کدهای تخفیف هنوز فعال نشده‌اند.","Discount codes are not available yet."):t("کد نمونه NILART10 فقط برای تست رابط است.","NILART10 is a demo code for testing this interface.")}
+                  {live?t("کد تخفیف را در مرحله پرداخت بررسی و اعمال کنید؛ مبلغ از قیمت‌های جاری سبد محاسبه می‌شود.","Check and apply your code at checkout using the current basket prices."):t("کد نمونه NILART10 فقط برای تست رابط است.","NILART10 is a demo code for testing this interface.")}
                 </p>
                 <p className="coupon-demo-note">
                   {t(

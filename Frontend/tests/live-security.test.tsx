@@ -3,11 +3,13 @@ import {afterEach,expect,test,vi} from "vitest"
 import SecurityPage from "../src/design/SecurityPage"
 import type {LiveSecurityApi} from "../src/features/identity/security"
 afterEach(cleanup)
-test("reference security form uses live password callback and displays actual sessions",async()=>{
+test("reference security form uses live password callback without session management",async()=>{
  const change=vi.fn().mockResolvedValue({reauthenticate:true})
- const api={load:vi.fn().mockResolvedValue({owner:"test-owner",sandboxSms:false,passwordEnabled:true,otpEnabled:false,phoneVerified:true,maskedPhone:"+9891••••6789",canChange:true,minimum:12,sessionPolicy:"all-sessions",sessionsEnabled:true,canManageSessions:true,sessions:[{id:"session-id",current:true,device:["نشست حساب","Account session"],lastActivity:"2026-10-13T10:00:00Z"}]}),change,revoke:vi.fn(),subscribe:()=>()=>{},registerPrivateCache:()=>()=>{}} as unknown as LiveSecurityApi
+ const api={load:vi.fn().mockResolvedValue({owner:"test-owner",sandboxSms:false,passwordEnabled:true,otpEnabled:false,phoneVerified:true,maskedPhone:"+9891••••6789",canChange:true,minimum:12,sessionPolicy:"all-sessions"}),change,subscribe:()=>()=>{},registerPrivateCache:()=>()=>{}} as unknown as LiveSecurityApi
  render(<SecurityPage page="/en/account/security" navigate={vi.fn()} liveApi={api}/>)
- await screen.findByText("Current session")
+ await screen.findByLabelText("Current password")
+ expect(screen.queryByText("Account sessions")).toBeNull()
+ expect(screen.queryByRole("button",{name:"Sign out other sessions"})).toBeNull()
  expect(screen.queryByText("Preview states")).toBeNull()
  expect(document.querySelector(".dash-alert-dot")).toBeNull()
  fireEvent.change(screen.getByLabelText("Current password"),{target:{value:"a current passphrase"}})

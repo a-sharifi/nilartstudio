@@ -1,7 +1,8 @@
 import hmac
+from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Query, Request
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -42,6 +43,66 @@ class SKUAuthoringOutput(BaseModel):
     code: str
     published: bool
     version: int
+
+
+class SKUAuditOutput(BaseModel):
+    id: UUID
+    sku_id: UUID
+    product_id: UUID
+    actor_id: UUID
+    previous_version: int
+    version: int
+    created_at: datetime
+    before: dict | None
+    after: dict
+
+
+class SKUAuditPage(BaseModel):
+    items: list[SKUAuditOutput]
+    next_before_version: int | None
+
+
+@router.get("/skus/{sku_id}/audits", response_model=SKUAuditPage)
+def sku_history(sku_id: UUID, request: Request,
+                before_version: int | None = Query(default=None, ge=1, le=2147483647),
+                limit: int = Query(default=20, ge=1, le=100),
+                db: Session = Depends(session_dependency),
+                principal: Principal = Depends(require_permission("catalog.manage"))):
+    try:
+        return SqlSKUAuthoringRepository(db).audits(sku_id, before_version, limit)
+    except SKUAuthoringError as exc:
+        return failure(request, str(exc), 404)
+
+
+class SKUPublication(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    version: int = Field(ge=0, le=2147483646, strict=True)
+    published: bool = Field(strict=True)
+    reason: str = Field(min_length=1, max_length=1000, strict=True)
+
+    @model_validator(mode="after")
+    def valid_reason(self):
+        self.reason = self.reason.strip()
+        if not self.reason or any(ord(c) < 32 for c in self.reason):
+            raise ValueError("A nonblank reason without control characters is required")
+        return self
+
+
+@router.post("/skus/{sku_id}/publication", response_model=SKUAuthoringOutput)
+def publish_sku(sku_id: UUID, body: SKUPublication, request: Request,
+                db: Session = Depends(session_dependency),
+                principal: Principal = Depends(require_permission("catalog.manage"))):
+    account, denied = write_access(request, db, principal)
+    if denied is not None:
+        return denied
+    try:
+        result = SqlSKUAuthoringRepository(db).publication(
+            sku_id, account.id, body.version, body.published, body.reason)
+    except SKUAuthoringError as exc:
+        db.rollback()
+        return failure(request, str(exc), 404 if str(exc) == "sku_not_found" else 409)
+    db.commit()
+    return result
 
 
 def write_access(request, db, principal):

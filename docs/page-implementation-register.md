@@ -70,62 +70,62 @@
 | ART-05 | اجرای سفارش / Production Workspace | 7 | missing | ArtistDashboard.tsx |
 | ART-06 | سوابق هنرمند / Artist History | 7 | missing | ArtistDashboard.tsx |
 | ART-07 | پروفایل و تنظیمات هنرمند / Artist Profile | 7 | missing | ArtistDashboard.tsx |
-| ADM-01 | داشبورد ادمین / Admin Dashboard | 8 | prototype | AdminDashboard.tsx |
-| ADM-02 | مدیریت کالکشن / Collections Admin | 2 | missing | AdminDashboard.tsx |
-| ADM-03 | مدیریت دسته / Categories Admin | 2 | missing | AdminDashboard.tsx |
-| ADM-04 | فهرست محصولات / Products Admin | 2 | missing | AdminDashboard.tsx |
-| ADM-05 | فرم محصول / Product Editor | 2 | missing | AdminDashboard.tsx |
-| ADM-06 | گزینه‌ها و SKU / Variant Matrix | 2 | foundation | AdminDashboard.tsx |
-| ADM-07 | مدیریت پکیج / Bundles Admin | 2 | missing | AdminDashboard.tsx |
+| ADM-01 | داشبورد ادمین / Admin Dashboard | 8 | connected_partial | AdminDashboard.tsx |
+| ADM-02 | مدیریت کالکشن / Collections Admin | 2 | connected_partial | AdminDashboard.tsx |
+| ADM-03 | مدیریت دسته / Categories Admin | 2 | connected_partial | AdminDashboard.tsx |
+| ADM-04 | فهرست محصولات / Products Admin | 2 | connected_partial | AdminDashboard.tsx |
+| ADM-05 | فرم محصول / Product Editor | 2 | connected_partial | AdminDashboard.tsx |
+| ADM-06 | گزینه‌ها و SKU / Variant Matrix | 2 | connected_partial | AdminDashboard.tsx |
+| ADM-07 | مدیریت پکیج / Bundles Admin | 2 | connected_partial | AdminDashboard.tsx |
 | ADM-08 | فرم پکیج / Bundle Editor | 2 | missing | AdminDashboard.tsx |
-| ADM-09 | کدهای تخفیف / Discounts Admin | 5 | missing | AdminDashboard.tsx |
-| ADM-10 | فرم کد تخفیف / Discount Editor | 5 | missing | AdminDashboard.tsx |
-| ADM-11 | رسانه و فایل چاپ / Media Library | 2 | missing | AdminDashboard.tsx |
-| ADM-12 | آثار نقاشی / Artwork Admin | 2 | missing | AdminDashboard.tsx |
+| ADM-09 | کدهای تخفیف / Discounts Admin | 5 | connected_partial | AdminDashboard.tsx |
+| ADM-10 | فرم کد تخفیف / Discount Editor | 5 | connected_partial | AdminDashboard.tsx |
+| ADM-11 | رسانه و فایل چاپ / Media Library | 2 | connected_partial | AdminDashboard.tsx |
+| ADM-12 | آثار نقاشی / Artwork Admin | 2 | connected_partial | AdminDashboard.tsx |
 | ADM-13 | کاربران و دسترسی / Users & Roles | 1 | connected_partial | AdminDashboard.tsx |
-| ADM-14 | هنرمندان / Artists Admin | 2 | missing | AdminDashboard.tsx |
-| ADM-15 | محتوا و پشتیبانی / Content Admin | 2 | missing | AdminDashboard.tsx |
-| ADM-16 | تنظیمات کسب‌وکار / Business Settings | 2 | missing | AdminDashboard.tsx |
-| COST-01 | فهرست مواد / Materials | 3 | missing | AdminDashboard.tsx |
-| COST-02 | تعریف ماده و تبدیل واحد / Material Editor | 3 | missing | AdminDashboard.tsx |
-| COST-03 | نرخ خدمات / Service Rates | 3 | missing | AdminDashboard.tsx |
-| COST-04 | فرمول‌های ساخت / BOM Library | 3 | missing | AdminDashboard.tsx |
-| COST-05 | ویرایش فرمول ساخت / BOM Editor | 3 | missing | AdminDashboard.tsx |
-| COST-06 | بازده برش و ضایعات / Cutting Yield | 3 | missing | AdminDashboard.tsx |
-| COST-07 | محاسبه‌گر هزینه SKU / SKU Cost Calculator | 3 | missing | AdminDashboard.tsx |
-| COST-08 | قیمت پیشنهادی SKU / Price Proposal | 3 | foundation | AdminDashboard.tsx |
-| COST-09 | صف بازبینی قیمت / Price Review Queue | 3 | missing | AdminDashboard.tsx |
-| COST-10 | تأیید انتشار و تاریخچه / Price Publication | 3 | foundation | AdminDashboard.tsx |
-| OPS-01 | نمای انبار / Inventory | 4 | prototype | OperationsPage.tsx |
-| OPS-02 | گردش و رزرو موجودی / Stock Ledger | 4 | missing | OperationsPage.tsx |
-| OPS-03 | موجودی افتتاحیه و اصلاح / Stock Adjustment | 4 | missing | OperationsPage.tsx |
-| OPS-04 | تأمین‌کننده و مانده / Suppliers | 4 | missing | OperationsPage.tsx |
-| OPS-05 | فهرست خرید / Purchases | 4 | missing | OperationsPage.tsx |
-| OPS-06 | سند خرید / Purchase Editor | 4 | missing | OperationsPage.tsx |
-| OPS-07 | تحویل و برگشت خرید / Purchase Receipt | 4 | missing | OperationsPage.tsx |
-| OPS-08 | دستورهای تولید / Production Orders | 4 | missing | OperationsPage.tsx |
-| OPS-09 | اجرای بچ تولید / Production Batch | 4 | missing | OperationsPage.tsx |
-| OPS-10 | کنترل کیفیت و پایان تولید / Production QC | 4 | missing | OperationsPage.tsx |
-| OPS-11 | ضایعات و خرابی / Waste & Damage | 4 | missing | OperationsPage.tsx |
-| FIN-01 | داشبورد مالی / Finance Overview | 8 | prototype | FinancePage.tsx |
-| FIN-02 | دریافت و پرداخت / Cash Movements | 4 | missing | FinancePage.tsx |
-| FIN-03 | بانک و صندوق / Accounts & Balances | 4 | missing | FinancePage.tsx |
-| FIN-04 | هزینه‌های جاری / Operating Expenses | 4 | missing | FinancePage.tsx |
-| FIN-05 | بدهی و مطالبات / Payables & Receivables | 4 | missing | FinancePage.tsx |
-| FIN-06 | پرداخت‌ها و رسیدها / Transactions | 5 | missing | FinancePage.tsx |
+| ADM-14 | هنرمندان / Artists Admin | 2 | connected_partial | AdminDashboard.tsx |
+| ADM-15 | محتوا و پشتیبانی / Content Admin | 2 | connected_partial | AdminDashboard.tsx |
+| ADM-16 | تنظیمات کسب‌وکار / Business Settings | 2 | connected_partial | AdminDashboard.tsx |
+| COST-01 | فهرست مواد / Materials | 3 | connected_partial | AdminDashboard.tsx |
+| COST-02 | تعریف ماده و تبدیل واحد / Material Editor | 3 | connected_partial | AdminDashboard.tsx |
+| COST-03 | نرخ خدمات / Service Rates | 3 | connected_partial | AdminDashboard.tsx |
+| COST-04 | فرمول‌های ساخت / BOM Library | 3 | connected_partial | AdminDashboard.tsx |
+| COST-05 | ویرایش فرمول ساخت / BOM Editor | 3 | connected_partial | AdminDashboard.tsx |
+| COST-06 | بازده برش و ضایعات / Cutting Yield | 3 | connected_partial | AdminDashboard.tsx |
+| COST-07 | محاسبه‌گر هزینه SKU / SKU Cost Calculator | 3 | connected_partial | AdminDashboard.tsx |
+| COST-08 | قیمت پیشنهادی SKU / Price Proposal | 3 | connected_partial | AdminDashboard.tsx |
+| COST-09 | صف بازبینی قیمت / Price Review Queue | 3 | connected_partial | AdminDashboard.tsx |
+| COST-10 | تأیید انتشار و تاریخچه / Price Publication | 3 | connected_partial | AdminDashboard.tsx |
+| OPS-01 | نمای انبار / Inventory | 4 | connected_partial | OperationsPage.tsx |
+| OPS-02 | گردش و رزرو موجودی / Stock Ledger | 4 | connected_partial | OperationsPage.tsx |
+| OPS-03 | موجودی افتتاحیه و اصلاح / Stock Adjustment | 4 | connected_partial | OperationsPage.tsx |
+| OPS-04 | تأمین‌کننده و مانده / Suppliers | 4 | connected_partial | OperationsPage.tsx |
+| OPS-05 | فهرست خرید / Purchases | 4 | connected_partial | OperationsPage.tsx |
+| OPS-06 | سند خرید / Purchase Editor | 4 | connected_partial | OperationsPage.tsx |
+| OPS-07 | تحویل و برگشت خرید / Purchase Receipt | 4 | connected_partial | OperationsPage.tsx |
+| OPS-08 | دستورهای تولید / Production Orders | 4 | connected_partial | OperationsPage.tsx |
+| OPS-09 | اجرای بچ تولید / Production Batch | 4 | connected_partial | OperationsPage.tsx |
+| OPS-10 | کنترل کیفیت و پایان تولید / Production QC | 4 | connected_partial | OperationsPage.tsx |
+| OPS-11 | ضایعات و خرابی / Waste & Damage | 4 | connected_partial | OperationsPage.tsx |
+| FIN-01 | داشبورد مالی / Finance Overview | 8 | connected_partial | FinancePage.tsx |
+| FIN-02 | دریافت و پرداخت / Cash Movements | 4 | connected_partial | FinancePage.tsx |
+| FIN-03 | بانک و صندوق / Accounts & Balances | 4 | connected_partial | FinancePage.tsx |
+| FIN-04 | هزینه‌های جاری / Operating Expenses | 4 | connected_partial | FinancePage.tsx |
+| FIN-05 | بدهی و مطالبات / Payables & Receivables | 4 | connected_partial | FinancePage.tsx |
+| FIN-06 | پرداخت‌ها و رسیدها / Transactions | 5 | connected_partial | PaymentsPanel.tsx |
 | FIN-07 | تسویه درگاه / Gateway Settlement | 8 | missing | FinancePage.tsx |
-| FIN-08 | بازپرداخت‌ها / Refund Processing | 6 | missing | FinancePage.tsx |
+| FIN-08 | بازپرداخت‌ها / Refund Processing | 6 | connected_partial | FinancePage.tsx |
 | FIN-09 | سود محصول، SKU و پکیج / Profit Report | 8 | missing | FinancePage.tsx |
-| FIN-10 | جریان نقدی / Cash Flow | 8 | missing | FinancePage.tsx |
-| FIN-11 | گزارش موجودی و تولید / Inventory & Production Report | 8 | missing | FinancePage.tsx |
-| FIN-12 | خروجی حسابدار / Accounting Export | 8 | prototype | FinancePage.tsx |
-| ORDER-01 | فهرست سفارش ادمین / Orders Admin | 5 | prototype | OrdersPage.tsx |
-| ORDER-02 | جزئیات عملیاتی سفارش / Operations Order | 5 | prototype | OrdersPage.tsx |
-| ORDER-03 | آماده‌سازی و ارسال / Fulfillment | 6 | missing | AdminDashboard.tsx |
-| ORDER-04 | مرجوعی و کنترل کالا / Return Inspection | 6 | missing | AdminDashboard.tsx |
-| ORDER-05 | صف بررسی سفارش نقاشی / Commission Review Admin | 7 | foundation | AdminDashboard.tsx |
-| ORDER-06 | پشتیبانی ادمین / Support Inbox | 6 | missing | AdminDashboard.tsx |
-| ORDER-07 | لاگ و تاریخچه تغییر / Audit Log | 6 | foundation | AdminDashboard.tsx |
+| FIN-10 | جریان نقدی / Cash Flow | 8 | connected_partial | FinancePage.tsx |
+| FIN-11 | گزارش موجودی و تولید / Inventory & Production Report | 8 | connected_partial | FinancePage.tsx |
+| FIN-12 | خروجی حسابدار / Accounting Export | 8 | connected_partial | FinancePage.tsx |
+| ORDER-01 | فهرست سفارش ادمین / Orders Admin | 5 | connected_partial | OrdersPage.tsx |
+| ORDER-02 | جزئیات عملیاتی سفارش / Operations Order | 5 | connected_partial | OrdersPage.tsx |
+| ORDER-03 | آماده‌سازی و ارسال / Fulfillment | 6 | connected_partial | ShipmentsPanel.tsx |
+| ORDER-04 | مرجوعی و کنترل کالا / Return Inspection | 6 | connected_partial | AdminDashboard.tsx |
+| ORDER-05 | صف بررسی سفارش نقاشی / Commission Review Admin | 7 | connected_partial | AdminDashboard.tsx |
+| ORDER-06 | پشتیبانی ادمین / Support Inbox | 6 | connected_partial | AdminDashboard.tsx |
+| ORDER-07 | لاگ و تاریخچه تغییر / Audit Log | 6 | connected_partial | AdminDashboard.tsx |
 | SYS-01 | خطای ۴۰۴ / Not Found | 1 | foundation | App.tsx |
 | SYS-02 | عدم دسترسی / Access Denied | 1 | foundation | App.tsx |
 | SYS-03 | قطع اتصال و اختلال / Offline & Service Error | 1 | foundation | App.tsx |
@@ -135,3 +135,43 @@
 | FUT-03 | AR و پیش‌نمایش سبک / AR & Style Preview | Future | excluded_future | App.tsx |
 
 ADM-13 and USER-13 now have verified contracts and test references in the JSON register. Remaining language/viewport/state acceptance is outstanding.
+
+2026-10-19: FIN-01–05, FIN-10 and FIN-12 now have recorded operational finance workflows. See [finance-workflow.md](finance-workflow.md) for evidence and remaining obligations, private attachments, XLSX and reporting scope. No view is promoted to full acceptance.
+
+2026-10-19: FIN-11 operational reports and FIN-12 CSV/XLSX extensions are connected_partial, with recorded dashboard metrics for ADM-01. See [operational-reporting.md](operational-reporting.md) for historical scope, permissions, evidence and remaining dependencies.
+
+2026-10-19: COST-08–10 proposal/review/publication workflows are connected_partial. See [price-proposals.md](price-proposals.md) for exact calculations, stale-input protection, permissions, browser evidence and remaining group/family/bundle scope.
+
+2026-10-19: FIN-06 sandbox payment inquiries now persist actor/reason/before/result history with independent payments.read + finance.write permissions, stale-revision conflicts and immutable replay/recovery. Both admin payments routes and order integration are connected; refunds, settlement, stock-backed checkout and background inquiries remain pending. See [payment inquiries](payment-inquiries.md).
+
+2026-10-19: OPS-02 / ORDER-01–02 now connect atomic checkout reservations, actual repeated-SKU demand, fixed selected components/paid shares, scheduled expiry, unknown/late gateway outcomes and a reasoned staff shortage/recommit queue. See [stock commitments](order-stock-reservations.md). Customer state follows recorded commitments; all existing orders remain preserved. Fulfillment/shipping/refund/policy acceptance remains pending.
+
+2026-10-19: ORDER-03 connects persisted partial shipment preparation/QC/packing, actual dispatch stock/COGS, versioned audit/receipts, labels and owned parcel tracking. Custom print, returns/refunds and complete policy integration remain pending; see fulfillment-workflow.md.
+
+2026-10-20 cancellation extension: approved pending/unknown/failed sandbox orders may release holds; late successful payment retains cancellation and refund eligibility without stock reacquisition. No-payment closure remains pending. See `cancellation-workflow.md`.
+
+0049 adds explicit financial closure for cancelled orders after fresh rejected inquiry evidence; later uncertainty/success reopens review. Views remain connected_partial pending full integrated acceptance. See cancellation-financial-closure.md.
+
+Supplier financial statements now connect purchase and cash/correction evidence with exact recorded balances, scoped exports and independent finance access. Missing opening balances remain explicit; full release acceptance remains pending. See supplier-financial-statements.md.
+
+0050: supplier opening confirmations and linked corrections now feed recorded statements/exports without cash or stock movement. Opening settlements and full release acceptance remain pending.
+
+
+0051 adds opening-only supplier cash allocations, bounded receipts/payments, linked reversals and statement integration. The register remains connected_partial; see [opening settlements](supplier-opening-settlements.md).
+
+
+2026-10-20 adds the combined current supplier-balance report and filtered snapshot exports. FIN-05/FIN-12 remain partial; see [supplier balances report](supplier-balances-report.md).
+
+
+2026-10-20 adds historical recording-day supplier positions, date-bound export/paging and retained URL filters. Due-date aging and full integrated acceptance remain pending.
+
+
+### Integrated catalogue preview0052 — 2026-10-20
+
+The requested full56-view release is in progress. The source has a verified managed bundle editor/publication/gallery/history/receipt workflow, percentage quotes and ledger-backed selected capacity, plus BOM/material edit aliases and standalone cutting workbench. Independent catalogue/price publication permissions apply. Final699 backend /418 frontend tests and two real isolated browser journeys pass; restored-copy migration preserves existing tables. Main remains stable0051; only demo uses0052 via integrated-preview.override.yaml. See `bundle-authoring.md`, `admin-integrated-release-progress.md` and `admin-integrated-acceptance.json`. Catalogue/SKU commerce profiles, artwork authoring, settings-backed checkout, family costing/production dependencies, gateway/profit/artist/support/recovery workflows and final release acceptance remain unfinished. No complete release or main rollout is claimed.
+
+
+2026-10-21 integrated preview checkpoint: schema0053 adds persisted product/collection/SKU media/specification profiles and explicit SKU delivery metadata, with public product-detail overrides, versioned publication and safe command recovery. Source register remains54 connected_partial and2 missing admin views; no final acceptance promoted. See `catalog-profiles.md` for verification and remaining integrations.
+
+
+2026-10-21 checkpoint0054: ADM-12 now has managed artwork authoring/publication/history and distinct original/print/digital source rules. Settings-backed checkout freezes delivery/policy/financial terms and supports digital/mixed orders; fulfillment/refund workflows consume them. Three live demo journeys passed. All admin view statuses remain partial until integrated release acceptance; see `artwork-checkout-integration.md`.

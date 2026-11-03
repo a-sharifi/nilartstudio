@@ -1,0 +1,21 @@
+import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
+import type {ReactNode} from 'react';
+import {afterEach,beforeAll,expect,it,vi} from 'vitest';
+import CatalogEditor from '../src/features/admin/CatalogEditor';
+import ProductOptionsEditor from '../src/features/admin/ProductOptionsEditor';
+import {adminCatalogApi,catalogManagementApi,type ManagedEntry} from '../src/features/admin/catalog-api';
+import {optionsApi} from '../src/features/admin/options-api';
+const state=vi.hoisted(()=>({globalGuard:vi.fn()}));
+vi.mock('../src/design/AdminDashboard',()=>({default:({live}:{live:{children:ReactNode}})=><main data-testid="dashboard-shell">{live.children}</main>}));
+vi.mock('../src/features/identity/use-account-access',()=>({useAccountAccess:()=>({access:{permissions:['catalog.manage']}})}));
+vi.mock('../src/features/navigation/NavigationGuardProvider',()=>({useNavigationGuard:()=>state.globalGuard}));
+vi.mock('../src/features/admin/catalog-api',async original=>({...await original<typeof import('../src/features/admin/catalog-api')>(),catalogManagementApi:{read:vi.fn(),choices:vi.fn(),audits:vi.fn(),update:vi.fn()},adminCatalogApi:{skus:vi.fn()}}));
+vi.mock('../src/features/admin/options-api',async original=>({...await original<typeof import('../src/features/admin/options-api')>(),optionsApi:{read:vi.fn(),history:vi.fn()}}));
+const id='11111111-1111-4111-8111-111111111111';
+const entry:ManagedEntry={id,kind:'products',slug:'notebook',title_fa:'دفتر',title_en:'Notebook',description_fa:'شرح',description_en:'Description',published:false,version:1,collection_ids:[],category_ids:[]};
+beforeAll(()=>{HTMLDialogElement.prototype.showModal=vi.fn();HTMLDialogElement.prototype.close=vi.fn()});
+afterEach(()=>{cleanup();vi.resetAllMocks()});
+function setup(){vi.mocked(catalogManagementApi.read).mockResolvedValue(entry);vi.mocked(catalogManagementApi.choices).mockResolvedValue([]);vi.mocked(catalogManagementApi.audits).mockResolvedValue({items:[],next_before_version:null});vi.mocked(adminCatalogApi.skus).mockResolvedValue([]);vi.mocked(optionsApi.read).mockResolvedValue({configuration_id:null,product_id:id,version:0,options:[],combinations:[]});vi.mocked(optionsApi.history).mockResolvedValue({items:[],next_before_version:null})}
+it('embeds product content without a nested admin shell and reports confirmed saves',async()=>{setup();const register=vi.fn(),saved=vi.fn();vi.mocked(catalogManagementApi.update).mockResolvedValue({...entry,title_en:'Personal notebook',version:2});render(<CatalogEditor embedded registerOverride={register} onSaved={saved} path={`/en/admin/products/${id}/edit`} navigate={vi.fn()}/>);await screen.findByDisplayValue('Notebook');expect(screen.queryByTestId('dashboard-shell')).toBeNull();expect(register).toHaveBeenCalledWith(expect.any(Function));expect(state.globalGuard).not.toHaveBeenCalled();fireEvent.change(screen.getByLabelText('English title'),{target:{value:'Personal notebook'}});fireEvent.change(screen.getByLabelText('Reason for change'),{target:{value:'Improve product title'}});fireEvent.click(screen.getByRole('button',{name:'Confirm and save content'}));await waitFor(()=>expect(saved).toHaveBeenCalledOnce())});
+it('embeds the option editor and registers its guard with the surrounding product page',async()=>{setup();const register=vi.fn();render(<ProductOptionsEditor embedded registerOverride={register} path={`/en/admin/products/${id}/options`} navigate={vi.fn()}/>);await screen.findByText('No SKUs. Create one from the product list.');expect(screen.queryByTestId('dashboard-shell')).toBeNull();expect(register).toHaveBeenCalledWith(expect.any(Function));expect(state.globalGuard).not.toHaveBeenCalled()});
+it('retains the admin shell and global guard for standalone product editing',async()=>{setup();render(<CatalogEditor path={`/en/admin/products/${id}/edit`} navigate={vi.fn()}/>);await screen.findByDisplayValue('Notebook');expect(screen.getByTestId('dashboard-shell')).toBeTruthy();expect(state.globalGuard).toHaveBeenCalledWith(expect.any(Function))});

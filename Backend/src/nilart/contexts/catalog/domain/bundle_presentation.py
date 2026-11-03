@@ -12,13 +12,16 @@ class Copy(BaseModel):
 
 
 class BundleDiscount(BaseModel):
+    kind: Literal["fixed", "percent"] = "fixed"
     model_config = ConfigDict(extra="forbid")
     amount: str = Field(pattern=r"^(?:0|[1-9]\d{0,17})(?:\.\d{1,6})?$")
     currency: Literal["IRT", "IRR"]
 
     @model_validator(mode="after")
     def finite(self):
-        if not Decimal(self.amount).is_finite():
+        if not Decimal(self.amount).is_finite() or (
+            self.kind == "percent" and Decimal(self.amount) > 100
+        ):
             raise ValueError("Invalid discount")
         return self
 

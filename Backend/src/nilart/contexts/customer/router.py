@@ -1,7 +1,8 @@
 """Customer-owned panel records. No fixture orders or financial state."""
 
 import json
-from typing import Literal
+import unicodedata
+from typing import Any, Literal
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, Query, Request
@@ -12,6 +13,7 @@ from sqlalchemy.orm import Session
 from nilart.contexts.identity.domain.permissions import Principal
 from nilart.contexts.identity.domain.rules import normalize_phone
 from nilart.contexts.identity.infrastructure.management import SqlAccountManagement
+from nilart.contexts.identity.infrastructure.repository import SqlIdentityRepository
 from nilart.contexts.identity.presentation.access import require_permission
 from nilart.contexts.identity.presentation.management import write_access
 from nilart.contexts.identity.presentation.router import failure
@@ -72,6 +74,14 @@ class Ticket(Strict):
     subject: str = Field(min_length=1, max_length=160)
     body: str = Field(min_length=1, max_length=10000)
     request_id: UUID
+    order_id: UUID | None = None
+    line_id: UUID | None = None
+
+    @model_validator(mode="after")
+    def order_required_for_item(self):
+        if self.line_id and not self.order_id:
+            raise ValueError("Order required for an item")
+        return self
 
 
 class Message(Strict):
@@ -109,13 +119,23 @@ MODELS: dict[str, type[BaseModel]] = {
 }
 
 
-def rows(db, owner, kind, cursor=None, limit=50):
+def rows(db, owner, kind, cursor=None, limit=50, ticket_id=None, q="", status=None, read_filter=None, category=None, favorite_type=None):
+    if kind == "favorite" and q:
+        clauses = [f"(r.data->>'kind'='{entity}' AND EXISTS (SELECT 1 FROM {table} c "
+                   "WHERE c.id::text=r.data->>'target_id' AND c.published=true "
+                   "AND strpos(translate(lower(concat_ws(' ',c.title_fa,c.title_en)),'يك','یک'),:q)>0))"
+                   for entity, table in (("product", "catalog_products"), ("bundle", "catalog_bundles"), ("artwork", "catalog_artworks"))]
+        return db.execute(text("SELECT r.* FROM customer_records r WHERE r.account_id=:owner AND r.kind='favorite' "
+                               "AND (CAST(:type AS text) IS NULL OR r.data->>'kind'=:type) "
+                               "AND (CAST(:cursor AS uuid) IS NULL OR r.id>CAST(:cursor AS uuid)) AND (" + " OR ".join(clauses) + ") ORDER BY r.id LIMIT :limit"),
+                          {"owner": owner, "type": favorite_type, "cursor": cursor, "limit": limit,
+                           "q": unicodedata.normalize("NFKC", q).lower().replace("ي", "ی").replace("ك", "ک")}).mappings().all()
     return (
         db.execute(
             text(
-                "SELECT * FROM customer_records WHERE account_id=:owner AND kind=:kind AND (CAST(:cursor AS uuid) IS NULL OR id>CAST(:cursor AS uuid)) ORDER BY id LIMIT :limit"
+                "SELECT * FROM customer_records WHERE account_id=:owner AND kind=:kind AND (CAST(:type AS text) IS NULL OR data->>'kind'=:type) AND (:q='' OR strpos(lower(concat_ws(' ',data->>'subject',data->>'body',data->>'title_fa',data->>'title_en')),lower(CAST(:q AS text)))>0) AND (CAST(:read AS text) IS NULL OR (CASE WHEN data->>'read'='true' THEN 'read' ELSE 'unread' END)=:read) AND (CAST(:category AS text) IS NULL OR data->>'category'=:category) AND (CAST(:status AS text) IS NULL OR data->>'status'=:status) AND (CAST(:ticket AS text) IS NULL OR data->>'ticket_id'=CAST(:ticket AS text)) AND (CAST(:cursor AS uuid) IS NULL OR id>CAST(:cursor AS uuid)) ORDER BY id LIMIT :limit"
             ),
-            {"owner": owner, "kind": kind, "cursor": cursor, "limit": limit},
+            {"owner": owner, "kind": kind, "cursor": cursor, "limit": limit, "ticket": str(ticket_id) if ticket_id else None, "q": q, "status": status, "read": read_filter, "category": category, "type": favorite_type},
         )
         .mappings()
         .all()
@@ -203,12 +223,32 @@ def summary(
 @router.get("/{kind}", response_model=Page)
 def list_records(
     kind: Kind,
+    request: Request,
     cursor: UUID | None = None,
+    ticket_id: UUID | None = None,
+    q: str = Query("", max_length=200),
+    status: Literal["submitted", "awaiting_reply", "awaiting_customer", "closed"] | None = None,
+    read_filter: Literal["read", "unread"] | None = None,
+    category: Literal["account", "order", "delivery", "proposal", "artwork", "files", "support"] | None = None,
+    favorite_type: Literal["product", "bundle", "artwork"] | None = None,
     limit: int = Query(50, ge=1, le=100),
     db: Session = Depends(session_dependency),
     principal: Principal = Depends(require_permission("account.read_self")),
 ):
-    result = rows(db, principal.account_id, kind, cursor, limit + 1)
+    if (q.strip() and kind not in {"ticket", "notification", "favorite"}) or (status and kind != "ticket") or ((read_filter or category) and kind != "notification") or (favorite_type and kind != "favorite"):
+        return failure(request, "invalid_ticket_filter", 422)
+    if kind == "favorite" and cursor and not owned(db, principal.account_id, kind, cursor):
+        return failure(request, "record_not_found", 404)
+    if ticket_id:
+        if kind != "message":
+            return failure(request, "invalid_ticket_filter", 422)
+        if not owned(db, principal.account_id, "ticket", ticket_id):
+            return failure(request, "record_not_found", 404)
+        if cursor:
+            anchor = owned(db, principal.account_id, "message", cursor)
+            if not anchor or anchor["data"].get("ticket_id") != str(ticket_id):
+                return failure(request, "record_not_found", 404)
+    result = rows(db, principal.account_id, kind, cursor, limit + 1, ticket_id, q.strip(), status, read_filter, category, favorite_type)
     items = [output(row) for row in result[:limit]]
     if kind == "favorite":
         for item in items:
@@ -271,7 +311,7 @@ def write(
         if kind not in MODELS:
             return failure(request, "immutable_record", 409)
         try:
-            data = MODELS[kind].model_validate(body.data).model_dump(mode="json")
+            data = MODELS[kind].model_validate(body.data).model_dump(mode="json", exclude_none=True)
         except ValueError:
             return failure(request, "validation_error", 422)
         if row and kind in {"ticket", "message", "favorite"}:
@@ -292,6 +332,15 @@ def write(
                 ),
                 {"owner": actor.id, "id": id},
             )
+        if kind == "ticket" and data.get("order_id"):
+            if not SqlIdentityRepository(db).principal(actor.id, lock=True).allows("orders.read_self"):
+                return failure(request, "permission_denied", 403)
+            order = db.execute(text("SELECT snapshot FROM customer_orders WHERE id=:id AND account_id=:owner"),
+                               {"id": data["order_id"], "owner": actor.id}).scalar()
+            if not order:
+                return failure(request, "order_not_found", 404)
+            if data.get("line_id") and not any(line["id"] == data["line_id"] for line in order["items"]):
+                return failure(request, "order_item_not_found", 404)
         if kind == "favorite":
             table = {
                 "product": "catalog_products",
@@ -456,16 +505,20 @@ admin_router = APIRouter(prefix="/api/v1/admin/customer", tags=["customer-suppor
 @admin_router.get("/tickets", response_model=Page)
 def support_inbox(
     cursor: UUID | None = None,
+    status: Literal["submitted", "awaiting_reply", "awaiting_customer", "closed"] | None = None,
     limit: int = Query(50, ge=1, le=100),
+    q: str | None = Query(None, min_length=1, max_length=100),
     db: Session = Depends(session_dependency),
     principal: Principal = Depends(require_permission("support.manage")),
 ):
+    term = q.strip() if q else ""
+    pattern = "%" + term.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%" if term else None
     result = (
         db.execute(
             text(
-                "SELECT * FROM customer_records WHERE kind='ticket' AND (CAST(:cursor AS uuid) IS NULL OR id>CAST(:cursor AS uuid)) ORDER BY id LIMIT :limit"
+                "SELECT * FROM customer_records WHERE kind='ticket' AND (CAST(:status AS text) IS NULL OR data->>'status'=:status) AND (CAST(:query AS text) IS NULL OR data->>'subject' ILIKE :query) AND (CAST(:cursor AS uuid) IS NULL OR id>CAST(:cursor AS uuid)) ORDER BY id LIMIT :limit"
             ),
-            {"cursor": cursor, "limit": limit + 1},
+            {"cursor": cursor, "status": status, "query": pattern, "limit": limit + 1},
         )
         .mappings()
         .all()
@@ -480,6 +533,38 @@ class StaffReply(Strict):
     version: int = Field(ge=0, strict=True)
     body: str = Field(min_length=1, max_length=10000)
     request_id: UUID
+
+
+@admin_router.get("/tickets/{id}", response_model=Record)
+def staff_ticket(id: UUID, request: Request, db: Session = Depends(session_dependency),
+                 principal: Principal = Depends(require_permission("support.manage"))):
+    row = db.execute(text("SELECT * FROM customer_records WHERE kind='ticket' AND id=:id"),
+                     {"id": id}).mappings().first()
+    return output(row) if row else failure(request, "record_not_found", 404)
+
+
+@admin_router.get("/tickets/{id}/messages", response_model=Page)
+def staff_messages(id: UUID, request: Request, cursor: UUID | None = None, request_id: UUID | None = None,
+                   limit: int = Query(50, ge=1, le=100), db: Session = Depends(session_dependency),
+                   principal: Principal = Depends(require_permission("support.manage"))):
+    owner = db.scalar(text("SELECT account_id FROM customer_records WHERE kind='ticket' AND id=:id"), {"id": id})
+    if owner is None:
+        return failure(request, "record_not_found", 404)
+    params = {"owner": owner, "ticket": str(id), "cursor": cursor, "limit": limit + 1, "request_key": str(request_id) if request_id else None}
+    stamp = None
+    if cursor is not None:
+        stamp = db.scalar(text("SELECT created_at FROM customer_records WHERE id=:cursor AND account_id=:owner "
+                               "AND kind='message' AND data->>'ticket_id'=:ticket"), params)
+        if stamp is None:
+            return failure(request, "record_not_found", 404)
+    params["stamp"] = stamp
+    rows = db.execute(text("SELECT * FROM customer_records WHERE account_id=:owner AND kind='message' "
+        "AND data->>'ticket_id'=:ticket AND (CAST(:request_key AS text) IS NULL OR data->>'request_id'=:request_key) "
+        "AND (CAST(:stamp AS timestamptz) IS NULL OR "
+        "(created_at,id)>(CAST(:stamp AS timestamptz),CAST(:cursor AS uuid))) ORDER BY created_at,id LIMIT :limit"),
+        params).mappings().all()
+    return {"items": [output(row) for row in rows[:limit]],
+            "next_cursor": rows[limit - 1]["id"] if len(rows) > limit else None}
 
 
 @admin_router.post("/tickets/{id}/reply", response_model=Record)
@@ -570,3 +655,101 @@ def staff_reply(
     result = output(owned(db, row["account_id"], "message", message_id))
     db.commit()
     return result
+
+
+class StaffTicketState(TicketState):
+    reason: str = Field(min_length=1, max_length=1000)
+
+
+@admin_router.put("/tickets/{id}/state", response_model=Record)
+def staff_ticket_state(
+    id: UUID,
+    body: StaffTicketState,
+    request: Request,
+    db: Session = Depends(session_dependency),
+    principal: Principal = Depends(require_permission("support.manage")),
+):
+    actor, denied = write_access(request, db, principal, "support.manage")
+    if denied is not None:
+        return denied
+    row = db.execute(
+        text("SELECT * FROM customer_records WHERE kind='ticket' AND id=:id FOR UPDATE"),
+        {"id": id},
+    ).mappings().first()
+    if not row:
+        return failure(request, "record_not_found", 404)
+    if row["version"] != body.version:
+        return failure(request, "record_version_conflict", 409)
+    before = row["data"]["status"]
+    if (before == "closed") == (body.status == "closed"):
+        return failure(request, "invalid_ticket_transition", 409)
+    db.execute(
+        text("UPDATE customer_records SET data=jsonb_set(data,'{status}',CAST(:status AS jsonb)),"
+             "version=version+1,updated_at=now() WHERE id=:id"),
+        {"id": id, "status": json.dumps(body.status)},
+    )
+    SqlAccountManagement(db).audit(
+        actor.id, str(row["account_id"]), "customer.support_state",
+        {"record_id": str(id), "before": before, "after": body.status,
+         "previous_version": row["version"], "version": row["version"] + 1},
+        body.reason,
+    )
+    enqueue(db, "customer.record_changed", {
+        "account_id": str(row["account_id"]), "record_id": str(id),
+        "kind": "ticket", "action": "saved",
+    })
+    result = output(owned(db, row["account_id"], "ticket", id))
+    db.commit()
+    return result
+
+
+class SupportAudit(BaseModel):
+    id: UUID
+    actor_id: UUID | None
+    created_at: str
+    action: Literal["customer.support_reply", "customer.support_state"]
+    reason: str
+    changes: dict[str, Any]
+
+
+class SupportAuditPage(BaseModel):
+    items: list[SupportAudit]
+    next_cursor: UUID | None
+
+
+@admin_router.get("/tickets/{id}/audits", response_model=SupportAuditPage)
+def staff_ticket_audits(
+    id: UUID, request: Request, cursor: UUID | None = None,
+    limit: int = Query(50, ge=1, le=100),
+    db: Session = Depends(session_dependency),
+    principal: Principal = Depends(require_permission("support.manage")),
+):
+    owner = db.scalar(text("SELECT account_id FROM customer_records WHERE kind='ticket' AND id=:id"), {"id": id})
+    if owner is None:
+        return failure(request, "record_not_found", 404)
+    params = {"owner": owner, "record": str(id), "cursor": cursor, "limit": limit + 1}
+    scope = "account_id=:owner AND changes->>'record_id'=:record AND action IN ('customer.support_reply','customer.support_state')"
+    stamp = None
+    if cursor is not None:
+        stamp = db.scalar(text(f"SELECT created_at FROM identity_audits WHERE {scope} AND id=:cursor"), params)
+        if stamp is None:
+            return failure(request, "record_not_found", 404)
+    params["stamp"] = stamp
+    rows = db.execute(text(f"SELECT id,actor_id,created_at,action,reason,changes FROM identity_audits WHERE {scope} "
+        "AND (CAST(:stamp AS timestamptz) IS NULL OR (created_at,id)<(CAST(:stamp AS timestamptz),CAST(:cursor AS uuid))) "
+        "ORDER BY created_at DESC,id DESC LIMIT :limit"), params).mappings().all()
+    return {"items": [{**row, "created_at": row["created_at"].isoformat()} for row in rows[:limit]],
+            "next_cursor": rows[limit - 1]["id"] if len(rows) > limit else None}
+
+
+class TicketSummary(BaseModel):
+    total_tickets: int
+    statuses: dict[str, int]
+
+
+@admin_router.get("/ticket-summary", response_model=TicketSummary)
+def ticket_summary(db: Session = Depends(session_dependency),
+                   principal: Principal = Depends(require_permission("support.manage"))):
+    rows = db.execute(text("SELECT data->>'status' AS status,count(*) AS count FROM customer_records WHERE kind='ticket' GROUP BY data->>'status'")).mappings().all()
+    statuses = {row["status"]: row["count"] for row in rows}
+    return {"total_tickets": sum(statuses.values()), "statuses": statuses}

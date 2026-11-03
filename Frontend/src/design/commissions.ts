@@ -20,7 +20,7 @@ export const commissionConfig = {
   executionTypes: ["digital", "hand-painted"],
 } as const
 export function isCommissionRoute(path: string) {
-  return /^(\/fa|\/en)?\/commissions(\/new)?$/.test(path.split(/[?#]/)[0])
+  return /^(\/fa|\/en)?\/commissions(\/new|\/notebook(?:\/(?:checkout\/)?[0-9a-f-]{36})?)?$/.test(path.split(/[?#]/)[0])
 }
 export function commissionDestination(
   language: 0 | 1,

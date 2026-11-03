@@ -1,0 +1,3 @@
+.stock-command>fieldset{border:0;padding:0;min-width:0;display:grid;gap:16px}.stock-command textarea{min-height:100px}.stock-command .nil-dropdown-control input{border:0;background:transparent;box-shadow:none}
+
+.stock-command{display:block!important}.stock-command>fieldset{width:100%;box-sizing:border-box}.stock-command .nil-dropdown{min-width:0;width:100%}.stock-command input,.stock-command textarea{min-width:0;max-width:100%;box-sizing:border-box}@media(max-width:600px){.ad-main h1{overflow-wrap:anywhere}.stock-command button{white-space:normal;max-width:100%}}

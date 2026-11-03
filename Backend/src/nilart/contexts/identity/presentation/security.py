@@ -1,5 +1,3 @@
-from datetime import UTC, datetime
-from uuid import UUID
 
 from fastapi import APIRouter, Depends, Request, Response
 from pydantic import BaseModel, ConfigDict, Field
@@ -13,7 +11,6 @@ from nilart.contexts.identity.infrastructure.management import SqlAccountManagem
 from nilart.contexts.identity.infrastructure.rate_limit import password_attempt_allowed
 from nilart.contexts.identity.infrastructure.secrets import (
     hash_password,
-    token_digest,
     verify_password,
 )
 from nilart.contexts.identity.presentation.access import require_permission
@@ -22,13 +19,6 @@ from nilart.contexts.identity.presentation.router import failure
 from nilart.shared.database import session_dependency
 
 router = APIRouter(prefix="/api/v1/account/security", tags=["account-security"])
-
-
-class SessionOutput(BaseModel):
-    id: UUID
-    created_at: datetime
-    expires_at: datetime
-    current: bool
 
 
 class PasswordUpdate(BaseModel):
@@ -46,35 +36,14 @@ class SecurityMethods(BaseModel):
     otp_enabled: bool
     can_change: bool
     sandbox_sms: bool
+    order_sms_enabled: bool = False
 
 
 @router.get("/methods", response_model=SecurityMethods)
 def methods(principal: Principal = Depends(require_permission("account.read_self"))):
+    from nilart.contexts.messaging.service import available
     return {"password_enabled": True, "otp_enabled": settings.sms_mode != "disabled" and settings.otp_hmac_key is not None,
-            "can_change": principal.allows("account.write_self"), "sandbox_sms": settings.sms_mode == "sandbox"}
-
-
-@router.get("/sessions", response_model=list[SessionOutput])
-def sessions(request: Request, db: Session = Depends(session_dependency),
-             principal: Principal = Depends(require_permission("account.read_self"))):
-    current = token_digest(request.cookies.get("nilart_session", ""))
-    return db.execute(text("SELECT id,created_at,expires_at,(token_hash=:token) AS current FROM identity_sessions "
-                           "WHERE account_id=:id AND expires_at>:now ORDER BY created_at DESC,id DESC"),
-                      {"token": current, "id": principal.account_id, "now": datetime.now(UTC)}).mappings().all()
-
-
-@router.delete("/sessions/{session_id}", status_code=204)
-def revoke(session_id: UUID, request: Request, db: Session = Depends(session_dependency),
-           principal: Principal = Depends(require_permission("account.write_self"))):
-    actor, denied = write_access(request, db, principal, "account.write_self")
-    if denied is not None:
-        return denied
-    row = db.execute(text("DELETE FROM identity_sessions WHERE id=:session AND account_id=:account RETURNING id"),
-                     {"session": session_id, "account": actor.id}).first()
-    if row:
-        SqlAccountManagement(db).audit(actor.id, actor.id, "session.revoked", {"session_id": str(session_id)}, "Account owner revoked a session")
-    db.commit()
-    return Response(status_code=204, headers={"Cache-Control": "no-store"})
+            "can_change": principal.allows("account.write_self"), "sandbox_sms": settings.sms_mode == "sandbox", "order_sms_enabled": available()}
 
 
 @router.post("/password", response_model=PasswordResult)

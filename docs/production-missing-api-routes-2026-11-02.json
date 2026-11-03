@@ -1,0 +1,29 @@
+{
+  "server_route_count": 248,
+  "local_route_count": 271,
+  "not_deployed_routes": [
+    "/api/v1/admin/channels",
+    "/api/v1/admin/channels/{code}/activity",
+    "/api/v1/admin/channels/{code}/category/{category_id}",
+    "/api/v1/admin/channels/{code}/connection",
+    "/api/v1/admin/channels/{code}/listings",
+    "/api/v1/admin/channels/{code}/listings/{id}/commands/{key}",
+    "/api/v1/admin/channels/{code}/listings/{id}/preview",
+    "/api/v1/admin/channels/{code}/listings/{id}/sync/{key}",
+    "/api/v1/admin/channels/{code}/operations/{key}/reconcile",
+    "/api/v1/admin/channels/{code}/reference-data",
+    "/api/v1/admin/channels/{code}/settings/{key}",
+    "/api/v1/admin/channels/{code}/webhook-registration",
+    "/api/v1/admin/shipping/tapin/configuration",
+    "/api/v1/admin/shipping/tapin/connection",
+    "/api/v1/admin/shipping/tapin/reference-data",
+    "/api/v1/admin/shipping/tapin/shipments/{id}",
+    "/api/v1/admin/shipping/tapin/shipments/{id}/label",
+    "/api/v1/admin/shipping/tapin/shipments/{id}/operations/{operation}",
+    "/api/v1/admin/shipping/tapin/shipments/{id}/quote",
+    "/api/v1/admin/shipping/tapin/shipments/{id}/reconcile",
+    "/api/v1/admin/shipping/tapin/shipments/{id}/refresh",
+    "/api/v1/integrations/{code}/webhook",
+    "/api/v1/payments/shipping-quote"
+  ]
+}

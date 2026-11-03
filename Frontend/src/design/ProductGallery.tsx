@@ -20,6 +20,7 @@ export default function ProductGallery({
   images = defaultGallery,
   productName,
   renderView,
+  approved = false,
 }: {
   language: 0 | 1
   media: ReactNode
@@ -28,6 +29,7 @@ export default function ProductGallery({
   images?: GalleryImage[]
   productName?: string
   renderView?: (index: number) => ReactNode
+  approved?: boolean
 }) {
   const gallery = images
   const name = productName || notebookCopy.name[language]
@@ -106,6 +108,7 @@ export default function ProductGallery({
           }
         >
           <GallerySurface
+            approved={approved}
             index={active}
             language={language}
             media={media}
@@ -125,7 +128,7 @@ export default function ProductGallery({
       <div className="gallery-footer">
         <span>
           {gallery[active].label[language]} ·{" "}
-          {t("جای‌نگهدار تصویر", "Image placeholder")}
+          {approved ? t("تصویر تأییدشده", "Approved image") : t("جای‌نگهدار تصویر", "Image placeholder")}
         </span>
         {controls}
       </div>
@@ -136,7 +139,7 @@ export default function ProductGallery({
       >
         {gallery.map((image, index) => (
           <button
-            key={image.view}
+            key={`${image.view}:${image.src || "reference"}:${index}`}
             className={index === active ? "selected" : ""}
             aria-pressed={index === active}
             onClick={() => setActive(index)}
@@ -144,6 +147,7 @@ export default function ProductGallery({
           >
             <div aria-hidden="true">
               <GallerySurface
+                approved={approved}
                 index={index}
                 language={language}
                 media={media}
@@ -157,12 +161,12 @@ export default function ProductGallery({
           </button>
         ))}
       </div>
-      <p className="gallery-disclaimer">
+      {!approved && <p className="gallery-disclaimer">
         {t(
           "ماکت طراحی است؛ تصویر و طرح اصلی برند پس از دریافت جایگزین می‌شود.",
           "Design mockups only; approved brand artwork and photography will replace these images.",
         )}
-      </p>
+      </p>}
       {renderDialog(
         zoom,
         () => {
@@ -173,6 +177,7 @@ export default function ProductGallery({
         gallery[active].label[language],
         <div className="product-lightbox" {...gesture}>
           <GallerySurface
+            approved={approved}
             index={active}
             language={language}
             media={media}
@@ -204,6 +209,7 @@ function ZoomIcon() {
   )
 }
 function GallerySurface({
+  approved = false,
   index,
   language,
   media,
@@ -219,20 +225,23 @@ function GallerySurface({
   images?: GalleryImage[]
   name?: string
   renderView?: (index: number) => ReactNode
+  approved?: boolean
 }) {
   const [failed, setFailed] = useState(false)
   const image = images[index]
-  useEffect(() => setFailed(false), [index])
+  useEffect(() => setFailed(false), [index, image.src])
   return (
     <div
       className={`gallery-surface gallery-view-${image.view}`}
       role="img"
-      aria-label={`${name} — ${image.label[language]} — ${
-        language === 0 ? "تصویر نمونه" : "sample image"
-      }`}
+      aria-label={`${name} — ${image.label[language]}${approved ? "" : language === 0 ? " — تصویر نمونه" : " — sample image"}`}
     >
       {image.src && !failed ? (
-        <img src={image.src} alt="" onError={() => setFailed(true)} />
+        <img src={thumbnail&&image.src.startsWith("/api/v1/media/")?`${image.src}?thumbnail=true`:image.src} alt="" onError={() => setFailed(true)} />
+      ) : approved ? (
+        <span className="gallery-image-error" role="status">
+          {language === 0 ? "تصویر در دسترس نیست" : "Image unavailable"}
+        </span>
       ) : (
         <>
           <div className="gallery-object" aria-hidden="true">

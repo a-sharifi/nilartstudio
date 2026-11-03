@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect,useState} from "react";
 import "./sample-stationery.css";
 import BundleStillLife from "./BundleStillLife";
 import Mockup from "./Mockup";
@@ -29,6 +29,9 @@ function StationeryPhoto({photo,language}:{photo:number;language:0|1}){
  </div>;
 }
 export function ReferenceProductImage({slug,language,view=0}:{slug:string;language:0|1;view?:number}){
+ const [approved,setApproved]=useState<{slug:string;src:string;alt:string}|null>(null)
+ useEffect(()=>{const controller=new AbortController();void fetch(`/api/v1/catalog/products/${encodeURIComponent(slug)}`,{signal:controller.signal,cache:'no-store'}).then(async response=>response.ok?response.json():null).then(row=>{if(!controller.signal.aborted)setApproved(row?.image_url?{slug,src:row.image_url,alt:language===0?row.image_alt_fa:row.image_alt_en}:null)}).catch(()=>{});return()=>controller.abort()},[slug,language])
+ if(approved?.slug===slug)return <div className="sample-catalog-photo approved-catalog-photo"><img src={`${approved.src}?thumbnail=true`} alt={approved.alt} loading="lazy" decoding="async" onError={()=>setApproved(null)}/></div>;
  if(hasStationeryPhoto(slug))return <StationeryPhoto photo={notebookPhotos[slug]+view} language={language}/>;
  const visual=visuals[slug];
  return visual?<Mockup {...visual}/>:<span>{language===0?"تصویر در دسترس نیست":"Image unavailable"}</span>;

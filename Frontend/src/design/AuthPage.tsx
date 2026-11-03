@@ -39,6 +39,7 @@ function validReturn(search: string) {
   if (/^\/(?:fa|en)\/account\/profile$/.test(value || "")) return value
   if (/^\/(?:fa|en)\/checkout\/sandbox$/.test(value || "")) return value
   if (/^\/(?:fa|en)\/payment\/result\?id=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(value || "")) return value
+  if (/^\/(?:fa|en)\/commissions\/notebook(?:\/(?:checkout\/)?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})?(?:#notebook-request)?$/.test(value || "")) return value
   // Only known public/internal destinations; no query data, role panels or arbitrary redirects.
   if (!value || /[\\?#%]/.test(value)) return null
   return /^(\/cart|\/checkout(?:\/(?:address|delivery|payment))?|\/account|\/(?:fa|en)\/commissions(?:\/new(?:\/(?:references|preferences|assessment))?)?|\/products\/[\w-]+)$/.test(value) ? value : null

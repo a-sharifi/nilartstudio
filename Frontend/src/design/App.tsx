@@ -1,3 +1,10 @@
+import {useHomeMotion} from "../features/marketing/use-home-motion";
+import {HomeSpecialOffers} from "../features/marketing/HomeSpecialOffers";
+import "../features/marketing/home-motion.css";
+import PromotionBanner from "../features/marketing/StorefrontPromotions";
+import OrderTrackingPage from "../features/customer/OrderTrackingPage"
+import ApprovedContent from "../features/content/ApprovedContent"
+import EnamadSeal from "../components/ui/EnamadSeal"
 import {liveAuthApi} from "../features/identity/adapter"
 import BasketPage from "../features/basket/BasketPage"
 import {useBasket} from "../features/basket/store"
@@ -48,6 +55,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import CollectionCard, { CollectionSkeleton } from "./CollectionCard"
 import CollectionsPage from "./CollectionsPage"
 import CollectionDetailPage from "./CollectionDetailPage"
+import NotebookPortfolioPage from "../features/catalog/NotebookPortfolioPage"
 import ShopPage from "./ShopPage"
 import PrivacyPage from "./PrivacyPage"
 import { contactDemoConfig } from "./contact"
@@ -444,10 +452,11 @@ export default function App() {
   const currentPageRef = useRef(page)
   currentPageRef.current = page
   const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const isCollections = page.startsWith("/collections")
+  const collectionPath=page.replace(/^\/(?:fa|en)(?=\/collections(?:\/|$))/,"")
+  const isCollections = collectionPath.startsWith("/collections")
   const isShop = isShopRoute(page)
-  const isDetail = isCollections && page !== "/collections"
-  const liveCatalog = useLiveCatalog(isDetail ? page.split("/")[2] : undefined)
+  const isDetail = isCollections && collectionPath !== "/collections"
+  const liveCatalog = useLiveCatalog(isDetail ? collectionPath.split("/")[2] : undefined)
   const collections = demoMode ? demoCollections : liveCatalog.data.collections
   const categories = demoMode ? demoCategories : [...liveCatalog.data.categories].sort((a,b)=>(demoCategories.findIndex(row=>row.id===a.id)+1 || 999)-(demoCategories.findIndex(row=>row.id===b.id)+1 || 999))
   const products: (typeof demoProducts[number] & {startingPrice?: import("../features/catalog/catalog-price").CatalogPrice})[] = demoMode ? demoProducts : homepageProducts(liveCatalog.data)
@@ -457,6 +466,7 @@ export default function App() {
   const liveProduct = useProductDetail(!demoMode && isProduct, isProduct ? page.split("/").pop() : undefined)
   const liveBundleSlug = /^\/(?:fa\/|en\/)?bundles\/[^/]+$/.test(page) ? page.split("/").pop() : undefined
   const isHomePage = ["/", "/fa", "/en"].includes(page)
+  useHomeMotion(isHomePage)
   const bundleCatalog = useBundleCatalog(!demoMode && (isHomePage || isProduct || /^\/(?:fa\/|en\/)?bundles(?:\/[^/]+)?$/.test(page)), liveBundleSlug)
   const isBundle = page.startsWith("/bundles/")
   const isCart = /^\/(?:fa\/|en\/)?cart\/?$/.test(page)
@@ -594,7 +604,7 @@ export default function App() {
       : requestedRoute.split("?")[0] === "/login"
         ? `/${lang === 0 ? "fa" : "en"}/auth/login${requestedRoute.includes("?") ? requestedRoute.slice(requestedRoute.indexOf("?")) : ""}`
       : isCommissionRoute(requestedRoute)
-        ? `/${requestedRoute.startsWith("/en/") ? "en" : requestedRoute.startsWith("/fa/") ? "fa" : lang === 0 ? "fa" : "en"}/commissions`
+        ? `/${requestedRoute.startsWith("/en/") ? "en" : requestedRoute.startsWith("/fa/") ? "fa" : lang === 0 ? "fa" : "en"}${requestedRoute.replace(/^\/(?:fa|en)(?=\/)/, "")}`
         : requestedRoute === "/artworks"
         ? `/${lang === 0 ? "fa" : "en"}/artworks`
         : requestedRoute === "/bundles/cats"
@@ -1211,7 +1221,7 @@ export default function App() {
     [t("کالکشن‌ها", "Collections"), "/collections"],
     [t("فروشگاه", "Shop"), `/${lang === 0 ? "fa" : "en"}/shop`],
     [t("نقاشی‌ها", "Artworks"), "/artworks"],
-    [t("سفارش نقاشی", "Commission artwork"), "/commissions"],
+    [t("سفارش نقاشی و دفتر", "Custom art & notebooks"), "/commissions"],
   ]
   const SectionHeading = ({
     number,
@@ -1276,6 +1286,7 @@ export default function App() {
       </a>
       {!isCheckout && (
         <>
+          {!demoMode && <PromotionBanner en={lang===1}/>}
           <div className="announcement">
             {t(
               "هنر، در کوچک‌ترین لحظه‌های روزمره",
@@ -1307,10 +1318,7 @@ export default function App() {
                   navigate(t("خانه", "Home"), "/")
                 }}
               >
-                <span>
-                  nilart<span className="wordmark-dot">.</span>
-                </span>
-                <small>ART & EVERYDAY</small>
+                <img className="nilart-brand-logo" src="/brand/nilart-logo.webp" width="156" height="88" alt="نیل آرت استودیو | Nil Art Studio" />
               </a>
               <nav
                 className="desktop-nav"
@@ -1368,8 +1376,10 @@ export default function App() {
         </>
       )}
 
-      <main id="main">
-        {!demoMode && (isCommissions || isReferences || isPreferences) ? (
+      <main id="main" data-home-motion={isHomePage?"true":undefined}>
+        {!demoMode && isTracking ? <OrderTrackingPage language={lang} /> : !demoMode && (isAbout || isContact || isFAQ || isBuyingGuide || isPrivacy || isTerms || isReturns) ? (
+          <ApprovedContent key={page} path={page} language={lang} />
+        ) : !demoMode && (isCommissions || isReferences || isPreferences) ? (
           <CommissionFlow path={page} language={lang} onNavigate={navigate} registerGuard={registerReferenceGuard} />
         ) : isCheckout ? (
           <Suspense
@@ -1759,10 +1769,12 @@ export default function App() {
             renderSheet={(open, onClose, title, children) => <Modal open={open} onClose={onClose} title={title} sheet>{children}</Modal>}
             arrow={<Icon name="arrow" size={19}/>} heart={<Icon name="heart" size={19}/>}
           />
+        ) : !demoMode && collectionPath === "/collections/custom-notebook-portfolio" ? (
+          <NotebookPortfolioPage language={lang} />
         ) : isDetail ? (
           <CollectionDetailPage
             key={page}
-            slug={page.split("/")[2] || ""}
+            slug={collectionPath.split("/")[2] || ""}
             search={urlSearch}
             language={lang}
             mode={demoMode ? detailMode : liveCatalog.status}
@@ -1812,25 +1824,25 @@ export default function App() {
                   {t("نیل‌آرت استودیو", "NILART STUDIO")}
                 </div>
                 <h1>
-                  {t("دنیای کوچک هنر،", "A little world of art,")}
+                  {t("نقاشی و دفتر،", "Art and notebooks,")}
                   <br />
-                  <span>{t("برای روزهای شما", "for your everyday life")}</span>
+                  <span>{t("به سلیقهٔ شما", "made personal")}</span>
                 </h1>
                 <p>
                   {t(
-                    "از دفتر و استیکر تا نقاشی و پکیج‌های هنری؛ کالکشن محبوبتان را پیدا کنید و هنر را به روزمره‌تان بیاورید.",
-                    "From notebooks and stickers to paintings and art bundles, discover your favorite collection and bring art into everyday life.",
+                    "نقاشی دلخواهتان را سفارش دهید یا دفتر اختصاصی‌تان را با انتخاب سایز، کاغذ و طرح جلد بسازید؛ هر دو از ایدهٔ شما شروع می‌شوند.",
+                    "Commission a personal artwork or create a custom notebook with your choice of size, paper and cover design. Both begin with your idea.",
                   )}
                 </p>
                 <div className="hero-buttons">
                   {arrowLink(
-                    t("کشف کالکشن‌ها", "Explore collections"),
-                    "/collections",
+                    t("سفارش دفتر اختصاصی", "Order a custom notebook"),
+                    `/${lang===0?"fa":"en"}/commissions/notebook#notebook-request`,
                     "button primary",
                   )}
                   {link(
-                    t("سفارش نقاشی", "Commission artwork"),
-                    "/commissions/new",
+                    t("سفارش نقاشی اختصاصی", "Commission artwork"),
+                    `/${lang===0?"fa":"en"}/commissions/new`,
                     "button secondary",
                   )}
                 </div>
@@ -1842,8 +1854,8 @@ export default function App() {
                 <div className="hero-note">
                   <span className="small-spark">✳</span>
                   {t(
-                    "یک طرح، چند انتخاب؛ یک دنیای هنری برای شما.",
-                    "One design, many possibilities. A little world of your own.",
+                    "برای هدیه‌دادن، خلق‌کردن و ثبت لحظه‌های شما.",
+                    "For giving, creating and keeping your everyday moments.",
                   )}
                 </div>
               </div>
@@ -1852,7 +1864,7 @@ export default function App() {
                   <span>THE EVERYDAY COLLECTION</span>
                   <span>01 — 05</span>
                 </div>
-                <Mockup hero color="sage" />
+                <div className="nilart-hero-covers">{["gorbe","roh","gav"].map((slug,index)=><img key={slug} src={`/brand/${slug}-cover.webp`} alt={["طرح جلد کالکشن گربه","طرح جلد کالکشن روح","طرح جلد کالکشن گاو"][index]} width="400" height="560" />)}</div>
                 <div className="image-caption">
                   <span>
                     {t(
@@ -1864,13 +1876,14 @@ export default function App() {
                 </div>
                 <span className="asset-notice">
                   {t(
-                    "ماکت نمایشی · تصاویر واقعی برند جایگزین می‌شوند",
-                    "Sample mockup · awaiting original brand photography",
+                    "طرح جلد کالکشن‌های نیل‌آرت",
+                    "Original NilArt collection cover artwork",
                   )}
                 </span>
               </div>
             </section>
 
+            {!demoMode&&<HomeSpecialOffers en={lang===1}/>}
             <section
               className="container section collections-section"
               id="collections"
@@ -1932,12 +1945,7 @@ export default function App() {
                     )}
                 </div>
               )}
-              <p className="data-disclaimer">
-                {t(
-                  "تصاویر و محصولات این صفحه نمونه طراحی هستند؛ طرح‌های اصلی کالکشن‌ها پس از دریافت جایگزین می‌شوند.",
-                  "Images and products are design samples; original collection artwork will be added when supplied.",
-                )}
-              </p>
+              {demoMode&&<p className="data-disclaimer">{t("تصاویر و محصولات این صفحه نمونه طراحی هستند.","Images and products are design samples.")}</p>}
             </section>
 
             <section className="category-section">
@@ -1961,7 +1969,7 @@ export default function App() {
                       "category-card",
                       <>
                         <div className="category-art">
-                          <Mockup color={c.color} kind={c.kind} />
+                          {demoMode ? <Mockup color={c.color} kind={c.kind} /> : liveCatalog.data.products.find(product=>product.categories?.includes(c.id)) ? <ReferenceProductImage slug={liveCatalog.data.products.find(product=>product.categories?.includes(c.id))!.slug} language={lang}/> : <span>{local(c.name)}</span>}
                         </div>
                         <div>
                           <h3>{local(c.name)}</h3>
@@ -2285,6 +2293,7 @@ export default function App() {
         <footer>
           <div className="container footer-main">
             <div className="footer-brand">
+              <div className="footer-brand-marks">
               <a
                 className="wordmark"
                 href="/"
@@ -2293,17 +2302,20 @@ export default function App() {
                   navigate(t("خانه", "Home"), "/")
                 }}
               >
-                <span>
-                  nilart<span className="wordmark-dot">.</span>
-                </span>
-                <small>ART & EVERYDAY</small>
+                <img className="nilart-brand-logo" src="/brand/nilart-logo.webp" width="156" height="88" alt="نیل آرت استودیو | Nil Art Studio" />
               </a>
+              <EnamadSeal english={lang === 1} />
+              </div>
               <p>
                 {t("محصولات هنری برای روزمره،", "Art for everyday life,")}
                 <br />
                 {t("و آثاری برای ماندن.", "and artworks to keep.")}
               </p>
-              <span className="handwritten">made with a little love.</span>
+              <span className="footer-credit" dir="rtl">ساخته شده با عشق توسط <a href="https://ezhoosh.com" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">ezhoosh.com</bdi></a></span>
+              <a className="footer-support" href="tel:+989120829872">
+                <span>{t("پشتیبانی", "Support")}</span>
+                <bdi dir="ltr">{t("۰۹۱۲۰۸۲۹۸۷۲", "09120829872")}</bdi>
+              </a>
             </div>
             {[
               {
@@ -2353,9 +2365,9 @@ export default function App() {
               © {new Date().getFullYear()} NilArt Studio.{" "}
               {t("تمام حقوق محفوظ است.", "All rights reserved.")}
             </span>
-            <button className="foundation-link" disabled={!demoMode} onClick={() => demoMode && setLab(true)}>
+            {demoMode && <button className="foundation-link" onClick={() => setLab(true)}>
               {t("سیستم طراحی و حالت‌ها", "Design system & states")}
-            </button>
+            </button>}
             <button className="language-button" onClick={switchLanguage}>
               {lang === 0 ? "English / EN" : "فارسی / FA"} <span>↔</span>
             </button>
@@ -2414,7 +2426,7 @@ export default function App() {
             e.preventDefault()
             navigate(
               t("نتایج جست‌وجو", "Search results"),
-              `/search?q=${encodeURIComponent(query)}`,
+              `/${lang === 0 ? "fa" : "en"}/search?q=${encodeURIComponent(query.trim())}`,
             )
           }}
         >

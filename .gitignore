@@ -21,3 +21,10 @@ playwright-report/
 # Private backup artifacts
 backups/
 *.dump
+
+# Isolated release development output
+.next-release/
+Backend/.deploy-wheels/
+
+# Local vendor-account evidence contains personal account and balance details.
+/docs/verification/kavenegar-templates.png

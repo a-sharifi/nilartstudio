@@ -14,7 +14,7 @@ test("saved basket uses reference rows and persists quantities, edits, remove an
  await expect(page.locator(".cart-options")).toContainText("A4")
  await expect(page.locator(".cart-summary-total")).toContainText("245,000")
  await expect(page.locator(".cart-checkout-button")).toBeDisabled()
- await expect(page.locator("#cart-coupon-input")).toBeDisabled()
+ await expect(page.locator("#cart-coupon-input")).toHaveCount(0)
  await page.getByRole("button",{name:/Increase quantity of/}).click()
  await expect(page.locator(".cart-summary-total")).toContainText("490,000")
  await page.reload()

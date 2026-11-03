@@ -1,6 +1,9 @@
+import Dropdown from "../components/ui/Dropdown"
 import {useBasket} from "../features/basket/store"
 import {fromMicroUnits,tomanAmount} from "../features/basket/money"
 import AddToBasket from "../features/basket/AddToBasket";
+import {Glyph} from "./DashboardPage"
+import FavoriteButton from "../features/customer/FavoriteButton"
 import { ReferenceBundleImage, ReferenceProductImage } from "./ReferenceMedia";
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { catalogProducts } from "./catalog"
@@ -28,7 +31,7 @@ import {
   type Selection,
 } from "./product"
 import ProductOptions, { ProductOptionGroup } from "./ProductOptions"
-import {useBundleDetail,bundleQuote,displayBundleMoney,bundlePriceUnits,selectBundleOption,bundleOptionOffered} from "../features/catalog/bundle-detail"
+import {useBundleAvailability,useBundleDetail,bundleQuote,displayBundleMoney,bundlePriceUnits,selectBundleOption,bundleOptionOffered} from "../features/catalog/bundle-detail"
 import ProductGallery, { type ProductDialog } from "./ProductGallery"
 import ProductCard from "./ProductCard"
 import BundleStillLife from "./BundleStillLife"
@@ -1133,7 +1136,7 @@ export function PublishedBundleDetail({ bundle, language, onNavigate, renderDial
  const prefilled=useRef("");
  const editingRow=savedBasket.data.lines.find(row=>row.id===editingId&&row.item.kind==="bundle"&&row.item.item_id===bundle.id);
  useEffect(()=>setEditingId(new URLSearchParams(window.location.search).get("basketLine")||""),[bundle.id]);
- useEffect(()=>{if(editingRow&&detail.status==="normal"&&prefilled.current!==editingId){const next:Record<string,Record<string,string>>={};for(const [base,id] of Object.entries(editingRow.item.choices)){for(const product of Object.values(detail.products)){const sku=product.skus.find(row=>row.id===id);const combination=product.product.presentation?.option_combinations?.find(row=>row.code===sku?.code);if(combination)next[base]=combination.selections}}setSelections(next);setQuantity(String(editingRow.item.quantity));prefilled.current=editingId}},[editingRow,editingId,detail.products,detail.status]);
+ useEffect(()=>{if(editingRow&&detail.status==="normal"&&prefilled.current!==editingId){const next:Record<string,Record<string,string>>={};for(const [base,id] of Object.entries(editingRow.item.choices)){for(const product of Object.values(detail.products)){const sku=product.skus.find(row=>row.id===id);const combination=product.product.presentation?.option_combinations?.find(row=>row.code===sku?.code);if(combination)next[base]=combination.selections;else if(sku)next[base]={__sku:sku.id}}}setSelections(next);setQuantity(String(editingRow.item.quantity));prefilled.current=editingId}},[editingRow,editingId,detail.products,detail.status]);
  const known=["cats-bundle","cat-everyday-set","cat-keepsake-set"].includes(bundle.slug)
  const order=["cats-sketchbook-127gsm","cat-ruled","cat-ruled-hard","cat-stickers","cat-bookmark"]
  const rank=(slug?:string|null)=>{const index=order.indexOf(slug??"");return index<0?order.length:index}
@@ -1150,7 +1153,9 @@ export function PublishedBundleDetail({ bundle, language, onNavigate, renderDial
  const selectedFor=(part:typeof components[number])=>{
   const product=productFor(part),allowed=document?.component_choices.find(item=>item.component_sku_id===part.sku_id)
   if(!allowed)return product?.skus.find(sku=>sku.id===part.sku_id)
-  const selection=selections[part.sku_id]||{},combination=combinationsFor(part).find(item=>Object.entries(item.selections).every(([key,value])=>selection[key]===value))
+  const selection=selections[part.sku_id]||{}
+  if(!combinationsFor(part).length){const available=product?.skus.filter(sku=>allowed.allowed_sku_ids.includes(sku.id))??[];return available.length===1?available[0]:available.find(sku=>sku.id===selection.__sku)}
+  const combination=combinationsFor(part).find(item=>Object.entries(item.selections).every(([key,value])=>selection[key]===value))
   return product?.skus.find(sku=>sku.code===combination?.code&&allowed.allowed_sku_ids.includes(sku.id))
  }
  const choose=(part:typeof components[number],key:string,value:string)=>{
@@ -1169,6 +1174,8 @@ export function PublishedBundleDetail({ bundle, language, onNavigate, renderDial
  })
  const starting=bundleQuote(startingParts,document?.discount??null,1)
  const selected=parts.every(part=>part.sku),number=(n:number)=>n.toLocaleString(locale)
+ const availability=useBundleAvailability(bundle.slug,Object.fromEntries(components.map((part,index)=>[part.sku_id,parts[index].sku?.id??''])),selected&&!!quote)
+ const stockReady=availability.status==='normal'&&availability.configured&&(availability.unlimited||(availability.capacity!==null&&BigInt(availability.capacity)>=BigInt(qty||1)))
  const money=(amount:bigint)=>quote?displayBundleMoney(amount,quote.currency,language):"—"
  const counts=(n:number)=>components.map(part=>`${number(part.quantity*n)} ${t(part.title_fa,part.title_en)}`).join(t(" + "," + "))
  const collectionRoute=document?`${root}/collections/${document.collection_slug}`:null
@@ -1183,11 +1190,11 @@ export function PublishedBundleDetail({ bundle, language, onNavigate, renderDial
   </nav>
   <section className="product-main-layout">
    <div className="bundle-gallery-column">
-    <ProductGallery key={bundle.id} language={language} media={composition()} images={known?bundleGallery:[{label:["نمای پکیج","Bundle view"],view:"bundle"}]} productName={name} renderView={composition} renderDialog={renderDialog}/>
+    <ProductGallery key={bundle.id+detail.gallery.map(g=>g.url).join()} language={language} media={composition()} images={detail.gallery.length?detail.gallery.map(g=>({label:[g.alt_fa,g.alt_en],view:"bundle",src:g.url})):known?bundleGallery:[{label:["نمای پکیج","Bundle view"],view:"bundle"}]} productName={name} renderView={detail.gallery.length?(index)=>{const g=detail.gallery[index];return <img src={g.url} alt={t(g.alt_fa,g.alt_en)} style={{width:'100%',height:'100%',objectFit:'contain'}}/>}:composition} renderDialog={renderDialog}/>
     <div className="bundle-gallery-inventory"><span className="eyebrow">THE COMPLETE SET</span><h2>{known?t("یک مجموعه، چهار همراه کوچک","One set. Four little companions."):t("اجزای پکیج","Bundle contents")}</h2><p>{document?copy(document.contents):description[0]}</p></div>
    </div>
    <div className="product-purchase-panel bundle-purchase-panel">
-    <div className="product-intro-top">{collectionRoute?<a className="eyebrow" href={collectionRoute} onClick={event=>go(event,copy(document!.collection_title),collectionRoute)}>{t("کالکشن ","")+copy(document!.collection_title)+t(""," COLLECTION")}</a>:<span className="eyebrow">NILART STUDIO</span>}<button className="icon-button" aria-label={t("اشتراک‌گذاری لینک پکیج","Share bundle link")} onClick={share}><ShareIcon/></button></div>
+    <div className="product-intro-top">{collectionRoute?<a className="eyebrow" href={collectionRoute} onClick={event=>go(event,copy(document!.collection_title),collectionRoute)}>{t("کالکشن ","")+copy(document!.collection_title)+t(""," COLLECTION")}</a>:<span className="eyebrow">NILART STUDIO</span>}<FavoriteButton kind="bundle" id={bundle.id} language={language}><Glyph name="heart"/></FavoriteButton><button className="icon-button" aria-label={t("اشتراک‌گذاری لینک پکیج","Share bundle link")} onClick={share}><ShareIcon/></button></div>
     <span className="bundle-page-label">{t("پکیج","Bundle")}</span><h1 tabIndex={-1}>{name}</h1><p className="product-intro">{document?copy(document.intro):description[0]}</p>
     {document?.sample&&<p className="bundle-demo-note">{t("اجزا، گزینه‌ها و قیمت داده آزمایشی مرجع طراحی‌اند؛ موجودی و خرید واقعی فعال نیست.","Components, options and prices are reference test data; stock and real purchasing are unavailable.")}</p>}
     {shareMessage&&<p className="product-feedback" role="status">{shareMessage}</p>}
@@ -1198,22 +1205,23 @@ export function PublishedBundleDetail({ bundle, language, onNavigate, renderDial
       const product=productFor(part),combinations=combinationsFor(part),selection=selections[part.sku_id]||{},sku=selectedFor(part)
       const groups=combinations.length?product?.product.presentation?.option_groups||[]:[]
       return <BundleComponentCard key={part.sku_id}>
-       <div className="bundle-component-head"><div className="bundle-component-thumb" aria-hidden="true">{index===1&&known?<ReferenceBundleImage slug={bundle.slug} language={language} view={2}/>:part.product_slug?<ReferenceProductImage slug={part.product_slug} language={language}/>:<span>—</span>}</div><div><span className="component-fixed-count">{number(part.quantity)} {t("عدد در هر پکیج","per bundle")}</span><h3>{t(part.title_fa,part.title_en)}</h3>{!part.product_slug&&<p><bdi>{part.code}</bdi></p>}{!groups.length&&<p>{part.quantity===2?t("دو عدد از همین طرح؛ بدون انتخاب یا تغییر تعداد","Two of this design; fixed quantity and specification"):t("طرح و مشخصات ثابت","Fixed design and specification")}</p>}</div></div>
+       <div className="bundle-component-head"><div className="bundle-component-thumb" aria-hidden="true">{index===1&&known?<ReferenceBundleImage slug={bundle.slug} language={language} view={2}/>:part.product_slug?<ReferenceProductImage slug={part.product_slug} language={language}/>:<span>—</span>}</div><div><span className="component-fixed-count">{number(part.quantity)} {t("عدد در هر پکیج","per bundle")}</span><h3>{t(part.title_fa,part.title_en)}</h3>{!part.product_slug&&<p><bdi>{part.code}</bdi></p>}{!groups.length&&<p>{(document?.component_choices.find(c=>c.component_sku_id===part.sku_id)?.allowed_sku_ids.length??0)>1?t("یکی از گزینه‌های مجاز را انتخاب کنید","Choose one of the permitted options"):part.quantity===2?t("دو عدد از همین طرح؛ بدون انتخاب یا تغییر تعداد","Two of this design; fixed quantity and specification"):t("طرح و مشخصات ثابت","Fixed design and specification")}</p>}</div></div>
        {!!groups.length&&<><div className="product-option-groups">{groups.map(group=><ProductOptionGroup key={group.id} id={group.id} namePrefix={part.sku_id} label={copy(group.label)} selected={selection[group.id]||""} language={language} bundle onChange={value=>choose(part,group.id,value)} choices={group.choices.map(choice=>({value:choice.value,name:copy(choice.label),caption:choice.caption?copy(choice.caption):"",status:bundleOptionOffered(selection,group.id,choice.value,groups.map(group=>group.id),combinations)?"":"not-offered"}))} guide={group.id==="size"?<button type="button" className="option-guide-link" onClick={()=>setGuide(true)}>{t("راهنمای سایز","Size guide")}</button>:undefined} helper={group.helper?copy(group.helper):undefined}/>)}</div><p className="bundle-allowed-note">{t("فقط گزینه‌های مجاز این پکیج. همه گزینه‌های دفتر مستقل در این مجموعه عرضه نمی‌شوند.","Only this bundle's allowed options. Not every standalone notebook option is included.")}</p></>}
        <div className="bundle-component-footer"><span className="component-availability">{groups.length&&!sku?t("منتظر انتخاب دفتر","Choose notebook options"):t("موجودی تأیید نشده","Stock unconfirmed")}</span>{part.product_slug&&<a className="text-link" href={`${root}/products/${part.product_slug}`} onClick={event=>go(event,t(part.title_fa,part.title_en),`${root}/products/${part.product_slug}`)}>{t("محصول مستقل","Standalone product")}<span aria-hidden="true">↗</span></a>}</div>
-      </BundleComponentCard>
+      {!combinationsFor(part).length&&(document?.component_choices.find(c=>c.component_sku_id===part.sku_id)?.allowed_sku_ids.length??0)>1&&<Dropdown label={t('گزینه جزء','Component option')} value={selections[part.sku_id]?.__sku??''} onChange={value=>setSelections(old=>({...old,[part.sku_id]:{__sku:value}}))} options={[{value:'',label:t('انتخاب کنید','Choose')},...(productFor(part)?.skus.filter(s=>document?.component_choices.find(c=>c.component_sku_id===part.sku_id)?.allowed_sku_ids.includes(s.id)).map(s=>({value:s.id,label:s.code}))??[])]}/>}
+     </BundleComponentCard>
      })}
      {!components.length&&<p className="product-stock-state">{t("جزئیات اجزا در دسترس نیست","Component details unavailable")}</p>}
     </section>
     <BundlePurchaseSummary>
      <h2>{t("خلاصه پکیج شما","Your bundle, together")}</h2>
-     <div className="selection-summary" aria-live="polite">{selected?<><strong>{components.flatMap(part=>{const sku=selectedFor(part),product=productFor(part);return sku&&product?.product.presentation?.option_labels?.[sku.code]?[copy(product.product.presentation.option_labels[sku.code])]:[]}).join(" · ")}</strong><span>{counts(1)}</span></>:t("گزینه‌های دفتر را انتخاب کنید.","Choose your notebook options.")}</div>
+     <div className="selection-summary" aria-live="polite">{selected?<><strong>{components.flatMap(part=>{const sku=selectedFor(part),product=productFor(part);return sku&&product?.product.presentation?.option_labels?.[sku.code]?[copy(product.product.presentation.option_labels[sku.code])]:[]}).join(" · ")}</strong><span>{counts(1)}</span></>:t("گزینه‌های اجزای پکیج را انتخاب کنید.","Choose the bundle component options.")}</div>
      <div className="quantity-section"><label htmlFor="bundle-quantity">{t("تعداد پکیج","Bundle quantity")}</label><div className="quantity-stepper"><button aria-label={t("کم‌کردن تعداد پکیج","Decrease bundle quantity")} disabled={!selected||qty<=1} onClick={()=>setQuantity(String(qty-1))}>−</button><input id="bundle-quantity" inputMode="numeric" value={/^\d+$/.test(quantity)?Number(quantity).toLocaleString(locale,{useGrouping:false}):quantity} disabled={!selected} onChange={event=>setQuantity(event.target.value.replace(/[۰-۹]/g,d=>String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/[٠-٩]/g,d=>String("٠١٢٣٤٥٦٧٨٩".indexOf(d))))} aria-invalid={!qty} aria-describedby="bundle-quantity-help"/><button aria-label={t("افزایش تعداد پکیج","Increase bundle quantity")} disabled={!selected||!qty||qty>=999} onClick={()=>setQuantity(String(qty+1))}>+</button></div><p id="bundle-quantity-help">{qty?`${t("شما ","You're viewing ")}${number(qty)} ${t("پکیج انتخاب کرده‌اید: ","bundles: ")}${counts(qty)}`:t("تعداد صحیح مثبت وارد کنید.","Enter a positive whole quantity.")}</p></div>
      <div className="bundle-price-breakdown" aria-live="polite" aria-busy={detail.status==="loading"}>
       {!selected&&starting?<div className="starting-price"><span>{t("از","From")}</span><strong>{displayBundleMoney(starting.price,starting.currency,language)}</strong></div>:<>
-      <div className="product-stock-state"><span aria-hidden="true">—</span>{t("موجودی تأیید نشده","Stock unconfirmed")}</div>
+      <div className="product-stock-state" role="status">{!selected||!quote?t('ابتدا گزینه‌های اجزا را کامل کنید.','Complete the component selection first.'):availability.status==='loading'?t('در حال بررسی موجودی…','Checking availability…'):availability.status==='error'?t('بررسی موجودی ممکن نشد؛ انتخاب را دوباره بررسی کنید.','Unable to confirm availability. Review the selection again.'):!availability.configured?t('موجودی اجزا تنظیم نشده است.','Component stock is not configured.'):availability.unlimited?t('تحویل دیجیتال؛ بدون محدودیت موجودی فیزیکی','Digital delivery; no physical stock limit'):availability.capacity==='0'?t('این ترکیب ناموجود است.','This combination is out of stock.'):t('ظرفیت این انتخاب: ','Available for this selection: ')+BigInt(availability.capacity!).toLocaleString(locale)}</div>{availability.status==='error'&&<button type="button" className="text-link" onClick={availability.retry}>{t('بررسی دوباره موجودی','Retry availability')}</button>}
       <div className="bundle-price-row"><span>{t("خرید جداگانه اجزا","Items purchased separately")}</span><s>{quote?money(quote.separate):"—"}</s></div>
-      <div className="bundle-price-row bundle-discount-row"><span>{t("تخفیف ثابت پکیج","Fixed bundle discount")}</span><strong>{quote?`− ${money(quote.saving)}`:"—"}</strong></div>
+      <div className="bundle-price-row bundle-discount-row"><span>{t("تخفیف پکیج","Bundle discount")}</span><strong>{quote?`− ${money(quote.saving)}`:"—"}</strong></div>
       <div className="bundle-price-row bundle-unit-price"><span>{t("قیمت هر پکیج","Price per bundle")}</span><strong>{quote?money(quote.price):"—"}</strong></div>
       <div className="selection-total"><span>{t("مبلغ کل این انتخاب","Selection total")}</span><strong>{quote?money(quote.total):"—"}</strong></div>
       </>}
@@ -1221,7 +1229,7 @@ export function PublishedBundleDetail({ bundle, language, onNavigate, renderDial
       <small className="demo-price">{document?.sample?t("قیمت و تخفیف فقط داده آزمایشی‌اند.","Price and saving are test data only."):!quote?t("قیمت این انتخاب در دسترس نیست.","Selection price unavailable."):""}</small>
      </div>
      {document?.allow_discount_stacking===false&&<p className="bundle-stacking-note">{t("تخفیف این پکیج با کد تخفیف دیگر جمع نمی‌شود. این محدودیت فقط مربوط به پکیج است، نه محصولات مستقل سبد.","This bundle discount can't be combined with another discount code. This restriction applies to the bundle, not standalone products in your cart.")}</p>}
-     <AddToBasket item={{kind:"bundle",item_id:bundle.id,quantity:qty,choices:Object.fromEntries(components.map((part,index)=>[part.sku_id,parts[index].sku?.id||""]))}} language={language} expectedUnit={quote?tomanAmount(fromMicroUnits(quote.price),quote.currency):undefined} disabled={!selected||!quote||qty>99||!!editingId&&!editingRow} lineId={editingId||undefined} onSaved={editingId?()=>onNavigate(t("سبد خرید","Basket"),`${root}/cart`):undefined} label={editingId?t("ذخیره انتخاب‌ها","Save selections"):t("افزودن پکیج به سبد","Add bundle to basket")}/><p className="product-reservation-note">{t("انتخاب‌ها پیش‌نمایش‌اند؛ موجودی هیچ جزء رزرو نمی‌شود.","Selections are a preview; no component stock is reserved.")}</p>
+     <AddToBasket item={{kind:"bundle",item_id:bundle.id,quantity:qty,choices:Object.fromEntries(components.map((part,index)=>[part.sku_id,parts[index].sku?.id||""]))}} language={language} expectedUnit={quote?tomanAmount(fromMicroUnits(quote.price),quote.currency):undefined} disabled={!selected||!quote||!stockReady||qty>99||!!editingId&&!editingRow} lineId={editingId||undefined} onSaved={editingId?()=>onNavigate(t("سبد خرید","Basket"),`${root}/cart`):undefined} label={editingId?t("ذخیره انتخاب‌ها","Save selections"):t("افزودن پکیج به سبد","Add bundle to basket")}/><p className="product-reservation-note">{t("انتخاب‌ها پیش‌نمایش‌اند؛ موجودی هیچ جزء رزرو نمی‌شود.","Selections are a preview; no component stock is reserved.")}</p>
     </BundlePurchaseSummary>
    </div>
   </section>

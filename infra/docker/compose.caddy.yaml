@@ -1,0 +1,140 @@
+# Standalone internet deployment. Does not read local/demo env or volumes.
+name: nilart-live
+x-runtime: &runtime
+  NILART_ENVIRONMENT: production
+  NILART_PUBLIC_ORIGIN: https://${NILART_DOMAIN:?Set NILART_DOMAIN}
+  NILART_OTP_HMAC_KEY: ${NILART_OTP_HMAC_KEY:?Set OTP secret}
+  NILART_DEV_MODE: 'false'
+  NILART_FAKE_SMS: 'false'
+  NILART_SMS_MODE: ${NILART_SMS_MODE:-disabled}
+  NILART_KAVENEGAR_API_KEY: ${NILART_KAVENEGAR_API_KEY:-}
+  NILART_KAVENEGAR_APPROVED_TEMPLATES: ${NILART_KAVENEGAR_APPROVED_TEMPLATES:-}
+  NILART_ORDER_SMS_ENABLED: ${NILART_ORDER_SMS_ENABLED:-false}
+  NILART_KAVENEGAR_TEMPLATE_PURCHASE: ${NILART_KAVENEGAR_TEMPLATE_PURCHASE:-nilartpurchase}
+  NILART_KAVENEGAR_TEMPLATE_SHIPPED: ${NILART_KAVENEGAR_TEMPLATE_SHIPPED:-nilartshipped}
+  NILART_KAVENEGAR_TEMPLATE_LOGIN: ${NILART_KAVENEGAR_TEMPLATE_LOGIN:-nilartlogin}
+  NILART_KAVENEGAR_TEMPLATE_REGISTER: ${NILART_KAVENEGAR_TEMPLATE_REGISTER:-nilartregister}
+  NILART_KAVENEGAR_TEMPLATE_RECOVERY: ${NILART_KAVENEGAR_TEMPLATE_RECOVERY:-nilartrecovery}
+  NILART_KAVENEGAR_TEMPLATE_PHONE_CHANGE: ${NILART_KAVENEGAR_TEMPLATE_PHONE_CHANGE:-nilartphonechange}
+  NILART_PAYMENT_MODE: ${NILART_PAYMENT_MODE:-disabled}
+  NILART_ZIBAL_MERCHANT_ID: "${NILART_ZIBAL_MERCHANT_ID:-}"
+  NILART_DATABASE_URL: postgresql+psycopg://nilart:${POSTGRES_PASSWORD:?Set database secret}@postgres:5432/nilart
+  NILART_REDIS_URL: redis://:${REDIS_PASSWORD:?Set cache secret}@redis:6379/0
+  NILART_BROKER_URL: amqp://nilart:${RABBITMQ_PASSWORD:?Set queue secret}@rabbitmq:5672//
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nilart
+      POSTGRES_USER: nilart
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U nilart -d nilart']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    command: [sh, -ec, 'exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"']
+    volumes: [redis_data:/data]
+    healthcheck:
+      test: [CMD-SHELL, 'REDISCLI_AUTH="$$REDIS_PASSWORD" redis-cli ping | grep -q PONG']
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  rabbitmq:
+    image: rabbitmq:4-alpine
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: nilart
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes: [rabbitmq_data:/var/lib/rabbitmq]
+    healthcheck:
+      test: [CMD, rabbitmq-diagnostics, -q, ping]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+  api:
+    image: nilart-live-api:current
+    build: {context: ../../Backend, dockerfile: Dockerfile.deploy}
+    restart: unless-stopped
+    environment: *runtime
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      rabbitmq: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+  worker:
+    image: nilart-live-api:current
+    restart: unless-stopped
+    command: [celery, -A, 'nilart.bootstrap.worker:celery', worker, --loglevel=INFO, --concurrency=2, --hostname=worker@%h]
+    environment: *runtime
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: [CMD-SHELL, 'celery -A nilart.bootstrap.worker:celery inspect ping --destination "worker@$$HOSTNAME" --timeout 5 | grep -q pong']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+  scheduler:
+    image: nilart-live-api:current
+    restart: unless-stopped
+    command: [celery, -A, 'nilart.bootstrap.worker:celery', beat, --loglevel=INFO, --schedule=/tmp/celerybeat-schedule, --pidfile=/tmp/celerybeat.pid]
+    environment: *runtime
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: [CMD-SHELL, 'test -s /tmp/celerybeat.pid && kill -0 "$$(cat /tmp/celerybeat.pid)"']
+      interval: 30s
+      timeout: 3s
+      retries: 5
+  web:
+    image: nilart-live-web:current
+    build: {context: ../../Frontend, dockerfile: Dockerfile}
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: '3000'
+      API_INTERNAL_URL: http://api:8000
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ['80:80', '443:443', '443:443/udp']
+    environment:
+      NILART_DOMAIN: ${NILART_DOMAIN}
+    volumes:
+      - ../caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api: {condition: service_healthy}
+      web: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, http://127.0.0.1:2019/config/]
+      interval: 15s
+      timeout: 3s
+      retries: 10
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  caddy_data:
+  caddy_config:

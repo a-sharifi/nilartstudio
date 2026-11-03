@@ -209,12 +209,16 @@ export default function CommissionsPage({
   onDemoSignIn,
   initialMode = "normal",
   live = false,
+  notebookContent,
+  initialKind = "artwork",
 }: {
   language: 0 | 1
   signedIn: boolean
   onNavigate: (name: string, route: string) => void
   onDemoSignIn?: (value: boolean) => void
   live?: boolean
+  notebookContent?: ReactNode
+  initialKind?: "artwork" | "notebook"
   initialMode?: CommissionMode
 }) {
   const t = (fa: string, en: string) => (language === 0 ? fa : en)
@@ -223,6 +227,7 @@ export default function CommissionsPage({
     n.toLocaleString(language === 0 ? "fa-IR" : "en-US")
   const prefix = language === 0 ? "/fa" : "/en"
   const [mode, setMode] = useState<CommissionMode>(initialMode)
+  const [kind, setKind] = useState(initialKind)
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
   const [starting, setStarting] = useState(false)
   const [error, setError] = useState("")
@@ -386,32 +391,29 @@ export default function CommissionsPage({
           {t("خانه", "Home")}
         </a>
         <span>/</span>
-        <span>{t("سفارش نقاشی سفارشی", "Custom artwork")}</span>
+        <span>{notebookContent ? t("نقاشی و دفتر اختصاصی", "Custom artwork and notebooks") : t("سفارش نقاشی سفارشی", "Custom artwork")}</span>
       </nav>
       <section className="commission-hero">
         <div className="commission-hero-copy">
           <div className="eyebrow">
             <span className="tiny-line" />
-            {t("اثری که از شما شروع می‌شود", "AN ARTWORK THAT STARTS WITH YOU")}
+            {t("از ایدهٔ شما تا یک طرح اختصاصی", "YOUR IDEA, MADE PERSONAL")}
           </div>
           <h1>
             {t("ایده شما،", "Your idea,")}
             <br />
-            {t("نقطه شروع یک ", "the start of an ")}
-            <span>{t("نقاشی", "artwork")}</span>
+            {notebookContent ? t("نقاشی یا ", "an artwork or a ") : t("نقطه شروع یک ", "the start of an ")}
+            <span>{notebookContent ? t("دفتر اختصاصی", "personal notebook") : t("نقاشی", "artwork")}</span>
           </h1>
           <p>
             {t(
-              "تصویر یا ایده خود را معرفی کنید، ترجیحاتتان را انتخاب کنید و پیشنهاد سفارش را پیش از پرداخت بررسی کنید.",
-              "Share your image or idea, choose your preferences, and review the order proposal before payment.",
+              "برای سفارش نقاشی یا دفتر اختصاصی، ایده یا تصویرتان را بفرستید؛ سپس سبک نقاشی یا اندازه، کاغذ و طرح جلد دفتر را انتخاب کنید.",
+              "Share your idea or images for a custom artwork or notebook. Choose your painting style, or your notebook’s size, paper and cover design.",
             )}
           </p>
           <div className="commission-hero-actions">
-            {startButton()}
-            {link(
-              t("آثار آماده را ببینید", "Explore available artworks"),
-              `${prefix}/artworks`,
-            )}
+            {notebookContent && kind === "notebook" ? <a className="button primary commission-start" href="#notebook-request">{t("دفترت را بساز", "Build your notebook")} <CommissionIcon name="arrow" size={19}/></a> : startButton()}
+            {notebookContent ? <a className="text-link" href="#notebook-request" onClick={() => {setKind("notebook");requestAnimationFrame(() => document.getElementById("notebook-request")?.scrollIntoView({behavior:"smooth",block:"start"}))}}>{t("سفارش دفتر سفارشی", "Order a custom notebook")}<CommissionIcon name="arrow" size={18}/></a> : link(t("سفارش دفتر سفارشی", "Order a custom notebook"), `${prefix}/commissions/notebook#notebook-request`)}
           </div>
           <p className="commission-no-commitment">
             <CommissionIcon name="document" size={16} />
@@ -424,18 +426,23 @@ export default function CommissionsPage({
             <CommissionIcon name="lock" size={16} />
             <p>
               {t(
-                "مطالعه این صفحه عمومی است. در مسیر نمونه، برای آپلود خصوصی و ذخیره درخواست، ورود در مرحله بعد لازم است؛ ذخیره مهمان فعال نیست.",
-                "This page is public. In the demo flow, sign-in is required before private uploads or saving a request in the next step; guest storage is not enabled.",
+                "نمونه‌ها را ببینید و مسیر دلخواهتان را انتخاب کنید. برای ارسال تصاویر خصوصی و ثبت سفارش وارد حساب شوید.",
+                "Explore the examples and choose your order. Sign in to upload private images and save your request.",
               )}
             </p>
           </div>
         </div>
         <IntroArtwork language={language} />
       </section>
+      {notebookContent && <><section className="commission-order-choices" aria-label={t("چه چیزی برایت بسازیم؟", "What shall we create?")}>
+        <button type="button" aria-pressed={kind === "artwork"} onClick={() => setKind("artwork")}><CommissionIcon name="brush" size={28}/><span><strong>{t("نقاشی اختصاصی", "Custom artwork")}</strong><small>{t("یک اثر مستقل، از تصویر یا ایدهٔ تو", "A standalone artwork inspired by your idea")}</small></span><CommissionIcon name="arrow"/></button>
+        <button type="button" aria-pressed={kind === "notebook"} onClick={() => setKind("notebook")}><CommissionIcon name="document" size={28}/><span><strong>{t("دفتر و اسکچ‌بوک اختصاصی", "Custom notebook & sketchbook")}</strong><small>{t("طرح تو روی جلد، با کاغذ و اندازهٔ دلخواه", "Your cover, your paper, your size")}</small></span><CommissionIcon name="arrow"/></button>
+      </section><div hidden={kind !== "notebook"}>{notebookContent}</div></>}
+      <div hidden={!!notebookContent && kind !== "artwork"}>
       <div className="commission-demo-notice">
         <span>{live ? t("درخواست بررسی", "Review request") : "DEMO"}</span>
         <p>
-          {live ? t("ایده متنی را برای بررسی ثبت کنید. تصویر، ارزیابی و قیمت‌گذاری هنوز در دسترس نیست. نمونه‌ها و گزینه‌ها نمایشی‌اند و تأیید اجرای سفارش نیستند.", "Submit a text brief for review. Images, assessment and quotes are unavailable. Illustrations and options are examples, not confirmed production offerings.") : t(
+          {live ? t("ایده یا تصویر مرجع را بفرستید و مشخصات اثر را انتخاب کنید. پیشنهاد و مبلغ نقاشی پس از بررسی تأیید می‌شود.", "Share your idea or reference images and choose your artwork specifications. The proposal and price are confirmed after review.") : t(
             "این صفحه نمونه طراحی مسیر است؛ محتوای سیاست‌ها، انواع اجرا و پیش‌نویس‌ها به سرویس واقعی متصل نیستند. نمونه سفارش دارای مجوز ارائه نشده است.",
             "This is a flow-design prototype. Policies, execution options and drafts are not connected to a live service. No licensed commission examples have been provided.",
           )}
@@ -853,6 +860,7 @@ export default function CommissionsPage({
         </p>
       )}
       {!live && previews}
+      </div>
     </div>
   )
 }

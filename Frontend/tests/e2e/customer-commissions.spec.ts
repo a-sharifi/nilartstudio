@@ -1,0 +1,90 @@
+import {expect,test,type Page} from "@playwright/test"
+const id="00000000-0000-4000-8000-000000000001",artwork="00000000-0000-4000-8000-000000000002"
+const image=Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC","base64")
+const original={id,version:1,status:"awaiting_customer",created_at:"2026-10-13T12:00:00Z",updated_at:"2026-10-13T12:00:00Z",brief:{idea:"Private portrait",changes:"",style:"Oil",size:"40 x 60",execution:"handmade"},agreement:"AGREED-TERMS",revision_allowance:1,artwork:[{id:artwork,number:1,note:"Review colors",created_at:"2026-10-13T12:00:00Z",action:null as string|null,details:null as string|null,decided_at:null as string|null}]}
+async function access(page:Page){await page.route("**/api/v1/auth/access",route=>route.fulfill({json:{account_id:id,roles:["customer"],permissions:["account.read_self","account.write_self"]}}));await page.route("**/api/v1/auth/session/csrf",route=>route.fulfill({json:{csrf_token:"test-token"}}));page.on("dialog",dialog=>dialog.accept())}
+test("owned history opens private preview and approval persists",async({page})=>{
+ await access(page);let item=structuredClone(original)
+ await page.route("**/api/v1/account/commissions?*",route=>route.fulfill({json:{items:[item],next_cursor:null}}))
+ await page.route(`**/api/v1/account/commissions/${id}`,route=>route.fulfill({json:item}))
+ await page.route(`**/api/v1/account/commissions/${id}/artwork/${artwork}/preview`,route=>route.fulfill({body:image,contentType:"image/png",headers:{"Cache-Control":"no-store"}}))
+ await page.route(`**/api/v1/account/commissions/${id}/decisions/*`,route=>{const body=route.request().postDataJSON();item={...item,status:"approved",version:2,artwork:[{...item.artwork[0],action:body.action,details:body.details,decided_at:item.updated_at}]};return route.fulfill({json:item})})
+ await page.goto("/en/account/commissions");await page.getByRole("link",{name:"Private portrait",exact:true}).click()
+ await expect(page.getByRole("checkbox")).toBeEnabled();await page.getByRole("checkbox").check()
+ await page.getByRole("button",{name:"Approve this version",exact:true}).click()
+ await expect(page.getByText("Artwork approved",{exact:true})).toBeVisible();await page.reload()
+ await expect(page.getByText("This version was approved.",{exact:true})).toBeVisible()
+})
+test("uncertain revision keeps feedback and reconciles without a second write",async({page})=>{
+ await access(page);let item=structuredClone(original),writes=0
+ await page.route(`**/api/v1/account/commissions/${id}`,route=>route.fulfill({json:item}))
+ await page.route(`**/api/v1/account/commissions/${id}/artwork/${artwork}/preview`,route=>route.fulfill({body:image,contentType:"image/png"}))
+ await page.route(`**/api/v1/account/commissions/${id}/decisions/*`,route=>{writes++;const body=route.request().postDataJSON();item={...item,status:"revision_requested",version:2,artwork:[{...item.artwork[0],action:body.action,details:body.details,decided_at:item.updated_at}]};return route.fulfill({status:503,json:{code:"service_unavailable"}})})
+ await page.goto(`/en/account/commissions/${id}`);await expect(page.getByRole("checkbox")).toBeEnabled();await page.getByRole("checkbox").check();await page.getByRole("textbox",{name:"Revision feedback"}).fill("Simplify background")
+ await page.getByRole("button",{name:"Request revision",exact:true}).click();await expect(page.getByRole("button",{name:"Check saved result"})).toBeVisible()
+ await expect(page.getByRole("textbox",{name:"Revision feedback"})).toHaveValue("Simplify background");await expect(page.getByRole("button",{name:"Approve this version"})).toBeDisabled()
+ await page.getByRole("button",{name:"Check saved result"}).click();await expect(page.getByText("Revision requested",{exact:true})).toBeVisible();expect(writes).toBe(1)
+})
+test("failed private image blocks approval",async({page})=>{
+ await access(page);await page.route(`**/api/v1/account/commissions/${id}`,route=>route.fulfill({json:original}));await page.route(`**/api/v1/account/commissions/${id}/artwork/${artwork}/preview`,route=>route.fulfill({status:404,body:""}))
+ await page.goto(`/en/account/commissions/${id}`);await expect(page.getByText("Preview unavailable; artwork approval is disabled.",{exact:true})).toBeVisible();await expect(page.getByRole("button",{name:"Approve this version"})).toBeDisabled()
+})
+test("Persian mobile commission history is empty without fixtures",async({page})=>{
+ await access(page);await page.route("**/api/v1/account/commissions?*",route=>route.fulfill({json:{items:[],next_cursor:null}}));await page.setViewportSize({width:390,height:844});await page.goto("/fa/account/commissions")
+ await expect(page.getByRole("heading",{name:"هنوز سفارش نقاشی ندارید",exact:true})).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy()
+})
+test("Persian mobile history reopens old preview without allowing a stale decision",async({page})=>{
+ await access(page);const latest="00000000-0000-4000-8000-000000000003"
+ const item={...original,version:3,artwork:[{...original.artwork[0],id:latest,number:2},{...original.artwork[0],action:"revise",details:"Simplify background",decided_at:"2026-10-13T13:00:00Z"}]}
+ await page.route(`**/api/v1/account/commissions/${id}`,r=>r.fulfill({json:item}))
+ await page.route(`**/api/v1/account/commissions/${id}/artwork/*/preview`,r=>r.fulfill({body:image,contentType:"image/png"}))
+ await page.setViewportSize({width:390,height:844});await page.goto(`/fa/account/commissions/${id}`)
+ const history=page.getByRole("region",{name:"تاریخچه بررسی اثر",exact:true})
+ await expect(history.getByText("Simplify background",{exact:true})).toBeVisible()
+ await history.getByRole("button",{name:"مشاهده این نسخه",exact:true}).first().click()
+ await expect(page.getByRole("checkbox")).toHaveCount(0)
+ await expect(page.getByRole("img",{name:"پیش‌نمایش خصوصی اثر برای بررسی",exact:true})).toHaveAttribute("src",`/api/v1/account/commissions/${id}/artwork/${artwork}/preview`)
+ await history.getByRole("button",{name:"مشاهده این نسخه",exact:true}).last().click()
+ await expect(page.getByRole("checkbox")).not.toBeChecked();await expect(page.getByRole("button",{name:"تأیید همین نسخه",exact:true})).toBeDisabled()
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy()
+})
+test("Persian mobile filters commission history and clears search",async({page})=>{
+ await access(page);let seen=false
+ await page.route("**/api/v1/account/commissions?*",route=>{const url=new URL(route.request().url());if(url.searchParams.get("q")==="portrait"&&url.searchParams.get("status")==="approved")seen=true;return route.fulfill({json:{items:url.searchParams.has("q")?[]:[original],next_cursor:null}})})
+ await page.setViewportSize({width:390,height:844});await page.goto("/fa/account/commissions")
+ await expect(page.getByRole("link",{name:"Private portrait",exact:true})).toBeVisible()
+ await page.getByRole("textbox",{name:"جست‌وجوی سفارش نقاشی",exact:true}).fill("portrait")
+ await page.getByRole("combobox",{name:"وضعیت سفارش",exact:true}).selectOption("approved")
+ await page.getByRole("button",{name:"جست‌وجو",exact:true}).click()
+ await expect(page.getByText("سفارشی با این فیلترها پیدا نشد",{exact:true})).toBeVisible();expect(seen).toBeTruthy()
+ await page.getByRole("button",{name:"پاک کردن فیلترها",exact:true}).click()
+ await expect(page.getByRole("link",{name:"Private portrait",exact:true})).toBeVisible()
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy()
+})
+test("Persian failed preview retries privately and requires acknowledgement",async({page})=>{
+ await access(page);let previews=0,writes=0
+ await page.route(`**/api/v1/account/commissions/${id}`,r=>r.fulfill({json:original}))
+ await page.route(`**/api/v1/account/commissions/${id}/artwork/${artwork}/preview`,r=>{previews++;return previews===1?r.fulfill({status:503,body:""}):r.fulfill({body:image,contentType:"image/png",headers:{"Cache-Control":"no-store"}})})
+ await page.route(`**/api/v1/account/commissions/${id}/decisions/*`,r=>{writes++;return r.fulfill({status:503,json:{code:"service_unavailable"}})})
+ await page.setViewportSize({width:390,height:844});await page.goto(`/fa/account/commissions/${id}`)
+ await expect(page.getByRole("button",{name:"دریافت دوباره پیش‌نمایش",exact:true})).toBeVisible()
+ await expect(page.getByRole("button",{name:"تأیید همین نسخه",exact:true})).toBeDisabled()
+ await page.getByRole("button",{name:"دریافت دوباره پیش‌نمایش",exact:true}).click()
+ await expect(page.getByRole("checkbox")).toBeEnabled();await expect(page.getByRole("checkbox")).not.toBeChecked()
+ await page.getByRole("textbox",{name:"جزئیات اصلاح",exact:true}).fill("Keep feedback")
+ await page.getByRole("checkbox").check()
+ await expect(page.getByRole("button",{name:"درخواست اصلاح",exact:true})).toBeEnabled()
+ expect(previews).toBe(2);expect(writes).toBe(0);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy()
+})
+test("pending artwork approval keeps the review page open until confirmed",async({page})=>{
+ await access(page);let release!:()=>void;const gate=new Promise<void>(done=>{release=done})
+ await page.route(`**/api/v1/account/commissions/${id}`,r=>r.fulfill({json:original}))
+ await page.route(`**/api/v1/account/commissions/${id}/artwork/${artwork}/preview`,r=>r.fulfill({body:image,contentType:"image/png"}))
+ await page.route(`**/api/v1/account/commissions/${id}/decisions/*`,async r=>{await gate;await r.fulfill({json:{...original,status:"approved",version:2,artwork:[{...original.artwork[0],action:"approve",details:"",decided_at:original.updated_at}]}})})
+ await page.goto(`/en/account/commissions/${id}`);await expect(page.getByRole("checkbox")).toBeEnabled();await page.getByRole("checkbox").check()
+ await page.getByRole("button",{name:"Approve this version",exact:true}).click()
+ await expect(page.getByText("Saving or checking the result; please wait.",{exact:true})).toBeVisible()
+ await page.getByRole("link",{name:"My orders",exact:true}).click()
+ await expect(page).toHaveURL(new RegExp(`/en/account/commissions/${id}$`))
+ release();await expect(page.getByText("Artwork approved",{exact:true})).toBeVisible()
+})

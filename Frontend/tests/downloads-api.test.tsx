@@ -1,0 +1,12 @@
+import {webcrypto,createHash} from "node:crypto"
+import {afterEach,beforeEach,expect,test,vi} from "vitest"
+import {downloadsApi,type CustomerDownload} from "../src/features/customer/downloads-api"
+import {sessionLifecycle} from "../src/features/identity/session-lifecycle"
+const id="00000000-0000-4000-8000-000000000001"
+const item:CustomerDownload={id,order_id:id,line_id:id,file_name:"Final.pdf",description:"",size:4,sha256:createHash("sha256").update("file").digest("hex"),version:0,created_at:"2026-10-13T12:00:00Z",updated_at:"2026-10-13T12:00:00Z",order_reference:"TEST-ORDER"}
+beforeEach(()=>{vi.stubGlobal("fetch",vi.fn());vi.stubGlobal("crypto",webcrypto);sessionLifecycle.authenticated("download-owner",sessionLifecycle.capture())})
+afterEach(()=>{vi.unstubAllGlobals();vi.restoreAllMocks()})
+test("download verifies exact size and checksum before returning bytes",async()=>{vi.mocked(fetch).mockResolvedValue(new Response("file",{headers:{"Content-Type":"application/octet-stream"}}));const result=await downloadsApi.content(item,new AbortController().signal);expect(await result.text()).toBe("file");expect(fetch).toHaveBeenCalledWith(`/api/v1/account/downloads/${id}/content`,expect.objectContaining({credentials:"same-origin",cache:"no-store",redirect:"error"}))})
+test("mismatched content and active document responses fail integrity checks",async()=>{for(const response of [new Response("evil",{headers:{"Content-Type":"application/octet-stream"}}),new Response("file-extra",{headers:{"Content-Type":"application/octet-stream"}}),new Response("file",{headers:{"Content-Type":"text/html"}})]){vi.mocked(fetch).mockResolvedValueOnce(response);await expect(downloadsApi.content(item,new AbortController().signal)).rejects.toThrow("file_integrity_error")}})
+test("a changed account cannot receive an in-flight file",async()=>{let resolve!:(response:Response)=>void;vi.mocked(fetch).mockImplementation(()=>new Promise<Response>(done=>{resolve=done}));const pending=downloadsApi.content(item,new AbortController().signal);sessionLifecycle.authenticated("different-owner",sessionLifecycle.capture());resolve(new Response("file",{headers:{"Content-Type":"application/octet-stream"}}));await expect(pending).rejects.toThrow("permission_denied")})
+test("revoked file response never becomes downloadable bytes",async()=>{vi.mocked(fetch).mockResolvedValue(new Response("",{status:404}));await expect(downloadsApi.content(item,new AbortController().signal)).rejects.toThrow("file_unavailable")})

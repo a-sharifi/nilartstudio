@@ -1,0 +1,7 @@
+.return-inspection-form fieldset,.order-review-form fieldset{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;min-width:0;padding:16px;margin:16px 0;border:1px solid var(--border);border-radius:12px}
+.return-inspection-form label,.order-review-form label{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0}
+.return-inspection-form label:first-child,.return-inspection-form .return-inspection-reason,.return-inspection-form fieldset>button,.order-review-form label,.order-review-form fieldset>button{grid-column:1/-1}
+.return-inspection-form input[type=number],.return-inspection-form textarea,.order-review-form textarea,.order-review-form select{width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:8px;background:var(--surface);padding:10px 12px;min-height:44px;font:inherit;color:inherit}
+.return-inspection-form textarea,.order-review-form textarea{min-height:100px;resize:vertical}
+.return-inspections td small{overflow-wrap:anywhere}.return-inspections td p{margin-block:6px}.return-inspections bdi{display:inline-block;font-variant-numeric:tabular-nums}
+@media(max-width:600px){.return-inspection-form fieldset,.order-review-form fieldset{grid-template-columns:minmax(0,1fr);padding:12px}.return-inspection-form fieldset>button,.order-review-form fieldset>button{width:100%}}

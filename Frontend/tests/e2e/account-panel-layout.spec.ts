@@ -1,0 +1,86 @@
+import {expect,test,type Page} from "@playwright/test"
+const owner="00000000-0000-4000-8000-000000000001",id="00000000-0000-4000-8000-000000000002"
+async function access(page:Page){
+ await page.route("**/api/v1/account/downloads?*",r=>r.fulfill({json:{items:[],next_cursor:null}}))
+ await page.route("**/api/v1/auth/access",route=>route.fulfill({json:{account_id:owner,roles:["customer"],permissions:["account.read_self","account.write_self","orders.read_self"]}}))
+ await page.route("**/api/v1/account/commissions?*",r=>r.fulfill({json:{items:[],next_cursor:null}}))
+ await page.route("**/api/v1/account/orders/summary",r=>r.fulfill({json:{orders:7,awaiting_delivery:3,active_requests:2,available_files:4}}))
+ await page.route("**/api/v1/account/orders?*",route=>route.fulfill({json:{items:[],next_cursor:null}}))
+ await page.route("**/api/v1/account/panel/summary",route=>route.fulfill({json:{favorites:2,addresses:1,tickets:1,unread_notifications:1}}))
+ await page.route("**/api/v1/account/panel/notification?*",route=>route.fulfill({json:{items:new URL(route.request().url()).searchParams.get("category")==="account"?[]:[{id,kind:"notification",version:0,data:{read:false,title_fa:"پاسخ تازه پشتیبانی",title_en:"A new support reply",category:"support"},created_at:"2026-10-13T10:00:00Z",updated_at:"2026-10-13T10:00:00Z"}],next_cursor:null}}))
+}
+test("reference dashboard and orders navigation on English desktop",async({page})=>{
+ await access(page)
+ await page.setViewportSize({width:1440,height:1000})
+ await page.goto("/en/account")
+ await expect(page.locator(".dash-stats").first()).toBeVisible()
+ await expect(page.getByText("A new support reply",{exact:true})).toBeVisible()
+ await expect(page.getByRole("region",{name:"Your order activity"})).toContainText("7Recorded orders")
+ await expect(page.getByText("NA-24018",{exact:true})).toHaveCount(0)
+ await page.screenshot({path:"/tmp/nilart-account-desktop.png",fullPage:true})
+ await page.getByRole("link",{name:"My orders",exact:true}).click()
+ await expect(page.getByRole("heading",{name:"No orders yet",exact:true})).toBeVisible()
+ await expect(page.getByRole("link",{name:"My orders",exact:true})).toHaveAttribute("aria-current","page")
+ await expect(page.locator(".dash-destination-dialog[open]")).toHaveCount(0)
+})
+test("Persian mobile dashboard drawer and notification filters",async({page})=>{
+ await access(page)
+ await page.setViewportSize({width:390,height:844})
+ await page.goto("/fa/account")
+ await expect(page.locator(".dash-stats").first()).toBeVisible()
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy()
+ await page.screenshot({path:"/tmp/nilart-account-mobile.png",fullPage:true})
+ await page.locator("button.dash-menu").click()
+ await page.getByRole("dialog").locator('a[href="/fa/account/notifications"]').click()
+ await expect(page.getByRole("heading",{name:"پاسخ تازه پشتیبانی",exact:true})).toBeVisible()
+ await page.getByRole("combobox",{name:"دسته‌بندی"}).click()
+ await page.getByRole("option",{name:"حساب",exact:true}).click()
+ await expect(page.getByRole("heading",{name:"موردی با این فیلترها پیدا نشد",exact:true})).toBeVisible()
+ await page.getByRole("button",{name:"نمایش همه",exact:true}).click()
+ await expect(page.getByRole("heading",{name:"پاسخ تازه پشتیبانی",exact:true})).toBeVisible()
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy()
+ await page.screenshot({path:"/tmp/nilart-notifications-mobile.png",fullPage:true})
+})
+test("favorites search, kinds and unavailable records on mobile",async({page})=>{
+ await access(page)
+ const favorites=[{id,kind:"favorite",version:0,data:{kind:"product"},created_at:"2026-10-13T10:00:00Z",updated_at:"2026-10-13T10:00:00Z",catalog:{slug:"cats",title_en:"Cats notebook",title_fa:"دفتر گربه‌ها"}},{id:owner,kind:"favorite",version:1,data:{kind:"artwork"},created_at:"2026-10-12T10:00:00Z",updated_at:"2026-10-12T10:00:00Z",catalog:null}]
+ await page.route("**/api/v1/account/panel/favorite?*",route=>{const filters=new URL(route.request().url()).searchParams;return route.fulfill({json:{items:favorites.filter(item=>(!filters.get("favorite_type")||item.data.kind===filters.get("favorite_type"))&&(!filters.get("q")||item.catalog?.title_en.toLowerCase().includes(filters.get("q")!.toLowerCase()))),next_cursor:null}})})
+ await page.setViewportSize({width:390,height:844})
+ await page.goto("/en/account/favorites")
+ await expect(page.getByRole("heading",{name:"Cats notebook",exact:true})).toBeVisible()
+ await page.getByRole("button",{name:"Artwork",exact:true}).click()
+ await expect(page.getByRole("heading",{name:"This item is currently unavailable",exact:true})).toBeVisible()
+ await expect(page.getByRole("heading",{name:"Cats notebook",exact:true})).toHaveCount(0)
+ await page.getByRole("button",{name:"All",exact:true}).click()
+ await page.getByRole("searchbox").fill("cats")
+ await page.getByRole("button",{name:"Search all favorites",exact:true}).click()
+ await expect(page.getByRole("heading",{name:"Cats notebook",exact:true})).toBeVisible()
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBeTruthy()
+ await page.screenshot({path:"/tmp/nilart-favorites-mobile.png",fullPage:true})
+})
+test("dashboard activity count failure keeps account cards and retries",async({page})=>{
+ await access(page);let failed=true
+ await page.route("**/api/v1/account/orders/summary",r=>failed?r.fulfill({status:503,json:{code:"service_unavailable"}}):r.fulfill({json:{orders:2,awaiting_delivery:1,active_requests:0,available_files:3}}))
+ await page.goto("/en/account")
+ await expect(page.getByText("Unable to load order activity.",{exact:true})).toBeVisible()
+ await expect(page.getByText("A new support reply",{exact:true})).toBeVisible();failed=false
+ await page.getByRole("button",{name:"Retry activity",exact:true}).click()
+ await expect(page.getByRole("region",{name:"Your order activity"})).toContainText("2Recorded orders")
+ await expect(page.getByRole("link",{name:/3.*Available downloads/})).toHaveAttribute("href","/en/account/downloads")
+})
+test("dashboard review action opens the owned commission review page",async({page})=>{
+ await access(page)
+ const commission={id,brief:{idea:"Private portrait",changes:"",style:"Oil",size:"40 cm",execution:"digital"},status:"awaiting_customer",version:1,agreement:"Accepted terms",revision_allowance:1,artwork:[],created_at:"2026-10-14T10:00:00Z",updated_at:"2026-10-14T11:00:00Z"}
+ await page.route("**/api/v1/account/commissions?*",r=>{expect(new URL(r.request().url()).searchParams.get("status")).toBe("awaiting_customer");return r.fulfill({json:{items:[commission],next_cursor:null}})})
+ await page.route(`**/api/v1/account/commissions/${id}`,r=>r.fulfill({json:commission}))
+ await page.goto("/en/account");await page.getByRole("link",{name:"View version and give feedback",exact:true}).click()
+ await expect(page).toHaveURL(new RegExp(`/en/account/commissions/${id}/artwork-review$`))
+ await expect(page.getByText("Private portrait",{exact:true})).toBeVisible()
+})
+test("failed dashboard reviews preserve account content and retry",async({page})=>{
+ await access(page);let failed=true
+ await page.route("**/api/v1/account/commissions?*",r=>failed?r.fulfill({status:503,json:{code:"service_unavailable"}}):r.fulfill({json:{items:[],next_cursor:null}}))
+ await page.goto("/fa/account");await expect(page.getByText("دریافت آثار منتظر بررسی ممکن نشد.",{exact:true})).toBeVisible();failed=false
+ await expect(page.getByText("پاسخ تازه پشتیبانی",{exact:true})).toBeVisible()
+ await page.getByRole("button",{name:"دریافت دوباره آثار",exact:true}).click();await expect(page.getByText("یک اثر، فقط برای شما",{exact:true})).toBeVisible()
+})

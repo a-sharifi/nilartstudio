@@ -154,12 +154,12 @@ export default function CollectionsPage({
           </div>
         )}
       </section>
-      <p className="collections-asset-note">
+      {published.some(collection=>!collection.image)&&<p className="collections-asset-note">
         {t(
           "تصاویر، جای‌نگهدار طراحی‌اند؛ آثار اصلی کالکشن‌ها پس از دریافت جایگزین می‌شوند.",
           "Images are design placeholders; original collection artwork will be added when supplied.",
         )}
-      </p>
+      </p>}
       <aside className="collections-shop-path">
         <div>
           <h2>

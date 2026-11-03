@@ -146,7 +146,7 @@ export default function PreferencesPage({
   liveSubmission?: { status: string; receipt: string; submit: (draft: PreferencesDraft) => Promise<boolean> }
   hasPriorAssessment?: boolean
 }) {
-  const t = (fa: string, en: string) => (language === 0 ? fa : en)
+  const t = (fa: string, en: string) => { const text = language === 0 ? fa : en; return live ? text.replace(/\s*[·—]?\s*Demo\b/g, "").trim() : text }
   const prefix = `/${language === 0 ? "fa" : "en"}`
   const [draft, setDraft] = useState<PreferencesDraft>(
     signedIn && saved ? saved : blank,
@@ -446,10 +446,10 @@ export default function PreferencesPage({
             t("سبک و اجرا", "Style and execution"),
             t("مرحله جاری", "Current step"),
           ],
-          [t("ارزیابی", "Assessment"), live ? t("فعلاً در دسترس نیست", "Currently unavailable") : t("مرحله بعد", "Next step")],
+          [t("ارزیابی", "Assessment"), live ? t("پس از بررسی کارشناس", "After staff review") : t("مرحله بعد", "Next step")],
           [
             t("پیشنهاد و تأیید", "Proposal and approval"),
-            live ? t("فعلاً در دسترس نیست", "Currently unavailable") : t("در انتظار", "Upcoming"),
+            live ? t("پس از بررسی درخواست", "After request review") : t("در انتظار", "Upcoming"),
           ],
         ].map(([name, state], i) => (
           <li

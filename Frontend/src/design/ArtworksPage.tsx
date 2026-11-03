@@ -1,3 +1,4 @@
+import {SaleTag} from "../features/marketing/StorefrontPromotions";
 import SelectDropdown from "../components/ui/SelectDropdown";
 import { useEffect, useRef, useState } from "react"
 import "./artworks.css"
@@ -153,7 +154,7 @@ function readState() {
     available: p.get("available") === "1",
     min: digits(p.get("min") || ""),
     max: digits(p.get("max") || ""),
-    medium: ["oil", "acrylic", "colored-pencil"].includes(p.get("medium") || "")
+    medium: ["oil", "acrylic", "colored-pencil", "mixed-media"].includes(p.get("medium") || "")
       ? p.get("medium")!
       : "",
     style: ["abstract", "landscape"].includes(p.get("style") || "")
@@ -394,7 +395,7 @@ export default function ArtworksPage({
     else dialog.current?.close()
   }, [sheet])
   const mediumName = (v: string) =>
-    v === "colored-pencil" ? t("مدادرنگی", "Colored pencil") : v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
+    v === "mixed-media" ? t("ماندالا ترکیبی", "Mixed-media mandala") : v === "colored-pencil" ? t("مدادرنگی", "Colored pencil") : v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
   const styleName = (v: string) =>
     v === "abstract" ? t("انتزاعی", "Abstract") : t("منظره", "Landscape")
   const orientationName = (v: string) =>
@@ -496,7 +497,7 @@ export default function ArtworksPage({
                 : t("جهت اثر", "Orientation")}
           </legend>
           {(key === "medium"
-            ? ["oil", "acrylic", "colored-pencil"]
+            ? ["oil", "acrylic", "colored-pencil", "mixed-media"]
             : key === "style"
               ? ["landscape", "abstract"]
               : ["portrait", "landscape", "square"]
@@ -971,7 +972,7 @@ export function ArtGalleryCard({
     n === null ? "—" : n.toLocaleString(language === 0 ? "fa-IR" : "en-US")
   const prefix = language === 0 ? "/fa" : "/en"
   const mediumName = (v: string) =>
-    !v ? t("تکنیک اعلام نشده", "Medium not provided") : v === "colored-pencil" ? t("مدادرنگی", "Colored pencil") : v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
+    !v ? t("تکنیک اعلام نشده", "Medium not provided") : v === "mixed-media" ? t("ماندالا ترکیبی", "Mixed-media mandala") : v === "colored-pencil" ? t("مدادرنگی", "Colored pencil") : v === "oil" ? t("رنگ روغن", "Oil painting") : t("اکریلیک", "Acrylic")
   const routeLink = (label: string, route: string) => (
     <a
       className="text-link"
@@ -1037,6 +1038,7 @@ export function ArtGalleryCard({
         </p>
         <div className="art-card-footer">
           <strong>
+            {work.catalogRecord&&<SaleTag kind="artwork" id={work.catalogRecord.id} en={language===1}/>}
             {work.price === null ? (
               t("قیمت اعلام نشده", "Price not listed")
             ) : (
@@ -1055,11 +1057,12 @@ export function ArtGalleryCard({
   )
 }
 
-export function SampleArtworkImage({work}:{work:GalleryWork}){
+export function SampleArtworkImage({work,image}:{work:GalleryWork;image?:{url:string;alt:string}}){
  const [failed,setFailed]=useState("")
  const details=work.catalogRecord?.details
- if(!details||failed===details.image_url)return <div className="art-image-fallback"><Symbol name="image"/>تصویر در دسترس نیست / Image unavailable</div>
+ const url=image?.url??details?.image_url
+ if(!details||failed===url)return <div className="art-image-fallback"><Symbol name="image"/>تصویر در دسترس نیست / Image unavailable</div>
  // Downloaded local sample media keeps the reference painting container and geometry.
  // eslint-disable-next-line @next/next/no-img-element
- return <img className="demo-painting" src={details.image_url} alt={work.title.join(" / ")} title={details.image_credit} style={{width:"100%",height:"100%",objectFit:"contain"}} onError={()=>setFailed(details.image_url)}/>
+ return <img className="demo-painting" src={url} alt={image?.alt??work.title.join(" / ")} title={details.image_credit} style={{width:"100%",height:"100%",objectFit:"contain"}} onError={()=>setFailed(url!)}/>
 }

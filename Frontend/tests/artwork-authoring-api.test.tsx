@@ -1,0 +1,10 @@
+import {afterEach,expect,it,vi} from 'vitest'
+import {artworkAuthoringApi,type ArtworkCommand} from '../src/features/admin/artwork-authoring-api'
+import {privateRequest} from '../src/features/admin/identity-api'
+vi.mock('../src/features/admin/identity-api',()=>({privateRequest:vi.fn()}))
+const id='11111111-1111-4111-8111-111111111111',key='22222222-2222-4222-8222-222222222222'
+export const content={slug:'artwork',title_fa:'اثر',title_en:'Artwork',description_fa:'',description_en:'',artist_fa:'هنرمند',artist_en:'Artist',medium:'oil' as const,style:'landscape' as const,width_cm:20,height_cm:30,edition:'digital' as const,linked_sku_id:null,price_amount:'100',weight_grams:null,returnable:false,license_fa:'مجوز شخصی',license_en:'Personal license',image_credit:'Studio',gallery:[]}
+const body:ArtworkCommand={expected_version:0,action:'draft',content,reason:'Reviewed artwork draft'},record={id,slug:'artwork',title_fa:'اثر',title_en:'Artwork',version:1,content,published_revision:null,published:false},receipt={id:key,artwork_id:id,actor_id:id,version:1,intent:body,result:record,created_at:'2026-10-21T12:00:00Z'}
+afterEach(()=>vi.resetAllMocks())
+it('recovers only the exact artwork intent, identity and immutable version',async()=>{vi.mocked(privateRequest).mockResolvedValue(receipt);await expect(artworkAuthoringApi.saved(id,key,body)).resolves.toMatchObject({id:key});for(const invalid of [{...receipt,artwork_id:key},{...receipt,result:{...record,version:2}},{...receipt,intent:{...body,action:'publish'}},{...receipt,result:{...record,content:{...content,price_amount:'200'}}}]){vi.mocked(privateRequest).mockResolvedValue(invalid);await expect(artworkAuthoringApi.saved(id,key,body)).rejects.toThrow('result_unknown')}})
+it('keeps unknown writes recoverable and authoritative conflicts actionable',async()=>{vi.mocked(privateRequest).mockRejectedValue(new Error('Failed to fetch'));await expect(artworkAuthoringApi.save(id,key,body)).rejects.toThrow('result_unknown');vi.mocked(privateRequest).mockRejectedValue(new Error('artwork_version_conflict'));await expect(artworkAuthoringApi.save(id,key,body)).rejects.toThrow('artwork_version_conflict')})

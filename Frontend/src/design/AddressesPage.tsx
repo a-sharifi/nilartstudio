@@ -32,8 +32,10 @@ export default function AddressesPage({
   search,
   navigate,
   liveApi,
+  canWrite = true,
 }: {
   page: string
+  canWrite?: boolean
   liveApi?: typeof addressApi
   search: string
   navigate: (route: string) => void
@@ -48,6 +50,8 @@ export default function AddressesPage({
   const [dialogKind, setDialogKind] = useState<DialogKind>(null),
     [initial, setInitial] = useState<Address | null>(null),
     [deleting, setDeleting] = useState<Address | null>(null)
+  const [mutationUnknown,setMutationUnknown]=useState(false),[checkingMutation,setCheckingMutation]=useState(false)
+  const pendingMutation=useRef<{address:Address;remove:boolean;existed:boolean}|null>(null)
   const [busy, setBusy] = useState(false),
     [pendingId, setPendingId] = useState<string | null>(null),
     [saveError, setSaveError] = useState("")
@@ -99,6 +103,7 @@ export default function AddressesPage({
   const navigateLive=(route:string)=>guard(()=>navigate(route))
   const close = () => {
     formDirty.current=false
+    setMutationUnknown(false);pendingMutation.current=null
     setDialogKind(null)
     setInitial(null)
     setDeleting(null)
@@ -121,7 +126,7 @@ export default function AddressesPage({
     else close()
   }
   const openForm = (address: Address, event?: MouseEvent<HTMLElement>) => {
-    if (mutationLock.current || !loaded) return
+    if (mutationLock.current || !loaded || !canWrite) return
     origin.current =
       event?.currentTarget || document.activeElement as HTMLElement
     conflictInjected.current = false
@@ -140,13 +145,25 @@ export default function AddressesPage({
     try {const values=await liveApi.load();if(stamp===liveGeneration.current){setAddresses(values);setMode("normal")}}
     catch {if(stamp===liveGeneration.current)setMode("network")}
   }
-  useEffect(()=>{if(!liveApi)return;void loadLive();const clear=sessionLifecycle.registerPrivateCache(()=>{liveGeneration.current++;setAddresses([]);setInitial(null);setDeleting(null);setDialogKind(null);setMode("denied");setSaveError("");setLeaving(false);leaveAction.current=null;formDirty.current=false});return()=>{liveGeneration.current++;clear()}},[liveApi])
+  useEffect(()=>{if(!liveApi)return;void loadLive();const clear=sessionLifecycle.registerPrivateCache(()=>{liveGeneration.current++;setAddresses([]);setInitial(null);setDeleting(null);setDialogKind(null);setMode("denied");setSaveError("");setLeaving(false);leaveAction.current=null;formDirty.current=false;setMutationUnknown(false);pendingMutation.current=null});return()=>{liveGeneration.current++;clear()}},[liveApi])
   const liveMutation=async(address:Address,remove=false)=>{
-    if(!liveApi || mutationLock.current)return
-    mutationLock.current=true;setBusy(true);setSaveError("");const stamp=liveGeneration.current
+    if(!liveApi || mutationLock.current || !canWrite || mutationUnknown)return
+    pendingMutation.current={address,remove,existed:addresses.some(item=>item.id===address.id)};mutationLock.current=true;setBusy(true);setSaveError("");const stamp=liveGeneration.current
     try {const values=await (remove?liveApi.remove(address):liveApi.save(address));if(stamp!==liveGeneration.current)return;setAddresses(values);close();setLive(t("تغییر آدرس ذخیره شد.","Address change saved."))}
-    catch(error){if(stamp!==liveGeneration.current)return;const message=error instanceof Error && error.message==="record_version_conflict"?t("نسخه آدرس تغییر کرده است؛ دوباره فهرست را دریافت کنید.","Address version changed; reload the list."):t("تغییر تأیید نشد؛ ورودی‌ها حفظ شده‌اند. پیش از تکرار، فهرست را بررسی کنید.","Change unconfirmed; inputs retained. Check the list before retrying.");setSaveError(message);setCardErrors(previous=>({...previous,[address.id]:message}))}
+    catch(error){if(stamp!==liveGeneration.current)return;setMutationUnknown(true);const message=error instanceof Error && error.message==="record_version_conflict"?t("نسخه آدرس تغییر کرده است؛ دوباره فهرست را دریافت کنید.","Address version changed; reload the list."):t("تغییر تأیید نشد؛ ورودی‌ها حفظ شده‌اند. پیش از تکرار، فهرست را بررسی کنید.","Change unconfirmed; inputs retained. Check the list before retrying.");setSaveError(message);setCardErrors(previous=>({...previous,[address.id]:message}))}
     finally {mutationLock.current=false;setBusy(false)}
+  }
+  const checkMutation=async()=>{
+    if(!liveApi || checkingMutation || !pendingMutation.current)return
+    const attempt=pendingMutation.current,stamp=liveGeneration.current;setCheckingMutation(true)
+    try{const values=await liveApi.load();if(stamp!==liveGeneration.current)return;setAddresses(values);const saved=values.find(item=>item.id===attempt.address.id)
+      if(!dialogKind){setMutationUnknown(false);pendingMutation.current=null;setCardErrors({});setSaveError("");setLive(t("فهرست آدرس‌ها تازه شد. وضعیت پیش‌فرض را بررسی کنید.","Addresses reloaded. Review the current default."))}
+      else if(attempt.remove){if(!saved){close();setLive(t("حذف آدرس تأیید شد.","Address removal confirmed."))}else{setDeleting(saved);setMutationUnknown(false);setSaveError("")}}
+      else if(saved){setConflict(saved);setSaveError(t("نسخه ذخیره‌شده را بررسی کنید و برای ادامه در فرم بارگذاری کنید.","Review the saved version and load it into the form to continue."))}
+      else if(!attempt.existed){setMutationUnknown(false);setSaveError(t("آدرس ثبت نشده است؛ می‌توانید با همان شناسه دوباره ذخیره کنید.","This address is not saved. You can retry with the same identifier."))}
+      else{setSaveError(t("این آدرس دیگر وجود ندارد. فرم را ببندید و فهرست را بررسی کنید.","This address no longer exists. Close the form and review the list."))}
+    }catch{if(stamp===liveGeneration.current)setSaveError(t("بررسی نتیجه ممکن نشد؛ دوباره تلاش کنید.","Unable to check the result. Try again."))}
+    finally{setCheckingMutation(false)}
   }
   const follow = (route: string) => (event: MouseEvent<HTMLAnchorElement>) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
@@ -160,7 +177,7 @@ export default function AddressesPage({
   }
   const save = (draft: Address) => {
     if(liveApi){void liveMutation(draft);return}
-    if (mutationLock.current || !loaded) return
+    if (mutationLock.current || !loaded || !canWrite) return
     mutationLock.current = true
     setBusy(true)
     setSaveError("")
@@ -235,7 +252,7 @@ export default function AddressesPage({
   }
   const setDefault = (address: Address) => {
     if(liveApi){void liveMutation({...address,default:true});return}
-    if (mutationLock.current || !loaded) return
+    if (mutationLock.current || !loaded || !canWrite) return
     mutationLock.current = true
     setPendingId(address.id)
     setCardErrors((previous) => {
@@ -442,13 +459,14 @@ export default function AddressesPage({
           </div>
           <button
             className="button primary"
-            disabled={!loaded || busy || !!pendingId}
+            disabled={!canWrite || mutationUnknown || !loaded || busy || !!pendingId}
             onClick={(event) => openForm(emptyAddress(), event)}
           >
             <Glyph name="plus" size={18} />
             {t("افزودن آدرس", "Add address")}
           </button>
         </div>
+        {mutationUnknown&&!dialogKind&&<section role="status"><p>{saveError}</p><button className="button secondary" disabled={checkingMutation} onClick={()=>void checkMutation()}>{t("بررسی نتیجه ذخیره","Check saved result")}</button></section>}
         {!liveApi && <div className="account-addresses-demo">
           <span>Demo</span>
           <p>
@@ -595,19 +613,19 @@ export default function AddressesPage({
                         )}
                       </p>
                     )}
-                    <footer>
-                      <div>
+                    <div className="account-address-actions">
+                      <div className="account-address-primary-actions">
                         <button
                           className="text-link"
                           data-address-edit={address.id}
-                          disabled={busy || !!pendingId}
+                          disabled={!canWrite || mutationUnknown || busy || !!pendingId}
                           onClick={(event) => openForm(address, event)}
                         >
                           {t("ویرایش", "Edit")}
                         </button>
                         <button
                           className="account-address-delete"
-                          disabled={busy || !!pendingId}
+                          disabled={!canWrite || mutationUnknown || busy || !!pendingId}
                           onClick={(event) => {
                             origin.current = event.currentTarget
                             setDeleting({ ...address })
@@ -625,7 +643,7 @@ export default function AddressesPage({
                       {!address.default && (
                         <button
                           className="account-address-set-default"
-                          disabled={busy || !!pendingId}
+                          disabled={!canWrite || mutationUnknown || busy || !!pendingId}
                           onClick={() => setDefault(address)}
                         >
                           {pendingId === address.id
@@ -633,7 +651,7 @@ export default function AddressesPage({
                             : t("انتخاب به‌عنوان پیش‌فرض", "Set as default")}
                         </button>
                       )}
-                    </footer>
+                    </div>
                     {cardErrors[address.id] && (
                       <p className="account-address-card-error" role="alert">
                         {cardErrors[address.id]}
@@ -788,6 +806,7 @@ export default function AddressesPage({
               <Glyph name="close" />
             </button>
           </div>
+          {mutationUnknown&&<div role="status"><p>{saveError}</p><button type="button" className="button secondary" disabled={checkingMutation} onClick={()=>void checkMutation()}>{t("بررسی نتیجه ذخیره","Check saved result")}</button></div>}
           {dialogKind === "form" && initial && permitted && (
             <>
               {!liveApi && <p className="account-address-form-demo">
@@ -815,7 +834,7 @@ export default function AddressesPage({
                       setInitial({ ...conflict })
                       setFormKey((value) => value + 1)
                       setSaveError("")
-                      setConflict(null)
+                      setConflict(null);setMutationUnknown(false);pendingMutation.current=null
                     }}
                   >
                     {t(
@@ -832,6 +851,7 @@ export default function AddressesPage({
                 onDirtyChange={value=>{formDirty.current=value}}
                 language={language}
                 busy={busy}
+                blocked={mutationUnknown || !canWrite}
                 offline={false}
                 cityFailure={cityFailure}
                 cityLoading={cityLoading}
@@ -874,7 +894,7 @@ export default function AddressesPage({
               <div className="account-address-delete-actions">
                 <button
                   className="button primary"
-                  disabled={busy}
+                  disabled={!canWrite || busy || mutationUnknown}
                   onClick={remove}
                 >
                   {busy

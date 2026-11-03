@@ -52,7 +52,9 @@ export default function AccountPreferencesPage({
   navigate,
   registerGuard,
   liveApi,
+  canWrite = true,
 }: {
+  canWrite?: boolean
   liveApi?: typeof preferencesApi
   page: string
   navigate: (route: string) => void
@@ -100,7 +102,7 @@ export default function AccountPreferencesPage({
   const loaded = !["loading", "network", "denied"].includes(mode)
   const dirty = loaded && preferencesDirty(record, draft)
   const blocked =
-    state === "saving" || state === "unknown" || state === "conflict"
+    !canWrite || state === "saving" || state === "unknown" || state === "conflict"
   dirtyRef.current = dirty || state === "unknown"
   authorizedRef.current = loaded
   savingRef.current = state === "saving"
@@ -297,7 +299,7 @@ export default function AccountPreferencesPage({
   const liveId=useRef(crypto.randomUUID()),liveGeneration=useRef(0)
   const loadLive=async()=>{if(!liveApi)return;const stamp=++liveGeneration.current;setMode("loading");try{const result=await liveApi.load(en?"en":"fa");if(stamp!==liveGeneration.current)return;liveId.current=result.id;setRecord(result.record);authoritative.current=result.record;setDraft(accountPreferenceDraft(result.record));setMode("normal");setState("idle");lock.current=false;dirtyRef.current=false}catch{if(stamp===liveGeneration.current)setMode("network")}}
   useEffect(()=>{if(!liveApi)return;void loadLive();const clear=sessionLifecycle.registerPrivateCache(()=>{liveGeneration.current++;setMode("denied");setDraft({language:"fa",choices:{}});setRecord(previous=>({...previous,owner:"",choices:{}}));setLatest(null);setModal(null)});return()=>{liveGeneration.current++;clear()}},[liveApi])
-  const saveLive=async()=>{if(!liveApi)return;lock.current=true;setState("saving");const stamp=liveGeneration.current;try{const result=await liveApi.save(liveId.current,record,draft);if(stamp!==liveGeneration.current)return;setRecord(result);setDraft(accountPreferenceDraft(result));authoritative.current=result;setState("success");dirtyRef.current=false;setLive(t("ترجیحات ذخیره شد.","Preferences saved."));if(result.language!==(en?"en":"fa"))navigate(`/${result.language}/account/preferences`)}catch(error){if(stamp!==liveGeneration.current)return;const conflict=error instanceof Error && error.message==="record_version_conflict";setState(conflict?"conflict":"unknown");setLive(t("ذخیره تأیید نشد؛ پیش از تکرار نسخه ذخیره‌شده را بررسی کنید.","Save unconfirmed; check the saved version before retrying."))}finally{lock.current=false}}
+  const saveLive=async()=>{if(!liveApi || !canWrite || lock.current)return;lock.current=true;setState("saving");const stamp=liveGeneration.current;try{const result=await liveApi.save(liveId.current,record,draft);if(stamp!==liveGeneration.current)return;setRecord(result);setDraft(accountPreferenceDraft(result));authoritative.current=result;setState("success");dirtyRef.current=false;setLive(t("ترجیحات ذخیره شد.","Preferences saved."));if(result.language!==(en?"en":"fa"))navigate(`/${result.language}/account/preferences`)}catch(error){if(stamp!==liveGeneration.current)return;const conflict=error instanceof Error && error.message==="record_version_conflict";setState(conflict?"conflict":"unknown");setLive(t("ذخیره تأیید نشد؛ پیش از تکرار نسخه ذخیره‌شده را بررسی کنید.","Save unconfirmed; check the saved version before retrying."))}finally{lock.current=false}}
   const submit = (event: FormEvent) => {
     event.preventDefault()
     if (lock.current || blocked || !loaded || !dirty) return

@@ -1,0 +1,15 @@
+"use client"
+import {useEffect,useRef,useState} from 'react'
+import {z} from 'zod'
+import {privateRequest} from '../admin/identity-api'
+import {sessionLifecycle} from '../identity/session-lifecycle'
+const parcel=z.object({id:z.string().uuid(),status:z.enum(['dispatched','delivered']),quantities:z.record(z.string().uuid(),z.number().int().positive()),carrier:z.string(),tracking:z.string(),dispatched_at:z.iso.datetime({offset:true}),delivered_at:z.iso.datetime({offset:true}).nullable(),return_until:z.iso.datetime({offset:true}).nullable()})
+const page=z.object({order_id:z.string().uuid(),items:z.array(parcel),next_cursor:z.string().uuid().nullable()})
+export default function ShipmentTracking({id,en,refresh}:{id:string;en:boolean;refresh?:string}){
+ const [rows,setRows]=useState<z.infer<typeof parcel>[]>([]),[cursor,setCursor]=useState<string|null>(null),[loading,setLoading]=useState(true),[failed,setFailed]=useState(false),generation=useRef(0)
+ const t=(fa:string,e:string)=>en?e:fa
+ async function load(more=false){const g=generation.current;setLoading(true);setFailed(false);try{const r=page.parse(await privateRequest(`/api/v1/account/orders/${id}/shipments${more&&cursor?`?cursor=${cursor}`:''}`));if(r.order_id!==id)throw new Error('result_unknown');if(g!==generation.current)return;setRows(old=>more?[...old,...r.items]:r.items);setCursor(r.next_cursor)}catch{if(g===generation.current)setFailed(true)}finally{if(g===generation.current)setLoading(false)}}
+ useEffect(()=>{const clear=sessionLifecycle.registerPrivateCache(()=>{generation.current++;setRows([]);setCursor(null);setLoading(false);setFailed(false)});void load();return()=>{generation.current++;clear()}},[id,refresh])
+ const date=(s:string)=>new Intl.DateTimeFormat(en?'en':'fa',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Tehran'}).format(new Date(s))
+ return <section className="od-card" aria-label={t('پیگیری بسته‌های سفارش','Order parcel tracking')}><h2>{t('پیگیری بسته‌های سفارش','Order parcel tracking')}</h2>{loading&&<p role="status">{t('در حال دریافت…','Loading…')}</p>}{failed&&<p role="alert">{t('دریافت رهگیری ممکن نشد.','Unable to load parcel tracking.')}</p>}{!loading&&!failed&&!rows.length&&<p>{t('هنوز ارسال بسته‌ای ثبت نشده است.','No parcel has been dispatched yet.')}</p>}{rows.map(r=><article key={r.id}><h3>{r.status==='delivered'?t('تحویل‌شده','Delivered'):t('ارسال‌شده','Dispatched')}</h3><p>{t('حامل','Carrier')}: {r.carrier}</p><p>{t('کد رهگیری','Tracking number')}: <bdi>{r.tracking}</bdi></p><p>{t('زمان ارسال','Dispatched at')}: {date(r.dispatched_at)}</p>{r.delivered_at&&<p>{t('زمان تحویل','Delivered at')}: {date(r.delivered_at)}</p>}<p>{t('تعداد اقلام بسته','Parcel item quantity')}: {Object.values(r.quantities).reduce((a,b)=>a+b,0)}</p><small><bdi>{r.id}</bdi></small></article>)}<button type="button" className="button secondary" disabled={loading} onClick={()=>void load()}>{t('بررسی دوباره بسته‌ها','Check parcels again')}</button>{cursor&&<button type="button" className="button secondary" disabled={loading} onClick={()=>void load(true)}>{t('بسته‌های بیشتر','More parcels')}</button>}</section>
+}

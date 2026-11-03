@@ -89,7 +89,8 @@ export default function CollectionCard({
           </div>
         ) : (
           <img
-            src={collection.image}
+            src={collection.image?.startsWith("/api/v1/media/")?`${collection.image}?thumbnail=true`:collection.image}
+            loading="lazy" decoding="async"
             alt={collection.imageAlt[language] || name}
             onError={() => setFailedSource(collection.image)}
           />

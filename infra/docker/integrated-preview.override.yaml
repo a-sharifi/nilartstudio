@@ -1,0 +1,9 @@
+services:
+  api:
+    image: nilart-demo-api:integrated-catalogue
+  worker:
+    image: nilart-demo-api:integrated-catalogue
+  scheduler:
+    image: nilart-demo-api:integrated-catalogue
+  web:
+    image: nilart-demo-web:integrated-catalogue

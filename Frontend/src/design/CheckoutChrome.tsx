@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import EnamadSeal from "../components/ui/EnamadSeal"
 type Props = {
   language: 0 | 1
   onNavigate: (name: string, route: string) => void
@@ -46,10 +47,7 @@ export function CheckoutHeader({
           }}
           aria-label="NilArt Studio — Home"
         >
-          <span>
-            nilart<span className="wordmark-dot">.</span>
-          </span>
-          <small>ART & EVERYDAY</small>
+          <img className="nilart-brand-logo" src="/brand/nilart-logo.webp" width="156" height="88" alt="نیل آرت استودیو | Nil Art Studio" />
         </a>
         <nav
           aria-label={
@@ -154,6 +152,7 @@ export function CheckoutFooter({
     <footer className="checkout-footer">
       <div className="container">
         <span>© {new Date().getFullYear()} NilArt Studio</span>
+        <EnamadSeal english={language === 1} />
         <nav>
           {[
             ["قوانین", "Terms", "/terms"],

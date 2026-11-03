@@ -1,0 +1,12 @@
+import {afterEach,expect,it,vi} from "vitest"
+import {settingsApi,type BusinessSettings} from "../src/features/admin/business-settings-api"
+import {privateRequest} from "../src/features/admin/identity-api"
+vi.mock("../src/features/admin/identity-api",()=>({privateRequest:vi.fn()}))
+const key="11111111-1111-4111-8111-111111111111",other="22222222-2222-4222-8222-222222222222"
+export const content:BusinessSettings={title_fa:"",title_en:"",contact_phone:"",contact_email:"",contact_address:"",currency:"IRT",tax_included:false,tax_basis:null,shipping_calculation:null,shipping_rounding:null,tax_rounding:null,refund_policy:null,tax_percent:null,reservation_minutes:null,return_days:null,return_policy_fa:"",return_policy_en:"",shipping_methods:[],commission_base_amount:null,commission_complexity_amount:null,commission_digital_amount:null,commission_physical_amount:null,commission_revision_limit:null,commission_terms_fa:"",commission_terms_en:""}
+const revision={revision_id:key,actor_id:other,expected_version:0,version:1,content,reason:"Reviewed settings",created_at:"2026-10-18T12:00:00Z"}
+afterEach(()=>vi.resetAllMocks())
+it("preserves null as unconfigured and explicit zeros",async()=>{vi.mocked(privateRequest).mockResolvedValue({version:0,content:{...content,tax_percent:"0",return_days:0},updated_at:null,missing:["reservation_minutes"]});const r=await settingsApi.read();expect(r.content.tax_percent).toBe("0");expect(r.content.return_days).toBe(0);expect(r.content.reservation_minutes).toBeNull()})
+it("accepts only the exact saved intent and revision",async()=>{const intent={expected_version:0,content,reason:revision.reason};vi.mocked(privateRequest).mockResolvedValue(revision);await expect(settingsApi.save(key,intent)).resolves.toEqual(revision);for(const bad of [{...revision,revision_id:other},{...revision,version:3},{...revision,reason:"Changed"},{...revision,content:{...content,tax_percent:"0"}},{}]){vi.mocked(privateRequest).mockResolvedValue(bad);await expect(settingsApi.save(key,intent)).rejects.toThrow("result_unknown")}})
+it("rejects an unrelated recovery receipt",async()=>{vi.mocked(privateRequest).mockResolvedValue({...revision,revision_id:other});await expect(settingsApi.receipt(key)).rejects.toThrow("result_unknown")})
+it("paginates history with an exclusive version",async()=>{vi.mocked(privateRequest).mockResolvedValue({items:[revision],next_before_version:null});await settingsApi.history(2);expect(privateRequest).toHaveBeenCalledWith("/api/v1/admin/settings/versions?before=2")})

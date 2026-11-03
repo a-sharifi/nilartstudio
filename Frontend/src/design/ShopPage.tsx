@@ -111,7 +111,7 @@ export default function ShopPage({
   const visible = results.slice((current - 1) * 6, current * 6)
   const loaded = valid && mode !== "loading" && mode !== "network"
   const title =
-    category?.name[language] ||
+    query.q ? `${t("نتایج جست‌وجو", "Search results")}: ${query.q}` : category?.name[language] ||
     (scope
       ? t("این دسته پیدا نشد.", "Category not found.")
       : t("فروشگاه نیل‌آرت", "Nilart shop"))
@@ -198,7 +198,9 @@ export default function ShopPage({
   const activeCount =
     filterChips.length + (!scope && query.type !== "all" ? 1 : 0)
   useEffect(() => {
-    if (!valid) return
+    // Choices are incomplete until the live catalogue has loaded. Normalizing
+    // earlier would discard valid filters from a bookmarked or reloaded URL.
+    if (!valid || !loaded) return
     const canonicalQuery = serializeShopQuery(
       { ...query, page: loaded ? current : query.page },
       scope,
@@ -567,6 +569,7 @@ export default function ShopPage({
                     )}
                   </small>
                 </div>
+                <div className="shop-toolbar-controls">
                 <button
                   ref={filterTrigger}
                   className="button secondary shop-mobile-filter"
@@ -589,6 +592,7 @@ export default function ShopPage({
                     autocomplete={false} onChange={value=>update({sort:value as ShopQuery["sort"]})}
                     options={[{value:"newest",label:t("جدیدترین","Newest")},{value:"low",label:t("قیمت: کم به زیاد","Price: low to high")},{value:"high",label:t("قیمت: زیاد به کم","Price: high to low")}]} />
                 </label>
+                </div>
               </div>
               {!scope && (
                 <div

@@ -11,3 +11,37 @@
 .identity-accounts table {width:100%;border-collapse:collapse;text-align:start;}
 .identity-accounts th,.identity-accounts td {padding:var(--space-3);border-bottom:1px solid var(--border);}
 @media(max-width:600px){.identity-editor fieldset:nth-of-type(2)>label{grid-template-columns:1fr;gap:var(--space-2);}.identity-accounts th,.identity-accounts td{padding:var(--space-2);}}
+
+.ad-main .admin-price-input{display:block;width:100%;min-height:44px;margin-top:var(--space-2);border:1px solid var(--border);border-radius:var(--radius-control);padding:var(--space-3);background:var(--surface);color:var(--text);}
+.ad-main>.ad-panel+.ad-panel,.ad-main>.ad-lower-grid+.ad-panel{margin-top:var(--space-6);}
+.ad-main .ad-money-row>span{overflow-wrap:anywhere;min-width:0;}
+
+.ad-main .identity-editor .catalog-fields{grid-template-columns:1fr;}
+.ad-main .identity-editor .catalog-fields>label{display:block;}
+.ad-main .identity-editor .catalog-memberships>label{display:flex;gap:var(--space-3);align-items:center;min-height:44px;}
+.ad-main .catalog-memberships input[type=checkbox]{flex-shrink:0;}
+.ad-main .ad-table .text-link+.text-link{margin-inline-start:var(--space-3);}
+
+.ad-main .catalog-audit{margin-block:var(--space-6);padding-block:var(--space-3);border-top:1px solid var(--border);overflow-wrap:anywhere;}
+
+.ad-main .support-message-text{white-space:pre-wrap;overflow-wrap:anywhere;}
+
+.support-status-filter,.admin-role-filter { display:flex; flex-direction:column; gap:var(--space-2); max-width:320px; margin-block:var(--space-4); font-size:13px; }
+
+.ad-main .support-subject-search input { display:block; width:100%; min-height:44px; margin-top:var(--space-2); border:1px solid var(--border); border-radius:var(--radius-control); padding:var(--space-3); background:var(--surface); color:var(--text); font:inherit; }
+.ad-main .support-subject-search { margin-block:var(--space-4); }
+
+.ad-main .support-subject-search > div { display:flex; flex-wrap:wrap; gap:var(--space-3); }
+
+@media print {
+ body:has(.admin-receipt) .ad-sidebar,body:has(.admin-receipt) .ad-topbar,body:has(.admin-receipt) .ad-panel-head,body:has(.admin-receipt) .ad-drawer,body:has(.admin-receipt) .admin-receipt button { display:none !important; }
+ body:has(.admin-receipt) .ad-app,body:has(.admin-receipt) .ad-workspace { display:block; background:white; }
+ body:has(.admin-receipt) .ad-main { margin:0; padding:0; }
+ body:has(.admin-receipt) .admin-receipt { border:0; padding:0; box-shadow:none; }
+ body:has(.admin-receipt) .admin-receipt li { break-inside:avoid; }
+}
+.final-files-panel { min-width:0; margin-block:24px; }.final-files-panel ul { padding:0; list-style:none; }.final-files-panel li { padding:16px 0; border-bottom:1px solid var(--border); overflow-wrap:anywhere; }.final-files-panel p { overflow-wrap:anywhere; }.final-files-panel fieldset { min-width:0; border:0; display:grid; gap:16px; padding:16px 0; }.final-files-panel input[type=file] { width:100%; max-width:100%; }.final-files-panel select { width:100%; min-height:44px; }.final-files-panel .button { white-space:normal; }
+.ad-main .final-files-panel .identity-editor fieldset { grid-template-columns:minmax(0,1fr); }
+.ad-main .final-files-panel .identity-editor fieldset > label { display:grid; align-items:stretch; gap:8px; min-width:0; }
+.ad-main .final-files-panel .identity-editor fieldset > label:has(input[type=checkbox]) { display:flex; align-items:center; }
+.final-files-panel legend { max-width:100%; overflow-wrap:anywhere; }.final-files-panel select,.final-files-panel input { min-width:0; max-width:100%; }

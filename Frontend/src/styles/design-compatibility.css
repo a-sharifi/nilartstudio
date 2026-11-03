@@ -22,3 +22,17 @@
 .cart-quantity { display: grid; justify-items: start; }
 .cart-quantity > .quantity-stepper { width: max-content; max-width: 100%; }
 .cart-quantity > .quantity-stepper button { flex: 0 0 44px; }
+/* Supplied owner logo; preserve the original colours and proportions. */
+.nilart-brand-logo{width:138px;height:76px;object-fit:contain;display:block}.wordmark:has(.nilart-brand-logo){line-height:1;min-width:138px}.approved-catalog-photo img{object-fit:contain!important;padding:12px;background:#fff}@media(max-width:600px){.nilart-brand-logo{width:110px;height:64px}.wordmark:has(.nilart-brand-logo){min-width:110px}}
+.nilart-hero-covers{display:flex;align-items:center;justify-content:center;min-height:360px;padding:35px 20px;isolation:isolate}.nilart-hero-covers img{width:36%;height:auto;object-fit:contain;background:white;box-shadow:0 18px 40px #30261b20;border-radius:3px}.nilart-hero-covers img:first-child{transform:rotate(-12deg) translateX(-5%)}.nilart-hero-covers img:nth-child(2){transform:translateY(-12px);z-index:1}.nilart-hero-covers img:last-child{transform:rotate(12deg) translateX(5%)}@media(max-width:600px){.nilart-hero-covers{min-height:260px}}
+.collection-approved-cover{width:100%;height:100%;max-height:520px;object-fit:contain;background:white}
+
+.enamad-seal{display:inline-flex;flex-direction:column;gap:6px;font-size:11px;line-height:1.8;text-align:center;align-items:center;justify-content:center;width:136px;padding:8px;margin-top:12px;border-radius:12px;background:#fff;cursor:pointer}.enamad-seal img{display:block;width:120px;height:130px;object-fit:contain}.enamad-seal:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.checkout-footer .enamad-seal{margin:0}
+
+.footer-brand-marks{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.footer-brand-marks .wordmark{flex:0 0 auto}
+.footer-brand-marks .enamad-seal{margin:0;width:80px;padding:4px;border-radius:8px;flex:0 0 auto}
+.footer-brand-marks .enamad-seal img{width:72px;height:80px}
+.footer-credit{display:block;margin-top:18px;font-size:13px;line-height:2;color:var(--muted)}
+.footer-credit a{color:var(--accent);text-decoration:underline;text-underline-offset:4px}
+@media(max-width:600px){.footer-brand-marks{gap:18px}.footer-credit{margin-top:12px}}

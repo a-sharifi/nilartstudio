@@ -44,10 +44,11 @@ export function isReferencesRoute(path: string) {
 }
 export function referenceFileError(
   file: Pick<File, "type" | "size">,
+  maxBytes: number = referenceDemoConfig.maxBytes,
 ): "type" | "size" | undefined {
   if (!referenceDemoConfig.mimeTypes.some((type) => type === file.type))
     return "type"
-  if (file.size > referenceDemoConfig.maxBytes) return "size"
+  if (file.size > maxBytes) return "size"
 }
 export function referenceErrors(
   draft: Pick<ReferenceDraft, "kind" | "brief" | "primary" | "files">,

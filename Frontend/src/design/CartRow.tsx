@@ -121,7 +121,7 @@ export default function CartRow({
         <div
           className="cart-row-image"
           role="img"
-          aria-label={t("تصویر نمونه: ", "Sample image: ") + displayName}
+          aria-label={(live ? t("تصویر: ", "Image: ") : t("تصویر نمونه: ", "Sample image: ")) + displayName}
         >
           <div aria-hidden="true">
             {media ?? (line.kind === "bundle" ? (
@@ -526,9 +526,9 @@ export default function CartRow({
           </button>
         </div>
       )}
-      <small className="cart-row-demo">
+      {!live && <small className="cart-row-demo">
         {t("اطلاعات و مبلغ نمایشی", "Demo details and price")}
-      </small>
+      </small>}
     </article>
   )
 }

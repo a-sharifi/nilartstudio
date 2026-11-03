@@ -4,7 +4,7 @@ import { mapPublishedProduct, mapPublishedSKUs } from "../src/features/catalog/p
 import { PublishedProductDetail } from "../src/design/ProductDetailPage";
 const product = {id:"p",slug:"test-product",title_fa:"محصول",title_en:"Product",description_fa:"شرح",description_en:"Description",collection_ids:[],category_ids:[]};
 const option = {id:"s",product_id:"p",code:"SKU-EXACT",price:{amount:"123456789012345678.123456",currency:"IRT" as const}};
-afterEach(cleanup);
+afterEach(()=>{cleanup();window.history.replaceState({},'', '/');});
 test("product mapping requires descriptions and explicit membership arrays",()=>{
  expect(mapPublishedProduct(product)).toEqual(product);
  expect(()=>mapPublishedProduct({...product,collection_ids:[null]})).toThrow();
@@ -25,6 +25,16 @@ test("products without SKUs remain visible with unknown prices",()=>{
  expect(screen.getByRole("heading",{name:"Product"})).toBeTruthy();
  expect(screen.getByText("No published options yet.")).toBeTruthy();
  expect(screen.getByText("Price unavailable")).toBeTruthy();
+});
+test("a special-offer link selects its exact variant and does not overwrite a later choice",()=>{
+ const other={...option,id:'s-other',code:'SKU-OTHER',price:{amount:'500',currency:'IRT' as const}};
+ window.history.replaceState({},'', '/en/products/test-product?sku=s');
+ const catalog={product,skus:[other,option],status:'normal' as const,retry:()=>{}};
+ const view=render(<PublishedProductDetail catalog={catalog} language={1} collections={[]} onNavigate={()=>{}}/>);
+ expect((screen.getByRole('radio',{name:'SKU-EXACT'}) as HTMLInputElement).checked).toBe(true);
+ fireEvent.click(screen.getByRole('radio',{name:'SKU-OTHER'}));
+ view.rerender(<PublishedProductDetail catalog={{...catalog,skus:[other,option]}} language={1} collections={[]} onNavigate={()=>{}}/>);
+ expect((screen.getByRole('radio',{name:'SKU-OTHER'}) as HTMLInputElement).checked).toBe(true);
 });
 test("database presentation validates product-specific media and nonempty galleries",()=>{
  const presentation = {intro:{fa:"نشانک",en:"Bookmark"},about:{fa:"نمونه",en:"Sample"},kind:"bookmark",color:"rose",gallery:[{label:{fa:"نما",en:"Front view"},view:"front"}],specifications:[],delivery:{fa:"ارسال",en:"Delivery"}};

@@ -206,8 +206,10 @@ export default function AdminDashboard({live}: {live?: {path:string;title:string
       "bag",
       [
         ["سفارش‌ها", "Orders", "/orders"],
-        ["پرداخت‌ها و بازپرداخت‌ها", "Payments & refunds", "/payments"],
-        ["ارسال و مرجوعی", "Shipping & returns", "/shipping"],
+        ["درخواست‌های لغو و مرجوعی", "Cancellation & return requests", "/order-requests"],
+        ["پرداخت‌ها و استعلام درگاه", "Payments & inquiries", "/payments"],
+        ["تخصیص موجودی سفارش", "Order stock commitments", "/order-stock"],
+        ["آماده‌سازی و ارسال", "Shipment preparation", "/shipments"],
         ["پشتیبانی", "Support", "/support"],
       ],
       true,
@@ -221,76 +223,21 @@ export default function AdminDashboard({live}: {live?: {path:string;title:string
         ["پکیج‌ها", "Packages", "/packages"],
         ["نقاشی‌های آماده", "Ready artworks", "/artworks"],
         ["تخفیف‌ها", "Discounts", "/discounts"],
-        ["رسانه و محتوا", "Media & content", "/media"],
+        ["بنر و فروش ویژه", "Banners and special offers", "/promotions"],
+        ["رسانه و فایل چاپ", "Media & print files", "/media"],
+        ["محتوا و انتشار", "Content & publication", "/content"],
       ],
       role === "owner",
     ],
     [
-      t("هزینه و قیمت", "Cost & pricing"),
+      t("حسابداری ساده", "Simple accounting"),
       "chart",
       [
-        ["مواد و خدمات", "Materials & services", "/materials"],
-        ["فرمول ساخت", "Recipes", "/recipes"],
-        ["هزینه‌یابی", "Costing", "/costing"],
-        ["صف بازبینی قیمت", "Price review queue", "/price-review"],
-      ],
-      financial,
-    ],
-    [
-      t("عملیات", "Operations"),
-      "box",
-      [
-        ["موجودی و انبار", "Inventory", "/inventory"],
-        [
-          "گردش و رزرو",
-          "Stock movements and reservations",
-          "/inventory/movements",
-        ],
-        [
-          "موجودی افتتاحیه و اصلاح",
-          "Opening stock and adjustments",
-          "/inventory/adjustments",
-        ],
-        ["تأمین‌کنندگان", "Suppliers", "/inventory/suppliers"],
-        ["خریدها", "Purchases", "/inventory/purchases"],
-        [
-          "دریافت و برگشت خرید",
-          "Purchase receipts and returns",
-          "/inventory/receipts",
-        ],
-        ["دستورهای تولید", "Production orders", "/inventory/production-orders"],
-        ["بچ‌های تولید", "Production batches", "/inventory/batches"],
-        ["کنترل کیفیت", "Quality control", "/inventory/quality"],
-        ["ضایعات و خرابی", "Waste and damage", "/inventory/waste"],
+        ["ورینت‌ها و موجودی", "Variants & stock", "/stock"],
+        ["خریدها", "Purchases", "/purchases"],
+        ["سود و زیان", "Profit & loss", "/finance/profit"],
       ],
       true,
-    ],
-    [
-      t("مالی", "Finance"),
-      "chart",
-      [
-        ["نمای مالی", "Finance overview", "/finance"],
-        [
-          "دریافت و پرداخت",
-          "Receipts and payments",
-          "/finance/receipts-payments",
-        ],
-        ["بانک و صندوق", "Bank and cash accounts", "/finance/accounts"],
-        ["هزینه‌های جاری", "Operating expenses", "/finance/expenses"],
-        ["بدهی و مطالبات", "Payables and receivables", "/finance/balances"],
-        ["تراکنش‌های پرداخت", "Payment transactions", "/finance/transactions"],
-        ["تسویه درگاه", "Gateway settlements", "/finance/settlements"],
-        ["بازپرداخت‌ها", "Refunds", "/finance/refunds"],
-        ["گزارش سود", "Profit reports", "/finance/profit"],
-        ["جریان نقدی", "Cash flow", "/finance/cash-flow"],
-        [
-          "گزارش ارزش موجودی و تولید",
-          "Inventory and production value",
-          "/finance/inventory-value",
-        ],
-        ["خروجی حسابدار", "Accounting exports", "/finance/exports"],
-      ],
-      financial,
     ],
     [
       t("هنرمندان", "Artists"),
@@ -375,15 +322,15 @@ export default function AdminDashboard({live}: {live?: {path:string;title:string
                       key={route}
                       className={
                         (isOrders && route === "/orders") ||
-                        (isFinance && route === "/finance") ||
-                        (isOperations && route === "/inventory")
+                        (isFinance && route === "/finance/profit") ||
+                        (isOperations && route === "/stock")
                           ? "ad-nav-active"
                           : ""
                       }
                       aria-current={
                         (isOrders && route === "/orders") ||
-                        (isFinance && route === "/finance") ||
-                        (isOperations && route === "/inventory")
+                        (isFinance && route === "/finance/profit") ||
+                        (isOperations && route === "/stock")
                           ? "page"
                           : undefined
                       }
@@ -543,8 +490,23 @@ export default function AdminDashboard({live}: {live?: {path:string;title:string
   ]
   if (live) {
     const liveBase=`/${live.path.startsWith("/en/")?"en":"fa"}/admin`
-    const allowedGroups=["orders.read_all","catalog.manage","pricing.publish","inventory.manage","finance.read","commissions.manage","identity.manage"]
-    const sidebar=<><div className="ad-brand"><span className="wordmark"><span>nilart<span className="wordmark-dot">.</span></span><small>ART, IN EVERY DETAIL</small></span><span className="ad-brand-caption">{t("پنل مدیریت نیل‌آرت","NilArt administration")}</span></div><nav aria-label={t("ناوبری مدیریت","Admin navigation")}><button onClick={()=>live.navigate(liveBase)}><Glyph/>{t("داشبورد","Dashboard")}</button>{groups.filter((_,index)=>live.permissions.includes(allowedGroups[index])).map(([title,icon,items])=><details key={title} open={title===t("سیستم","System")}><summary><Glyph name={icon}/><span>{title}</span><Glyph name="chevron"/></summary><div>{items.map(([fa,english,route])=><button key={route} className={live.path===liveBase+route?"ad-nav-active":""} aria-current={live.path===liveBase+route?"page":undefined} onClick={()=>{setDrawer(false);live.navigate(liveBase+route)}}>{t(fa,english)}</button>)}</div></details>)}</nav><div className="ad-sidebar-bottom"><span className="ad-avatar">ن</span><div><strong>{t("فضای کار نیل‌آرت","NilArt workspace")}</strong><small>{t("هنر، با نظم بیشتر","A little more order, for art")}</small></div></div></>
+    const routePermission=(route:string)=>{
+      if(["/media","/content"].includes(route))return "content.manage"
+      if(route==="/support")return "support.manage"
+      if(route==="/payments"||route==="/finance/refunds"||route==="/refunds")return "payments.read"
+      if(route==="/order-stock")return "fulfillment.manage"
+      if(["/shipping","/shipments"].includes(route))return "fulfillment.manage"
+      if(["/finance/export","/finance/exports"].includes(route))return "finance.export"
+      if(route.startsWith("/finance")||route.startsWith("/reports"))return "finance.read"
+      if(route.startsWith("/production")||["/inventory/production-orders","/inventory/batches","/inventory/quality"].includes(route))return "production.manage"
+      if(route==="/stock"||route.startsWith("/inventory")||route==="/purchases")return "inventory.manage"
+      if(["/users","/roles","/artists","/settings","/activity"].includes(route))return "identity.manage"
+      if(["/commissions","/artist-settlements"].includes(route))return "commissions.manage"
+      if(route.startsWith("/pricing")||["/materials","/service-rates","/recipes","/costing","/price-review"].includes(route))return "pricing.publish"
+      if(route==="/orders"||route==="/order-requests")return "orders.read_all"
+      return "catalog.manage"
+    }
+    const sidebar=<><div className="ad-brand"><span className="wordmark"><span>nilart<span className="wordmark-dot">.</span></span><small>ART, IN EVERY DETAIL</small></span><span className="ad-brand-caption">{t("پنل مدیریت نیل‌آرت","NilArt administration")}</span></div><nav aria-label={t("ناوبری مدیریت","Admin navigation")}><button className={live.path===liveBase?"ad-nav-active":""} aria-current={live.path===liveBase?"page":undefined} onClick={()=>{setDrawer(false);live.navigate(liveBase)}}><Glyph/>{t("داشبورد","Dashboard")}</button>{groups.filter(group=>group[2].some(item=>live.permissions.includes(routePermission(item[2])))).map(([title,icon,items])=><details key={title} open={items.some(item=>live.path===liveBase+item[2]||live.path.startsWith(liveBase+item[2]+"/"))}><summary><Glyph name={icon}/><span>{title}</span><Glyph name="chevron"/></summary><div>{items.filter(item=>live.permissions.includes(routePermission(item[2]))).map(([fa,english,route])=><button key={route} className={live.path===liveBase+route||live.path.startsWith(liveBase+route+"/")?"ad-nav-active":""} aria-current={live.path===liveBase+route?"page":live.path.startsWith(liveBase+route+"/")?"location":undefined} onClick={()=>{setDrawer(false);live.navigate(liveBase+route)}}>{t(fa,english)}</button>)}</div></details>)}</nav><div className="ad-sidebar-bottom"><span className="ad-avatar">ن</span><div><strong>{t("فضای کار نیل‌آرت","NilArt workspace")}</strong><small>{t("هنر، با نظم بیشتر","A little more order, for art")}</small></div></div></>
     return <div className="ad-app" dir={en?"ltr":"rtl"}><aside className="ad-sidebar">{sidebar}</aside><div className="ad-workspace"><header className="ad-topbar"><div className="ad-top-start"><button className="icon-button ad-mobile-menu" aria-label={t("باز کردن منو","Open menu")} onClick={()=>setDrawer(true)}><Glyph name="menu"/></button><span>{t("مدیریت کسب‌وکار","Business management")}</span></div><div className="ad-top-actions"><a className="ad-store" href={en?"/en":"/fa"}>{t("مشاهده فروشگاه","View store")}<Glyph name="link"/></a><button className="language-button" onClick={()=>live.navigate(live.path.replace(/^\/(fa|en)/,en?"/fa":"/en"))}>{en?"فارسی":"EN"}</button><a className="icon-button ad-logout" href={`/${en?"en":"fa"}/auth/logout`} aria-label={t("خروج از حساب","Sign out")}><Glyph name="logout"/></a></div></header><main className="ad-main"><div className="ad-panel-head"><div><h1>{live.title}</h1></div></div>{live.children}</main></div><dialog ref={drawerDialog} className="ad-drawer" onCancel={()=>setDrawer(false)}><button className="icon-button" aria-label={t("بستن منو","Close menu")} onClick={()=>setDrawer(false)}><Glyph name="close"/></button>{sidebar}</dialog></div>
   }
   if (!session)

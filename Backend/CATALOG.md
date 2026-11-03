@@ -219,7 +219,7 @@ Prices stay decimal strings; no API/schema or catalog-data changes are included.
 ## Explicit versioned SKU price authoring (0013)
 
 GET/PUT `/api/v1/admin/catalog/skus/{sku_id}/price` target an existing SKU.
-Both require `catalog.manage`. PUT additionally requires exact Origin, current
+GET requires `catalog.manage`; PUT requires the independent `pricing.publish` permission. PUT additionally requires exact Origin, current
 CSRF, and transactionally locked/rechecked session, account and role grants.
 No accounts/roles are created or elevated by this slice.
 
@@ -396,6 +396,48 @@ presentation fields. See fixtures/README.md for guarded test-data import.
 
 Migration 0020 stores optional published `catalog_bundle_presentations` separately from fixed bundle composition. `GET /api/v1/catalog/bundles/{slug}/presentation` supplies bilingual copy, collection context, sample marker, explicit fixed discount/currency, stacking information and allowed alternative SKU IDs per existing component. Alternatives are restricted to that component's published product SKUs; unpublished choices are filtered, invalid/empty configuration returns 404. No choices or discount are inferred when a presentation is missing. This is a read/presentation contract, not bundle publication, inventory, checkout or purchasing authorization. Existing bundle responses are unchanged. The guarded local importer is documented in fixtures/README.md.
 
+## Versioned collection, category and product administration (0021)
+
+`/api/v1/admin/catalog/entries/{kind}` supports protected list and explicit draft
+creation for `collections`, `categories` and `products`. Lists include drafts and
+published records, bounded pagination, status (`all|draft|published`) and literal
+case-insensitive title/slug search. `GET/PUT /entries/{kind}/{id}` reads or edits
+bilingual titles/descriptions and explicit product collection/category membership.
+Creation uses a client-chosen UUID so an uncertain outcome can be checked by ID;
+existing IDs/slugs conflict rather than silently recreating or overwriting records.
+
+Every read requires `catalog.manage`. Every mutation checks exact Origin, fresh
+CSRF and locked current session/effective permissions. Mutation reasons are required;
+versions compare under row locks. Creation starts unpublished at version 1; legacy
+entries start at version 0 without being changed by the migration. Text editing
+preserves publication status; editing published text changes public content immediately.
+Published slugs cannot be renamed. Foreign and duplicate memberships are rejected.
+
+`POST /entries/{kind}/{id}/publication` separately confirms public visibility with
+expected version, explicit boolean and reason. Publishing a product requires its
+linked collections/categories to be published. This does not publish a SKU, option
+mapping, product presentation or media, and does not establish inventory/purchasing.
+Unpublishing preserves records, IDs, associations and audit history. Existing public
+queries continue to hide unpublished parents/associations and dependent bundles;
+there is no hard-delete endpoint. Public SKU/mapping/presentation publication and
+approved media authoring remain subsequent work.
+
+Migration 0021 adds version/audit tables without rewriting business records. Each
+successful content/publication mutation records actor, UTC time, reason, versions
+and before/after snapshots, and enqueues `catalog.entry_changed` in the same transaction.
+Audit or outbox failures roll back all changes. An advisory transaction lock serializes
+catalog-content writes and dependency publication checks; existing product-before-SKU
+locking remains unchanged. The outbox consumer validates and deduplicates this change
+notification; it does not infer any downstream business operation.
+
+`GET /entries/{kind}/{id}/audits` provides bounded descending history with a version
+cursor. `GET /entries/products/{id}/skus` includes private and published SKUs and exact
+price strings. The existing audited draft-SKU creation endpoint is connected in the
+admin product browser. Browser data is never the authority for publication, prices or
+stock. The collection/category/product editor reuses the original admin shell/panel/
+form patterns and shared Dropdown, protects unsaved input, and requires an explicit
+reload after stale or unconfirmed writes.
+
 
 ## Database-backed artwork samples — 2026-10-13
 
@@ -408,14 +450,19 @@ Reference gallery/detail layouts and CSS are preserved. Cards and details share 
 Verification: 108 frontend tests, frontend types/lint, 12 artwork browser checks across final runs, focused PostgreSQL migration/import/rollback/idempotency/unpublication tests, focused backend lint/types, API/client generation, Docker API/web builds and eight healthy services. Full workspace backend run: 287 passed, 25 skipped (reported separately from focused PostgreSQL evidence). Unrelated panel implementation remains outside this commit. Remote CI is reported separately.
 
 
-### Server basket — 2026-10-14
+### Reviewed SKU publication
 
-PUB-09 now uses the reference CartPage/CartRow layout with persisted guest/account baskets. Products, explicit bundle selections and sample artworks with optional frames support quantities, edit, remove/undo, reload, explicit guest merge and exact decimal totals. Origin/CSRF/session checks, optimistic versions and command idempotency protect writes; changed prices require confirmation. No stock reservations, order creation, payment or discount-code service is claimed; checkout and coupon controls remain disabled. Migration 0027 follows the additive 0023–0026 schema prerequisites, included without their unfinished panel services.
+`POST /api/v1/admin/catalog/skus/{id}/publication` requires `catalog.manage`, current Origin/session/CSRF, the expected shared SKU authoring version, explicit boolean visibility and a nonblank reason. Publishing requires a published product and a current explicit mapping. Product-before-SKU locks serialize publication with mapping/configuration edits; stale or unmapped SKUs cannot publish. Unpublication permits subsequent draft code/mapping edits. Visibility, shared version and actor/time/reason/action audit commit atomically; repeated/stale requests return conflict. No migration, price, inventory or purchasing action is implied.
 
-Verification: six isolated PostgreSQL tests (including concurrent updates), backend lint/types, 209 frontend tests, frontend types/lint, generated contracts, API/web Docker builds and desktop/mobile browser flows. Local services healthy. Remote CI is reported separately after push.
+`GET /api/v1/catalog/skus/{code}/options` returns only a published SKU under a published product with a stored reviewed mapping: IDs, configuration version and bilingual option/combination snapshot. It reads the immutable mapping snapshot, never the mutable option draft. Later draft edits leave public snapshots unchanged. While published, code/mapping changes are blocked. Legacy published unmapped SKUs return 404 on this new endpoint; existing SKU list contracts remain unchanged. Unpublishing hides this snapshot; republishing requires a fresh mapping review. This endpoint is separate from product presentation rendering and historic order snapshots.
+
+The bilingual admin options editor provides an explicit publish/unpublish confirmation with reason. Publication changes do not enable checkout or assert stock. SKU audit rows retain the reason, but a dedicated SKU audit-history UI remains outstanding.
 
 
-### Zarinpal sandbox checkout — 2026-10-18
-Connected the saved basket to a bilingual sandbox checkout (saved address, price review, explicit test consent), Zarinpal v4 redirect, authoritative callback verification, receipt and owner-only result/recheck. Requests require exact Origin, fresh CSRF and transactionally rechecked session/write permission. PostgreSQL snapshots retain selections, amounts and recipient; payment/order/receipt/basket updates and outbox writes are atomic. Sandbox orders remain on hold; no real money, stock, shipping or production fulfillment is enabled. Shipping/tax are explicitly zero for this test. Migration 0031 includes additive schema prerequisites 0028–0030 without their unfinished services.
+### SKU authoring history
 
-Local validation: six new backend tests on isolated PostgreSQL, two checkout UI tests, 297 total frontend tests, backend lint/types and frontend lint/types. A live sandbox request and browser test completed with gateway verification/reference saved. Frontend Docker build passed. The clean API Docker build hit dependency-registry DNS failure; the API image was successfully rebuilt from its installed runtime with updated source/migrations. Remote CI results are separate. See Backend/PAYMENTS.md for settings and recovery limits.
+`GET /api/v1/admin/catalog/skus/{id}/audits` requires `catalog.manage` and returns actor, UTC timestamp, previous/current authoring versions and before/after snapshots. `limit` is 1–100 (default 20); `before_version` is an exclusive descending cursor. Publication reasons/actions are retained. Earlier code/publication audits may omit mapping snapshots; omission does not mean a mapping was removed. Price audits use their separate existing endpoint/version. Missing SKUs return 404; private responses are no-store. Admin options page provides retryable, paginated history with Tehran dates and before/after comparisons, clears history on SKU/session changes and refreshes displayed SKU state from acknowledged reads.
+
+## 2026-10-19 — Reviewed price proposals
+
+The `/api/v1/admin/pricing` module uses complete versioned recipe estimates, explicit margin/fee/fixed-cost/rounding inputs and immutable proposal decisions. Preview/save do not publish. Explicit publication reuses this SKU price repository and audit under `pricing.publish`, with current input/price fingerprints and stable operation receipts. Pending rate/BOM/current-price/bundle changes require review. Catalogue-only users retain public-price/history reads but cannot write through the legacy route. See docs/price-proposals.md for contracts, tests, chosen-date validity and remaining family/group/bundle/scheduling scope.

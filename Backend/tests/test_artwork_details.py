@@ -71,3 +71,10 @@ def test_details_import_is_atomic_idempotent_and_publication_safe(flow):
     with Operations.context(MigrationContext.configure(db.connection())):
         for module in reversed(modules):
             module.downgrade()
+
+
+def test_mixed_media_mandala_preserves_exact_a5_dimensions():
+    from nilart.contexts.catalog.presentation.artwork_authoring import Content
+    value = Content(slug="mandala-test", title_fa="ماندالا", title_en="Mandala", artist_fa="نیلوفر مرادی", artist_en="Niloufar Moradi", medium="mixed-media", style="abstract", width_cm=14.8, height_cm=21, edition="original", price_amount="1000000", weight_grams=500, returnable=True, image_credit="Niloufar Moradi", frame_fa="با قاب", frame_en="Frame included")
+    assert value.width_cm == 14.8 and value.height_cm == 21
+    assert value.medium == "mixed-media" and value.frame_en == "Frame included"

@@ -1,0 +1,4 @@
+import {z} from "zod"
+import {privateRequest} from "./identity-api"
+const entry=z.object({id:z.string().uuid(),actor_id:z.string().uuid().nullable(),account_id:z.string().uuid(),action:z.string(),reason:z.string(),created_at:z.iso.datetime({offset:true})})
+export const activityApi={async list(q:string,account:string,cursor?:string,actor?:string,dates?:{from:string;to:string},action?:string){const params=new URLSearchParams({limit:"25"});if(q)params.set("q",q);if(account)params.set("account_id",z.string().uuid().parse(account));if(actor)params.set("actor_id",z.string().uuid().parse(actor));if(dates?.from)params.set("date_from",z.iso.date().parse(dates.from));if(dates?.to)params.set("date_to",z.iso.date().parse(dates.to));if(action)params.set("action",action);if(cursor)params.set("cursor",cursor);return z.object({items:z.array(entry),next_cursor:z.string().uuid().nullable()}).parse(await privateRequest(`/api/v1/admin/identity/audits?${params}`))}}

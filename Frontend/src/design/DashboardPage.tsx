@@ -29,6 +29,11 @@ export function Glyph({ name, size = 20 }: { name: string; size?: number }) {
         <path d="m3 7 9-4 9 4v10l-9 4-9-4V7Zm0 0 9 4 9-4M12 11v10M7 5l9 4" />
       </>
     ),
+    plus: <path d="M12 5v14M5 12h14" />,
+    alert: <><path d="m12 3 10 18H2Z" /><path d="M12 9v5M12 17h.01" /></>,
+    search: <><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></>,
+    refresh: <><path d="M20 7v5h-5M4 17v-5h5" /><path d="M6 7a7 7 0 0 1 12-1l2 6M4 12l2 6a7 7 0 0 0 12-1" /></>,
+    book: <><path d="M6 3h9l4 4v14H6Z M14 3v5h5M9 12h7M9 16h7" /></>,
     download: <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />,
     heart: (
       <path d="M12 21 3.5 12.5a5.5 5.5 0 0 1 8.5-7 5.5 5.5 0 0 1 8.5 7Z" />
@@ -177,7 +182,7 @@ export default function DashboardPage({
       event.preventDefault()
       const proceed = () => {
         setDrawer(false)
-        if (route.startsWith(account + "/") && ![`${account}/downloads`, `${account}/favorites`, `${account}/addresses`, `${account}/profile`, `${account}/security`, `${account}/preferences`, `${account}/support`, `${account}/notifications`].includes(route) && !/^\/(fa|en)\/account\/support\/[^/]+$/.test(route) && !/\/(receipt|cancel|return|artwork-review)$/.test(route) && !route.startsWith(`${account}/requests/`)) {
+        if (!liveMode && route.startsWith(account + "/") && ![`${account}/downloads`, `${account}/favorites`, `${account}/addresses`, `${account}/profile`, `${account}/security`, `${account}/preferences`, `${account}/support`, `${account}/notifications`].includes(route) && !/^\/(fa|en)\/account\/support\/[^/]+$/.test(route) && !/\/(receipt|cancel|return|artwork-review)$/.test(route) && !route.startsWith(`${account}/requests/`)) {
           navigate(route)
           setDestination(route)
         } else navigate(route)

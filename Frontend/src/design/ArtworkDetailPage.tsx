@@ -1,3 +1,5 @@
+import {SaleTag} from "../features/marketing/StorefrontPromotions";
+import FavoriteButton from "../features/customer/FavoriteButton"
 import {useBasket} from "../features/basket/store"
 import {addAmounts,tomanAmount} from "../features/basket/money"
 import AddToBasket from "../features/basket/AddToBasket"
@@ -10,7 +12,7 @@ import "./artwork-detail.css"
 import type { ArtworkCatalog } from "../features/catalog/artwork-catalog"
 
 type Work = GalleryWork
-type View = "full" | "detail" | "frame"
+type View = "full" | "detail" | "frame" | `image-${number}`
 type Mode = "normal" | "loading" | "error" | "not-found" | "image-error" | "sold" | "unavailable" | "checking" | "cart-error" | "stock-error" | "price-change" | "favorite-error"
 const modes: [Mode, string, string][] = [
   ["normal", "عادی", "Normal"],
@@ -105,7 +107,7 @@ export default function ArtworkDetailPage({
     null,
   )
   const hasFrameOptions = live ? work?.catalogRecord?.details?.frame_price_amount!=null&&!!work.catalogRecord.details.framed_fa&&!!work.catalogRecord.details.framed_en : work?.id === "quiet-morning"
-  const views: View[] = live ? hasFrameOptions?["full","frame"]:["full"] : hasFrameOptions
+  const views: View[] = live ? work?.catalogRecord?.details?.gallery?.length?work.catalogRecord.details.gallery.map((_,i)=>`image-${i}` as View):hasFrameOptions?["full","frame"]:["full"] : hasFrameOptions
     ? ["full", "detail", "frame"]
     : ["full", "detail"]
   const resetZoom = () => {
@@ -146,7 +148,7 @@ export default function ArtworkDetailPage({
   const surfaceLabel=metadata?.surface_fa&&metadata.surface_en?t(metadata.surface_fa,metadata.surface_en):live?unknown:t("بوم — نمونه","Canvas — demo")
   const frameLabel=frame&&metadata?.framed_fa&&metadata.framed_en?t(metadata.framed_fa,metadata.framed_en):metadata?.frame_fa&&metadata.frame_en?t(metadata.frame_fa,metadata.frame_en):live?unknown:frame?t("با قاب چوبی — نمونه","Wood frame — demo"):t("بدون قاب — نمونه","Unframed — demo")
   const medium =
-    work?.medium === "colored-pencil" ? t("مدادرنگی","Colored pencil") : live && !work?.medium ? unknown : work?.medium === "oil"
+    work?.medium === "mixed-media" ? t("ماندالا ترکیبی","Mixed-media mandala") : work?.medium === "colored-pencil" ? t("مدادرنگی","Colored pencil") : live && !work?.medium ? unknown : work?.medium === "oil"
       ? t("رنگ روغن", "Oil painting")
       : t("اکریلیک", "Acrylic")
   const price =
@@ -167,7 +169,7 @@ export default function ArtworkDetailPage({
     mode !== "image-error"
   const inCart = !live && work ? cartIds.includes(work.id) : false
   const viewName = (v: View) =>
-    v === "full"
+    v.startsWith("image-")?t("تصویر ","Image ")+(Number(v.slice(6))+1):v === "full"
       ? t("نمای کامل", "Full artwork")
       : v === "detail"
         ? t("جزئیات تصویر نمونه", "Demo image detail")
@@ -269,6 +271,7 @@ export default function ArtworkDetailPage({
       )
     }, 650)
   }
+  const approvedImage=(w:Work,selected:View)=>{const g=w.catalogRecord?.details?.gallery?.[selected.startsWith('image-')?Number(selected.slice(6)):0];return g?{url:`/api/v1/media/${g.asset_id}/versions/${g.revision_id}/content`,alt:language===0?g.alt_fa:g.alt_en}:undefined}
   const artwork = (w: Work, selected: View, extra = "") => (
     <div
       className={`ad-art-surface ${selected === "frame" ? "ad-framed" : ""} ${
@@ -276,7 +279,7 @@ export default function ArtworkDetailPage({
       } ${extra}`}
       style={w.width !== null && w.height !== null ? { "--art-ratio": `${w.width} / ${w.height}` } as CSSProperties : undefined}
     >
-      {w.catalogRecord?.details ? <SampleArtworkImage work={w}/> : w.catalogRecord ? <Symbol name="image" /> : <DemoPainting work={w} />}
+      {w.catalogRecord?.details ? <SampleArtworkImage work={w} image={approvedImage(w,selected)}/> : w.catalogRecord ? <Symbol name="image" /> : <DemoPainting work={w} />}
     </div>
   )
   const prototype = live ? null : (
@@ -458,8 +461,9 @@ export default function ArtworkDetailPage({
               </button>
             ))}
           </div>
+          {metadata?.edition==='digital'&&<section><h2>{t('مجوز نسخه دیجیتال','Digital edition license')}</h2><p>{t(metadata.license_fa,metadata.license_en)}</p><p>{t('پس از تأیید پرداخت و آماده‌سازی، فایل در دانلودهای حساب ارائه می‌شود. ارسال پستی ندارد.','After payment confirmation and preparation, the file is released in your account downloads. No postal shipping.')}</p></section>}
           <p className="ad-gallery-note">
-            {work.catalogRecord?.details ? `${t("تصویر نمونه؛ ","Sample image; ")}${work.catalogRecord.details.image_credit}` : live ? t("تصویر تأییدشده اثر ارائه نشده است.", "No approved artwork image has been provided.") : view === "frame"
+            {work.catalogRecord?.details ? `${work.catalogRecord.details.sample?t("تصویر نمونه؛ ","Sample image; "):""}${work.catalogRecord.details.image_credit}` : live ? t("تصویر تأییدشده اثر ارائه نشده است.", "No approved artwork image has been provided.") : view === "frame"
               ? t(
                   "نمای قاب شبیه‌سازی‌شده است؛ مقیاس و رنگ تقریبی‌اند.",
                   "Simulated frame view; scale and color are approximate.",
@@ -477,11 +481,11 @@ export default function ArtworkDetailPage({
             </span>
             {work.unique && (
               <span className="ad-edition">
-                {t("تک‌نسخه — نمونه", "One-of-a-kind — demo")}
+                {live?t("تک‌نسخه", "One-of-a-kind"):t("تک‌نسخه — نمونه", "One-of-a-kind — demo")}
               </span>
             )}
           </div>
-          <h1 id="ad-title">{work.title[language]}</h1>
+          <h1 id="ad-title">{work.title[language]}</h1><SaleTag kind="artwork" id={work.catalogRecord?.id} en={language===1}/>
           <p className="ad-byline">{work.catalogRecord?.details ? t(work.catalogRecord.details.artist_fa,work.catalogRecord.details.artist_en) : live ? t("هنرمند اعلام نشده", "Artist not provided") : t("اثر هنرمند نمونه", "By Demo artist")}</p>
           <p className="ad-summary">
             {work.catalogRecord ? work.catalogRecord[language === 0 ? "description_fa" : "description_en"] : work.style === "landscape"
@@ -660,7 +664,7 @@ export default function ArtworkDetailPage({
                 {!live && <span>Demo</span>}
               </button>
             )}
-            <button
+            {live && work.catalogRecord ? <FavoriteButton kind="artwork" id={work.catalogRecord.id} language={language} className="button secondary ad-save"><Symbol name="heart"/></FavoriteButton> : <button
               className={`button secondary ad-save ${saved ? "saved" : ""}`}
               disabled={live}
               aria-pressed={saved}
@@ -672,7 +676,7 @@ export default function ArtworkDetailPage({
               onClick={() => favorite(work)}
             >
               <Symbol name="heart" />
-            </button>
+            </button>}
           </div>
           <p className="ad-reservation">
             {t(

@@ -1,0 +1,7 @@
+import {z} from 'zod'
+import {privateRequest} from '../admin/identity-api'
+export const stockComponent=z.object({delivery:z.enum(["physical","digital"]).default("physical"),returnable:z.boolean().nullable().optional(),unit_amount:z.string().regex(/^\d+(?:\.\d{1,7})?$/),paid_amount:z.string().regex(/^\d+(?:\.\d{1,2})?$/).nullable().optional(),line_id:z.string().uuid(),basket_line_id:z.string().regex(/^[a-f0-9]{32}$/),component:z.number().int().nonnegative(),kind:z.enum(['sku','artwork']),reference_id:z.string().uuid(),position_id:z.string().uuid(),per_unit:z.number().int().positive(),quantity:z.number().int().positive(),title_fa:z.string(),title_en:z.string()})
+const position=z.object({position_id:z.string().uuid(),required:z.number().int().positive(),available:z.string().regex(/^\d+(?:\.\d{1,6})?$/),issue:z.enum(['stock_opening_required','stock_insufficient']).nullable()})
+export const stockReview=z.object({basket_version:z.number().int().nonnegative(),fingerprint:z.string().regex(/^[a-f0-9]{64}$/),settings_version:z.number().int().positive(),reservation_minutes:z.number().int().positive(),components:z.array(stockComponent),positions:z.array(position),ready:z.boolean()})
+export type StockReview=z.infer<typeof stockReview>
+export async function reviewStock(version:number){const r=stockReview.parse(await privateRequest(`/api/v1/payments/stock-review?basket_version=${version}`));if(r.basket_version!==version||r.ready!==r.positions.every(p=>p.issue===null))throw new Error('result_unknown');return r}

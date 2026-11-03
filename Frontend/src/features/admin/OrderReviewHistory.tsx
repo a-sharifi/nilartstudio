@@ -1,0 +1,14 @@
+"use client"
+import {AdminButton} from "../../components/admin/AdminUI"
+import {useEffect,useRef,useState} from "react"
+import {orderReviewApi} from "./order-review-api"
+import {sessionLifecycle} from "../identity/session-lifecycle"
+export default function OrderReviewHistory({id,en}:{id:string;en:boolean}){
+ const t=(fa:string,english:string)=>en?english:fa
+ const [rows,setRows]=useState<Awaited<ReturnType<typeof orderReviewApi.history>>["items"]>([]),[cursor,setCursor]=useState<string|null>(null),[loaded,setLoaded]=useState(false),[loading,setLoading]=useState(false),[error,setError]=useState("")
+ const revision=useRef(0),lock=useRef(false)
+ useEffect(()=>{const clear=()=>{revision.current++;lock.current=false;setRows([]);setCursor(null);setLoaded(false);setLoading(false);setError("")};const unregister=sessionLifecycle.registerPrivateCache(clear);return()=>{revision.current++;lock.current=false;unregister()}},[])
+ async function load(append=false){if(lock.current)return;lock.current=true;setLoading(true);setError("");const current=revision.current;try{const page=await orderReviewApi.history(id,append&&cursor?cursor:undefined);if(current!==revision.current)return;setRows(old=>append?[...old,...page.items]:page.items);setCursor(page.next_cursor);setLoaded(true)}catch{if(current===revision.current)setError(t("دریافت تاریخچه تصمیم‌ها ممکن نشد.","Unable to load decision history."))}finally{if(current===revision.current){lock.current=false;setLoading(false)}}}
+ const status=(value:string)=>({in_review:t("در حال بررسی","Under review"),approved:t("تأیید برای پردازش","Approved for processing"),rejected:t("ردشده","Rejected")}[value]||value)
+ return <section className="catalog-audit" aria-label={t("تاریخچه تصمیم‌ها","Decision history")}><h3>{t("تاریخچه تصمیم‌ها","Decision history")}</h3><AdminButton type="button" className="button secondary" disabled={loading} onClick={()=>void load()}>{t("دریافت تاریخچه تصمیم‌ها","Load decision history")}</AdminButton>{loading&&<p role="status">{t("در حال دریافت…","Loading history…")}</p>}{error&&<p role="alert">{error}</p>}{loaded&&!rows.length&&<p>{t("تصمیمی ثبت نشده است.","No decisions recorded.")}</p>}{rows.map(row=><article className="catalog-audit" key={row.id}><h4>{status(row.status)}</h4><time dateTime={row.created_at}>{new Intl.DateTimeFormat(en?"en":"fa",{dateStyle:"medium",timeStyle:"short",timeZone:"Asia/Tehran"}).format(new Date(row.created_at))}</time><p>{t("ثبت‌کننده","Recorded by")}: <bdi>{row.actor_id}</bdi></p><p>{t("نسخه","Version")}: {row.expected_version} → {row.expected_version+1}</p><p className="support-message-text" dir="auto">{row.reply}</p></article>)}{cursor&&<AdminButton type="button" className="button secondary" disabled={loading} onClick={()=>void load(true)}>{t("تصمیم‌های قدیمی‌تر","Older decisions")}</AdminButton>}</section>
+}

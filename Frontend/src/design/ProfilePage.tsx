@@ -239,7 +239,7 @@ export default function ProfilePage({
       return
     }
     requestLeave(() => {
-      if (internalRoute(route)) proceed()
+      if (liveApi || internalRoute(route)) proceed()
       else showDestination(route)
     })
   }
@@ -247,7 +247,7 @@ export default function ProfilePage({
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
     event.preventDefault()
     requestLeave(() => {
-      if (internalRoute(route)) navigate(route)
+      if (liveApi || internalRoute(route)) navigate(route)
       else showDestination(route)
     })
   }

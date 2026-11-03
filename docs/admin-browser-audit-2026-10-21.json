@@ -1,0 +1,5789 @@
+{
+  "date": "2026-10-21",
+  "environment": "http://127.0.0.1:18080",
+  "main_environment_modified": false,
+  "schema_main": "0051",
+  "schema_preview": "0054",
+  "release_complete": false,
+  "all_features_verified": false,
+  "summary": {
+    "admin_views": 56,
+    "admin_layout_variants": 224,
+    "route_statuses": {
+      "passed": 54,
+      "not implemented": 2
+    },
+    "layout_statuses": {
+      "passed": 216,
+      "not implemented": 8
+    },
+    "distinct_recorded_action_checks": {
+      "passed": 80,
+      "not implemented": 1,
+      "blocked": 1
+    },
+    "customer_layout_variants": 48,
+    "backend_tests_passed": 718,
+    "frontend_tests_passed": 434
+  },
+  "setup_exceptions": [
+    "Sandbox OTP read from the isolated Redis SMS inbox; account registration and password entry were performed in the browser. No real SMS was sent.",
+    "Supplemental scenarios use existing demo-only seed scripts/API fixtures for supplier/costing prerequisites and imported paid, unpaid, rejected or late-paid states. These are labeled controlled fixtures, not proof of gateway transactions.",
+    "Read-only APIs/database queries corroborate record IDs, frozen order data, original costs and privacy. They do not substitute for browser actions."
+  ],
+  "fixed_defects": [
+    "Filter toolbars without submit handlers no longer reload the document and cancel New artwork navigation.",
+    "Dropdown toggle buttons retain accessible names when a legacy select uses an external/wrapping label.",
+    "Shared private requests serialize CSRF rotation with the associated command, preventing overlapping checkout reviews invalidating one another. Queued requests retain session-generation checks and are never automatically replayed.",
+    "Required /admin/commissions/reviews alias opens the existing permission-controlled commission review workspace.",
+    "Delivered physical items in a mixed order remain partially fulfilled and return-eligible while digital files await release."
+  ],
+  "views": [
+    {
+      "id": "ADM-01",
+      "title": "داشبورد ادمین / Admin Dashboard",
+      "required_route": "/admin",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-01",
+          "at": "2026-10-21T10:01:39.957Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-01-en-1440.png"
+        },
+        {
+          "name": "ADM-01",
+          "at": "2026-10-21T10:01:40.954Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-01-en-390.png"
+        },
+        {
+          "name": "ADM-01",
+          "at": "2026-10-21T10:01:41.983Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-01-fa-1440.png"
+        },
+        {
+          "name": "ADM-01",
+          "at": "2026-10-21T10:01:42.969Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-01-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [],
+      "remaining": "Consolidated sales/profit/gateway metrics, cross-domain actionable queues and failed-job retry visibility; current recorded summaries are partial.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-02",
+      "title": "مدیریت کالکشن / Collections Admin",
+      "required_route": "/admin/collections",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-02",
+          "at": "2026-10-21T10:01:43.913Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/collections",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-02-en-1440.png"
+        },
+        {
+          "name": "ADM-02",
+          "at": "2026-10-21T10:01:44.870Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/collections",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-02-en-390.png"
+        },
+        {
+          "name": "ADM-02",
+          "at": "2026-10-21T10:01:45.798Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/collections",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-02-fa-1440.png"
+        },
+        {
+          "name": "ADM-02",
+          "at": "2026-10-21T10:01:46.734Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/collections",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-02-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "catalogue-collections",
+          "at": "2026-10-21T09:54:37.025Z",
+          "status": "passed",
+          "method": "browser draft, reload, publication, reload",
+          "id": "d6b466f9-e7ef-450c-a2e1-e6555840e2d9"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Approved media/gallery ordering/alt text and complete publication checks across member products/bundles.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-03",
+      "title": "مدیریت دسته / Categories Admin",
+      "required_route": "/admin/categories",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-03",
+          "at": "2026-10-21T10:01:47.661Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/categories",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-03-en-1440.png"
+        },
+        {
+          "name": "ADM-03",
+          "at": "2026-10-21T10:01:48.561Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/categories",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-03-en-390.png"
+        },
+        {
+          "name": "ADM-03",
+          "at": "2026-10-21T10:01:49.479Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/categories",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-03-fa-1440.png"
+        },
+        {
+          "name": "ADM-03",
+          "at": "2026-10-21T10:01:50.390Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/categories",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-03-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "catalogue-categories",
+          "at": "2026-10-21T09:54:38.473Z",
+          "status": "passed",
+          "method": "browser draft, reload, publication, reload",
+          "id": "56b74588-693d-490d-a31f-3a050cd1805c"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Complete catalogue/media publication dependencies and integrated acceptance; text drafts/publication exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-04",
+      "title": "فهرست محصولات / Products Admin",
+      "required_route": "/admin/products",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-04",
+          "at": "2026-10-21T10:01:51.456Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-04-en-1440.png"
+        },
+        {
+          "name": "ADM-04",
+          "at": "2026-10-21T10:01:52.517Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-04-en-390.png"
+        },
+        {
+          "name": "ADM-04",
+          "at": "2026-10-21T10:01:53.597Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-04-fa-1440.png"
+        },
+        {
+          "name": "ADM-04",
+          "at": "2026-10-21T10:01:54.661Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-04-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "catalogue-products",
+          "at": "2026-10-21T09:54:39.941Z",
+          "status": "passed",
+          "method": "browser draft, reload, publication, reload",
+          "id": "3ca549dd-0208-4a87-8110-9e92c8778c71"
+        },
+        {
+          "name": "sku-draft",
+          "at": "2026-10-21T09:54:40.549Z",
+          "status": "passed",
+          "method": "browser product filter and SKU creation"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Complete product/SKU/media authoring and publication workflow; lists and basic drafts exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-05",
+      "title": "فرم محصول / Product Editor",
+      "required_route": "/admin/products/:id/edit",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-05",
+          "at": "2026-10-21T10:01:55.663Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products/6074b6f8-7e6a-4a3a-bcc4-d583e16f3ad5/edit",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-05-en-1440.png"
+        },
+        {
+          "name": "ADM-05",
+          "at": "2026-10-21T10:01:56.604Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products/6074b6f8-7e6a-4a3a-bcc4-d583e16f3ad5/edit",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-05-en-390.png"
+        },
+        {
+          "name": "ADM-05",
+          "at": "2026-10-21T10:01:57.609Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products/6074b6f8-7e6a-4a3a-bcc4-d583e16f3ad5/edit",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-05-fa-1440.png"
+        },
+        {
+          "name": "ADM-05",
+          "at": "2026-10-21T10:01:58.575Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products/6074b6f8-7e6a-4a3a-bcc4-d583e16f3ad5/edit",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-05-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "catalogue-products",
+          "at": "2026-10-21T09:54:39.941Z",
+          "status": "passed",
+          "method": "browser draft, reload, publication, reload",
+          "id": "3ca549dd-0208-4a87-8110-9e92c8778c71"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Finish SKU recipe relationships and full publication checks, public catalogue/list media integration and settings-backed checkout consumption/freezing of approved metadata. Artwork and protected-delivery dependencies remain separate. Product/SKU specifications, gallery and explicit delivery/weight authoring now persist through versioned profiles.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-06",
+      "title": "گزینه‌ها و SKU / Variant Matrix",
+      "required_route": "/admin/products/:id/variants",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-06",
+          "at": "2026-10-21T10:01:59.563Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products/6074b6f8-7e6a-4a3a-bcc4-d583e16f3ad5/variants",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-06-en-1440.png"
+        },
+        {
+          "name": "ADM-06",
+          "at": "2026-10-21T10:02:00.494Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products/6074b6f8-7e6a-4a3a-bcc4-d583e16f3ad5/variants",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-06-en-390.png"
+        },
+        {
+          "name": "ADM-06",
+          "at": "2026-10-21T10:02:01.474Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products/6074b6f8-7e6a-4a3a-bcc4-d583e16f3ad5/variants",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-06-fa-1440.png"
+        },
+        {
+          "name": "ADM-06",
+          "at": "2026-10-21T10:02:02.410Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/products/6074b6f8-7e6a-4a3a-bcc4-d583e16f3ad5/variants",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-06-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "sku-option-mapping-publication",
+          "at": "2026-10-21T14:35:19.124Z",
+          "status": "passed",
+          "method": "browser bilingual option/value/combination draft, reload, version-pinned mapping, explicit SKU publication and reload",
+          "product": "3ca549dd-0208-4a87-8110-9e92c8778c71"
+        }
+      ],
+      "supplemental_browser_specs": [
+        "catalog-profiles-live.spec.ts"
+      ],
+      "remaining": "Finish SKU recipe relationships and full publication checks, public catalogue/list media integration and settings-backed checkout consumption/freezing of approved metadata. Artwork and protected-delivery dependencies remain separate. Product/SKU specifications, gallery and explicit delivery/weight authoring now persist through versioned profiles.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-07",
+      "title": "مدیریت پکیج / Bundles Admin",
+      "required_route": "/admin/bundles",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-07",
+          "at": "2026-10-21T10:02:03.327Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/bundles",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-07-en-1440.png"
+        },
+        {
+          "name": "ADM-07",
+          "at": "2026-10-21T10:02:04.244Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/bundles",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-07-en-390.png"
+        },
+        {
+          "name": "ADM-07",
+          "at": "2026-10-21T10:02:05.162Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/bundles",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-07-fa-1440.png"
+        },
+        {
+          "name": "ADM-07",
+          "at": "2026-10-21T10:02:06.078Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/bundles",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-07-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-ADM-07",
+          "at": "2026-10-21T14:21:16.314Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/catalog/bundles?q=QA-NO-MATCH-ACCEPTANCE&status=all"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "bundle-authoring-live.spec.ts"
+      ],
+      "remaining": "Bundle administration beyond the published-record list: drafts, component/choice editing and publication.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-08",
+      "title": "فرم پکیج / Bundle Editor",
+      "required_route": "/admin/bundles/:id/edit",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-08",
+          "at": "2026-10-21T10:02:07.169Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/bundles/01507d0b-7dd4-480a-ace6-afaaad582382/edit",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-08-en-1440.png"
+        },
+        {
+          "name": "ADM-08",
+          "at": "2026-10-21T10:02:08.182Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/bundles/01507d0b-7dd4-480a-ace6-afaaad582382/edit",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-08-en-390.png"
+        },
+        {
+          "name": "ADM-08",
+          "at": "2026-10-21T10:02:09.290Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/bundles/01507d0b-7dd4-480a-ace6-afaaad582382/edit",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-08-fa-1440.png"
+        },
+        {
+          "name": "ADM-08",
+          "at": "2026-10-21T10:02:10.311Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/bundles/01507d0b-7dd4-480a-ace6-afaaad582382/edit",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-08-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [
+        "bundle-authoring-live.spec.ts"
+      ],
+      "remaining": "Complete public multi-collection, costing/group proposals and final integrated catalogue/checkout acceptance. Editor is implemented in the isolated preview; main rollout held.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-09",
+      "title": "کدهای تخفیف / Discounts Admin",
+      "required_route": "/admin/discounts",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-09",
+          "at": "2026-10-21T10:02:11.270Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/discounts",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-09-en-1440.png"
+        },
+        {
+          "name": "ADM-09",
+          "at": "2026-10-21T10:02:12.208Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/discounts",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-09-en-390.png"
+        },
+        {
+          "name": "ADM-09",
+          "at": "2026-10-21T10:02:13.152Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/discounts",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-09-fa-1440.png"
+        },
+        {
+          "name": "ADM-09",
+          "at": "2026-10-21T10:02:14.091Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/discounts",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-09-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "discount-rule-history",
+          "at": "2026-10-21T14:14:52.901Z",
+          "status": "passed",
+          "method": "browser create inactive rule, reload, usage and history"
+        },
+        {
+          "name": "filters-ADM-09",
+          "at": "2026-10-21T14:21:17.329Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/discounts/rules?q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+          ]
+        },
+        {
+          "name": "filter-clear-ADM-09",
+          "at": "2026-10-21T14:21:17.421Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Complete bundle/catalogue/policy integration and end-to-end acceptance; discount rules, usage and checkout reservations already exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-10",
+      "title": "فرم کد تخفیف / Discount Editor",
+      "required_route": "/admin/discounts/:id/edit",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-10",
+          "at": "2026-10-21T10:02:15.105Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/discounts/4464a758-46df-4eed-accd-32a85b02a0ac/edit",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-10-en-1440.png"
+        },
+        {
+          "name": "ADM-10",
+          "at": "2026-10-21T10:02:16.052Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/discounts/4464a758-46df-4eed-accd-32a85b02a0ac/edit",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-10-en-390.png"
+        },
+        {
+          "name": "ADM-10",
+          "at": "2026-10-21T10:02:17.115Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/discounts/4464a758-46df-4eed-accd-32a85b02a0ac/edit",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-10-fa-1440.png"
+        },
+        {
+          "name": "ADM-10",
+          "at": "2026-10-21T10:02:18.075Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/discounts/4464a758-46df-4eed-accd-32a85b02a0ac/edit",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-10-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "discount-rule-history",
+          "at": "2026-10-21T14:14:52.901Z",
+          "status": "passed",
+          "method": "browser create inactive rule, reload, usage and history"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Complete rule-to-sale/return financial acceptance across final catalogue workflows; editor/revisions already exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-11",
+      "title": "رسانه و فایل چاپ / Media Library",
+      "required_route": "/admin/media",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-11",
+          "at": "2026-10-21T10:02:19.090Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/media",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-11-en-1440.png"
+        },
+        {
+          "name": "ADM-11",
+          "at": "2026-10-21T10:02:20.070Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/media",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-11-en-390.png"
+        },
+        {
+          "name": "ADM-11",
+          "at": "2026-10-21T10:02:21.068Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/media",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-11-fa-1440.png"
+        },
+        {
+          "name": "ADM-11",
+          "at": "2026-10-21T10:02:22.041Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/media",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-11-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "media-upload-publication",
+          "at": "2026-10-21T14:14:39.512Z",
+          "status": "passed",
+          "method": "browser upload, draft and explicit approval",
+          "id": "c800db8a-d494-4013-a0c7-a343f2fab92c"
+        },
+        {
+          "name": "filters-ADM-11",
+          "at": "2026-10-21T14:21:18.496Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/media?q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Attach approved assets to catalogue galleries and consume protected print files in production/fulfillment. Upload/version/private-file foundation exists.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-12",
+      "title": "آثار نقاشی / Artwork Admin",
+      "required_route": "/admin/artworks",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-12",
+          "at": "2026-10-21T10:02:23.023Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/artworks",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-12-en-1440.png"
+        },
+        {
+          "name": "ADM-12",
+          "at": "2026-10-21T10:02:23.983Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/artworks",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-12-en-390.png"
+        },
+        {
+          "name": "ADM-12",
+          "at": "2026-10-21T10:02:24.944Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/artworks",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-12-fa-1440.png"
+        },
+        {
+          "name": "ADM-12",
+          "at": "2026-10-21T10:02:25.906Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/artworks",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-12-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "original-artwork",
+          "at": "2026-10-21T14:14:41.061Z",
+          "status": "passed",
+          "method": "browser approved gallery, publication and reload",
+          "id": "37a0912a-e201-4eef-82e5-a2137984b4d8"
+        },
+        {
+          "name": "digital-artwork",
+          "at": "2026-10-21T14:14:47.937Z",
+          "status": "passed",
+          "method": "browser approved gallery, publication and reload",
+          "id": "2ff61ddd-1313-49df-940b-f40b1325e72c"
+        },
+        {
+          "name": "physical-checkout",
+          "at": "2026-10-21T14:14:44.091Z",
+          "status": "passed",
+          "method": "customer browser basket, accepted review and zero-charge sandbox checkout",
+          "order": "e05a3635-cef6-4072-84cd-e6b9fdc35322"
+        },
+        {
+          "name": "digital-checkout",
+          "at": "2026-10-21T14:14:49.083Z",
+          "status": "passed",
+          "method": "customer browser basket, accepted review and zero-charge sandbox checkout",
+          "order": "68d0cc92-b9cc-4254-92ed-9a2c0acae3f1"
+        },
+        {
+          "name": "licensed-digital-delivery",
+          "at": "2026-10-21T14:14:50.200Z",
+          "status": "passed",
+          "method": "browser private final file release, reload and customer download",
+          "order": "68d0cc92-b9cc-4254-92ed-9a2c0acae3f1"
+        },
+        {
+          "name": "mixed-checkout-renewed-acceptance",
+          "at": "2026-10-21T14:24:01.749Z",
+          "status": "passed",
+          "method": "browser physical + digital basket, address change clears acceptance, renewed acceptance and frozen mixed zero-charge order",
+          "order": "20523218-0c29-49e8-b398-1b4bea314a3d"
+        },
+        {
+          "name": "last-unit-browser-concurrency",
+          "at": "2026-10-21T14:37:47.311Z",
+          "status": "passed",
+          "method": "two independent customer browsers accept the same last-unit review and pay concurrently; one succeeds, one conflicts; exactly one reservation",
+          "art": "57a84388-6275-49bb-9c5a-621cc4a5e691",
+          "position": "faeb3ffe-81c3-5083-94c3-22615b9657e3"
+        },
+        {
+          "name": "filters-ADM-12",
+          "at": "2026-10-21T14:21:19.523Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/catalog/artworks?q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Final catalogue/private-print/production dependencies and full-view acceptance. Managed original/print/licensed-digital authoring, publication, history, live source availability and physical/digital delivery are now implemented and verified in preview0054.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-13",
+      "title": "کاربران و دسترسی / Users & Roles",
+      "required_route": "/admin/users",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-13",
+          "at": "2026-10-21T10:02:26.969Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/users",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-13-en-1440.png"
+        },
+        {
+          "name": "ADM-13",
+          "at": "2026-10-21T10:02:28.018Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/users",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-13-en-390.png"
+        },
+        {
+          "name": "ADM-13",
+          "at": "2026-10-21T10:02:29.112Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/users",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-13-fa-1440.png"
+        },
+        {
+          "name": "ADM-13",
+          "at": "2026-10-21T10:02:30.221Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/users",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-13-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "role-admin",
+          "at": "2026-10-21T09:49:31.686Z",
+          "status": "passed",
+          "method": "browser account management"
+        },
+        {
+          "name": "role-staff",
+          "at": "2026-10-21T09:49:32.350Z",
+          "status": "passed",
+          "method": "browser account management"
+        },
+        {
+          "name": "role-artist",
+          "at": "2026-10-21T09:49:33.015Z",
+          "status": "passed",
+          "method": "browser account management"
+        },
+        {
+          "name": "role-boundaries",
+          "at": "2026-10-21T14:23:05.915Z",
+          "status": "passed",
+          "method": "operations denied identity/finance; customer denied all orders; artist checked separately"
+        },
+        {
+          "name": "permission-revocation",
+          "at": "2026-10-21T14:23:01.089Z",
+          "status": "passed",
+          "method": "loaded staff draft, admin revocation, rejected browser save and reload"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Final independent-permission, revocation and cross-domain acceptance; account/role/override management already works.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-14",
+      "title": "هنرمندان / Artists Admin",
+      "required_route": "/admin/artists",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-14",
+          "at": "2026-10-21T10:02:31.159Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/artists",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-14-en-1440.png"
+        },
+        {
+          "name": "ADM-14",
+          "at": "2026-10-21T10:02:32.054Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/artists",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-14-en-390.png"
+        },
+        {
+          "name": "ADM-14",
+          "at": "2026-10-21T10:02:32.978Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/artists",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-14-fa-1440.png"
+        },
+        {
+          "name": "ADM-14",
+          "at": "2026-10-21T10:02:33.888Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/artists",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-14-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "role-artist",
+          "at": "2026-10-21T09:49:33.015Z",
+          "status": "passed",
+          "method": "browser account management"
+        },
+        {
+          "name": "artist-workspace",
+          "at": "2026-10-21T14:23:05.873Z",
+          "status": "not implemented",
+          "reason": "Authorized artist route explicitly reports missing backend workflow"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Professional artist profiles, workload, deadlines, assignment and obligations; artist account-role management alone is connected.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-15",
+      "title": "محتوا و پشتیبانی / Content Admin",
+      "required_route": "/admin/content",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-15",
+          "at": "2026-10-21T10:02:34.851Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/content",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-15-en-1440.png"
+        },
+        {
+          "name": "ADM-15",
+          "at": "2026-10-21T10:02:35.804Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/content",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-15-en-390.png"
+        },
+        {
+          "name": "ADM-15",
+          "at": "2026-10-21T10:02:36.767Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/content",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-15-fa-1440.png"
+        },
+        {
+          "name": "ADM-15",
+          "at": "2026-10-21T10:02:37.703Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/content",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-15-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "content-draft-publication",
+          "at": "2026-10-21T14:14:55.145Z",
+          "status": "passed",
+          "method": "browser approval, public rendering, retained private draft isolation"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Richer page-specific content sections and complete public presentation/SEO acceptance; bilingual drafting and explicit publication exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ADM-16",
+      "title": "تنظیمات کسب‌وکار / Business Settings",
+      "required_route": "/admin/settings",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ADM-16",
+          "at": "2026-10-21T10:02:38.837Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/settings",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-16-en-1440.png"
+        },
+        {
+          "name": "ADM-16",
+          "at": "2026-10-21T10:02:39.841Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/settings",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-16-en-390.png"
+        },
+        {
+          "name": "ADM-16",
+          "at": "2026-10-21T10:02:40.966Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/settings",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-16-fa-1440.png"
+        },
+        {
+          "name": "ADM-16",
+          "at": "2026-10-21T10:02:41.965Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/settings",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ADM-16-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "business-settings",
+          "at": "2026-10-21T14:14:38.389Z",
+          "status": "passed",
+          "method": "browser explicit policies and isolated shipping method saved"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Remaining commission pricing/terms enforcement and final integrated settings acceptance. Shipping/tax/delivery/reservation/return/refund settings now govern new checkout and recorded outcomes; missing setup blocks affected actions.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-01",
+      "title": "فهرست مواد / Materials",
+      "required_route": "/admin/materials",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-01",
+          "at": "2026-10-21T10:02:42.991Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/materials",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-01-en-1440.png"
+        },
+        {
+          "name": "COST-01",
+          "at": "2026-10-21T10:02:44.050Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/materials",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-01-en-390.png"
+        },
+        {
+          "name": "COST-01",
+          "at": "2026-10-21T10:02:45.085Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/materials",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-01-fa-1440.png"
+        },
+        {
+          "name": "COST-01",
+          "at": "2026-10-21T10:02:46.112Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/materials",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-01-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "materials",
+          "at": "2026-10-21T09:54:43.600Z",
+          "status": "passed",
+          "method": "browser authoring and reload",
+          "id": "8bf89ade-c2d7-4a91-a030-660505d7906b"
+        },
+        {
+          "name": "filters-COST-01",
+          "at": "2026-10-21T14:21:24.160Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/costing/resources?kind=material&q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+          ]
+        },
+        {
+          "name": "filter-clear-COST-01",
+          "at": "2026-10-21T14:21:24.226Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Link resource supplier metadata to authoritative supplier records rather than only free text; final procurement/costing integration.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-02",
+      "title": "تعریف ماده و تبدیل واحد / Material Editor",
+      "required_route": "/admin/materials/:id/edit",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-02",
+          "at": "2026-10-21T10:02:47.114Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/materials/0fdab23a-b38b-45ac-b953-7efcd3a13d53/edit",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-02-en-1440.png"
+        },
+        {
+          "name": "COST-02",
+          "at": "2026-10-21T10:02:48.062Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/materials/0fdab23a-b38b-45ac-b953-7efcd3a13d53/edit",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-02-en-390.png"
+        },
+        {
+          "name": "COST-02",
+          "at": "2026-10-21T10:02:49.056Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/materials/0fdab23a-b38b-45ac-b953-7efcd3a13d53/edit",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-02-fa-1440.png"
+        },
+        {
+          "name": "COST-02",
+          "at": "2026-10-21T10:02:49.995Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/materials/0fdab23a-b38b-45ac-b953-7efcd3a13d53/edit",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-02-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "materials",
+          "at": "2026-10-21T09:54:43.600Z",
+          "status": "passed",
+          "method": "browser authoring and reload",
+          "id": "8bf89ade-c2d7-4a91-a030-660505d7906b"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Reference edit-route alias and full supplier/unit authoring integration; versioned resource rates/conversions exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-03",
+      "title": "نرخ خدمات / Service Rates",
+      "required_route": "/admin/service-rates",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-03",
+          "at": "2026-10-21T10:02:50.975Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/service-rates",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-03-en-1440.png"
+        },
+        {
+          "name": "COST-03",
+          "at": "2026-10-21T10:02:51.937Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/service-rates",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-03-en-390.png"
+        },
+        {
+          "name": "COST-03",
+          "at": "2026-10-21T10:02:52.907Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/service-rates",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-03-fa-1440.png"
+        },
+        {
+          "name": "COST-03",
+          "at": "2026-10-21T10:02:53.850Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/service-rates",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-03-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "service-rates",
+          "at": "2026-10-21T09:54:44.622Z",
+          "status": "passed",
+          "method": "browser authoring and reload",
+          "id": "47362133-e5d0-4fa4-a3b3-0ff8613e91bf"
+        },
+        {
+          "name": "filters-COST-03",
+          "at": "2026-10-21T14:21:25.249Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/costing/resources?kind=service&q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+          ]
+        },
+        {
+          "name": "filter-clear-COST-03",
+          "at": "2026-10-21T14:21:25.335Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Authoritative supplier/service obligations and full actual-cost/finance integration; versioned service rates exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-04",
+      "title": "فرمول‌های ساخت / BOM Library",
+      "required_route": "/admin/boms",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-04",
+          "at": "2026-10-21T10:02:54.851Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/boms",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-04-en-1440.png"
+        },
+        {
+          "name": "COST-04",
+          "at": "2026-10-21T10:02:55.846Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/boms",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-04-en-390.png"
+        },
+        {
+          "name": "COST-04",
+          "at": "2026-10-21T10:02:56.840Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/boms",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-04-fa-1440.png"
+        },
+        {
+          "name": "COST-04",
+          "at": "2026-10-21T10:02:57.830Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/boms",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-04-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "recipe-authoring",
+          "at": "2026-10-21T09:57:48.432Z",
+          "status": "passed",
+          "method": "browser SKU/material version selection, recipe save and reload",
+          "id": "ed1c97da-5199-422a-8da2-d5bf4cd85447"
+        },
+        {
+          "name": "filters-COST-04",
+          "at": "2026-10-21T14:21:26.357Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/costing/recipes?q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+          ]
+        },
+        {
+          "name": "filter-clear-COST-04",
+          "at": "2026-10-21T14:21:26.428Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Reusable family BOM templates, parameters and inherited overrides; reference /admin/boms route is not aliased to the connected recipe workspace.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-05",
+      "title": "ویرایش فرمول ساخت / BOM Editor",
+      "required_route": "/admin/boms/:id/edit",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-05",
+          "at": "2026-10-21T10:02:58.866Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/boms/01960499-7989-44de-8214-ee5966dfebc3/edit",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-05-en-1440.png"
+        },
+        {
+          "name": "COST-05",
+          "at": "2026-10-21T10:02:59.836Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/boms/01960499-7989-44de-8214-ee5966dfebc3/edit",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-05-en-390.png"
+        },
+        {
+          "name": "COST-05",
+          "at": "2026-10-21T10:03:00.868Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/boms/01960499-7989-44de-8214-ee5966dfebc3/edit",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-05-fa-1440.png"
+        },
+        {
+          "name": "COST-05",
+          "at": "2026-10-21T10:03:01.875Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/boms/01960499-7989-44de-8214-ee5966dfebc3/edit",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-05-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "recipe-authoring",
+          "at": "2026-10-21T09:57:48.432Z",
+          "status": "passed",
+          "method": "browser SKU/material version selection, recipe save and reload",
+          "id": "ed1c97da-5199-422a-8da2-d5bf4cd85447"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Template/override editing and reference /admin/boms/:id/edit alias; individual versioned recipes already exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-06",
+      "title": "بازده برش و ضایعات / Cutting Yield",
+      "required_route": "/admin/costing/cutting",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-06",
+          "at": "2026-10-21T10:03:02.807Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/costing/cutting",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-06-en-1440.png"
+        },
+        {
+          "name": "COST-06",
+          "at": "2026-10-21T10:03:03.703Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/costing/cutting",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-06-en-390.png"
+        },
+        {
+          "name": "COST-06",
+          "at": "2026-10-21T10:03:04.623Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/costing/cutting",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-06-fa-1440.png"
+        },
+        {
+          "name": "COST-06",
+          "at": "2026-10-21T10:03:05.522Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/costing/cutting",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-06-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "cutting-layout",
+          "at": "2026-10-21T09:54:45.928Z",
+          "status": "passed",
+          "method": "browser calculation and explicit workshop confirmation"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Standalone /admin/costing/cutting route and broader mixed-layout optimization. Geometric margins/orientation/yield plus workshop confirmation already exist inside recipes.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-07",
+      "title": "محاسبه‌گر هزینه SKU / SKU Cost Calculator",
+      "required_route": "/admin/costing",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-07",
+          "at": "2026-10-21T10:03:06.515Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/costing",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-07-en-1440.png"
+        },
+        {
+          "name": "COST-07",
+          "at": "2026-10-21T10:03:07.497Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/costing",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-07-en-390.png"
+        },
+        {
+          "name": "COST-07",
+          "at": "2026-10-21T10:03:08.475Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/costing",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-07-fa-1440.png"
+        },
+        {
+          "name": "COST-07",
+          "at": "2026-10-21T10:03:09.481Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/costing",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-07-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-COST-07",
+          "at": "2026-10-21T14:21:28.308Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/costing/recipes?q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+          ]
+        },
+        {
+          "name": "filter-clear-COST-07",
+          "at": "2026-10-21T14:21:28.377Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [
+        "pricing-live.spec.ts",
+        "production-live.spec.ts"
+      ],
+      "remaining": "Family/template-dependent calculation and complete catalogue/bundle estimates; individual exact recipe estimates exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-08",
+      "title": "قیمت پیشنهادی SKU / Price Proposal",
+      "required_route": "/admin/pricing/:sku",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-08",
+          "at": "2026-10-21T10:03:10.448Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/a83c535a-7084-4318-84a6-05dc8cc6f8ea",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-08-en-1440.png"
+        },
+        {
+          "name": "COST-08",
+          "at": "2026-10-21T10:03:11.386Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/a83c535a-7084-4318-84a6-05dc8cc6f8ea",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-08-en-390.png"
+        },
+        {
+          "name": "COST-08",
+          "at": "2026-10-21T10:03:12.351Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/a83c535a-7084-4318-84a6-05dc8cc6f8ea",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-08-fa-1440.png"
+        },
+        {
+          "name": "COST-08",
+          "at": "2026-10-21T10:03:13.303Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/a83c535a-7084-4318-84a6-05dc8cc6f8ea",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-08-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [
+        "pricing-live.spec.ts"
+      ],
+      "remaining": "Family/group policies and full bundle price proposals; individual margin/fee/rounding proposals exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-09",
+      "title": "صف بازبینی قیمت / Price Review Queue",
+      "required_route": "/admin/pricing/reviews",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-09",
+          "at": "2026-10-21T10:03:14.224Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/reviews",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-09-en-1440.png"
+        },
+        {
+          "name": "COST-09",
+          "at": "2026-10-21T10:03:15.121Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/reviews",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-09-en-390.png"
+        },
+        {
+          "name": "COST-09",
+          "at": "2026-10-21T10:03:16.041Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/reviews",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-09-fa-1440.png"
+        },
+        {
+          "name": "COST-09",
+          "at": "2026-10-21T10:03:16.937Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/reviews",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-09-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-COST-09",
+          "at": "2026-10-21T14:21:29.422Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/pricing/proposals?q=QA-NO-MATCH-ACCEPTANCE&status=pending"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "pricing-live.spec.ts"
+      ],
+      "remaining": "Group/family and full affected-bundle review/publication workflow; individual stale-proposal checks exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "COST-10",
+      "title": "تأیید انتشار و تاریخچه / Price Publication",
+      "required_route": "/admin/pricing/reviews/:id",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "COST-10",
+          "at": "2026-10-21T10:03:17.921Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/reviews/015a4110-067e-4aff-97e3-9336fe8d7439",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-10-en-1440.png"
+        },
+        {
+          "name": "COST-10",
+          "at": "2026-10-21T10:03:18.861Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/reviews/015a4110-067e-4aff-97e3-9336fe8d7439",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-10-en-390.png"
+        },
+        {
+          "name": "COST-10",
+          "at": "2026-10-21T10:03:19.835Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/reviews/015a4110-067e-4aff-97e3-9336fe8d7439",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-10-fa-1440.png"
+        },
+        {
+          "name": "COST-10",
+          "at": "2026-10-21T10:03:20.768Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/pricing/reviews/015a4110-067e-4aff-97e3-9336fe8d7439",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "COST-10-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [
+        "pricing-live.spec.ts"
+      ],
+      "remaining": "Complete group/bundle publication and integrated historical-price/cost acceptance; individual audited publication exists.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-01",
+      "title": "نمای انبار / Inventory",
+      "required_route": "/admin/inventory",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-01",
+          "at": "2026-10-21T10:03:21.789Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-01-en-1440.png"
+        },
+        {
+          "name": "OPS-01",
+          "at": "2026-10-21T10:03:22.905Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-01-en-390.png"
+        },
+        {
+          "name": "OPS-01",
+          "at": "2026-10-21T10:03:23.960Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-01-fa-1440.png"
+        },
+        {
+          "name": "OPS-01",
+          "at": "2026-10-21T10:03:25.032Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-01-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "original-opening",
+          "at": "2026-10-21T14:14:41.843Z",
+          "status": "passed",
+          "method": "browser explicit unique-original quantity and historical cost"
+        },
+        {
+          "name": "purchase-post-receive",
+          "at": "2026-10-21T09:57:47.187Z",
+          "status": "passed",
+          "method": "browser supplier/material selection, draft, posting, goods receipt and reload",
+          "id": "aa5fe5b6-a95b-4c4e-99d6-5c225b090a3d"
+        },
+        {
+          "name": "purchase-production-qc",
+          "at": "2026-10-21T09:57:49.458Z",
+          "status": "passed",
+          "method": "browser-created source data → purchase → pinned recipe → issue → QC output and reload",
+          "batch": "61ff9191-c0ff-459c-8325-d5b24efc9b8e"
+        },
+        {
+          "name": "filters-OPS-01",
+          "at": "2026-10-21T14:21:30.458Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/inventory?q=QA-NO-MATCH-ACCEPTANCE&low=false"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Complete catalogue/media/source integrations and integrated operational acceptance; ledger balances, stock and low-stock filters exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-02",
+      "title": "گردش و رزرو موجودی / Stock Ledger",
+      "required_route": "/admin/inventory/:item/movements",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-02",
+          "at": "2026-10-21T10:03:25.980Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory/02722902-36ec-52e4-97f2-82ac3fb3c68e/movements",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-02-en-1440.png"
+        },
+        {
+          "name": "OPS-02",
+          "at": "2026-10-21T10:03:26.911Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory/02722902-36ec-52e4-97f2-82ac3fb3c68e/movements",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-02-en-390.png"
+        },
+        {
+          "name": "OPS-02",
+          "at": "2026-10-21T10:03:27.885Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory/02722902-36ec-52e4-97f2-82ac3fb3c68e/movements",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-02-fa-1440.png"
+        },
+        {
+          "name": "OPS-02",
+          "at": "2026-10-21T10:03:28.808Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory/02722902-36ec-52e4-97f2-82ac3fb3c68e/movements",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-02-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "original-opening",
+          "at": "2026-10-21T14:14:41.843Z",
+          "status": "passed",
+          "method": "browser explicit unique-original quantity and historical cost"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Complete cross-domain reservation/source-history acceptance and reporting integration; checkout reservations and expiry already exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-03",
+      "title": "موجودی افتتاحیه و اصلاح / Stock Adjustment",
+      "required_route": "/admin/inventory/adjustments/new",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-03",
+          "at": "2026-10-21T10:03:29.723Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory/adjustments/new",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-03-en-1440.png"
+        },
+        {
+          "name": "OPS-03",
+          "at": "2026-10-21T10:03:30.637Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory/adjustments/new",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-03-en-390.png"
+        },
+        {
+          "name": "OPS-03",
+          "at": "2026-10-21T10:03:31.590Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory/adjustments/new",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-03-fa-1440.png"
+        },
+        {
+          "name": "OPS-03",
+          "at": "2026-10-21T10:03:32.504Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/inventory/adjustments/new",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-03-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "original-opening",
+          "at": "2026-10-21T14:14:41.843Z",
+          "status": "passed",
+          "method": "browser explicit unique-original quantity and historical cost"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Broader source-document correction/backdating policy and acceptance; reasoned openings/adjustments/reversals already exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-04",
+      "title": "تأمین‌کننده و مانده / Suppliers",
+      "required_route": "/admin/suppliers",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-04",
+          "at": "2026-10-21T10:03:33.558Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/suppliers",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-04-en-1440.png"
+        },
+        {
+          "name": "OPS-04",
+          "at": "2026-10-21T10:03:34.595Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/suppliers",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-04-en-390.png"
+        },
+        {
+          "name": "OPS-04",
+          "at": "2026-10-21T10:03:35.634Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/suppliers",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-04-fa-1440.png"
+        },
+        {
+          "name": "OPS-04",
+          "at": "2026-10-21T10:03:36.677Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/suppliers",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-04-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "supplier-create",
+          "at": "2026-10-21T09:54:42.479Z",
+          "status": "passed",
+          "method": "browser create and reload",
+          "id": "6377073f-672d-4ed9-8bb5-bd3c7b030c8d"
+        },
+        {
+          "name": "filters-OPS-04",
+          "at": "2026-10-21T14:21:32.357Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/procurement/suppliers?q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+          ]
+        },
+        {
+          "name": "filter-clear-OPS-04",
+          "at": "2026-10-21T14:21:32.441Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Explicit due-date terms/aging and remaining service/provider obligations; directory, statements, opening settlements and historical supplier balances already work.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-05",
+      "title": "فهرست خرید / Purchases",
+      "required_route": "/admin/purchases",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-05",
+          "at": "2026-10-21T10:03:37.695Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-05-en-1440.png"
+        },
+        {
+          "name": "OPS-05",
+          "at": "2026-10-21T10:03:38.716Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-05-en-390.png"
+        },
+        {
+          "name": "OPS-05",
+          "at": "2026-10-21T10:03:39.728Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-05-fa-1440.png"
+        },
+        {
+          "name": "OPS-05",
+          "at": "2026-10-21T10:03:40.750Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-05-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "purchase-post-receive",
+          "at": "2026-10-21T09:57:47.187Z",
+          "status": "passed",
+          "method": "browser supplier/material selection, draft, posting, goods receipt and reload",
+          "id": "aa5fe5b6-a95b-4c4e-99d6-5c225b090a3d"
+        },
+        {
+          "name": "filters-OPS-05",
+          "at": "2026-10-21T14:21:33.475Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/procurement/purchases?q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Purchase-unit entry/conversion and full acceptance; posted purchases, receipts/returns and independent cash payments already work.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-06",
+      "title": "سند خرید / Purchase Editor",
+      "required_route": "/admin/purchases/:id",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-06",
+          "at": "2026-10-21T10:03:41.729Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases/01aa5dae-30d1-4efe-978e-1821bbf719b7",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-06-en-1440.png"
+        },
+        {
+          "name": "OPS-06",
+          "at": "2026-10-21T10:03:42.663Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases/01aa5dae-30d1-4efe-978e-1821bbf719b7",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-06-en-390.png"
+        },
+        {
+          "name": "OPS-06",
+          "at": "2026-10-21T10:03:43.628Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases/01aa5dae-30d1-4efe-978e-1821bbf719b7",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-06-fa-1440.png"
+        },
+        {
+          "name": "OPS-06",
+          "at": "2026-10-21T10:03:44.563Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases/01aa5dae-30d1-4efe-978e-1821bbf719b7",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-06-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "purchase-post-receive",
+          "at": "2026-10-21T09:57:47.187Z",
+          "status": "passed",
+          "method": "browser supplier/material selection, draft, posting, goods receipt and reload",
+          "id": "aa5fe5b6-a95b-4c4e-99d6-5c225b090a3d"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Purchase-unit authoring/conversion and final source/correction acceptance; persisted drafts/posting and cash allocations exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-07",
+      "title": "تحویل و برگشت خرید / Purchase Receipt",
+      "required_route": "/admin/purchases/:id/receipts/new",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-07",
+          "at": "2026-10-21T10:03:45.528Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases/01aa5dae-30d1-4efe-978e-1821bbf719b7/receipts/new",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-07-en-1440.png"
+        },
+        {
+          "name": "OPS-07",
+          "at": "2026-10-21T10:03:46.463Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases/01aa5dae-30d1-4efe-978e-1821bbf719b7/receipts/new",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-07-en-390.png"
+        },
+        {
+          "name": "OPS-07",
+          "at": "2026-10-21T10:03:47.432Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases/01aa5dae-30d1-4efe-978e-1821bbf719b7/receipts/new",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-07-fa-1440.png"
+        },
+        {
+          "name": "OPS-07",
+          "at": "2026-10-21T10:03:48.377Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/purchases/01aa5dae-30d1-4efe-978e-1821bbf719b7/receipts/new",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-07-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "purchase-post-receive",
+          "at": "2026-10-21T09:57:47.187Z",
+          "status": "passed",
+          "method": "browser supplier/material selection, draft, posting, goods receipt and reload",
+          "id": "aa5fe5b6-a95b-4c4e-99d6-5c225b090a3d"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Final unit/source and operational acceptance; partial receipts, receipt-bounded returns and weighted-average valuation exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-08",
+      "title": "دستورهای تولید / Production Orders",
+      "required_route": "/admin/production",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-08",
+          "at": "2026-10-21T10:03:49.351Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-08-en-1440.png"
+        },
+        {
+          "name": "OPS-08",
+          "at": "2026-10-21T10:03:50.337Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-08-en-390.png"
+        },
+        {
+          "name": "OPS-08",
+          "at": "2026-10-21T10:03:51.314Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-08-fa-1440.png"
+        },
+        {
+          "name": "OPS-08",
+          "at": "2026-10-21T10:03:52.305Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-08-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "purchase-production-qc",
+          "at": "2026-10-21T09:57:49.458Z",
+          "status": "passed",
+          "method": "browser-created source data → purchase → pinned recipe → issue → QC output and reload",
+          "batch": "61ff9191-c0ff-459c-8325-d5b24efc9b8e"
+        },
+        {
+          "name": "filters-OPS-08",
+          "at": "2026-10-21T14:21:34.487Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/production?q=QA-NO-MATCH-ACCEPTANCE&losses=false"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Parent-order batch splits, scheduling/material reservations and production-finance obligations.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-09",
+      "title": "اجرای بچ تولید / Production Batch",
+      "required_route": "/admin/production/:id",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-09",
+          "at": "2026-10-21T10:03:53.269Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production/1a172c76-2ed6-4616-8f3c-b69b0a365c94",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-09-en-1440.png"
+        },
+        {
+          "name": "OPS-09",
+          "at": "2026-10-21T10:03:54.209Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production/1a172c76-2ed6-4616-8f3c-b69b0a365c94",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-09-en-390.png"
+        },
+        {
+          "name": "OPS-09",
+          "at": "2026-10-21T10:03:55.188Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production/1a172c76-2ed6-4616-8f3c-b69b0a365c94",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-09-fa-1440.png"
+        },
+        {
+          "name": "OPS-09",
+          "at": "2026-10-21T10:03:56.123Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production/1a172c76-2ed6-4616-8f3c-b69b0a365c94",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-09-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "purchase-production-qc",
+          "at": "2026-10-21T09:57:49.458Z",
+          "status": "passed",
+          "method": "browser-created source data → purchase → pinned recipe → issue → QC output and reload",
+          "batch": "61ff9191-c0ff-459c-8325-d5b24efc9b8e"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Substitutions/rework/corrections, detailed labor, protected print consumption and linked service obligations.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-10",
+      "title": "کنترل کیفیت و پایان تولید / Production QC",
+      "required_route": "/admin/production/:id/qc",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-10",
+          "at": "2026-10-21T10:03:57.085Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production/1a172c76-2ed6-4616-8f3c-b69b0a365c94/qc",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-10-en-1440.png"
+        },
+        {
+          "name": "OPS-10",
+          "at": "2026-10-21T10:03:58.008Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production/1a172c76-2ed6-4616-8f3c-b69b0a365c94/qc",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-10-en-390.png"
+        },
+        {
+          "name": "OPS-10",
+          "at": "2026-10-21T10:03:58.967Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production/1a172c76-2ed6-4616-8f3c-b69b0a365c94/qc",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-10-fa-1440.png"
+        },
+        {
+          "name": "OPS-10",
+          "at": "2026-10-21T10:03:59.911Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/production/1a172c76-2ed6-4616-8f3c-b69b0a365c94/qc",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-10-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "purchase-production-qc",
+          "at": "2026-10-21T09:57:49.458Z",
+          "status": "passed",
+          "method": "browser-created source data → purchase → pinned recipe → issue → QC output and reload",
+          "batch": "61ff9191-c0ff-459c-8325-d5b24efc9b8e"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Approved waste thresholds and remaining production/finance/print dependencies; QC, healthy output and normal/abnormal waste posting exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "OPS-11",
+      "title": "ضایعات و خرابی / Waste & Damage",
+      "required_route": "/admin/waste",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "OPS-11",
+          "at": "2026-10-21T10:04:00.881Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/waste",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-11-en-1440.png"
+        },
+        {
+          "name": "OPS-11",
+          "at": "2026-10-21T10:04:01.867Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/waste",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-11-en-390.png"
+        },
+        {
+          "name": "OPS-11",
+          "at": "2026-10-21T10:04:02.851Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/waste",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-11-fa-1440.png"
+        },
+        {
+          "name": "OPS-11",
+          "at": "2026-10-21T10:04:03.834Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/waste",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "OPS-11-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-OPS-11",
+          "at": "2026-10-21T14:21:35.508Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/inventory/waste?q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "production-live.spec.ts",
+        "reports-live.spec.ts"
+      ],
+      "remaining": "Complete cross-domain waste/profit/financial reporting and correction policy; stock write-offs and production loss views exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-01",
+      "title": "داشبورد مالی / Finance Overview",
+      "required_route": "/admin/finance",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-01",
+          "at": "2026-10-21T10:04:04.902Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-01-en-1440.png"
+        },
+        {
+          "name": "FIN-01",
+          "at": "2026-10-21T10:04:05.941Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-01-en-390.png"
+        },
+        {
+          "name": "FIN-01",
+          "at": "2026-10-21T10:04:06.984Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-01-fa-1440.png"
+        },
+        {
+          "name": "FIN-01",
+          "at": "2026-10-21T10:04:08.029Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-01-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-FIN-01",
+          "at": "2026-10-21T14:21:36.596Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/finance/accounts?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "finance-live.spec.ts"
+      ],
+      "remaining": "Consolidated sales/revenue/profit, gateway/customer/artist obligations and actionable queues.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-02",
+      "title": "دریافت و پرداخت / Cash Movements",
+      "required_route": "/admin/finance/movements",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-02",
+          "at": "2026-10-21T10:04:09.121Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/movements",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-02-en-1440.png"
+        },
+        {
+          "name": "FIN-02",
+          "at": "2026-10-21T10:04:10.193Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/movements",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-02-en-390.png"
+        },
+        {
+          "name": "FIN-02",
+          "at": "2026-10-21T10:04:11.262Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/movements",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-02-fa-1440.png"
+        },
+        {
+          "name": "FIN-02",
+          "at": "2026-10-21T10:04:12.320Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/movements",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-02-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-FIN-02",
+          "at": "2026-10-21T14:21:37.685Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/finance/accounts?q=",
+            "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "finance-live.spec.ts"
+      ],
+      "remaining": "Private supporting-document uploads and remaining gateway/customer/artist allocation workflows; cash movements/transfers/reversals exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-03",
+      "title": "بانک و صندوق / Accounts & Balances",
+      "required_route": "/admin/finance/accounts",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-03",
+          "at": "2026-10-21T10:04:13.366Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/accounts",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-03-en-1440.png"
+        },
+        {
+          "name": "FIN-03",
+          "at": "2026-10-21T10:04:14.405Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/accounts",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-03-en-390.png"
+        },
+        {
+          "name": "FIN-03",
+          "at": "2026-10-21T10:04:15.481Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/accounts",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-03-fa-1440.png"
+        },
+        {
+          "name": "FIN-03",
+          "at": "2026-10-21T10:04:16.546Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/accounts",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-03-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-FIN-03",
+          "at": "2026-10-21T14:21:38.750Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/finance/accounts?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "finance-live.spec.ts"
+      ],
+      "remaining": "Configured multi-currency and bank/gateway reconciliation integration; explicit account openings/balances exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-04",
+      "title": "هزینه‌های جاری / Operating Expenses",
+      "required_route": "/admin/finance/expenses",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-04",
+          "at": "2026-10-21T10:04:17.512Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/expenses",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-04-en-1440.png"
+        },
+        {
+          "name": "FIN-04",
+          "at": "2026-10-21T10:04:18.449Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/expenses",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-04-en-390.png"
+        },
+        {
+          "name": "FIN-04",
+          "at": "2026-10-21T10:04:19.414Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/expenses",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-04-fa-1440.png"
+        },
+        {
+          "name": "FIN-04",
+          "at": "2026-10-21T10:04:20.347Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/expenses",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-04-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-FIN-04",
+          "at": "2026-10-21T14:21:39.796Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE&kind=expense",
+            "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/finance/accounts?q="
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "finance-live.spec.ts"
+      ],
+      "remaining": "Private supporting-file uploads and wider source/obligation integration; categorized expenses and linked corrections exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-05",
+      "title": "بدهی و مطالبات / Payables & Receivables",
+      "required_route": "/admin/finance/balances",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-05",
+          "at": "2026-10-21T10:04:21.407Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/balances",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-05-en-1440.png"
+        },
+        {
+          "name": "FIN-05",
+          "at": "2026-10-21T10:04:22.498Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/balances",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-05-en-390.png"
+        },
+        {
+          "name": "FIN-05",
+          "at": "2026-10-21T10:04:23.555Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/balances",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-05-fa-1440.png"
+        },
+        {
+          "name": "FIN-05",
+          "at": "2026-10-21T10:04:24.627Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/balances",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-05-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-FIN-05",
+          "at": "2026-10-21T14:21:40.883Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/finance/accounts?q="
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "finance-live.spec.ts",
+        "supplier-openings-live.spec.ts",
+        "supplier-statements-live.spec.ts",
+        "supplier-balances-live.spec.ts",
+        "opening-settlements-live.spec.ts"
+      ],
+      "remaining": "Customer/gateway/artist balances and explicit due-date aging; current and historical supplier balances are implemented.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-06",
+      "title": "پرداخت‌ها و رسیدها / Transactions",
+      "required_route": "/admin/finance/payments",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-06",
+          "at": "2026-10-21T10:04:25.656Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/payments",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-06-en-1440.png"
+        },
+        {
+          "name": "FIN-06",
+          "at": "2026-10-21T10:04:26.703Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/payments",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-06-en-390.png"
+        },
+        {
+          "name": "FIN-06",
+          "at": "2026-10-21T10:04:27.743Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/payments",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-06-fa-1440.png"
+        },
+        {
+          "name": "FIN-06",
+          "at": "2026-10-21T10:04:28.779Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/payments",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-06-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [],
+      "remaining": "Full asynchronous external processing/recovery and reconciliation with gateway receivables/settlement; sandbox inquiry/late-payment resolution exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-07",
+      "title": "تسویه درگاه / Gateway Settlement",
+      "required_route": "/admin/finance/settlements",
+      "route_layout_status": "not implemented",
+      "route_checks": [
+        {
+          "name": "FIN-07",
+          "at": "2026-10-21T10:04:29.696Z",
+          "status": "not implemented",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/settlements",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-07-en-1440.png"
+        },
+        {
+          "name": "FIN-07",
+          "at": "2026-10-21T10:04:30.589Z",
+          "status": "not implemented",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/settlements",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-07-en-390.png"
+        },
+        {
+          "name": "FIN-07",
+          "at": "2026-10-21T10:04:31.500Z",
+          "status": "not implemented",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/settlements",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-07-fa-1440.png"
+        },
+        {
+          "name": "FIN-07",
+          "at": "2026-10-21T10:04:32.390Z",
+          "status": "not implemented",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/settlements",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-07-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [],
+      "remaining": "Gateway receivable/fee/settlement records, bank allocation, deduplication and linked corrections without duplicate revenue. Page remains a placeholder.",
+      "full_view_acceptance": "not implemented",
+      "complete": false
+    },
+    {
+      "id": "FIN-08",
+      "title": "بازپرداخت‌ها / Refund Processing",
+      "required_route": "/admin/finance/refunds",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-08",
+          "at": "2026-10-21T10:04:33.363Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/refunds",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-08-en-1440.png"
+        },
+        {
+          "name": "FIN-08",
+          "at": "2026-10-21T10:04:34.329Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/refunds",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-08-en-390.png"
+        },
+        {
+          "name": "FIN-08",
+          "at": "2026-10-21T10:04:35.320Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/refunds",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-08-fa-1440.png"
+        },
+        {
+          "name": "FIN-08",
+          "at": "2026-10-21T10:04:36.278Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/refunds",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-08-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-FIN-08",
+          "at": "2026-10-21T14:21:43.693Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/refunds?q=QA-NO-MATCH-ACCEPTANCE",
+            "/api/v1/admin/refunds/requests?q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        }
+      ],
+      "supplemental_browser_specs": [
+        "refunds-live.spec.ts",
+        "cancellations-live.spec.ts"
+      ],
+      "remaining": "Provider/outbox payout reconciliation and external sandbox adapters plus final integrated acceptance. Local simulated refunds now enforce frozen policy, cumulative proportional tax and non-refundable dispatched shipping/tax bounds.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-09",
+      "title": "سود محصول، SKU و پکیج / Profit Report",
+      "required_route": "/admin/reports/profit",
+      "route_layout_status": "not implemented",
+      "route_checks": [
+        {
+          "name": "FIN-09",
+          "at": "2026-10-21T10:04:37.191Z",
+          "status": "not implemented",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/profit",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-09-en-1440.png"
+        },
+        {
+          "name": "FIN-09",
+          "at": "2026-10-21T10:04:38.081Z",
+          "status": "not implemented",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/profit",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-09-en-390.png"
+        },
+        {
+          "name": "FIN-09",
+          "at": "2026-10-21T10:04:39.000Z",
+          "status": "not implemented",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/profit",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-09-fa-1440.png"
+        },
+        {
+          "name": "FIN-09",
+          "at": "2026-10-21T10:04:39.888Z",
+          "status": "not implemented",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/profit",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-09-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [],
+      "remaining": "Official product/SKU/bundle/collection profit with frozen fulfillment costs, fees/refunds and unique totals despite overlapping collections. Page remains a placeholder.",
+      "full_view_acceptance": "not implemented",
+      "complete": false
+    },
+    {
+      "id": "FIN-10",
+      "title": "جریان نقدی / Cash Flow",
+      "required_route": "/admin/reports/cashflow",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-10",
+          "at": "2026-10-21T10:04:40.839Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/cashflow",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-10-en-1440.png"
+        },
+        {
+          "name": "FIN-10",
+          "at": "2026-10-21T10:04:41.768Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/cashflow",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-10-en-390.png"
+        },
+        {
+          "name": "FIN-10",
+          "at": "2026-10-21T10:04:42.721Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/cashflow",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-10-fa-1440.png"
+        },
+        {
+          "name": "FIN-10",
+          "at": "2026-10-21T10:04:43.651Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/cashflow",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-10-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [
+        "finance-live.spec.ts"
+      ],
+      "remaining": "Complete gateway/customer/artist and realized-sales cash attribution; recorded operational cash flow exists.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-11",
+      "title": "گزارش موجودی و تولید / Inventory & Production Report",
+      "required_route": "/admin/reports/inventory",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-11",
+          "at": "2026-10-21T10:04:44.569Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/inventory",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-11-en-1440.png"
+        },
+        {
+          "name": "FIN-11",
+          "at": "2026-10-21T10:04:45.466Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/inventory",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-11-en-390.png"
+        },
+        {
+          "name": "FIN-11",
+          "at": "2026-10-21T10:04:46.385Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/inventory",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-11-fa-1440.png"
+        },
+        {
+          "name": "FIN-11",
+          "at": "2026-10-21T10:04:47.299Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/reports/inventory",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-11-fa-390.png"
+        }
+      ],
+      "action_checks": [],
+      "supplemental_browser_specs": [
+        "reports-live.spec.ts"
+      ],
+      "remaining": "Complete reservation/fulfillment/sales-cost integration and full operational reporting acceptance; historical inventory/production/waste reports exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "FIN-12",
+      "title": "خروجی حسابدار / Accounting Export",
+      "required_route": "/admin/finance/export",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "FIN-12",
+          "at": "2026-10-21T10:04:48.254Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/export",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-12-en-1440.png"
+        },
+        {
+          "name": "FIN-12",
+          "at": "2026-10-21T10:04:49.184Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/export",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-12-en-390.png"
+        },
+        {
+          "name": "FIN-12",
+          "at": "2026-10-21T10:04:50.140Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/export",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-12-fa-1440.png"
+        },
+        {
+          "name": "FIN-12",
+          "at": "2026-10-21T10:04:51.066Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/finance/export",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "FIN-12-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "financial-browser-exports",
+          "at": "2026-10-21T14:14:55.821Z",
+          "status": "passed",
+          "method": "filtered supplier report CSV and XLSX downloaded via browser"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Cross-domain accountant export for missing sales/profit/settlement/customer/artist workflows; existing cash/inventory/supplier CSV/XLSX remain working.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ORDER-01",
+      "title": "فهرست سفارش ادمین / Orders Admin",
+      "required_route": "/admin/orders",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ORDER-01",
+          "at": "2026-10-21T10:04:52.072Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/orders",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-01-en-1440.png"
+        },
+        {
+          "name": "ORDER-01",
+          "at": "2026-10-21T10:04:53.089Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/orders",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-01-en-390.png"
+        },
+        {
+          "name": "ORDER-01",
+          "at": "2026-10-21T10:04:54.103Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/orders",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-01-fa-1440.png"
+        },
+        {
+          "name": "ORDER-01",
+          "at": "2026-10-21T10:04:55.122Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/orders",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-01-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "physical-checkout",
+          "at": "2026-10-21T14:14:44.091Z",
+          "status": "passed",
+          "method": "customer browser basket, accepted review and zero-charge sandbox checkout",
+          "order": "e05a3635-cef6-4072-84cd-e6b9fdc35322"
+        },
+        {
+          "name": "digital-checkout",
+          "at": "2026-10-21T14:14:49.083Z",
+          "status": "passed",
+          "method": "customer browser basket, accepted review and zero-charge sandbox checkout",
+          "order": "68d0cc92-b9cc-4254-92ed-9a2c0acae3f1"
+        },
+        {
+          "name": "last-unit-browser-concurrency",
+          "at": "2026-10-21T14:37:47.311Z",
+          "status": "passed",
+          "method": "two independent customer browsers accept the same last-unit review and pay concurrently; one succeeds, one conflicts; exactly one reservation",
+          "art": "57a84388-6275-49bb-9c5a-621cc4a5e691",
+          "position": "faeb3ffe-81c3-5083-94c3-22615b9657e3"
+        },
+        {
+          "name": "filters-ORDER-01",
+          "at": "2026-10-21T14:21:48.342Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/orders?limit=50&q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        },
+        {
+          "name": "filter-clear-ORDER-01",
+          "at": "2026-10-21T14:21:48.410Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [
+        "financial-closures-live.spec.ts",
+        "stock-resolution-live.spec.ts",
+        "unpaid-cancellations-live.spec.ts"
+      ],
+      "remaining": "Full commission/financial/private-print dependencies, all-view permission/state coverage and final integrated release acceptance. Settings-backed checkout and physical/digital/mixed rules are now connected.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ORDER-02",
+      "title": "جزئیات عملیاتی سفارش / Operations Order",
+      "required_route": "/admin/orders/:id",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ORDER-02",
+          "at": "2026-10-21T10:04:56.196Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/orders/f359a49d-4a59-4d29-b55c-e1e2e68de1be",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-02-en-1440.png"
+        },
+        {
+          "name": "ORDER-02",
+          "at": "2026-10-21T10:04:57.169Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/orders/f359a49d-4a59-4d29-b55c-e1e2e68de1be",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-02-en-390.png"
+        },
+        {
+          "name": "ORDER-02",
+          "at": "2026-10-21T10:04:58.240Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/orders/f359a49d-4a59-4d29-b55c-e1e2e68de1be",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-02-fa-1440.png"
+        },
+        {
+          "name": "ORDER-02",
+          "at": "2026-10-21T10:04:59.234Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/orders/f359a49d-4a59-4d29-b55c-e1e2e68de1be",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-02-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "physical-fulfillment",
+          "at": "2026-10-21T14:14:46.412Z",
+          "status": "passed",
+          "method": "browser draft → picking → QC → packing → dispatch → delivery; customer tracking",
+          "order": "e05a3635-cef6-4072-84cd-e6b9fdc35322",
+          "shipment": "8ce79753-6a8a-4833-8103-8d311509150e"
+        },
+        {
+          "name": "licensed-digital-delivery",
+          "at": "2026-10-21T14:14:50.200Z",
+          "status": "passed",
+          "method": "browser private final file release, reload and customer download",
+          "order": "68d0cc92-b9cc-4254-92ed-9a2c0acae3f1"
+        }
+      ],
+      "supplemental_browser_specs": [
+        "financial-closures-live.spec.ts",
+        "stock-resolution-live.spec.ts",
+        "cancellations-live.spec.ts"
+      ],
+      "remaining": "Complete policy/commission/private-print/finance dependencies and operational recovery queues; stock/late-payment/cancellation resolution already exists.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ORDER-03",
+      "title": "آماده‌سازی و ارسال / Fulfillment",
+      "required_route": "/admin/shipments/:id",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ORDER-03",
+          "at": "2026-10-21T10:05:00.229Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/shipments/0142d089-ac97-480b-855d-55d1fac31285",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-03-en-1440.png"
+        },
+        {
+          "name": "ORDER-03",
+          "at": "2026-10-21T10:05:01.180Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/shipments/0142d089-ac97-480b-855d-55d1fac31285",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-03-en-390.png"
+        },
+        {
+          "name": "ORDER-03",
+          "at": "2026-10-21T10:05:02.183Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/shipments/0142d089-ac97-480b-855d-55d1fac31285",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-03-fa-1440.png"
+        },
+        {
+          "name": "ORDER-03",
+          "at": "2026-10-21T10:05:03.128Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/shipments/0142d089-ac97-480b-855d-55d1fac31285",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-03-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "physical-fulfillment",
+          "at": "2026-10-21T14:14:46.412Z",
+          "status": "passed",
+          "method": "browser draft → picking → QC → packing → dispatch → delivery; customer tracking",
+          "order": "e05a3635-cef6-4072-84cd-e6b9fdc35322",
+          "shipment": "8ce79753-6a8a-4833-8103-8d311509150e"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Remaining private-print/commission/production dependencies and final end-to-end acceptance. Physical shipments use accepted policies; digital files use existing protected release with derived fulfillment and mixed-component stock separation.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ORDER-04",
+      "title": "مرجوعی و کنترل کالا / Return Inspection",
+      "required_route": "/admin/returns/:id",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ORDER-04",
+          "at": "2026-10-21T10:05:04.127Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/returns/239ed4df-c1fd-4d6f-bd94-19633ca58b1b",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-04-en-1440.png"
+        },
+        {
+          "name": "ORDER-04",
+          "at": "2026-10-21T10:05:05.082Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/returns/239ed4df-c1fd-4d6f-bd94-19633ca58b1b",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-04-en-390.png"
+        },
+        {
+          "name": "ORDER-04",
+          "at": "2026-10-21T10:05:06.076Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/returns/239ed4df-c1fd-4d6f-bd94-19633ca58b1b",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-04-fa-1440.png"
+        },
+        {
+          "name": "ORDER-04",
+          "at": "2026-10-21T10:05:07.045Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/returns/239ed4df-c1fd-4d6f-bd94-19633ca58b1b",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-04-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "customer-return-request",
+          "at": "2026-10-21T14:15:41.524Z",
+          "status": "passed",
+          "method": "browser frozen-policy eligible physical quantity request",
+          "request": "791a9341-6f96-4a3d-a16b-85120816a01b"
+        },
+        {
+          "name": "return-approval-inspection",
+          "at": "2026-10-21T14:15:44.079Z",
+          "status": "passed",
+          "method": "browser customer request → staff review → approval → healthy inspection → customer receipt; internal historical cost remains private",
+          "request": "791a9341-6f96-4a3d-a16b-85120816a01b"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Full policy eligibility and customer-to-inspection-to-financial/provider acceptance; inspection, healthy/damaged disposition and simulated refunds exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ORDER-05",
+      "title": "صف بررسی سفارش نقاشی / Commission Review Admin",
+      "required_route": "/admin/commissions/reviews",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ORDER-05",
+          "at": "2026-10-21T14:16:52.228Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/commissions/reviews",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-05-en-1440.png"
+        },
+        {
+          "name": "ORDER-05",
+          "at": "2026-10-21T14:16:53.165Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/commissions/reviews",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-05-en-390.png"
+        },
+        {
+          "name": "ORDER-05",
+          "at": "2026-10-21T14:16:54.146Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/commissions/reviews",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-05-fa-1440.png"
+        },
+        {
+          "name": "ORDER-05",
+          "at": "2026-10-21T14:16:55.066Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/commissions/reviews",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-05-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "commission-brief",
+          "at": "2026-10-21T14:18:03.455Z",
+          "status": "passed",
+          "method": "browser text brief and preferences → pending review → customer history and reload",
+          "id": "commissions"
+        },
+        {
+          "name": "commission-preview-approval",
+          "at": "2026-10-21T14:18:05.979Z",
+          "status": "passed",
+          "method": "browser private PNG publication → owned customer preview → explicit approval and reload",
+          "id": "commissions"
+        },
+        {
+          "name": "commission-full-workflow",
+          "at": "2026-10-21T14:18:05.982Z",
+          "status": "blocked",
+          "reason": "Assessment, versioned payable quotes, artist assignment and artist final-delivery workflow remain incomplete"
+        },
+        {
+          "name": "filters-ORDER-05",
+          "at": "2026-10-21T14:21:49.429Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/commissions?limit=50&q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        },
+        {
+          "name": "filter-clear-ORDER-05",
+          "at": "2026-10-21T14:21:49.512Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Review-route alias, reproducible labeled sandbox assessment, human difficulty review, versioned quotes/customer acceptance, payable eligibility, artist assignment and final delivery.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ORDER-06",
+      "title": "پشتیبانی ادمین / Support Inbox",
+      "required_route": "/admin/support",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ORDER-06",
+          "at": "2026-10-21T10:05:11.619Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/support",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-06-en-1440.png"
+        },
+        {
+          "name": "ORDER-06",
+          "at": "2026-10-21T10:05:12.533Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/support",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-06-en-390.png"
+        },
+        {
+          "name": "ORDER-06",
+          "at": "2026-10-21T10:05:13.452Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/support",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-06-fa-1440.png"
+        },
+        {
+          "name": "ORDER-06",
+          "at": "2026-10-21T10:05:14.384Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/support",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-06-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "support-create-attachment",
+          "at": "2026-10-21T14:24:23.854Z",
+          "status": "passed",
+          "method": "browser submit, upload, reload, download",
+          "ticket": "d52a062e-47d4-4737-a0e0-b42fce27b4c0"
+        },
+        {
+          "name": "support-cross-account",
+          "at": "2026-10-21T14:24:25.768Z",
+          "status": "passed",
+          "method": "second customer browser context cannot access attachment"
+        },
+        {
+          "name": "support-staff-reply-close",
+          "at": "2026-10-21T14:24:27.586Z",
+          "status": "passed",
+          "method": "browser search, reply, close, reload"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Support assignment and priority; verify final ownership/attachment/cross-domain acceptance. Search, replies and protected attachments already exist.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    },
+    {
+      "id": "ORDER-07",
+      "title": "لاگ و تاریخچه تغییر / Audit Log",
+      "required_route": "/admin/audit",
+      "route_layout_status": "passed",
+      "route_checks": [
+        {
+          "name": "ORDER-07",
+          "at": "2026-10-21T10:05:15.403Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/audit",
+          "language": "en",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-07-en-1440.png"
+        },
+        {
+          "name": "ORDER-07",
+          "at": "2026-10-21T10:05:16.455Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/audit",
+          "language": "en",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-07-en-390.png"
+        },
+        {
+          "name": "ORDER-07",
+          "at": "2026-10-21T10:05:17.486Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/audit",
+          "language": "fa",
+          "width": 1440,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-07-fa-1440.png"
+        },
+        {
+          "name": "ORDER-07",
+          "at": "2026-10-21T10:05:18.551Z",
+          "status": "passed",
+          "scope": "route/layout only; actions require separate evidence",
+          "path": "/admin/audit",
+          "language": "fa",
+          "width": 390,
+          "overflow": false,
+          "unnamed_buttons": 0,
+          "alerts": [
+            ""
+          ],
+          "screenshot": "ORDER-07-fa-390.png"
+        }
+      ],
+      "action_checks": [
+        {
+          "name": "filters-ORDER-07",
+          "at": "2026-10-21T14:21:51.440Z",
+          "status": "passed",
+          "method": "browser applies search and real backend acknowledges the filter",
+          "reads": [
+            "/api/v1/admin/identity/audits?limit=25&q=QA-NO-MATCH-ACCEPTANCE"
+          ]
+        },
+        {
+          "name": "filter-clear-ORDER-07",
+          "at": "2026-10-21T14:21:51.515Z",
+          "status": "passed",
+          "method": "browser clear restores unfiltered query"
+        }
+      ],
+      "supplemental_browser_specs": [],
+      "remaining": "Aggregate missing-domain events and worker/retry visibility; existing audit search/filter/history is connected.",
+      "full_view_acceptance": "blocked",
+      "complete": false
+    }
+  ],
+  "actions": [
+    {
+      "name": "account-admin",
+      "at": "2026-10-21T09:49:21.531Z",
+      "status": "passed",
+      "method": "browser registration, visible sandbox OTP, password form"
+    },
+    {
+      "name": "account-customer",
+      "at": "2026-10-21T09:49:23.425Z",
+      "status": "passed",
+      "method": "browser registration, visible sandbox OTP, password form"
+    },
+    {
+      "name": "account-other",
+      "at": "2026-10-21T09:49:25.273Z",
+      "status": "passed",
+      "method": "browser registration, visible sandbox OTP, password form"
+    },
+    {
+      "name": "account-staff",
+      "at": "2026-10-21T09:49:27.104Z",
+      "status": "passed",
+      "method": "browser registration, visible sandbox OTP, password form"
+    },
+    {
+      "name": "account-artist",
+      "at": "2026-10-21T09:49:29.158Z",
+      "status": "passed",
+      "method": "browser registration, visible sandbox OTP, password form"
+    },
+    {
+      "name": "role-admin",
+      "at": "2026-10-21T09:49:31.686Z",
+      "status": "passed",
+      "method": "browser account management"
+    },
+    {
+      "name": "role-staff",
+      "at": "2026-10-21T09:49:32.350Z",
+      "status": "passed",
+      "method": "browser account management"
+    },
+    {
+      "name": "role-artist",
+      "at": "2026-10-21T09:49:33.015Z",
+      "status": "passed",
+      "method": "browser account management"
+    },
+    {
+      "name": "dedicated-admin-login",
+      "at": "2026-10-21T09:49:33.950Z",
+      "status": "passed"
+    },
+    {
+      "name": "customer-address",
+      "at": "2026-10-21T14:24:21.590Z",
+      "status": "passed",
+      "method": "browser create and reload"
+    },
+    {
+      "name": "customer-preferences",
+      "at": "2026-10-21T14:24:22.558Z",
+      "status": "passed",
+      "method": "browser save and reload"
+    },
+    {
+      "name": "cutting-layout",
+      "at": "2026-10-21T09:54:45.928Z",
+      "status": "passed",
+      "method": "browser calculation and explicit workshop confirmation"
+    },
+    {
+      "name": "catalogue-collections",
+      "at": "2026-10-21T09:54:37.025Z",
+      "status": "passed",
+      "method": "browser draft, reload, publication, reload",
+      "id": "d6b466f9-e7ef-450c-a2e1-e6555840e2d9"
+    },
+    {
+      "name": "catalogue-categories",
+      "at": "2026-10-21T09:54:38.473Z",
+      "status": "passed",
+      "method": "browser draft, reload, publication, reload",
+      "id": "56b74588-693d-490d-a31f-3a050cd1805c"
+    },
+    {
+      "name": "catalogue-products",
+      "at": "2026-10-21T09:54:39.941Z",
+      "status": "passed",
+      "method": "browser draft, reload, publication, reload",
+      "id": "3ca549dd-0208-4a87-8110-9e92c8778c71"
+    },
+    {
+      "name": "sku-draft",
+      "at": "2026-10-21T09:54:40.549Z",
+      "status": "passed",
+      "method": "browser product filter and SKU creation"
+    },
+    {
+      "name": "supplier-create",
+      "at": "2026-10-21T09:54:42.479Z",
+      "status": "passed",
+      "method": "browser create and reload",
+      "id": "6377073f-672d-4ed9-8bb5-bd3c7b030c8d"
+    },
+    {
+      "name": "materials",
+      "at": "2026-10-21T09:54:43.600Z",
+      "status": "passed",
+      "method": "browser authoring and reload",
+      "id": "8bf89ade-c2d7-4a91-a030-660505d7906b"
+    },
+    {
+      "name": "service-rates",
+      "at": "2026-10-21T09:54:44.622Z",
+      "status": "passed",
+      "method": "browser authoring and reload",
+      "id": "47362133-e5d0-4fa4-a3b3-0ff8613e91bf"
+    },
+    {
+      "name": "purchase-post-receive",
+      "at": "2026-10-21T09:57:47.187Z",
+      "status": "passed",
+      "method": "browser supplier/material selection, draft, posting, goods receipt and reload",
+      "id": "aa5fe5b6-a95b-4c4e-99d6-5c225b090a3d"
+    },
+    {
+      "name": "recipe-authoring",
+      "at": "2026-10-21T09:57:48.432Z",
+      "status": "passed",
+      "method": "browser SKU/material version selection, recipe save and reload",
+      "id": "ed1c97da-5199-422a-8da2-d5bf4cd85447"
+    },
+    {
+      "name": "purchase-production-qc",
+      "at": "2026-10-21T09:57:49.458Z",
+      "status": "passed",
+      "method": "browser-created source data → purchase → pinned recipe → issue → QC output and reload",
+      "batch": "61ff9191-c0ff-459c-8325-d5b24efc9b8e"
+    },
+    {
+      "name": "business-settings",
+      "at": "2026-10-21T14:14:38.389Z",
+      "status": "passed",
+      "method": "browser explicit policies and isolated shipping method saved"
+    },
+    {
+      "name": "media-upload-publication",
+      "at": "2026-10-21T14:14:39.512Z",
+      "status": "passed",
+      "method": "browser upload, draft and explicit approval",
+      "id": "c800db8a-d494-4013-a0c7-a343f2fab92c"
+    },
+    {
+      "name": "customer-profile",
+      "at": "2026-10-21T14:24:20.409Z",
+      "status": "passed",
+      "method": "browser save and reload"
+    },
+    {
+      "name": "support-create-attachment",
+      "at": "2026-10-21T14:24:23.854Z",
+      "status": "passed",
+      "method": "browser submit, upload, reload, download",
+      "ticket": "d52a062e-47d4-4737-a0e0-b42fce27b4c0"
+    },
+    {
+      "name": "support-cross-account",
+      "at": "2026-10-21T14:24:25.768Z",
+      "status": "passed",
+      "method": "second customer browser context cannot access attachment"
+    },
+    {
+      "name": "support-staff-reply-close",
+      "at": "2026-10-21T14:24:27.586Z",
+      "status": "passed",
+      "method": "browser search, reply, close, reload"
+    },
+    {
+      "name": "permission-revocation",
+      "at": "2026-10-21T14:23:01.089Z",
+      "status": "passed",
+      "method": "loaded staff draft, admin revocation, rejected browser save and reload"
+    },
+    {
+      "name": "artist-workspace",
+      "at": "2026-10-21T14:23:05.873Z",
+      "status": "not implemented",
+      "reason": "Authorized artist route explicitly reports missing backend workflow"
+    },
+    {
+      "name": "role-boundaries",
+      "at": "2026-10-21T14:23:05.915Z",
+      "status": "passed",
+      "method": "operations denied identity/finance; customer denied all orders; artist checked separately"
+    },
+    {
+      "name": "original-artwork",
+      "at": "2026-10-21T14:14:41.061Z",
+      "status": "passed",
+      "method": "browser approved gallery, publication and reload",
+      "id": "37a0912a-e201-4eef-82e5-a2137984b4d8"
+    },
+    {
+      "name": "original-opening",
+      "at": "2026-10-21T14:14:41.843Z",
+      "status": "passed",
+      "method": "browser explicit unique-original quantity and historical cost"
+    },
+    {
+      "name": "physical-checkout",
+      "at": "2026-10-21T14:14:44.091Z",
+      "status": "passed",
+      "method": "customer browser basket, accepted review and zero-charge sandbox checkout",
+      "order": "e05a3635-cef6-4072-84cd-e6b9fdc35322"
+    },
+    {
+      "name": "physical-fulfillment",
+      "at": "2026-10-21T14:14:46.412Z",
+      "status": "passed",
+      "method": "browser draft → picking → QC → packing → dispatch → delivery; customer tracking",
+      "order": "e05a3635-cef6-4072-84cd-e6b9fdc35322",
+      "shipment": "8ce79753-6a8a-4833-8103-8d311509150e"
+    },
+    {
+      "name": "digital-artwork",
+      "at": "2026-10-21T14:14:47.937Z",
+      "status": "passed",
+      "method": "browser approved gallery, publication and reload",
+      "id": "2ff61ddd-1313-49df-940b-f40b1325e72c"
+    },
+    {
+      "name": "digital-checkout",
+      "at": "2026-10-21T14:14:49.083Z",
+      "status": "passed",
+      "method": "customer browser basket, accepted review and zero-charge sandbox checkout",
+      "order": "68d0cc92-b9cc-4254-92ed-9a2c0acae3f1"
+    },
+    {
+      "name": "licensed-digital-delivery",
+      "at": "2026-10-21T14:14:50.200Z",
+      "status": "passed",
+      "method": "browser private final file release, reload and customer download",
+      "order": "68d0cc92-b9cc-4254-92ed-9a2c0acae3f1"
+    },
+    {
+      "name": "discount-rule-history",
+      "at": "2026-10-21T14:14:52.901Z",
+      "status": "passed",
+      "method": "browser create inactive rule, reload, usage and history"
+    },
+    {
+      "name": "content-draft-publication",
+      "at": "2026-10-21T14:14:55.145Z",
+      "status": "passed",
+      "method": "browser approval, public rendering, retained private draft isolation"
+    },
+    {
+      "name": "financial-browser-exports",
+      "at": "2026-10-21T14:14:55.821Z",
+      "status": "passed",
+      "method": "filtered supplier report CSV and XLSX downloaded via browser"
+    },
+    {
+      "name": "customer-return-request",
+      "at": "2026-10-21T14:15:41.524Z",
+      "status": "passed",
+      "method": "browser frozen-policy eligible physical quantity request",
+      "request": "791a9341-6f96-4a3d-a16b-85120816a01b"
+    },
+    {
+      "name": "return-approval-inspection",
+      "at": "2026-10-21T14:15:44.079Z",
+      "status": "passed",
+      "method": "browser customer request → staff review → approval → healthy inspection → customer receipt; internal historical cost remains private",
+      "request": "791a9341-6f96-4a3d-a16b-85120816a01b"
+    },
+    {
+      "name": "commission-brief",
+      "at": "2026-10-21T14:18:03.455Z",
+      "status": "passed",
+      "method": "browser text brief and preferences → pending review → customer history and reload",
+      "id": "commissions"
+    },
+    {
+      "name": "commission-preview-approval",
+      "at": "2026-10-21T14:18:05.979Z",
+      "status": "passed",
+      "method": "browser private PNG publication → owned customer preview → explicit approval and reload",
+      "id": "commissions"
+    },
+    {
+      "name": "commission-full-workflow",
+      "at": "2026-10-21T14:18:05.982Z",
+      "status": "blocked",
+      "reason": "Assessment, versioned payable quotes, artist assignment and artist final-delivery workflow remain incomplete"
+    },
+    {
+      "name": "security-password-session-revocation",
+      "at": "2026-10-21T14:18:52.369Z",
+      "status": "passed",
+      "method": "browser password change → old context denied → fresh password login → password restored and fresh login"
+    },
+    {
+      "name": "filters-ADM-07",
+      "at": "2026-10-21T14:21:16.314Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/catalog/bundles?q=QA-NO-MATCH-ACCEPTANCE&status=all"
+      ]
+    },
+    {
+      "name": "filters-ADM-09",
+      "at": "2026-10-21T14:21:17.329Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/discounts/rules?q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+      ]
+    },
+    {
+      "name": "filter-clear-ADM-09",
+      "at": "2026-10-21T14:21:17.421Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "filters-ADM-11",
+      "at": "2026-10-21T14:21:18.496Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/media?q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filters-ADM-12",
+      "at": "2026-10-21T14:21:19.523Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/catalog/artworks?q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filters-COST-01",
+      "at": "2026-10-21T14:21:24.160Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/costing/resources?kind=material&q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+      ]
+    },
+    {
+      "name": "filter-clear-COST-01",
+      "at": "2026-10-21T14:21:24.226Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "filters-COST-03",
+      "at": "2026-10-21T14:21:25.249Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/costing/resources?kind=service&q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+      ]
+    },
+    {
+      "name": "filter-clear-COST-03",
+      "at": "2026-10-21T14:21:25.335Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "filters-COST-04",
+      "at": "2026-10-21T14:21:26.357Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/costing/recipes?q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+      ]
+    },
+    {
+      "name": "filter-clear-COST-04",
+      "at": "2026-10-21T14:21:26.428Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "filters-COST-07",
+      "at": "2026-10-21T14:21:28.308Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/costing/recipes?q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+      ]
+    },
+    {
+      "name": "filter-clear-COST-07",
+      "at": "2026-10-21T14:21:28.377Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "filters-COST-09",
+      "at": "2026-10-21T14:21:29.422Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/pricing/proposals?q=QA-NO-MATCH-ACCEPTANCE&status=pending"
+      ]
+    },
+    {
+      "name": "filters-OPS-01",
+      "at": "2026-10-21T14:21:30.458Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/inventory?q=QA-NO-MATCH-ACCEPTANCE&low=false"
+      ]
+    },
+    {
+      "name": "filters-OPS-04",
+      "at": "2026-10-21T14:21:32.357Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/procurement/suppliers?q=QA-NO-MATCH-ACCEPTANCE&limit=25"
+      ]
+    },
+    {
+      "name": "filter-clear-OPS-04",
+      "at": "2026-10-21T14:21:32.441Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "filters-OPS-05",
+      "at": "2026-10-21T14:21:33.475Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/procurement/purchases?q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filters-OPS-08",
+      "at": "2026-10-21T14:21:34.487Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/production?q=QA-NO-MATCH-ACCEPTANCE&losses=false"
+      ]
+    },
+    {
+      "name": "filters-OPS-11",
+      "at": "2026-10-21T14:21:35.508Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/inventory/waste?q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filters-FIN-01",
+      "at": "2026-10-21T14:21:36.596Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/finance/accounts?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filters-FIN-02",
+      "at": "2026-10-21T14:21:37.685Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/finance/accounts?q=",
+        "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filters-FIN-03",
+      "at": "2026-10-21T14:21:38.750Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/finance/accounts?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filters-FIN-04",
+      "at": "2026-10-21T14:21:39.796Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE&kind=expense",
+        "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/finance/accounts?q="
+      ]
+    },
+    {
+      "name": "filters-FIN-05",
+      "at": "2026-10-21T14:21:40.883Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/finance/documents?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/finance/balances?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/finance/accounts?q="
+      ]
+    },
+    {
+      "name": "filters-FIN-08",
+      "at": "2026-10-21T14:21:43.693Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/refunds?q=QA-NO-MATCH-ACCEPTANCE",
+        "/api/v1/admin/refunds/requests?q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filters-ORDER-01",
+      "at": "2026-10-21T14:21:48.342Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/orders?limit=50&q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filter-clear-ORDER-01",
+      "at": "2026-10-21T14:21:48.410Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "filters-ORDER-05",
+      "at": "2026-10-21T14:21:49.429Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/commissions?limit=50&q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filter-clear-ORDER-05",
+      "at": "2026-10-21T14:21:49.512Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "filters-ORDER-07",
+      "at": "2026-10-21T14:21:51.440Z",
+      "status": "passed",
+      "method": "browser applies search and real backend acknowledges the filter",
+      "reads": [
+        "/api/v1/admin/identity/audits?limit=25&q=QA-NO-MATCH-ACCEPTANCE"
+      ]
+    },
+    {
+      "name": "filter-clear-ORDER-07",
+      "at": "2026-10-21T14:21:51.515Z",
+      "status": "passed",
+      "method": "browser clear restores unfiltered query"
+    },
+    {
+      "name": "mixed-checkout-renewed-acceptance",
+      "at": "2026-10-21T14:24:01.749Z",
+      "status": "passed",
+      "method": "browser physical + digital basket, address change clears acceptance, renewed acceptance and frozen mixed zero-charge order",
+      "order": "20523218-0c29-49e8-b398-1b4bea314a3d"
+    },
+    {
+      "name": "sku-option-mapping-publication",
+      "at": "2026-10-21T14:35:19.124Z",
+      "status": "passed",
+      "method": "browser bilingual option/value/combination draft, reload, version-pinned mapping, explicit SKU publication and reload",
+      "product": "3ca549dd-0208-4a87-8110-9e92c8778c71"
+    },
+    {
+      "name": "last-unit-browser-concurrency",
+      "at": "2026-10-21T14:37:47.311Z",
+      "status": "passed",
+      "method": "two independent customer browsers accept the same last-unit review and pay concurrently; one succeeds, one conflicts; exactly one reservation",
+      "art": "57a84388-6275-49bb-9c5a-621cc4a5e691",
+      "position": "faeb3ffe-81c3-5083-94c3-22615b9657e3"
+    }
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-01",
+      "required_views": [
+        "PUB-03",
+        "PUB-04"
+      ],
+      "scenario": "کالکشن گربه با فیلتر دفتر",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-02",
+      "required_views": [
+        "ADM-02",
+        "PUB-03",
+        "OPS-01"
+      ],
+      "scenario": "عضویت مشترک، یک موجودی",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-03",
+      "required_views": [
+        "PUB-06",
+        "ADM-06"
+      ],
+      "scenario": "تغییر سایز/برگ، حالت ناسازگار",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-04",
+      "required_views": [
+        "PUB-06",
+        "PUB-09"
+      ],
+      "scenario": "تعداد دفتر مستقل از برگ",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-05",
+      "required_views": [
+        "PUB-13",
+        "OPS-01"
+      ],
+      "scenario": "آخرین موجودی و خطای رزرو",
+      "state": "requires_integrated_verification",
+      "stage_evidence": [
+        "0054 artwork/checkout dependency stage: database concurrency/payment/refund/private-file checks plus original physical, licensed digital and print/mixed real demo journeys. Final integrated acceptance remains pending; see artwork-checkout-integration.md."
+      ],
+      "status": "passed",
+      "evidence_note": "Two independent customer browsers accepted the same last-unit review and submitted payment concurrently: one 200, one 409, one paid order and exactly one stock reservation. No real charge.",
+      "complete": true
+    },
+    {
+      "id": "AC-06",
+      "required_views": [
+        "PUB-08",
+        "ADM-08",
+        "OPS-02"
+      ],
+      "scenario": "SKU تکراری در پکیج",
+      "state": "requires_integrated_verification",
+      "stage_evidence": [
+        "0054 artwork/checkout dependency stage: database concurrency/payment/refund/private-file checks plus original physical, licensed digital and print/mixed real demo journeys. Final integrated acceptance remains pending; see artwork-checkout-integration.md."
+      ],
+      "status": "blocked",
+      "evidence_note": "Repeated-SKU bundle editing and capacity passed in the live browser; concurrent repeated-component reservation browser acceptance remains unverified.",
+      "complete": false
+    },
+    {
+      "id": "AC-07",
+      "required_views": [
+        "PUB-09",
+        "ADM-10"
+      ],
+      "scenario": "سبد مختلط، stacking روشن/خاموش",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-08",
+      "required_views": [
+        "PUB-14",
+        "FIN-06",
+        "OPS-02"
+      ],
+      "scenario": "شکست و callback تکراری",
+      "state": "requires_integrated_verification",
+      "stage_evidence": [
+        "0054 artwork/checkout dependency stage: database concurrency/payment/refund/private-file checks plus original physical, licensed digital and print/mixed real demo journeys. Final integrated acceptance remains pending; see artwork-checkout-integration.md."
+      ],
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-09",
+      "required_views": [
+        "PUB-14",
+        "ORDER-02"
+      ],
+      "scenario": "late paid با کمبود",
+      "state": "requires_integrated_verification",
+      "stage_evidence": [
+        "0054 artwork/checkout dependency stage: database concurrency/payment/refund/private-file checks plus original physical, licensed digital and print/mixed real demo journeys. Final integrated acceptance remains pending; see artwork-checkout-integration.md."
+      ],
+      "status": "blocked",
+      "evidence_note": "Imported late-paid shortage and safe staff recovery passed in the browser; an actual late provider callback browser journey remains unverified.",
+      "complete": false
+    },
+    {
+      "id": "AC-10",
+      "required_views": [
+        "COST-02"
+      ],
+      "scenario": "فقط وابسته‌ها، عدم انتشار خودکار",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-11",
+      "required_views": [
+        "COST-05"
+      ],
+      "scenario": "هزینه خالی، واحد مبهم",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-12",
+      "required_views": [
+        "PUB-06",
+        "COST-03"
+      ],
+      "scenario": "۵۰ برگ و نرخ دورو",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-13",
+      "required_views": [
+        "OPS-06",
+        "COST-07",
+        "FIN-11"
+      ],
+      "scenario": "خرید بسته در برابر مصرف",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-14",
+      "required_views": [
+        "OPS-07",
+        "FIN-11"
+      ],
+      "scenario": "میانگین موزون و خروجی سالم",
+      "state": "requires_integrated_verification",
+      "status": "passed",
+      "evidence_note": "Live purchases, moving weighted averages, production consumption and healthy QC output verified; database regression suite passed.",
+      "complete": true
+    },
+    {
+      "id": "AC-15",
+      "required_views": [
+        "USER-04",
+        "COST-10",
+        "FIN-09"
+      ],
+      "scenario": "نرخ جدید و snapshot تاریخی",
+      "state": "requires_integrated_verification",
+      "stage_evidence": [
+        "0054 artwork/checkout dependency stage: database concurrency/payment/refund/private-file checks plus original physical, licensed digital and print/mixed real demo journeys. Final integrated acceptance remains pending; see artwork-checkout-integration.md."
+      ],
+      "status": "blocked",
+      "evidence_note": "Related implemented domains have automated evidence in the passing backend/frontend suites; complete browser evidence for this exact acceptance scenario is not recorded.",
+      "complete": false
+    },
+    {
+      "id": "AC-16",
+      "required_views": [
+        "COST-08"
+      ],
+      "scenario": "margin، fee، گردکردن",
+      "state": "requires_integrated_verification",
+      "status": "passed",
+      "evidence_note": "Live price proposals, explicit publication and stale-input rejection passed; formula/fee/rounding regression suite passed.",
+      "complete": true
+    },
+    {
+      "id": "AC-17",
+      "required_views": [
+        "USER-06",
+        "ORDER-04",
+        "FIN-08"
+      ],
+      "scenario": "مرجوعی جزئی پکیج",
+      "state": "requires_integrated_verification",
+      "stage_evidence": [
+        "0054 artwork/checkout dependency stage: database concurrency/payment/refund/private-file checks plus original physical, licensed digital and print/mixed real demo journeys. Final integrated acceptance remains pending; see artwork-checkout-integration.md."
+      ],
+      "status": "blocked",
+      "evidence_note": "Partial/full simulated refunds and return inspection passed; exact partial bundle-component browser journey remains unverified.",
+      "complete": false
+    },
+    {
+      "id": "AC-18",
+      "required_views": [
+        "FIN-01"
+      ],
+      "scenario": "هم‌پوشانی کالکشن و جمع یکتا",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Official collection-profit report remains unimplemented.",
+      "complete": false
+    },
+    {
+      "id": "AC-19",
+      "required_views": [
+        "PAINT-07",
+        "PUB-09",
+        "ART-04"
+      ],
+      "scenario": "نقاشی pending کنار کالای آماده",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Brief submission and private preview approval passed; accepted payable quotes and artist dependencies remain incomplete.",
+      "complete": false
+    },
+    {
+      "id": "AC-20",
+      "required_views": [
+        "ADM-11",
+        "SYS-02"
+      ],
+      "scenario": "فایل خصوصی/مالی در نقش مشتری",
+      "state": "requires_integrated_verification",
+      "stage_evidence": [
+        "0054 artwork/checkout dependency stage: database concurrency/payment/refund/private-file checks plus original physical, licensed digital and print/mixed real demo journeys. Final integrated acceptance remains pending; see artwork-checkout-integration.md."
+      ],
+      "status": "blocked",
+      "evidence_note": "Cross-customer support privacy, customer denial of admin finance, protected downloads and session revocation passed; financial document uploads remain incomplete.",
+      "complete": false
+    },
+    {
+      "id": "AC-21",
+      "required_views": [
+        "PUB-11",
+        "USER-03"
+      ],
+      "scenario": "digital-only و mixed",
+      "state": "requires_integrated_verification",
+      "stage_evidence": [
+        "0054 artwork/checkout dependency stage: database concurrency/payment/refund/private-file checks plus original physical, licensed digital and print/mixed real demo journeys. Final integrated acceptance remains pending; see artwork-checkout-integration.md."
+      ],
+      "status": "passed",
+      "evidence_note": "Browser digital-only and physical checkout/delivery passed; explicit mixed checkout changed address, required renewed acceptance and froze physical/digital identities. Database mixed-return regression passed.",
+      "complete": true
+    },
+    {
+      "id": "AC-22",
+      "required_views": [
+        "FIN-07"
+      ],
+      "scenario": "تسویه مستقل از درآمد",
+      "state": "requires_integrated_verification",
+      "status": "blocked",
+      "evidence_note": "Gateway settlement workflow remains unimplemented.",
+      "complete": false
+    }
+  ],
+  "evidence_locations": [
+    "Frontend/tests/e2e/full-panel-browser-live.spec.ts",
+    "Frontend/test-results/browser-audit/ (ignored; screenshots and private post-login traces)",
+    "/tmp/nilart-browser-*.log (local execution logs)"
+  ],
+  "limits": [
+    "A route/layout pass does not mean all actions in that view have passed.",
+    "Full-view acceptance remains blocked by the existing remaining-work register and/or unverified exact browser scenarios.",
+    "No real payment, external refund, gateway settlement or production activation is claimed.",
+    "Chromium desktop/mobile viewport coverage; other browser engines and screen-reader testing are not recorded."
+  ]
+}

@@ -1,0 +1,27 @@
+http://{$NILART_DOMAIN}, http://www.{$NILART_DOMAIN} {
+    redir https://{$NILART_DOMAIN}{uri} permanent
+}
+
+https://www.{$NILART_DOMAIN} {
+    redir https://{$NILART_DOMAIN}{uri} permanent
+}
+
+{$NILART_DOMAIN} {
+    encode zstd gzip
+    request_body {
+        max_size 25MB
+    }
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+    @private path /api/* /fa/admin* /en/admin* /fa/account* /en/account* /fa/auth* /en/auth* /fa/checkout* /en/checkout*
+    header @private Cache-Control "no-store"
+    handle /api/* {
+        reverse_proxy api:8000
+    }
+    handle {
+        reverse_proxy web:3000
+    }
+}

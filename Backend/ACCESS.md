@@ -103,3 +103,11 @@ Live `/fa/admin/users`, `/en/admin/users`, and roles aliases use the reference a
 shell, permission filtering, actual account records and the shared dropdown. Stale
 or ambiguous writes require reload; unsaved edits are protected. Other admin/artist
 workflows remain unavailable until connected and enforce access before rendering.
+
+Price calculation, proposal review/commands and all SKU price writes (including the legacy manual-price endpoint) require `pricing.publish`. Catalogue-only users may read the existing SKU prices/history under `catalog.manage`; public-price publication does not inherit catalogue management. Pricing-only staff can use proposal workflows without `catalog.manage`.
+
+Sandbox payment inquiry reads/history/own receipts require `payments.read`. `PUT /api/v1/admin/payments/{id}/inquiries/{key}` additionally requires fresh `finance.write` plus fresh `payments.read`, valid Origin/CSRF, expected payment revision and a nonblank reason. Order embedding also requires the order page's `orders.read_all`; the standalone payment view does not grant order or customer data access. Manual mark-paid, refund and settlement are not provided by this command.
+
+Order stock queue/detail/history/recommit and actor-owned command receipts at `/api/v1/admin/order-stock` require `fulfillment.manage`, freshly rechecked with Origin/CSRF on recommit. Access does not grant order recipient/address information; containing order detail still requires `orders.read_all`. Customers require `orders.read_self` and ownership for stock state/expiry. Stock review requires authentication, and checkout retains fresh `account.write_self`. No endpoint permits binding current components onto historical orders or manually setting a payment paid.
+
+Shipment planning, history, actor-owned receipts and all commands under `/api/v1/admin/fulfillment` require `fulfillment.manage`. Fresh Origin/CSRF/account/permission checks precede commands. This permits operational shipment address and cost records but not refunds or bank payments. Containing order pages continue to require `orders.read_all`. Customer parcel tracking requires `orders.read_self` plus ownership, and returns no costs, drafts, QC/staff notes or internal audit. Dispatch is sandbox-only in this release.
