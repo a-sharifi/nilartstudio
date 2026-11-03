@@ -10069,7 +10069,8 @@
                 {
                   "enum": [
                     "public_image",
-                    "print_file"
+                    "print_file",
+                    "mockup_source"
                   ],
                   "type": "string"
                 },
@@ -10574,6 +10575,719 @@
               "type": "boolean",
               "default": false,
               "title": "Thumbnail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/templates": {
+      "get": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Templates",
+        "operationId": "templates_api_v1_admin_mockups_templates_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/templates/{id}/history": {
+      "get": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Template History",
+        "operationId": "template_history_api_v1_admin_mockups_templates__id__history_get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Before"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/templates/{id}/commands/{key}": {
+      "put": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Save Template",
+        "operationId": "save_template_api_v1_admin_mockups_templates__id__commands__key__put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/runs/{key}": {
+      "put": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_admin_mockups_runs__key__put",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/runs/{id}": {
+      "get": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Run",
+        "operationId": "run_api_v1_admin_mockups_runs__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/runs/{id}/retry": {
+      "post": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Retry",
+        "operationId": "retry_api_v1_admin_mockups_runs__id__retry_post",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/commands/{key}": {
+      "get": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Receipt",
+        "operationId": "receipt_api_v1_admin_mockups_commands__key__get",
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/sets": {
+      "get": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Sets",
+        "operationId": "sets_api_v1_admin_mockups_sets_get",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Product Id"
+            }
+          },
+          {
+            "name": "sku_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sku Id"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "collection",
+                    "personal"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Group"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 300,
+              "default": "",
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 25,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/sets/{id}": {
+      "get": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Detail",
+        "operationId": "detail_api_v1_admin_mockups_sets__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/sets/{id}/commands/{key}": {
+      "put": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Publish",
+        "operationId": "publish_api_v1_admin_mockups_sets__id__commands__key__put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "key",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/mockups/coverage": {
+      "get": {
+        "tags": [
+          "product-mockups"
+        ],
+        "summary": "Coverage",
+        "operationId": "coverage_api_v1_admin_mockups_coverage_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/catalog/image-sets": {
+      "get": {
+        "tags": [
+          "published-product-images"
+        ],
+        "summary": "Public Gallery",
+        "operationId": "public_gallery_api_v1_catalog_image_sets_get",
+        "parameters": [
+          {
+            "name": "design",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 80,
+              "default": "",
+              "title": "Design"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "collection",
+                    "personal"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Group"
+            }
+          },
+          {
+            "name": "notebook_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "notebook",
+                    "sketchbook"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Notebook Type"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "A3",
+                    "A4",
+                    "A5",
+                    "A6"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Size"
+            }
+          },
+          {
+            "name": "paper",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 80,
+              "default": "",
+              "title": "Paper"
+            }
+          },
+          {
+            "name": "product_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Product Id"
+            }
+          },
+          {
+            "name": "sku_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sku Id"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 300,
+              "default": "",
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 48,
+              "minimum": 1,
+              "default": 12,
+              "title": "Limit"
             }
           }
         ],
@@ -17709,6 +18423,47 @@
         }
       }
     },
+    "/api/v1/admin/simple/variants/{sku_id}": {
+      "get": {
+        "tags": [
+          "simple-commerce"
+        ],
+        "summary": "Variant Detail",
+        "operationId": "variant_detail_api_v1_admin_simple_variants__sku_id__get",
+        "parameters": [
+          {
+            "name": "sku_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Sku Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/admin/simple/commands/{key}": {
       "get": {
         "tags": [
@@ -17981,6 +18736,118 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/promotions/home-offers": {
+      "get": {
+        "tags": [
+          "storefront-promotions"
+        ],
+        "summary": "Home Offers",
+        "description": "Only current offers with a published identity and available stock; no private costs.",
+        "operationId": "home_offers_api_v1_promotions_home_offers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/shop-dashboard": {
+      "get": {
+        "tags": [
+          "shop-monitoring"
+        ],
+        "summary": "Dashboard",
+        "operationId": "dashboard_api_v1_admin_shop_dashboard_get",
+        "parameters": [
+          {
+            "name": "from_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From Date"
+            }
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To Date"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "live",
+                "sandbox",
+                "all"
+              ],
+              "type": "string",
+              "default": "live",
+              "title": "Scope"
+            }
+          },
+          {
+            "name": "low_stock",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 0,
+              "default": 2,
+              "title": "Low Stock"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -18882,7 +19749,8 @@
             "type": "string",
             "enum": [
               "public_image",
-              "print_file"
+              "print_file",
+              "mockup_source"
             ],
             "title": "Purpose"
           },
@@ -19175,6 +20043,16 @@
       },
       "Banner": {
         "properties": {
+          "tone": {
+            "type": "string",
+            "enum": [
+              "terracotta",
+              "sage",
+              "ink"
+            ],
+            "title": "Tone",
+            "default": "terracotta"
+          },
           "active": {
             "type": "boolean",
             "title": "Active",
@@ -19241,6 +20119,93 @@
         "additionalProperties": false,
         "type": "object",
         "title": "Banner"
+      },
+      "BannerSlide": {
+        "properties": {
+          "tone": {
+            "type": "string",
+            "enum": [
+              "terracotta",
+              "sage",
+              "ink"
+            ],
+            "title": "Tone",
+            "default": "terracotta"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active",
+            "default": false
+          },
+          "text_fa": {
+            "type": "string",
+            "maxLength": 300,
+            "title": "Text Fa",
+            "default": ""
+          },
+          "text_en": {
+            "type": "string",
+            "maxLength": 300,
+            "title": "Text En",
+            "default": ""
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^(?:[A-Z0-9][A-Z0-9_-]{0,79})?$",
+            "title": "Code",
+            "default": ""
+          },
+          "link": {
+            "type": "string",
+            "maxLength": 300,
+            "pattern": "^/[a-zA-Z0-9/\\-?=&%#_]*$",
+            "title": "Link",
+            "default": "/fa/shop"
+          },
+          "starts_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts At"
+          },
+          "ends_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends At"
+          },
+          "gallery": {
+            "items": {
+              "$ref": "#/components/schemas/GalleryImage"
+            },
+            "type": "array",
+            "maxItems": 1,
+            "title": "Gallery"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "BannerSlide"
       },
       "BasketCommand": {
         "properties": {
@@ -23948,6 +24913,27 @@
         ],
         "title": "MediaChoice"
       },
+      "MediaRef": {
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Asset Id"
+          },
+          "revision_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Revision Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "asset_id",
+          "revision_id"
+        ],
+        "title": "MediaRef"
+      },
       "Metadata": {
         "properties": {
           "title_fa": {
@@ -27134,6 +28120,92 @@
         ],
         "title": "QC"
       },
+      "Quad": {
+        "properties": {
+          "points": {
+            "prefixItems": [
+              {
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "maximum": 1.0,
+                    "minimum": 0.0
+                  },
+                  {
+                    "type": "number",
+                    "maximum": 1.0,
+                    "minimum": 0.0
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "maximum": 1.0,
+                    "minimum": 0.0
+                  },
+                  {
+                    "type": "number",
+                    "maximum": 1.0,
+                    "minimum": 0.0
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "maximum": 1.0,
+                    "minimum": 0.0
+                  },
+                  {
+                    "type": "number",
+                    "maximum": 1.0,
+                    "minimum": 0.0
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              },
+              {
+                "prefixItems": [
+                  {
+                    "type": "number",
+                    "maximum": 1.0,
+                    "minimum": 0.0
+                  },
+                  {
+                    "type": "number",
+                    "maximum": 1.0,
+                    "minimum": 0.0
+                  }
+                ],
+                "type": "array",
+                "maxItems": 2,
+                "minItems": 2
+              }
+            ],
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Points"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "points"
+        ],
+        "title": "Quad"
+      },
       "Quality": {
         "properties": {
           "healthy_output": {
@@ -28879,6 +29951,65 @@
         ],
         "title": "Row"
       },
+      "RunInput": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Version"
+          },
+          "spec": {
+            "$ref": "#/components/schemas/Spec"
+          },
+          "sources": {
+            "$ref": "#/components/schemas/Sources"
+          },
+          "templates": {
+            "additionalProperties": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "propertyNames": {
+              "enum": [
+                "front",
+                "back",
+                "inside"
+              ]
+            },
+            "type": "object",
+            "title": "Templates"
+          },
+          "target": {
+            "$ref": "#/components/schemas/Target"
+          },
+          "attach_to": {
+            "type": "string",
+            "enum": [
+              "sku",
+              "product",
+              "none"
+            ],
+            "title": "Attach To",
+            "default": "none"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 5,
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "spec",
+          "sources",
+          "templates",
+          "reason"
+        ],
+        "title": "RunInput"
+      },
       "SKUAuditOutput": {
         "properties": {
           "id": {
@@ -29344,6 +30475,62 @@
           "expires_at"
         ],
         "title": "SessionOutput"
+      },
+      "SetCommand": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Version"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "publish",
+              "rollback",
+              "unpublish"
+            ],
+            "title": "Action"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "expected_profile_version": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Profile Version"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 5,
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "action",
+          "reason"
+        ],
+        "title": "SetCommand"
       },
       "Settings": {
         "properties": {
@@ -29879,6 +31066,200 @@
         ],
         "title": "SkuChoices"
       },
+      "Sources": {
+        "properties": {
+          "front": {
+            "$ref": "#/components/schemas/MediaRef"
+          },
+          "back_print": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MediaRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "back_crop": {
+            "prefixItems": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              }
+            ],
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Back Crop",
+            "default": [
+              0,
+              0,
+              1,
+              1
+            ]
+          },
+          "back_art": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MediaRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "logo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MediaRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inside_left": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MediaRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inside_right": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MediaRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "inside_mode": {
+            "type": "string",
+            "enum": [
+              "motifs",
+              "pages"
+            ],
+            "title": "Inside Mode",
+            "default": "motifs"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "front"
+        ],
+        "title": "Sources"
+      },
+      "Spec": {
+        "properties": {
+          "design": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,79}$",
+            "title": "Design"
+          },
+          "title_fa": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Title Fa"
+          },
+          "title_en": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Title En"
+          },
+          "group": {
+            "type": "string",
+            "enum": [
+              "collection",
+              "personal"
+            ],
+            "title": "Group"
+          },
+          "notebook_type": {
+            "type": "string",
+            "enum": [
+              "notebook",
+              "sketchbook"
+            ],
+            "title": "Notebook Type"
+          },
+          "size": {
+            "type": "string",
+            "enum": [
+              "A3",
+              "A4",
+              "A5",
+              "A6"
+            ],
+            "title": "Size"
+          },
+          "paper": {
+            "type": "string",
+            "enum": [
+              "writing-paper",
+              "kraft-dark-70gsm",
+              "kraft-coffee-100gsm",
+              "drawing-cream-110gsm",
+              "drawing-cream-127gsm"
+            ],
+            "title": "Paper"
+          },
+          "sheets": {
+            "type": "integer",
+            "enum": [
+              40,
+              80
+            ],
+            "title": "Sheets"
+          },
+          "binding": {
+            "type": "string",
+            "enum": [
+              "top",
+              "side"
+            ],
+            "title": "Binding"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "design",
+          "title_fa",
+          "title_en",
+          "group",
+          "notebook_type",
+          "size",
+          "paper",
+          "sheets",
+          "binding"
+        ],
+        "title": "Spec"
+      },
       "Specification": {
         "properties": {
           "label_fa": {
@@ -30334,6 +31715,155 @@
           "confirmed"
         ],
         "title": "SyncCommand"
+      },
+      "Target": {
+        "properties": {
+          "product_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product Id"
+          },
+          "sku_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sku Id"
+          },
+          "collection_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collection Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Target"
+      },
+      "Template": {
+        "properties": {
+          "title_fa": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Title Fa"
+          },
+          "title_en": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Title En"
+          },
+          "notebook_type": {
+            "type": "string",
+            "enum": [
+              "notebook",
+              "sketchbook"
+            ],
+            "title": "Notebook Type"
+          },
+          "binding": {
+            "type": "string",
+            "enum": [
+              "top",
+              "side"
+            ],
+            "title": "Binding"
+          },
+          "view": {
+            "type": "string",
+            "enum": [
+              "front",
+              "back",
+              "inside"
+            ],
+            "title": "View"
+          },
+          "photo": {
+            "$ref": "#/components/schemas/MediaRef"
+          },
+          "quads": {
+            "items": {
+              "$ref": "#/components/schemas/Quad"
+            },
+            "type": "array",
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Quads"
+          },
+          "occlusion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MediaRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title_fa",
+          "title_en",
+          "notebook_type",
+          "binding",
+          "view",
+          "photo",
+          "quads"
+        ],
+        "title": "Template"
+      },
+      "TemplateCommand": {
+        "properties": {
+          "expected_version": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Expected Version"
+          },
+          "content": {
+            "$ref": "#/components/schemas/Template"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 5,
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_version",
+          "content",
+          "reason"
+        ],
+        "title": "TemplateCommand"
       },
       "TicketState": {
         "properties": {
@@ -34956,6 +36486,14 @@
           "banner": {
             "$ref": "#/components/schemas/Banner"
           },
+          "banners": {
+            "items": {
+              "$ref": "#/components/schemas/BannerSlide"
+            },
+            "type": "array",
+            "maxItems": 9,
+            "title": "Banners"
+          },
           "sales": {
             "items": {
               "$ref": "#/components/schemas/Sale"
@@ -35061,7 +36599,8 @@
             "type": "string",
             "enum": [
               "public_image",
-              "print_file"
+              "print_file",
+              "mockup_source"
             ],
             "title": "Purpose"
           },
@@ -35124,7 +36663,8 @@
             "type": "string",
             "enum": [
               "public_image",
-              "print_file"
+              "print_file",
+              "mockup_source"
             ],
             "title": "Purpose"
           },

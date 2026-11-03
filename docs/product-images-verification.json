@@ -1,0 +1,642 @@
+{
+  "checked_on": "2026-11-03",
+  "main_images": {
+    "local": {
+      "public_sets": 220,
+      "positions": 484,
+      "private_sources_checked": 142,
+      "preview_only_sets": 216,
+      "unique_output_blobs_checked": 660,
+      "full_report_sha256": "dc696232716cfc1dc01597c97a556fe8d95f10560fe935be72072dde6a9b218c"
+    },
+    "production": {
+      "public_sets": 220,
+      "positions": 484,
+      "private_sources_checked": 141,
+      "preview_only_sets": 170,
+      "unique_output_blobs_checked": 660,
+      "full_report_sha256": "3d893f8b759df44120349028a9d5e5be8f40140fed5ebdf940601622ff325c9a"
+    }
+  },
+  "local_production_outputs": {
+    "compared_sets": 220,
+    "positions": 484,
+    "differences": []
+  },
+  "main_commerce_changes": {
+    "local": [],
+    "production": []
+  },
+  "followup_additions": {
+    "local": {
+      "tables": {
+        "catalog_products": {
+          "existing_rows_checked": 8,
+          "added_rows": 5,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_categories": {
+          "existing_rows_checked": 4,
+          "added_rows": 2,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_skus": {
+          "existing_rows_checked": 20,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_sku_option_mappings": {
+          "existing_rows_checked": 0,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "simple_variant_costs": {
+          "existing_rows_checked": 0,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_sku_price_versions": {
+          "existing_rows_checked": 2,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "inventory_positions": {
+          "existing_rows_checked": 60,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "inventory_movements": {
+          "existing_rows_checked": 62,
+          "added_rows": 39,
+          "changed_or_removed_existing_rows": 0
+        },
+        "business_settings": {
+          "existing_rows_checked": 1,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_artworks": {
+          "existing_rows_checked": 49,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_artwork_details": {
+          "existing_rows_checked": 49,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_bundle_components": {
+          "existing_rows_checked": 9,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_bundle_documents": {
+          "existing_rows_checked": 0,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        }
+      },
+      "before_sha256": "842973344be39fd2dee5ce02a7bdacc0040f3c208ed4c18a6531ff7d298c1ab2",
+      "after_sha256": "a2161ab0a0da2211ddfaa148109e98c8a470c51f6acc08a8285a85cf20b287fd",
+      "public_content": {
+        "origin": "http://nginx",
+        "products": [
+          {
+            "slug": "gorbe-switch-sticker",
+            "id": "afc0d687-9a27-5250-b964-ce209cddd526",
+            "variants": [
+              {
+                "id": "d8a6494e-6cdf-4899-8312-ee54c6b087f1",
+                "code": "NIL-GORBE-SWITCH-STICKER-1",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "2b1f9bd2-1494-4037-b24c-eae2608ecfe4",
+                "code": "NIL-GORBE-SWITCH-STICKER-2",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "27ecd550-b0e3-49dc-968d-2949926afc22",
+                "code": "NIL-GORBE-SWITCH-STICKER-3",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              }
+            ]
+          },
+          {
+            "slug": "gav-switch-sticker",
+            "id": "c120cba2-b269-5ddd-a566-e0e940f1f05b",
+            "variants": [
+              {
+                "id": "a53af49f-f882-4801-8b0b-abe3acca9fa4",
+                "code": "NIL-GAV-SWITCH-STICKER-1",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "904debee-874a-476c-86d4-41c7ebeaf641",
+                "code": "NIL-GAV-SWITCH-STICKER-2",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "2bcdcb08-74bf-4ccd-ab7d-f6b0c8679f5c",
+                "code": "NIL-GAV-SWITCH-STICKER-3",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              }
+            ]
+          },
+          {
+            "slug": "roh-switch-sticker",
+            "id": "f586a4c9-0f02-5760-bca2-7069050e1590",
+            "variants": [
+              {
+                "id": "193e6b92-2dc1-4f6c-affb-767332bb4411",
+                "code": "NIL-ROH-SWITCH-STICKER-1",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "f1a91f19-cd45-4ff5-88b0-2dffd17c3719",
+                "code": "NIL-ROH-SWITCH-STICKER-2",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "a8958bab-bd34-4d23-8cfd-69bce05de6ca",
+                "code": "NIL-ROH-SWITCH-STICKER-3",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              }
+            ]
+          },
+          {
+            "slug": "qolche-switch-sticker",
+            "id": "e29055ba-c036-5c41-9ba0-d1d129373a0a",
+            "variants": [
+              {
+                "id": "8fd82084-782f-4e08-94f0-2b8a7f11d66a",
+                "code": "NIL-QOLCHE-SWITCH-STICKER-1",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "c234c206-0a6d-4b60-b963-8b3f310c4b0c",
+                "code": "NIL-QOLCHE-SWITCH-STICKER-2",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "c41a8fb0-1c63-4cbf-884f-7d169bcfb94a",
+                "code": "NIL-QOLCHE-SWITCH-STICKER-3",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              }
+            ]
+          }
+        ],
+        "installed_and_original_images_checked": 24,
+        "book": {
+          "id": "a4919456-617e-5249-b831-cb613730b2af",
+          "sku_id": "e5fb6648-3fad-4ff1-b69a-f32ed4ea240b",
+          "code": "NIL-MANDALA-BOOK-A4-KRAFT-110GSM-40",
+          "published": false,
+          "price_amount": "900000.000000",
+          "currency": "IRT",
+          "unit_cost": "550000.000000",
+          "quantity": "10.000000",
+          "reserved": "0.000000",
+          "value": "5500000.000000",
+          "size": "A4",
+          "binding": "right",
+          "sheets": 40,
+          "paper": "kraft-110gsm",
+          "publication": "awaiting_real_photographs"
+        },
+        "browser_rendering_verified": false
+      }
+    },
+    "production": {
+      "tables": {
+        "catalog_products": {
+          "existing_rows_checked": 14,
+          "added_rows": 5,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_categories": {
+          "existing_rows_checked": 3,
+          "added_rows": 2,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_skus": {
+          "existing_rows_checked": 87,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_sku_option_mappings": {
+          "existing_rows_checked": 87,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "simple_variant_costs": {
+          "existing_rows_checked": 0,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_sku_price_versions": {
+          "existing_rows_checked": 63,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "inventory_positions": {
+          "existing_rows_checked": 102,
+          "added_rows": 13,
+          "changed_or_removed_existing_rows": 0
+        },
+        "inventory_movements": {
+          "existing_rows_checked": 102,
+          "added_rows": 39,
+          "changed_or_removed_existing_rows": 0
+        },
+        "business_settings": {
+          "existing_rows_checked": 1,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_artworks": {
+          "existing_rows_checked": 40,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_artwork_details": {
+          "existing_rows_checked": 40,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_bundle_components": {
+          "existing_rows_checked": 10,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        },
+        "catalog_bundle_documents": {
+          "existing_rows_checked": 5,
+          "added_rows": 0,
+          "changed_or_removed_existing_rows": 0
+        }
+      },
+      "before_sha256": "86dfac3c1d9304591314c27b28614c7b600a1a27cedf844d05fd044073e1cb29",
+      "after_sha256": "c6a7bd75eb31766c79b6d753f915392b14d9c562cfc5abe5d18cbb4229067adc",
+      "public_content": {
+        "origin": "https://nilartstudio.ir",
+        "products": [
+          {
+            "slug": "gorbe-switch-sticker",
+            "id": "afc0d687-9a27-5250-b964-ce209cddd526",
+            "variants": [
+              {
+                "id": "cf73b75c-9e11-4d34-9ef1-6609947e0fad",
+                "code": "NIL-GORBE-SWITCH-STICKER-1",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "c846b9f1-c145-4a16-b9e9-9fc8813e1e05",
+                "code": "NIL-GORBE-SWITCH-STICKER-2",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "ec9ea0cf-7614-4656-a7d1-98e2325a56cd",
+                "code": "NIL-GORBE-SWITCH-STICKER-3",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              }
+            ]
+          },
+          {
+            "slug": "gav-switch-sticker",
+            "id": "c120cba2-b269-5ddd-a566-e0e940f1f05b",
+            "variants": [
+              {
+                "id": "2c04c912-51ad-47ad-8162-59b1f48cde47",
+                "code": "NIL-GAV-SWITCH-STICKER-1",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "b2c57607-fa23-46cd-b902-fecdd05f2675",
+                "code": "NIL-GAV-SWITCH-STICKER-2",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "60242faf-f890-4125-9860-f2be9c1db082",
+                "code": "NIL-GAV-SWITCH-STICKER-3",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              }
+            ]
+          },
+          {
+            "slug": "roh-switch-sticker",
+            "id": "f586a4c9-0f02-5760-bca2-7069050e1590",
+            "variants": [
+              {
+                "id": "23120924-bfea-4b84-8b99-327ed7c6ce0f",
+                "code": "NIL-ROH-SWITCH-STICKER-1",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "89071c42-6ff7-4e86-9bc3-61f0b98af6a7",
+                "code": "NIL-ROH-SWITCH-STICKER-2",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "a190b7ea-4616-4ef8-9dda-5b7d7cb211c0",
+                "code": "NIL-ROH-SWITCH-STICKER-3",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              }
+            ]
+          },
+          {
+            "slug": "qolche-switch-sticker",
+            "id": "e29055ba-c036-5c41-9ba0-d1d129373a0a",
+            "variants": [
+              {
+                "id": "188f50bb-b703-4083-978b-18226a9927aa",
+                "code": "NIL-QOLCHE-SWITCH-STICKER-1",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "25e8a006-a3c6-400a-baf9-f48b6c2cb6bd",
+                "code": "NIL-QOLCHE-SWITCH-STICKER-2",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              },
+              {
+                "id": "5600a5f5-e1d3-46e7-8bb7-2fcfe391564d",
+                "code": "NIL-QOLCHE-SWITCH-STICKER-3",
+                "published": true,
+                "price_amount": "50000.000000",
+                "currency": "IRT",
+                "unit_cost": "10000.000000",
+                "quantity": "1.000000",
+                "reserved": "0.000000",
+                "value": "10000.000000"
+              }
+            ]
+          }
+        ],
+        "installed_and_original_images_checked": 24,
+        "book": {
+          "id": "a4919456-617e-5249-b831-cb613730b2af",
+          "sku_id": "f961494e-358a-4a1d-999e-d865a6bbd47d",
+          "code": "NIL-MANDALA-BOOK-A4-KRAFT-110GSM-40",
+          "published": false,
+          "price_amount": "900000.000000",
+          "currency": "IRT",
+          "unit_cost": "550000.000000",
+          "quantity": "10.000000",
+          "reserved": "0.000000",
+          "value": "5500000.000000",
+          "size": "A4",
+          "binding": "right",
+          "sheets": 40,
+          "paper": "kraft-110gsm",
+          "publication": "awaiting_real_photographs"
+        },
+        "browser_rendering_verified": false
+      }
+    }
+  },
+  "tests": {
+    "backend_focused": 56,
+    "frontend_focused": 35,
+    "docker_api_build": "passed",
+    "docker_web_build": "passed",
+    "typescript": "passed",
+    "ruff_focused": "passed"
+  },
+  "browser_ui": {
+    "verified": false,
+    "reason": "Local browser use is disabled in Work settings. Real fa/en 390/1046/1440 UI screenshot checks remain unverified."
+  },
+  "code_release": "92d2928",
+  "public_feature_assets_and_routes": [
+    {
+      "origin": "http://localhost:8080",
+      "feature_assets": [
+        {
+          "path": "/_next/static/chunks/01xljeha8j5bg.js",
+          "markers": [
+            "notebook-image-library",
+            "/api/v1/catalog/image-sets",
+            "notebook-request"
+          ],
+          "sha256": "8ab3f1d2b8beaa32eb5936b96a243718f7db6b645218f98c29e71e4d9ec6a3c7"
+        }
+      ],
+      "routes": [
+        {
+          "path": "/fa/commissions/new",
+          "status": 200
+        },
+        {
+          "path": "/fa/collections/custom-notebook-portfolio",
+          "status": 200
+        },
+        {
+          "path": "/fa/products/gorbe-switch-sticker",
+          "status": 200
+        },
+        {
+          "path": "/en/commissions/new",
+          "status": 200
+        },
+        {
+          "path": "/en/collections/custom-notebook-portfolio",
+          "status": 200
+        },
+        {
+          "path": "/en/products/gorbe-switch-sticker",
+          "status": 200
+        }
+      ],
+      "browser_rendering_verified": false
+    },
+    {
+      "origin": "https://nilartstudio.ir",
+      "feature_assets": [
+        {
+          "path": "/_next/static/chunks/01xljeha8j5bg.js",
+          "markers": [
+            "notebook-image-library",
+            "/api/v1/catalog/image-sets",
+            "notebook-request"
+          ],
+          "sha256": "8ab3f1d2b8beaa32eb5936b96a243718f7db6b645218f98c29e71e4d9ec6a3c7"
+        }
+      ],
+      "routes": [
+        {
+          "path": "/fa/commissions/new",
+          "status": 200
+        },
+        {
+          "path": "/fa/collections/custom-notebook-portfolio",
+          "status": 200
+        },
+        {
+          "path": "/fa/products/gorbe-switch-sticker",
+          "status": 200
+        },
+        {
+          "path": "/en/commissions/new",
+          "status": 200
+        },
+        {
+          "path": "/en/collections/custom-notebook-portfolio",
+          "status": 200
+        },
+        {
+          "path": "/en/products/gorbe-switch-sticker",
+          "status": 200
+        }
+      ],
+      "browser_rendering_verified": false
+    }
+  ],
+  "generated_contracts": {
+    "openapi": "regenerated",
+    "typescript_types": "regenerated",
+    "typecheck": "passed",
+    "removed_paths": 0
+  },
+  "remaining": [
+    "Real browser fa/en verification at 390/1046/1440 is unavailable because local browser use is disabled in Work settings.",
+    "A4 Mandala book awaits owner-provided real cover and page photographs before publication.",
+    "Nine bookmark poses and five owner bundles have no compatible destination in the legacy local catalogue; prepared media preserved, no fabricated SKU prices/stock or duplicate products created."
+  ]
+}
