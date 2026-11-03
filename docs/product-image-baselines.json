@@ -1,0 +1,95 @@
+{
+  "local": {
+    "commerce": {
+      "catalog_products": {
+        "count": 8,
+        "sha256": "b9054508e0b57197d3fdbb32de5e2853a3323abd7131936b32e640749dd19361"
+      },
+      "catalog_skus": {
+        "count": 20,
+        "sha256": "962743480edf3be54f4722c4f036bd3a2ad905ae52cf7c888210d67f550faa66"
+      },
+      "catalog_sku_option_mappings": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "business_settings": {
+        "count": 1,
+        "sha256": "2f279753fd52fc5862dc9473bb273b5f195063addf2d959f40ab09e160371f53"
+      },
+      "simple_variant_costs": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "inventory_movements": {
+        "count": 62,
+        "sha256": "1efb67c96fa2a869bf2de0d6bbbdc0a0ce8a7b6873110ac6127382a9e497132d"
+      },
+      "inventory_positions": {
+        "count": 60,
+        "sha256": "6f1fd4d4896619bdb6526388c718fef582c3a1d2479d75543c760c695b1269e7"
+      },
+      "physical_profiles": {
+        "count": 20,
+        "sha256": "9cc5845a8abed25055d6c452bb25bc0250e01dacbefa915147e34cae5f19fe2a"
+      }
+    },
+    "media": {
+      "media_assets": {
+        "count": 46,
+        "sha256": "6fb2b88747694a008773a2248ba25864ca31659cd4d4feacf1d29b6cd30675e3"
+      },
+      "catalog_profiles": {
+        "count": 21,
+        "sha256": "94bb239dba9a484debbf32ffdb21b6d2051f968b7b62ae097b4a7fbd69a068f3"
+      }
+    }
+  },
+  "production": {
+    "commerce": {
+      "catalog_products": {
+        "count": 14,
+        "sha256": "1beba8934d9f7e23d8576a24cbcee546a16c96d2c000938c13950590259b8289"
+      },
+      "catalog_skus": {
+        "count": 87,
+        "sha256": "22a7fd781af9bdbcb53eb92a18780138c2f06cdebe8562b5f48c40b21363170b"
+      },
+      "catalog_sku_option_mappings": {
+        "count": 87,
+        "sha256": "5930f4fbc1b7ce3790b7ef126b935968ead108a98daadd3a83dd7bea173cb326"
+      },
+      "business_settings": {
+        "count": 1,
+        "sha256": "ea84d6b7d21a3fee8324e1ceb867b0e6a4e52bb8523241e0c47eca2231852ab3"
+      },
+      "simple_variant_costs": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "inventory_movements": {
+        "count": 102,
+        "sha256": "e4ff342a3cdf5ffd33f1bc0d55975d1cc654c9155e2fa02570cbe03a80da39b1"
+      },
+      "inventory_positions": {
+        "count": 102,
+        "sha256": "3d4a0285e92dd50cc9553ebb7590995478702fe66faf92ce70fa886c6fb39b7d"
+      },
+      "physical_profiles": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "media": {
+      "media_assets": {
+        "count": 178,
+        "sha256": "c0319abb205b644f630459b9a51de00638c10f26feb40adfdf0bbad1ede2b66a"
+      },
+      "catalog_profiles": {
+        "count": 107,
+        "sha256": "b0d03a295138c2ad0de41374a584c9587c518f077d25178ad4550b187580c511"
+      }
+    }
+  },
+  "production_backup": "/srv/nilart/backups/scheduled-20261103T151106Z.dump"
+}

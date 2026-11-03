@@ -1,5 +1,17 @@
 # Nilart — AI engineering handoff
 
+## Product images — implementation checkpoint, 2026-11-03
+
+Read [the execution plan](product-images-plan.md) and [the live progress register](product-images-progress.json). This checkpoint supersedes the original planning-only binding note. The approved rule is TOP-bound sketchbooks (40 sheets, front/back), side-bound ruled notebooks (80 sheets, front/back/real-paper spread). All 220 sets / 484 PNG positions are now rendered in the local database on schema0062. Nothing has been published or deployed by this image project yet.
+
+Implemented: deterministic Pillow renderer; immutable private source assets; versioned photo templates; durable Celery jobs on a dedicated single-process queue; atomic reviewed publication/withdrawal/rollback; product-workspace controls (including fresh design uploads); shared filtered/lazy public gallery outside the hidden notebook form; selected-SKU gallery loading guards. Local Docker supports Persian text through libraqm0; do not remove that runtime dependency. 49 backend tests and 30 frontend workflow tests pass; Docker web build passes. Browser use is disabled in Work settings, so real UI screenshot checks are still unverified.
+
+Portable inputs: `/home/ez/Documents/nilart/product-images-build-20261103` (145 named private inputs, 136 original source files) and `/srv/nilart/deploy-private/product-images-20261103` (transfer is private). All output images and 17 review sheets are at `/home/ez/Documents/nilart/product-images-review-local-20261103`. Original source files and real photos were never rewritten. The RGBA bookmark/sticker release is `/home/ez/Documents/nilart/other-product-images-build-20261103` (12+12 original poses). Contact sheets 1–6 of the notebook export and the complete 24-pose sheet have been visually reviewed; finish 7–17 before publishing.
+
+Resume using `infra/scripts/manage-product-images.py` (run in the API container): `import`, `status`, `retry`, `export`, `publish --reviewed-keys <json>`, `covers`. Publication requires an explicit JSON list of reviewed canonical set keys. Match each environment separately; local legacy 50/100-sheet sketchbook SKUs must not receive new 40-sheet SKU galleries. No price, cost, inventory, shipping dimensions, return policy, sale activation or payment setting changes are authorized. Production backup: `/srv/nilart/backups/scheduled-20261103T151106Z.dump`; read-only commerce digests are in `docs/product-image-baselines.json`.
+
+Next: finish image QA; publish/verify locally; deploy code, additive0062 and dedicated worker; render/publish/verify production; complete other-product galleries and mandala checks; compare commerce baselines; update this checkpoint and commit on the existing branch. No new branch. Earlier checkpoint sections below are historical.
+
 Updated 2026-10-13. This is an implemented foundation, **not a finished commerce platform**. Use Git history for the exact source revision.
 
 ## Browser audit continuation — 2026-10-22

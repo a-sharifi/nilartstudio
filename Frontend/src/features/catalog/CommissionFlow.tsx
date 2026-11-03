@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import NotebookCommission from "./NotebookCommission";
+import NotebookImageGallery from "./NotebookImageGallery";
 import CommissionsPage from "../../design/CommissionsPage";
 import ReferencesPage, { type ReferenceNavigationGuard } from "../../design/ReferencesPage";
 import PreferencesPage from "../../design/PreferencesPage";
@@ -116,5 +117,5 @@ export default function CommissionFlow({ path, language, onNavigate, registerGua
       size: size ? `${size.width} × ${size.height} ${size.unit}` : `${normalizeDimension(draft.width)} × ${normalizeDimension(draft.height)} cm` });
   } }} />;
   if (/\/references?\/?$/.test(path)) return <ReferencesPage key={key} {...common} draft={reference} onSave={draft => { if (signedIn && owner) { setReference(draft); checkpoint = { owner, reference: draft, preferences }; } }} />;
-  return <CommissionsPage key={`${key}:${ready}`} {...common} initialMode={ready ? "normal" : "loading"} initialKind={/\/notebook(?:\/|$)/.test(path) ? "notebook" : "artwork"} notebookContent={<NotebookCommission key={key} embedded path={path} en={language===1} signedIn={signedIn} submission={submission} onNavigate={guardedNavigate} registerGuard={guard} />} />;
+  return <CommissionsPage key={`${key}:${ready}`} {...common} initialMode={ready ? "normal" : "loading"} initialKind={/\/notebook(?:\/|$)/.test(path) ? "notebook" : "artwork"} notebookGallery={<NotebookImageGallery en={language===1}/>} notebookContent={<NotebookCommission key={key} embedded path={path} en={language===1} signedIn={signedIn} submission={submission} onNavigate={guardedNavigate} registerGuard={guard} />} />;
 }

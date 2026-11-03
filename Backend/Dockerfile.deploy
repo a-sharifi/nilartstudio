@@ -1,6 +1,7 @@
 # Exact Linux/Python wheels are prepared from requirements.lock by deploy.sh.
 FROM python:3.12-slim
 WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends libraqm0 && rm -rf /var/lib/apt/lists/*
 COPY requirements.lock ./
 COPY .deploy-wheels /wheels
 RUN pip install --no-cache-dir --no-index --find-links=/wheels -r requirements.lock && rm -rf /wheels

@@ -110,6 +110,18 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
+  mockup-worker:
+    image: nilart-api:latest
+    restart: unless-stopped
+    command: [celery, -A, 'nilart.bootstrap.worker:celery', worker, -Q, mockups, --loglevel=INFO, --concurrency=1, --hostname=mockups@%h]
+    environment: *api_environment
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: [CMD-SHELL, 'celery -A nilart.bootstrap.worker:celery inspect ping --destination "mockups@$$HOSTNAME" --timeout 5 | grep -q pong']
+      interval: 30s
+      timeout: 10s
+      retries: 5
   web:
     build: {context: ../../Frontend, dockerfile: Dockerfile}
     restart: unless-stopped

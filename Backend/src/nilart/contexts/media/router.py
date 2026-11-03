@@ -25,7 +25,7 @@ from nilart.shared.outbox import enqueue
 
 router=APIRouter(prefix="/api/v1/admin/media",tags=["media-library"])
 public_router=APIRouter(prefix="/api/v1/media",tags=["published-media"])
-Purpose=Literal["public_image","print_file"]
+Purpose=Literal["public_image","print_file","mockup_source"]
 
 
 class Metadata(Strict):
@@ -52,7 +52,7 @@ class Upload(Strict):
         if self.file_name in {".",".."} or any(c in "/\\" or unicodedata.category(c).startswith("C") for c in self.file_name):
             raise ValueError("Printable basename required")
         kind=media_type(self.file_name)
-        if self.purpose=="public_image" and kind not in {"image/png","image/jpeg"}:
+        if self.purpose in {"public_image","mockup_source"} and kind not in {"image/png","image/jpeg"}:
             raise ValueError("Public assets must be raster images")
         if self.purpose=="print_file" and (self.metadata.sku_id is None or not self.metadata.print_size):
             raise ValueError("Print files require explicit SKU and size")
@@ -147,7 +147,7 @@ def save(id:UUID,revision:UUID,body:Upload,request:Request,db:Session=Depends(se
     return save_record(db, actor, id, revision, body, request)
 
 
-def save_record(db, actor, id, revision, body, request):
+def save_record(db, actor, id, revision, body, request, *, commit=True):
     db.execute(text("SELECT pg_advisory_xact_lock(78214,37)"))
     current=db.execute(text("SELECT * FROM media_assets WHERE id=:id FOR UPDATE"),{"id":id}).mappings().first()
     prior=db.execute(text("SELECT * FROM media_asset_versions WHERE revision_id=:revision"),{"revision":revision}).mappings().first()
@@ -191,7 +191,8 @@ def save_record(db, actor, id, revision, body, request):
         payload={"asset_id":str(id),"revision_id":str(revision),"version":params["version"],"action":body.action}
         SqlAccountManagement(db).audit(actor.id,actor.id,"media.asset_saved",payload,body.reason)
         enqueue(db,"media.asset_saved",payload)
-        db.commit()
+        if commit:
+            db.commit()
         return dict(row)
     except Exception:
         db.rollback()

@@ -240,7 +240,7 @@ def save(
     return save_record(db, actor, kind, id, key, body, request)
 
 
-def save_record(db, actor, kind, id, key, body, request):
+def save_record(db, actor, kind, id, key, body, request, *, commit=True):
     db.execute(text("SELECT pg_advisory_xact_lock(78214,37)"))
     db.execute(text("SELECT pg_advisory_xact_lock(78214,21)"))
     intent = body.model_dump(mode="json")
@@ -336,7 +336,8 @@ def save_record(db, actor, kind, id, key, body, request):
                 action=body.action,
             ),
         )
-        db.commit()
+        if commit:
+            db.commit()
         return dict(row)
     except Exception:
         db.rollback()

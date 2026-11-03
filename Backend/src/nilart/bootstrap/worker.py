@@ -75,3 +75,32 @@ def sync_sales_channels():
         finally:
             connection.execute(text("SELECT pg_advisory_unlock(78214,61)"))
             connection.commit()
+
+
+celery.conf.beat_schedule["dispatch-product-images"] = {"task": "nilart.mockups.dispatch", "schedule": 5.0}
+
+
+@celery.task(name="nilart.mockups.dispatch")
+def dispatch_mockups():
+    from sqlalchemy import text
+    with Session(engine) as session:
+        session.execute(text("UPDATE mockup_runs SET status='failed',error='mockup_retry_limit',lease_until=NULL WHERE status='rendering' AND lease_until<now() AND attempts>=3"))
+        # Bound in-flight messages; re-dispatch only after an unclaimed message's
+        # lease expires. A stopped broker/worker cannot strand durable DB jobs.
+        session.execute(text("SELECT pg_advisory_xact_lock(78214,63)"))
+        active = session.scalar(text("SELECT count(*) FROM mockup_runs WHERE status='queued' AND lease_until>now()"))
+        rows = session.scalars(text("""UPDATE mockup_runs SET status='queued',lease_until=now()+interval '5 minutes'
+          WHERE id IN (SELECT id FROM mockup_runs WHERE attempts<3 AND
+          ((status='queued' AND (lease_until IS NULL OR lease_until<now())) OR
+           (status='rendering' AND lease_until<now())) ORDER BY created_at LIMIT :limit)
+          RETURNING id"""),dict(limit=max(0,5-active))).all()
+        session.commit()
+    for run_id in rows:
+        celery.send_task("nilart.mockups.render", args=[str(run_id)], queue="mockups", delivery_mode=2)
+
+
+@celery.task(name="nilart.mockups.render", queue="mockups", soft_time_limit=180, time_limit=210)
+def render_mockup(run_id):
+    from uuid import UUID
+    from nilart.contexts.mockups.service import process_run
+    return process_run(engine, UUID(run_id))

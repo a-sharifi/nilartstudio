@@ -419,6 +419,15 @@ def save(
         actor.id, lock=True
     ).allows("pricing.publish"):
         return failure(request, "permission_denied", 403)
+    return save_record(db, actor, id, key, body, request)
+
+
+def save_record(db, actor, id, key, body, request):
+    """Audited bundle writer shared by HTTP and owner-authorized media imports.
+
+    The caller supplies an already-authorized actor. This retains all dependency,
+    version, receipt and publication checks of the HTTP command.
+    """
     # Match existing catalogue publication lock; media approval is locked before catalogue rows.
     db.execute(text("SELECT pg_advisory_xact_lock(78214,37)"))
     db.execute(text("SELECT pg_advisory_xact_lock(78214,21)"))

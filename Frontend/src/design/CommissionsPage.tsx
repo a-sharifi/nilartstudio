@@ -210,6 +210,7 @@ export default function CommissionsPage({
   initialMode = "normal",
   live = false,
   notebookContent,
+  notebookGallery,
   initialKind = "artwork",
 }: {
   language: 0 | 1
@@ -218,6 +219,7 @@ export default function CommissionsPage({
   onDemoSignIn?: (value: boolean) => void
   live?: boolean
   notebookContent?: ReactNode
+  notebookGallery?: ReactNode
   initialKind?: "artwork" | "notebook"
   initialMode?: CommissionMode
 }) {
@@ -228,6 +230,7 @@ export default function CommissionsPage({
   const prefix = language === 0 ? "/fa" : "/en"
   const [mode, setMode] = useState<CommissionMode>(initialMode)
   const [kind, setKind] = useState(initialKind)
+  useEffect(()=>{const choose=()=>setKind("notebook");window.addEventListener("nilart:notebook-sample",choose);return()=>window.removeEventListener("nilart:notebook-sample",choose)},[])
   const [openFAQ, setOpenFAQ] = useState<number | null>(null)
   const [starting, setStarting] = useState(false)
   const [error, setError] = useState("")
@@ -437,7 +440,7 @@ export default function CommissionsPage({
       {notebookContent && <><section className="commission-order-choices" aria-label={t("چه چیزی برایت بسازیم؟", "What shall we create?")}>
         <button type="button" aria-pressed={kind === "artwork"} onClick={() => setKind("artwork")}><CommissionIcon name="brush" size={28}/><span><strong>{t("نقاشی اختصاصی", "Custom artwork")}</strong><small>{t("یک اثر مستقل، از تصویر یا ایدهٔ تو", "A standalone artwork inspired by your idea")}</small></span><CommissionIcon name="arrow"/></button>
         <button type="button" aria-pressed={kind === "notebook"} onClick={() => setKind("notebook")}><CommissionIcon name="document" size={28}/><span><strong>{t("دفتر و اسکچ‌بوک اختصاصی", "Custom notebook & sketchbook")}</strong><small>{t("طرح تو روی جلد، با کاغذ و اندازهٔ دلخواه", "Your cover, your paper, your size")}</small></span><CommissionIcon name="arrow"/></button>
-      </section><div hidden={kind !== "notebook"}>{notebookContent}</div></>}
+      </section>{notebookGallery}<div hidden={kind !== "notebook"}>{notebookContent}</div></>}
       <div hidden={!!notebookContent && kind !== "artwork"}>
       <div className="commission-demo-notice">
         <span>{live ? t("درخواست بررسی", "Review request") : "DEMO"}</span>

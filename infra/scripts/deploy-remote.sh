@@ -38,7 +38,7 @@ mkdir -p backups
 chmod 700 backups
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
 # Stop writers, then dump a consistent database before any migration.
-"${compose[@]}" stop caddy worker scheduler api web
+"${compose[@]}" stop caddy worker mockup-worker scheduler api web
 if [ -n "$("${compose[@]}" ps -q postgres)" ]; then
     umask 077
     "${compose[@]}" exec -T postgres pg_dump -U nilart -d nilart -Fc > "backups/pre-deploy-$stamp.dump"

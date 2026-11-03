@@ -1,6 +1,6 @@
 import {z} from "zod"
 import {privateRequest} from "./identity-api"
-const uuid=z.string().uuid(),purpose=z.enum(["public_image","print_file"]),action=z.enum(["draft","publish","unpublish"]),sha=z.string().regex(/^[0-9a-f]{64}$/)
+const uuid=z.string().uuid(),purpose=z.enum(["public_image","print_file","mockup_source"]),action=z.enum(["draft","publish","unpublish"]),sha=z.string().regex(/^[0-9a-f]{64}$/)
 export const mediaMetadata=z.object({title_fa:z.string().trim().min(1).max(200),title_en:z.string().trim().min(1).max(200),alt_fa:z.string().trim().max(500),alt_en:z.string().trim().max(500),sku_id:uuid.nullable(),print_size:z.string().trim().max(120),notes:z.string().trim().max(2000)})
 const asset=z.object({id:uuid,purpose,version:z.number().int().positive(),metadata:mediaMetadata,sha256:sha,file_name:z.string(),published_revision:uuid.nullable(),updated_at:z.iso.datetime({offset:true})}),revision=z.object({revision_id:uuid,asset_id:uuid,actor_id:uuid,expected_version:z.number().int().nonnegative(),version:z.number().int().positive(),action,purpose,metadata:mediaMetadata,sha256:sha,file_name:z.string(),reason:z.string(),created_at:z.iso.datetime({offset:true})}),choice=z.object({id:uuid,code:z.string(),title_fa:z.string(),title_en:z.string()})
 export type MediaMetadata=z.infer<typeof mediaMetadata>

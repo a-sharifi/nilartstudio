@@ -73,6 +73,8 @@ from nilart.contexts.inventory.order_stock import router as order_stock_router
 from nilart.contexts.inventory.resolution_reviews import router as resolution_reviews_router
 from nilart.contexts.inventory.router import router as inventory_router
 from nilart.contexts.media.router import public_router as public_media_router
+from nilart.contexts.mockups.router import public_router as public_mockups_router
+from nilart.contexts.mockups.router import router as mockups_router
 from nilart.contexts.media.router import router as media_router
 from nilart.contexts.orders.cancellations import router as cancellations_router
 from nilart.contexts.orders.financial_closures import router as financial_closures_router
@@ -132,6 +134,8 @@ app.include_router(inventory_router)
 app.include_router(content_router)
 app.include_router(media_router)
 app.include_router(public_media_router)
+app.include_router(mockups_router)
+app.include_router(public_mockups_router)
 app.include_router(public_content_router)
 app.include_router(profile_router)
 app.include_router(management_router)

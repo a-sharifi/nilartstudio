@@ -1,0 +1,34 @@
+import {cleanup,fireEvent,render,screen,waitFor} from '@testing-library/react';
+import {afterEach,beforeEach,expect,test,vi} from 'vitest';
+import ProductMockupsPanel from '../src/features/admin/ProductMockupsPanel';
+import {mockupApi,type MockupSet,type MockupRun,type MockupTemplate} from '../src/features/admin/mockup-api';
+import {catalogProfileApi} from '../src/features/admin/catalog-profile-api';
+import type {NavigationGuard} from '../src/features/navigation/history-guard';
+vi.mock('../src/features/admin/mockup-api',async original=>({...await original<typeof import('../src/features/admin/mockup-api')>(),mockupApi:{sets:vi.fn(),templates:vi.fn(),detail:vi.fn(),run:vi.fn(),render:vi.fn(),publish:vi.fn(),retry:vi.fn()}}));
+vi.mock('../src/features/admin/catalog-profile-api',async original=>({...await original<typeof import('../src/features/admin/catalog-profile-api')>(),catalogProfileApi:{read:vi.fn()}}));
+vi.mock('../src/components/ui/Dropdown',()=>({default:({label,value,options,onChange,disabled}:{label:string;value:string;options:{value:string;label:string}[];onChange:(value:string)=>void;disabled?:boolean})=><label>{label}<select disabled={disabled} value={value} onChange={e=>onChange(e.target.value)}>{options.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</select></label>}));
+const product='11111111-1111-4111-8111-111111111111',sku='22222222-2222-4222-8222-222222222222',setId='33333333-3333-4333-8333-333333333333',runId='44444444-4444-4444-8444-444444444444',newId='55555555-5555-4555-8555-555555555555',template='66666666-6666-4666-8666-666666666666',other='77777777-7777-4777-8777-777777777777';
+const spec={design:'gav',title_fa:'گاو',title_en:'Cows',group:'collection' as const,notebook_type:'sketchbook' as const,size:'A5' as const,paper:'kraft-dark-70gsm' as const,sheets:40 as const,binding:'top' as const},source={asset_id:product,revision_id:runId};
+const inputs={spec,sources:{front:source,back_art:source,back_crop:[0,0,1,1] as [number,number,number,number],inside_mode:'motifs' as const},views:{front:template,back:other},templates:{},target:{product_id:product,sku_id:sku,collection_id:null},attach_to:'sku' as const,profile:{kind:'skus' as const,id:sku,version:4}};
+const templateContent={title_fa:'قالب بالا',title_en:'Top bound',notebook_type:'sketchbook' as const,binding:'top' as const,view:'front' as const,photo:source,quads:[{points:[[.1,.1],[.9,.1],[.9,.9],[.1,.9]] as [number,number][]}],active:true};
+let newer=false;
+const makeRun=():MockupRun=>({id:newer?newId:runId,set_id:setId,status:'ready',inputs:{...inputs,views:{front:newer?other:template,back:other}},outputs:[],error:'',stale:false});
+const makeSet=():MockupSet=>({id:setId,set_key:'gav/sketchbook/A5/kraft-dark-70gsm/40',version:newer?2:1,spec,target:inputs.target,published_run:null,inputs:makeRun().inputs});
+beforeEach(()=>{newer=false;vi.mocked(mockupApi.templates).mockResolvedValue([{id:template,version:1,content:templateContent},{id:other,version:1,content:{...templateContent,title_en:'Revised top bound'}},{id:sku,version:1,content:{...templateContent,view:'back'}}] as MockupTemplate[]);vi.mocked(mockupApi.sets).mockImplementation(async()=>({items:[makeSet()],next_cursor:null}));vi.mocked(mockupApi.detail).mockImplementation(async()=>({...makeSet(),runs:[makeRun()],history:[]}));vi.mocked(mockupApi.run).mockImplementation(async()=>makeRun());vi.mocked(catalogProfileApi.read).mockResolvedValue({kind:'skus',entity_id:sku,version:7,content:null,published_revision:null})});
+afterEach(()=>{cleanup();vi.resetAllMocks();vi.restoreAllMocks()});
+test('regeneration refreshes the set version and an uncertain publish retries the same immutable command',async()=>{
+ vi.mocked(mockupApi.render).mockImplementation(async()=>{newer=true;return makeRun()});
+ vi.mocked(mockupApi.publish).mockRejectedValueOnce(Error('result_unknown')).mockResolvedValue({id:setId,version:3,published_run:newId});
+ render(<ProductMockupsPanel productId={product} skuId={sku} en navigate={vi.fn()} registerGuard={vi.fn()} onSaved={vi.fn()}/>);
+ await screen.findByText('Ready for review');fireEvent.change(screen.getByLabelText('Front template'),{target:{value:other}});fireEvent.click(screen.getByRole('button',{name:'Generate preview'}));
+ await waitFor(()=>expect(mockupApi.render).toHaveBeenCalledOnce());await waitFor(()=>expect(mockupApi.detail).toHaveBeenCalledTimes(2));
+ fireEvent.click(await screen.findByRole('button',{name:'Approve and publish these images'}));
+ await screen.findByRole('button',{name:'Check and retry this operation'});expect(vi.mocked(mockupApi.publish).mock.calls[0][2]).toMatchObject({expected_version:2,run_id:newId,expected_profile_version:7});
+ fireEvent.click(screen.getByRole('button',{name:'Check and retry this operation'}));await waitFor(()=>expect(mockupApi.publish).toHaveBeenCalledTimes(2));expect(vi.mocked(mockupApi.publish).mock.calls[0]).toEqual(vi.mocked(mockupApi.publish).mock.calls[1]);
+ expect(vi.mocked(mockupApi.render).mock.calls[0][1]).toMatchObject({expected_version:1,target:{product_id:product,sku_id:sku},spec:{binding:'top',sheets:40}});
+});
+test('unsaved image changes protect tab and page navigation and sketchbooks have no inside upload',async()=>{
+ const register=vi.fn<(guard:NavigationGuard|null)=>void>();render(<ProductMockupsPanel productId={product} skuId={sku} en navigate={vi.fn()} registerGuard={register} onSaved={vi.fn()}/>);await screen.findByText('Ready for review');
+ expect(screen.queryByText('Left page monochrome motif')).toBeNull();fireEvent.change(screen.getByLabelText('Front template'),{target:{value:other}});
+ vi.spyOn(window,'confirm').mockReturnValue(false);const leave=vi.fn();register.mock.calls.at(-1)![0]!(leave);expect(leave).not.toHaveBeenCalled();fireEvent.click(screen.getByRole('button',{name:'Shared product gallery'}));expect(screen.getByRole('heading',{name:'One design, every notebook view'})).toBeTruthy();
+});
