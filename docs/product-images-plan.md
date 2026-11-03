@@ -1,6 +1,6 @@
 # Product images — execution and handoff plan
 
-Owner approved 2026-11-03 (Asia/Tehran). Status: implementation in progress.
+Owner approved 2026-11-03 (Asia/Tehran). Status: all 220 sets / 484 positions published and content-verified on local and production; actual browser review remains unavailable.
 
 Latest owner correction (2026-11-03): **all sketchbooks are bound at the TOP**, for all four sizes, all four paper types, and both collection and personal designs. The real reference is `/home/ez/Downloads/Telegram Desktop/IMG_5127.HEIC`; it was inspected and shows the upper binding with the cover artwork upright. This supersedes earlier side-bound sketchbook sample assumptions. It does not change ruled-notebook binding.
 
@@ -57,3 +57,7 @@ Read this file, `product-images-progress.json`, then the latest product-image en
 ## Binding correction handoff — 2026-11-03
 
 The owner supplied IMG_5127.HEIC after blank side-bound candidate masters were generated. It was converted to `/tmp/nilart-mockup-inputs/IMG_5127.png` for inspection only; the original was not edited. Its SHA-256 is `4672fd0649a10a5207468b47181dd1fe45e43516e68009bc75e95955667b2aa8`. It visibly confirms top binding with upright front artwork. Top-edge parts of the coils reach the photograph boundary: validate complete coil silhouettes when preparing the master rather than declaring the source crop a finished template. This records the initial planning checkpoint. Implementation has since advanced; the current progress register and the newest AI-HANDOFF checkpoint contain actual completion and deployment evidence. Side-bound masters remain invalid for sketchbooks.
+
+## Owner-confirmed follow-up products — 2026-11-03
+
+After the notebook/image release, create independent switch/socket stickers and an independent Mandala book as detailed in [the catalogue follow-up](mandala-book-and-switch-stickers.md). Each of 12 sticker designs is sold singly, cost 10,000 IRT, sale 50,000 IRT, stock one, with both an installed socket preview and original art-only image. The socket is a display prop only. The separate Mandala book is A4, 40 sheets of kraft 110 gsm, RIGHT-bound, cost 550,000 IRT, sale 900,000 IRT, stock ten. Its category, product and SKU remain unpublished until the owner supplies actual book photos. This explicit follow-up authorizes commerce only for these new products; it does not amend existing product prices, stock, shipping or artwork records. Estimated shipping fields are marked as estimates. See [the admin guide](product-images-admin-guide.md) for daily operation.

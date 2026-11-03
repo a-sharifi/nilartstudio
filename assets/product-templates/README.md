@@ -1,0 +1,11 @@
+# Socket faceplate v1
+
+Generated using the built-in image_gen tool on 2026-11-03 after the owner requested a socket inside each decorative switch/socket sticker image. Used only as a display prop, never as an included product. Original sticker art is composited deterministically from the original RGBA atlas using the exact cut/slot geometry; no characters are redrawn.
+
+The selected template is `socket-faceplate-v1.png`. Its transparent outline was calibrated to the frontal plate and the surrounding segmentation halo removed. The original generated candidate remains in the local generated-image archive. The preparation script takes the repository asset explicitly with `--socket assets/product-templates/socket-faceplate-v1.png`; the website does not depend on a personal archive path.
+
+Final generation prompt:
+
+> Use case: product-mockup. Asset type: reusable product-photo insert for a handmade wall-socket decorative sticker catalogue. Generate ONE photorealistic clean white square European/Iranian two-round-pin recessed electrical power socket faceplate, straight-on orthographic frontal view, perfectly upright, perfectly square, all four edges visible. A standard white plastic 9x9 cm square plate, subtle gently rounded corners, recessed circular socket centered, two dark round pin holes horizontally aligned and realistic internal contours, no cable, no plug, no switch, no text, no brand, no logo, no screws outside plate. Neutral soft studio light, very subtle natural shading within the white plastic, crisp realistic plastic. Object isolated on genuinely TRANSPARENT background; no wall, no floor, no props, no colored halo. Centered square object occupying about 80 percent of square canvas with generous transparent margin. Keep a flat frontal plane suitable for deterministic compositing inside existing sticker art; no tilted perspective, no deep exterior drop shadow. This socket is only a display prop and is not included in the sticker product.
+
+The full installed preview bounds are fitted together, so the plate is not cropped when it sits beside or above a character. Each product also retains the sticker-only image. Installed-view alt text and product descriptions state that the socket is not included.

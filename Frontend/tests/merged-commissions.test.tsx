@@ -2,6 +2,11 @@ import {cleanup,fireEvent,render,screen} from '@testing-library/react';
 import {afterEach,expect,it,vi} from 'vitest';
 import CommissionsPage from '../src/design/CommissionsPage';
 afterEach(cleanup);
+it('shows the notebook image library immediately outside the hidden notebook order form',()=>{
+ render(<CommissionsPage language={1} signedIn={false} live onNavigate={vi.fn()} initialKind="artwork" notebookGallery={<section aria-label="Notebook image library">All published examples</section>} notebookContent={<section>Notebook order form</section>}/>);
+ expect(screen.getByRole('region',{name:'Notebook image library'}).closest('[hidden]')).toBeNull();
+ expect(screen.getByText('Notebook order form').closest('[hidden]')).not.toBeNull();
+});
 it('keeps the artwork introduction and opens notebooks without leaving the shared page',()=>{
  const navigate=vi.fn();render(<CommissionsPage language={1} signedIn live onNavigate={navigate} notebookContent={<section id="notebook-request">Notebook specifications</section>}/>);
  expect(screen.getAllByRole('button',{name:'Start a commission'})[0]).toBeTruthy();

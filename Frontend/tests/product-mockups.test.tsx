@@ -45,3 +45,13 @@ test('an uncertain template save keeps its command and blocks leaving until the 
  fireEvent.click(retry);await waitFor(()=>expect(mockupApi.template).toHaveBeenCalledTimes(2));expect(vi.mocked(mockupApi.template).mock.calls[0]).toEqual(vi.mocked(mockupApi.template).mock.calls[1]);
  await waitFor(()=>expect(screen.queryByRole('button',{name:'Check and retry this save'})).toBeNull());
 });
+
+test('four-size generation resumes the exact failed batch item without repeating successful items',async()=>{
+ vi.mocked(mockupApi.render).mockResolvedValueOnce(makeRun()).mockRejectedValueOnce(Error('result_unknown')).mockResolvedValue(makeRun());
+ render(<ProductMockupsPanel productId={product} skuId={sku} en navigate={vi.fn()} registerGuard={vi.fn()} onSaved={vi.fn()}/>);
+ await screen.findByText('Ready for review');fireEvent.click(screen.getByRole('button',{name:'Generate this design in all sizes'}));fireEvent.click(screen.getByRole('button',{name:'Generate four sizes'}));
+ await screen.findByRole('button',{name:'Check and retry this operation'});expect(mockupApi.render).toHaveBeenCalledTimes(2);
+ fireEvent.click(screen.getByRole('button',{name:'Check and retry this operation'}));await waitFor(()=>expect(mockupApi.render).toHaveBeenCalledTimes(5));
+ const calls=vi.mocked(mockupApi.render).mock.calls;expect(calls[1]).toEqual(calls[2]);expect(calls.map(c=>c[1].spec.size)).toEqual(['A3','A4','A4','A5','A6']);
+ expect(calls[0][1].attach_to).toBe('none');expect(calls[4][1].target.sku_id).toBeNull();expect(mockupApi.publish).not.toHaveBeenCalled();
+});

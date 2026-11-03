@@ -17,10 +17,13 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--source", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--socket", type=Path, help="Reviewed frontal socket-photo template")
     a = p.parse_args()
     a.output.mkdir(parents=True, exist_ok=True)
     assets = []
     tiles = []
+    installed_tiles = []
+    socket = Image.open(a.socket).convert("RGBA") if a.socket else None
     for kind in ["bookmark", "sticker"]:
         for slug, fa, en in [
             ("gorbe", "گربه", "Cats"),
@@ -55,6 +58,7 @@ def main():
                         photo.height,
                     )
                     image = photo.crop(region)
+                    geometry = None
                     if kind == "sticker":
                         svg = (
                             a.source
@@ -104,6 +108,34 @@ def main():
                         )
                         image = actual
                         region = mask.getbbox()
+                        slot_path = next(
+                            iter(
+                                next(
+                                    e
+                                    for e in tree.iter()
+                                    if e.tag.endswith("clipPath")
+                                    and e.attrib.get("id") == "slot"
+                                )
+                            )
+                        ).attrib["d"]
+                        slot = re.search(
+                            r"M(-?[\d.]+)\s+(-?[\d.]+)h([\d.]+)v([\d.]+)h", slot_path
+                        )
+                        if not slot:
+                            raise ValueError("Review socket cutout geometry")
+                        sx, sy, sw, sh = map(float, slot.groups())
+                        geometry = dict(
+                            slot_px=[
+                                (sx - x) * actual.width / w,
+                                (sy - y) * actual.height / h,
+                                sw * actual.width / w,
+                                sh * actual.height / h,
+                            ],
+                            slot_mm=[sw, sh],
+                            mm_per_pixel=[w / actual.width, h / actual.height],
+                            cut_svg=str(svg.relative_to(a.source)),
+                            cut_svg_sha256=hashlib.sha256(svg.read_bytes()).hexdigest(),
+                        )
                     bounds = (
                         image.getchannel("A")
                         .point(lambda x: 255 if x > 8 else 0)
@@ -138,6 +170,96 @@ def main():
                             title_en=en_title,
                         )
                     )
+                    if geometry:
+                        assets[-1]["print_geometry"] = geometry
+                        assets[-1]["dimensions_cm"] = [
+                            round(
+                                (bounds[2] - bounds[0])
+                                * geometry["mm_per_pixel"][0]
+                                / 10,
+                                2,
+                            ),
+                            round(
+                                (bounds[3] - bounds[1])
+                                * geometry["mm_per_pixel"][1]
+                                / 10,
+                                2,
+                            ),
+                        ]
+                        if socket:
+                            sx, sy, sw, sh = geometry["slot_px"]
+                            union = (
+                                min(bounds[0], sx),
+                                min(bounds[1], sy),
+                                max(bounds[2], sx + sw),
+                                max(bounds[3], sy + sh),
+                            )
+                            factor = min(
+                                1320 / (union[2] - union[0]),
+                                1320 / (union[3] - union[1]),
+                            )
+                            dx = (1600 - (union[2] - union[0]) * factor) / 2 - union[
+                                0
+                            ] * factor
+                            dy = (1600 - (union[3] - union[1]) * factor) / 2 - union[
+                                1
+                            ] * factor
+                            plate = socket.resize(
+                                (round(sw * factor), round(sh * factor)),
+                                Image.Resampling.LANCZOS,
+                            )
+                            installed = Image.new("RGBA", out.size)
+                            installed.alpha_composite(
+                                plate,
+                                (
+                                    round(dx + sx * factor),
+                                    round(dy + sy * factor),
+                                ),
+                            )
+                            art = actual.crop(bounds).resize(
+                                (
+                                    round((bounds[2] - bounds[0]) * factor),
+                                    round((bounds[3] - bounds[1]) * factor),
+                                ),
+                                Image.Resampling.LANCZOS,
+                            )
+                            installed.alpha_composite(
+                                art,
+                                (
+                                    round(dx + bounds[0] * factor),
+                                    round(dy + bounds[1] * factor),
+                                ),
+                            )
+                            box = installed.getchannel("A").getbbox()
+                            if (
+                                not box
+                                or min(box[0], box[1], 1600 - box[2], 1600 - box[3])
+                                < 100
+                            ):
+                                raise ValueError(
+                                    "Installed preview must include the complete socket and sticker"
+                                )
+                            filename = f"{slug}-sticker-{pose}-installed.png"
+                            installed.save(a.output / filename, optimize=True)
+                            assets[-1].update(
+                                installed_file=filename,
+                                installed_sha256=hashlib.sha256(
+                                    (a.output / filename).read_bytes()
+                                ).hexdigest(),
+                                socket_template_sha256=hashlib.sha256(
+                                    a.socket.read_bytes()
+                                ).hexdigest(),
+                                installed_note="Socket is a display prop, not included with the sticker",
+                            )
+                            preview = Image.new("RGBA", installed.size, "#eee8dc")
+                            preview.alpha_composite(installed)
+                            preview.thumbnail((300, 300))
+                            tile = Image.new("RGB", (320, 340), "white")
+                            tile.paste(preview.convert("RGB"), (10, 0))
+                            ImageDraw.Draw(tile).text(
+                                (10, 315), f"{slug} pose {pose}", fill="black"
+                            )
+                            installed_tiles.append(tile)
                     bg = Image.new("RGBA", out.size, "#eee8dc")
                     bg.alpha_composite(out)
                     bg.thumbnail((240, 240))
@@ -153,6 +275,11 @@ def main():
     for i, tile in enumerate(tiles):
         sheet.paste(tile, ((i % 6) * 260, (i // 6) * 280))
     sheet.save(a.output / "contact.jpg", quality=90)
+    if installed_tiles:
+        sheet = Image.new("RGB", (320 * 4, 340 * 3), "#eee8dc")
+        for i, tile in enumerate(installed_tiles):
+            sheet.paste(tile, ((i % 4) * 320, (i // 4) * 340))
+        sheet.save(a.output / "installed-contact.jpg", quality=92)
     (a.output / "manifest.json").write_text(
         json.dumps(dict(assets=assets), ensure_ascii=False, indent=2)
     )

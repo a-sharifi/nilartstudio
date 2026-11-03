@@ -30,8 +30,6 @@ REQUEST = Request({"type": "http", "headers": []})
 ALIASES = {
     "gorbe/bookmark": ["cat-bookmark"],
     "love/bookmark": ["bookmark-love"],
-    "gorbe/sticker": ["cat-stickers"],
-    "gav/sticker": ["sticker-cows"],
 }
 
 
@@ -132,7 +130,11 @@ def poses(db, actor, folder):
         p = (
             db.execute(
                 text("SELECT id,published FROM catalog_products WHERE slug=:slug"),
-                dict(slug=f"{slug}-{kind}"),
+                dict(
+                    slug=f"{slug}-switch-sticker"
+                    if kind == "sticker"
+                    else f"{slug}-{kind}"
+                ),
             )
             .mappings()
             .first()

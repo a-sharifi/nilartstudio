@@ -138,6 +138,11 @@ def save(
     actor, denied = write_access(request, db, principal, "inventory.manage")
     if denied is not None:
         return denied
+    return save_record(db, actor, key, body, request)
+
+
+def save_record(db, actor, key, body, request):
+    """Apply an authorized, idempotent cost/price/stock command with its audit."""
     # Consistent with stock adjustments and checkout, then SKU price locking.
     db.execute(text("SELECT pg_advisory_xact_lock(78214,35)"))
     intent = body.model_dump(mode="json")
