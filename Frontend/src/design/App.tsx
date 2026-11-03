@@ -1,5 +1,6 @@
 import {useHomeMotion} from "../features/marketing/use-home-motion";
 import {HomeSpecialOffers} from "../features/marketing/HomeSpecialOffers";
+import HomeProductCollage from "../features/marketing/HomeProductCollage";
 import "../features/marketing/home-motion.css";
 import PromotionBanner from "../features/marketing/StorefrontPromotions";
 import OrderTrackingPage from "../features/customer/OrderTrackingPage"
@@ -1859,28 +1860,7 @@ export default function App() {
                   )}
                 </div>
               </div>
-              <div className="hero-visual">
-                <div className="hero-art-label">
-                  <span>THE EVERYDAY COLLECTION</span>
-                  <span>01 — 05</span>
-                </div>
-                <div className="nilart-hero-covers">{["gorbe","roh","gav"].map((slug,index)=><img key={slug} src={`/brand/${slug}-cover.webp`} alt={["طرح جلد کالکشن گربه","طرح جلد کالکشن روح","طرح جلد کالکشن گاو"][index]} width="400" height="560" />)}</div>
-                <div className="image-caption">
-                  <span>
-                    {t(
-                      "جایی برای ایده‌های کوچک و بزرگ",
-                      "A place for ideas, big and small",
-                    )}
-                  </span>
-                  <span className="handwritten">a little art, every day.</span>
-                </div>
-                <span className="asset-notice">
-                  {t(
-                    "طرح جلد کالکشن‌های نیل‌آرت",
-                    "Original NilArt collection cover artwork",
-                  )}
-                </span>
-              </div>
+              <HomeProductCollage en={lang===1}/>
             </section>
 
             {!demoMode&&<HomeSpecialOffers en={lang===1}/>}
