@@ -1,5 +1,11 @@
 # Nilart — AI engineering handoff
 
+## Homepage product collage — released, 2026-11-03
+
+Release `5fcf732` replaces the homepage's three flat cover prints with two real-photo notebook renders, an installed ghost socket sticker and two transparent bookmarks. `Frontend/src/features/marketing/HomeProductCollage.tsx` reads only published image sets/media/product galleries. It resolves each environment's own IDs, uses480px thumbnails, cancels obsolete requests, omits unavailable images and respects reduced-motion preferences. It includes three separate category links under the composition; overlapping product images are decorative rather than conflicting click targets. No AI asset generation, new dependency, backend change or commerce mutation was required.
+
+**Browser access is restored.** Actual CUA screenshots and DOM checks passed on production in fa/en at390/1046/1440; all five images load and there is no horizontal overflow. Local mobile/desktop and the English sticker-category navigation passed too. Five existing routing/home-offer tests, component lint and local/production Docker web builds passed. Evidence: `homepage-product-collage-release.json`; previews are under `/home/ez/Documents/nilart/website-previews`. Web-only rollout preserved `nilart-live-web:before-home-collage` and did not restart API/workers or alter data. Prior image-project commission/admin/gallery UI acceptance remains a separate pending scope; the older browser-disabled notes describe the previous checkpoint, not current tool availability.
+
 ## Product images — published checkpoint, 2026-11-03
 
 Read [the execution plan](product-images-plan.md), [the progress register](product-images-progress.json), [the admin guide](product-images-admin-guide.md) and [the new product decisions](mandala-book-and-switch-stickers.md). This checkpoint supersedes all earlier image-planning notes. All **220 sets / 484 positions** are published and content-verified in local and production on schema0062. All 176 sketchbook sets are TOP-bound, 40 sheets, front/back only; all 44 ruled notebooks are side-bound, 80 sheets, front/back/real white-paper spread. Final local/production image bytes match. Original print files and photos were never rewritten. A3/A6 media does not activate their sale.

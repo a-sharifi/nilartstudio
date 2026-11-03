@@ -164,7 +164,7 @@
       "name": "Storefront and commission gallery",
       "status": "implemented_and_content_verified_browser_review_pending",
       "remaining": [
-        "Actual browser review in fa/en at widths 390/1046/1440 is unavailable because local browser use is disabled in Work settings."
+        "Browser access is restored; full notebook gallery/admin/form fa/en acceptance is still pending. Homepage collage checks passed separately."
       ]
     },
     {
@@ -181,7 +181,7 @@
       "name": "Bulk publication, verification and deployment",
       "status": "deployed_and_content_verified_browser_review_pending",
       "remaining": [
-        "Real browser fa/en verification at 390/1046/1440 is unavailable because local browser use is disabled in Work settings."
+        "Browser access is restored; full notebook gallery/admin/form fa/en acceptance is still pending. Homepage collage checks passed separately."
       ]
     }
   ],
@@ -295,7 +295,7 @@
   ],
   "next_actions": [
     "A4 Mandala book awaits owner-provided real cover and page photographs before publication. Follow docs/mandala-book-and-switch-stickers.md; preserve consumed stock when publishing.",
-    "Real browser fa/en verification at 390/1046/1440 is unavailable because local browser use is disabled in Work settings.",
+    "Browser access is restored; full notebook gallery/admin/form fa/en acceptance is still pending. Homepage collage checks passed separately.",
     "Nine bookmark poses and five owner bundles have no compatible destination in the legacy local catalogue; prepared media preserved, no fabricated SKU prices/stock or duplicate products created."
   ],
   "sets": [
@@ -62808,8 +62808,11 @@
       "typescript": "passed"
     },
     "browser_ui": {
-      "status": "unavailable",
-      "reason": "Local browser use is disabled in Work settings; no screenshot-based UI verification claimed"
+      "status": "homepage_verified_full_gallery_scope_pending",
+      "access": "restored",
+      "verified_scope": "Homepage product collage, fa/en at390/1046/1440, all five images loaded and no horizontal overflow",
+      "evidence": "docs/homepage-product-collage-release.json",
+      "remaining": "Full notebook gallery/admin/form UI acceptance remains to be executed; prior checks were blocked by unavailable browser access."
     },
     "local_image_export": {
       "positions": 484,

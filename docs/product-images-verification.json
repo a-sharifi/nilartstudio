@@ -541,7 +541,9 @@
   },
   "browser_ui": {
     "verified": false,
-    "reason": "Local browser use is disabled in Work settings. Real fa/en 390/1046/1440 UI screenshot checks remain unverified."
+    "browser_access": "restored",
+    "scope": "The full prior notebook/admin acceptance matrix remains pending. Homepage collage fa/en390/1046/1440 screenshots and five loaded images are now verified.",
+    "homepage_evidence": "docs/homepage-product-collage-release.json"
   },
   "code_release": "92d2928",
   "public_feature_assets_and_routes": [
@@ -635,7 +637,7 @@
     "removed_paths": 0
   },
   "remaining": [
-    "Real browser fa/en verification at 390/1046/1440 is unavailable because local browser use is disabled in Work settings.",
+    "Browser access is restored; full notebook gallery/admin/form fa/en acceptance is still pending. Homepage collage checks passed separately.",
     "A4 Mandala book awaits owner-provided real cover and page photographs before publication.",
     "Nine bookmark poses and five owner bundles have no compatible destination in the legacy local catalogue; prepared media preserved, no fabricated SKU prices/stock or duplicate products created."
   ]
