@@ -316,8 +316,10 @@ def process_run(engine, run_id):
                 for r in refs([inputs["sources"], inputs["templates"]])
             }
             db.rollback()
+
             def fetch(ref):
                 return blobs[f"{ref.asset_id}/{ref.revision_id}"]
+
             spec, sources = (
                 Spec.model_validate(inputs["spec"]),
                 Sources.model_validate(inputs["sources"]),
@@ -537,11 +539,7 @@ def publish_set(
                 if current["published_revision"]
                 else None
             )
-            if (
-                current["content"]
-                and current["content"] != published
-                and current["published_revision"]
-            ):
+            if current["content"] and current["content"] != published and current["version"] > 0:
                 raise MockupError("mockup_profile_has_unpublished_changes")
             content = profiles.Content.model_validate(
                 {**(current["content"] or {}), "gallery": gallery}

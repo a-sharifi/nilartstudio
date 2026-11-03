@@ -336,6 +336,16 @@ def product_covers(db, who):
                 # Collections show one front per design/type, never hundreds of files.
                 if target[0] == "collections" and output["view"] != "front":
                     continue
+                # A legacy 50/100-sheet product cannot inherit a printed 40-sheet
+                # back. Its sheet-neutral front is safe; canonical 40-sheet sets
+                # remain visible as explicit previews in the commissions gallery.
+                if (
+                    target[0] == "products"
+                    and row["spec"]["notebook_type"] == "sketchbook"
+                    and not row["target"].get("sku_id")
+                    and output["view"] != "front"
+                ):
+                    continue
                 revision = db.scalar(
                     text("SELECT published_revision FROM media_assets WHERE id=:id"),
                     dict(id=output["asset_id"]),
@@ -360,7 +370,7 @@ def product_covers(db, who):
             if old["published_revision"]
             else None
         )
-        if old["published_revision"] and old["content"] != published:
+        if old["version"] > 0 and old["content"] != published:
             raise RuntimeError("Unreviewed profile draft: " + str(id))
         content = profiles.Content.model_validate(old["content"] or {})
         if content.model_dump(mode="json")["gallery"] == gallery:
@@ -431,11 +441,23 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument(
         "action",
-        choices=["import", "status", "publish", "covers", "export", "render", "retry"],
+        choices=[
+            "import",
+            "status",
+            "publish",
+            "covers",
+            "export",
+            "render",
+            "retry",
+            "refresh-template",
+        ],
     )
     p.add_argument("--folder", type=Path)
     p.add_argument("--reviewed-keys", type=Path)
     p.add_argument("--output", type=Path)
+    p.add_argument(
+        "--template", help="Reviewed template name whose runtime calibration changed"
+    )
     a = p.parse_args()
     with Session(engine) as db:
         who = actor(db)
@@ -451,6 +473,27 @@ def main():
             result = product_covers(db, who)
         elif a.action == "export":
             result = export(db, a.folder)
+        elif a.action == "refresh-template":
+            if not a.template:
+                raise ValueError("An explicit template is required")
+            id = uuid5(NS, "template:" + a.template)
+            row = (
+                db.execute(
+                    text("SELECT * FROM mockup_templates WHERE id=:id"), dict(id=id)
+                )
+                .mappings()
+                .one()
+            )
+            result = service.save_template(
+                db,
+                who,
+                id,
+                uuid4(),
+                row["version"],
+                Template.model_validate(row["content"]),
+                REASON
+                + "; refresh calibrated typography after enabling mandatory RAQM shaping",
+            )
         elif a.action == "retry":
             service.lock(db)
             ids = []

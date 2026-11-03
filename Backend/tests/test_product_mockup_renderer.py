@@ -155,3 +155,11 @@ def test_invalid_bytes_and_degenerate_template_planes_are_rejected():
         decode(b"not a photo")
     with pytest.raises(ValueError):
         coefficients([(0, 0)] * 4, [(0, 0)] * 4)
+
+
+def test_missing_text_shaping_cannot_silently_render_different_typography(monkeypatch):
+    from nilart.contexts.mockups import renderer
+
+    monkeypatch.setattr(renderer.features, "check", lambda name: False)
+    with pytest.raises(ValueError, match="persian_text_shaping_unavailable"):
+        renderer.font(24)

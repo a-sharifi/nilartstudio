@@ -5,7 +5,7 @@ import json
 from io import BytesIO
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps, UnidentifiedImageError
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps, UnidentifiedImageError, features
 
 from .models import PAPERS, SIZES, Spec, Template
 
@@ -57,7 +57,9 @@ def encode(im, white=False):
 
 
 def font(size):
-    return ImageFont.truetype(str(FONT), size=size)
+    if not features.check("raqm"):
+        raise ValueError("persian_text_shaping_unavailable")
+    return ImageFont.truetype(str(FONT), size=size, layout_engine=ImageFont.Layout.RAQM)
 
 
 def contain(im, size, background=(255, 255, 255, 0)):

@@ -4,7 +4,7 @@ import ProductMockupsPanel from '../src/features/admin/ProductMockupsPanel';
 import {mockupApi,type MockupSet,type MockupRun,type MockupTemplate} from '../src/features/admin/mockup-api';
 import {catalogProfileApi} from '../src/features/admin/catalog-profile-api';
 import type {NavigationGuard} from '../src/features/navigation/history-guard';
-vi.mock('../src/features/admin/mockup-api',async original=>({...await original<typeof import('../src/features/admin/mockup-api')>(),mockupApi:{sets:vi.fn(),templates:vi.fn(),detail:vi.fn(),run:vi.fn(),render:vi.fn(),publish:vi.fn(),retry:vi.fn()}}));
+vi.mock('../src/features/admin/mockup-api',async original=>({...await original<typeof import('../src/features/admin/mockup-api')>(),mockupApi:{sets:vi.fn(),templates:vi.fn(),detail:vi.fn(),run:vi.fn(),render:vi.fn(),publish:vi.fn(),retry:vi.fn(),template:vi.fn()}}));
 vi.mock('../src/features/admin/catalog-profile-api',async original=>({...await original<typeof import('../src/features/admin/catalog-profile-api')>(),catalogProfileApi:{read:vi.fn()}}));
 vi.mock('../src/components/ui/Dropdown',()=>({default:({label,value,options,onChange,disabled}:{label:string;value:string;options:{value:string;label:string}[];onChange:(value:string)=>void;disabled?:boolean})=><label>{label}<select disabled={disabled} value={value} onChange={e=>onChange(e.target.value)}>{options.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}</select></label>}));
 const product='11111111-1111-4111-8111-111111111111',sku='22222222-2222-4222-8222-222222222222',setId='33333333-3333-4333-8333-333333333333',runId='44444444-4444-4444-8444-444444444444',newId='55555555-5555-4555-8555-555555555555',template='66666666-6666-4666-8666-666666666666',other='77777777-7777-4777-8777-777777777777';
@@ -31,4 +31,17 @@ test('unsaved image changes protect tab and page navigation and sketchbooks have
  const register=vi.fn<(guard:NavigationGuard|null)=>void>();render(<ProductMockupsPanel productId={product} skuId={sku} en navigate={vi.fn()} registerGuard={register} onSaved={vi.fn()}/>);await screen.findByText('Ready for review');
  expect(screen.queryByText('Left page monochrome motif')).toBeNull();fireEvent.change(screen.getByLabelText('Front template'),{target:{value:other}});
  vi.spyOn(window,'confirm').mockReturnValue(false);const leave=vi.fn();register.mock.calls.at(-1)![0]!(leave);expect(leave).not.toHaveBeenCalled();fireEvent.click(screen.getByRole('button',{name:'Shared product gallery'}));expect(screen.getByRole('heading',{name:'One design, every notebook view'})).toBeTruthy();
+});
+
+
+test('an uncertain template save keeps its command and blocks leaving until the same save is recovered',async()=>{
+ const register=vi.fn<(guard:NavigationGuard|null)=>void>();
+ vi.mocked(mockupApi.template).mockRejectedValueOnce(Error('result_unknown')).mockResolvedValue({id:template,version:2,content:{...templateContent,title_en:'Reviewed top bound'}});
+ render(<ProductMockupsPanel productId={product} skuId={sku} en navigate={vi.fn()} registerGuard={register} onSaved={vi.fn()}/>);
+ await screen.findByText('Ready for review');fireEvent.click(screen.getByText('Real-photo templates'));
+ fireEvent.change(await screen.findByLabelText('English title'),{target:{value:'Reviewed top bound'}});fireEvent.click(screen.getByRole('button',{name:'Save template revision'}));
+ const retry=await screen.findByRole('button',{name:'Check and retry this save'});expect((retry as HTMLButtonElement).disabled).toBe(false);
+ const leave=vi.fn();register.mock.calls.at(-1)![0]!(leave);expect(leave).not.toHaveBeenCalled();
+ fireEvent.click(retry);await waitFor(()=>expect(mockupApi.template).toHaveBeenCalledTimes(2));expect(vi.mocked(mockupApi.template).mock.calls[0]).toEqual(vi.mocked(mockupApi.template).mock.calls[1]);
+ await waitFor(()=>expect(screen.queryByRole('button',{name:'Check and retry this save'})).toBeNull());
 });

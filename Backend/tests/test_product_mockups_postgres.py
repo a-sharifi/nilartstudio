@@ -273,3 +273,38 @@ def test_dispatch_leases_bound_messages_and_recover_stopped_worker(flow, monkeyp
     worker.dispatch_mockups.run()
     assert len(sent) == 6
     assert len(set(sent)) <= 6
+
+
+def test_gallery_publication_cannot_activate_a_never_published_delivery_draft(flow, monkeypatch):
+    from types import SimpleNamespace
+
+    from starlette.requests import Request
+
+    from nilart.contexts.catalog.presentation import profiles
+
+    client, db, product, sku = prepare(flow, monkeypatch)
+    key, item = generate(client, db, inputs(client, product, sku))
+    actor_id = db.scalar(text("SELECT actor_id FROM mockup_runs WHERE id=:id"), dict(id=key))
+    body = profiles.Command(
+        expected_version=0,
+        action="draft",
+        content=profiles.Content(delivery="physical", weight_grams=200, returnable=True),
+        reason="Measured delivery details pending separate approval",
+    )
+    saved = profiles.save_record(
+        db,
+        SimpleNamespace(id=actor_id),
+        "skus",
+        sku,
+        uuid4(),
+        body,
+        Request({"type": "http", "headers": []}),
+    )
+    assert isinstance(saved, dict)
+    result = publish(client, item, expected_profile_version=1)
+    assert result.json()["code"] == "mockup_profile_has_unpublished_changes"
+    assert profiles.record(db, "skus", sku)["published_revision"] is None
+    assert (
+        db.scalar(text("SELECT count(*) FROM media_assets WHERE published_revision IS NOT NULL"))
+        == 0
+    )

@@ -95,7 +95,7 @@ def gallery(db, actor, kind, id, images):
         if old["published_revision"]
         else None
     )
-    if old["published_revision"] and old["content"] != published:
+    if old["version"] > 0 and old["content"] != published:
         raise RuntimeError("Unreviewed profile draft: " + str(id))
     if content.model_dump(mode="json")["gallery"] == images:
         return
@@ -207,7 +207,7 @@ def image_bytes(db, image):
     )
 
 
-def bundle_images(db, actor):
+def bundle_images(db, actor, publish=True, folder=None):
     report = []
     for slug in ["gorbe", "gav", "roh", "qolche", "love"]:
         row = (
@@ -284,6 +284,9 @@ def bundle_images(db, actor):
             )
         out = io.BytesIO()
         canvas.save(out, "PNG", optimize=True)
+        if folder:
+            folder.mkdir(parents=True, exist_ok=True)
+            (folder / (slug + "-bundle.png")).write_bytes(out.getvalue())
         primary = save_image(
             db,
             actor,
@@ -291,11 +294,22 @@ def bundle_images(db, actor):
             slug + "-bundle-components",
             content.title_fa + " — اجزای پکیج",
             content.title_en + " — included items",
-            True,
+            publish,
         )
         next_gallery = [primary] + [
             g for i, g in enumerate(images) if g not in images[:i]
         ]
+        if not publish:
+            report.append(
+                dict(
+                    slug=content.slug,
+                    status="preview_draft",
+                    component_count=len(objects),
+                    gallery=next_gallery,
+                    non_image_content_unchanged=True,
+                )
+            )
+            continue
         if original["gallery"] == next_gallery:
             report.append(dict(slug=content.slug, status="already_published"))
             continue
@@ -335,6 +349,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--folder", type=Path, required=True)
     p.add_argument("--bundles", action="store_true")
+    p.add_argument("--preview-bundles", type=Path)
     p.add_argument("--reviewed", action="store_true")
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
@@ -355,7 +370,11 @@ def main():
             raise RuntimeError("Authorized existing admin required")
         report = dict(
             poses=poses(db, actor, a.folder),
-            bundles=bundle_images(db, actor) if a.bundles else [],
+            bundles=bundle_images(
+                db, actor, publish=not bool(a.preview_bundles), folder=a.preview_bundles
+            )
+            if a.bundles or a.preview_bundles
+            else [],
         )
     a.output.write_text(json.dumps(report, ensure_ascii=False, indent=2))
     print("Product media publication recorded in", str(a.output))

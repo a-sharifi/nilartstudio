@@ -1,5 +1,6 @@
 import {z} from 'zod';
 import {privateRequest} from './identity-api';
+import {canonical} from './finance-api';
 import {notebookSpec} from '../catalog/notebook-images';
 const uuid=z.string().uuid();
 export const mockupRef=z.object({asset_id:uuid,revision_id:uuid});
@@ -19,13 +20,23 @@ export type PublishIntent={expected_version:number;action:'publish'|'rollback'|'
 const base='/api/v1/admin/mockups';
 export const mockupApi={
  async templates(){return z.object({items:z.array(mockupTemplate)}).parse(await privateRequest(`${base}/templates`)).items},
- async sets(productId?:string,skuId?:string,group?:string){const p=new URLSearchParams({limit:'100'});if(productId)p.set('product_id',productId);if(skuId)p.set('sku_id',skuId);if(group)p.set('group',group);return z.object({items:z.array(set),next_cursor:z.string().nullable()}).parse(await privateRequest(`${base}/sets?${p}`))},
+ async sets(productId?:string,skuId?:string,group?:string){
+  const p=new URLSearchParams({limit:'100'}),items:MockupSet[]=[],seen=new Set<string>();
+  if(productId)p.set('product_id',productId);if(skuId)p.set('sku_id',skuId);if(group)p.set('group',group);
+  for(let page=0;page<10;page++){
+   const result=z.object({items:z.array(set),next_cursor:z.string().nullable()}).parse(await privateRequest(`${base}/sets?${p}`));
+   for(const item of result.items){if(items.some(row=>row.id===item.id)||(productId&&item.target.product_id!==productId)||(skuId&&item.target.sku_id!==skuId)||(group&&item.spec.group!==group))throw Error('result_unknown');items.push(item)}
+   if(!result.next_cursor)return {items,next_cursor:null};
+   if(seen.has(result.next_cursor))throw Error('result_unknown');seen.add(result.next_cursor);p.set('cursor',result.next_cursor);
+  }
+  throw Error('mockup_list_too_large');
+ },
  async detail(id:string){const item=set.extend({runs:z.array(run.omit({set_id:true})),history:z.array(z.object({id:uuid,result:z.object({id:uuid,version:z.number(),published_run:uuid.nullable()}),created_at:z.string()}))}).parse(await privateRequest(`${base}/sets/${id}`));if(item.id!==id)throw Error('result_unknown');return item},
  async run(id:string){const result=run.parse(await privateRequest(`${base}/runs/${id}`));if(result.id!==id)throw Error('result_unknown');return result},
  async render(key:string,body:RenderIntent){return run.parse(await privateRequest(`${base}/runs/${key}`,'PUT',body))},
  async retry(id:string){return run.parse(await privateRequest(`${base}/runs/${id}/retry`,'POST'))},
  async publish(id:string,key:string,body:PublishIntent){const result=z.object({id:uuid,version:z.number(),published_run:uuid.nullable()}).parse(await privateRequest(`${base}/sets/${id}/commands/${key}`,'PUT',body));if(result.id!==id||result.version!==body.expected_version+1||result.published_run!==(body.action==='unpublish'?null:body.run_id))throw Error('result_unknown');return result},
  async receipt(key:string){return z.object({id:uuid,intent:z.record(z.string(),z.unknown()),result:z.record(z.string(),z.unknown())}).parse(await privateRequest(`${base}/commands/${key}`))},
- async template(id:string,key:string,expected_version:number,content:MockupTemplate['content'],reason:string){return mockupTemplate.parse(await privateRequest(`${base}/templates/${id}/commands/${key}`,'PUT',{expected_version,content,reason}))},
+ async template(id:string,key:string,expected_version:number,content:MockupTemplate['content'],reason:string){const intent={...content,title_fa:content.title_fa.trim(),title_en:content.title_en.trim(),occlusion:content.occlusion??null};const result=mockupTemplate.parse(await privateRequest(`${base}/templates/${id}/commands/${key}`,'PUT',{expected_version,content:intent,reason}));if(result.id!==id||result.version!==expected_version+1||canonical({...result.content,occlusion:result.content.occlusion??null})!==canonical(intent))throw Error('result_unknown');return result},
  async coverage(){return z.object({expected_sets:z.number(),expected_positions:z.number(),total_sets:z.number(),published_sets:z.number(),runs:z.record(z.string(),z.number())}).parse(await privateRequest(`${base}/coverage`))}
 };
